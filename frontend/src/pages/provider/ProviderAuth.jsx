@@ -113,7 +113,7 @@ const ProviderAuth = () => {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
-              <span className="text-sm text-gray-600">for Service Providers</span>
+              <span className="text-sm text-gray-600">for Merchants</span>
             </div>
             <div className="text-sm text-gray-600">
               Homeowner? <Button variant="link" onClick={() => navigate('/homeowners/auth')}>Sign in here</Button>
