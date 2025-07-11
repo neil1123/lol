@@ -118,105 +118,294 @@ export const mockProviders = [
   }
 ];
 
-// Enhanced mock orders with detailed workflow
+// Mock orders data (extending from quotations)
 export const mockOrders = [
   {
     id: 1,
-    quotationId: 1,
     homeownerId: 1,
-    homeownerName: "John Smith",
-    homeownerEmail: "john.smith@example.com",
-    homeownerPhone: "+1 (555) 123-4567",
-    homeownerAddress: "123 Main St, Halifax, NS",
     providerId: 1,
-    providerName: "CleanPro Services",
-    providerEmail: "contact@cleanpro.com",
-    providerPhone: "+1 (555) 987-6543",
-    serviceType: "Window Cleaning",
-    serviceCategory: "Cleaning & Exterior Maintenance",
-    description: "Need professional window cleaning for 2-story house, approximately 20 windows",
-    quotationAmount: 180,
-    orderDate: "2024-12-10T10:00:00Z",
-    scheduledDate: "2024-12-15T10:00:00Z",
-    status: "scheduled", // pending_quotation, quotation_sent, scheduled, in_progress, completed, cancelled
-    workProgress: [
-      {
-        id: 1,
-        timestamp: "2024-12-10T10:00:00Z",
-        update: "Order confirmed",
-        updatedBy: "homeowner",
-        status: "scheduled"
-      }
-    ],
-    invoice: {
-      id: 1,
-      amount: 180,
-      status: "pending", // pending, sent, paid
-      dueDate: "2024-12-22T00:00:00Z",
-      items: [
-        { description: "Window Cleaning - 20 windows", quantity: 1, rate: 180, amount: 180 }
-      ]
-    },
+    providerName: 'Elite Home Solutions',
+    homeownerName: 'Sarah Johnson',
+    homeownerEmail: 'sarah.johnson@email.com',
+    homeownerPhone: '(555) 123-4567',
+    serviceType: 'Home Cleaning',
+    description: 'Deep cleaning for 3-bedroom house. Need comprehensive cleaning including bathrooms, kitchen, and living areas.',
+    homeownerAddress: '123 Main Street, Halifax, NS B3H 1A1',
+    quotationAmount: 350,
+    orderDetails: 'Complete deep cleaning package including all rooms, bathrooms, kitchen deep clean, and window washing.',
+    priority: 'medium',
+    status: 'pending_quotation',
+    requestDate: '2024-01-15T10:00:00Z',
+    scheduledDate: '2024-01-20T14:00:00Z',
+    messages: []
+  },
+  {
+    id: 2,
+    homeownerId: 2,
+    providerId: 1,
+    providerName: 'Elite Home Solutions',
+    homeownerName: 'Mike Wilson',
+    homeownerEmail: 'mike.wilson@email.com',
+    homeownerPhone: '(555) 987-6543',
+    serviceType: 'Electrical Work',
+    description: 'Need electrical outlet installation in home office and kitchen lighting upgrade.',
+    homeownerAddress: '456 Oak Avenue, Halifax, NS B3H 2B2',
+    quotationAmount: 450,
+    orderDetails: 'Installation of 3 new outlets in home office, kitchen lighting fixture upgrade, and electrical safety inspection.',
+    priority: 'high',
+    status: 'quotation_sent',
+    requestDate: '2024-01-12T09:30:00Z',
+    scheduledDate: '2024-01-18T10:00:00Z',
+    messages: []
+  },
+  {
+    id: 3,
+    homeownerId: 3,
+    providerId: 1,
+    providerName: 'Elite Home Solutions',
+    homeownerName: 'Emily Davis',
+    homeownerEmail: 'emily.davis@email.com',
+    homeownerPhone: '(555) 456-7890',
+    serviceType: 'Plumbing',
+    description: 'Kitchen sink repair and bathroom faucet replacement needed.',
+    homeownerAddress: '789 Pine Street, Halifax, NS B3H 3C3',
+    quotationAmount: 280,
+    orderDetails: 'Kitchen sink pipe repair, bathroom faucet replacement with new fixtures, and water pressure check.',
+    priority: 'medium',
+    status: 'confirmed',
+    requestDate: '2024-01-10T11:15:00Z',
+    scheduledDate: '2024-01-16T13:00:00Z',
+    messages: []
+  },
+  {
+    id: 4,
+    homeownerId: 4,
+    providerId: 1,
+    providerName: 'Elite Home Solutions',
+    homeownerName: 'David Brown',
+    homeownerEmail: 'david.brown@email.com',
+    homeownerPhone: '(555) 321-0987',
+    serviceType: 'Landscaping',
+    description: 'Front yard landscaping and backyard maintenance needed for spring.',
+    homeownerAddress: '321 Elm Street, Halifax, NS B3H 4D4',
+    quotationAmount: 650,
+    orderDetails: 'Front yard garden design and planting, backyard cleanup, lawn fertilization, and hedge trimming.',
+    priority: 'low',
+    status: 'in_progress',
+    requestDate: '2024-01-08T14:20:00Z',
+    scheduledDate: '2024-01-14T09:00:00Z',
+    messages: []
+  },
+  {
+    id: 5,
+    homeownerId: 5,
+    providerId: 1,
+    providerName: 'Elite Home Solutions',
+    homeownerName: 'Lisa Chen',
+    homeownerEmail: 'lisa.chen@email.com',
+    homeownerPhone: '(555) 654-3210',
+    serviceType: 'Painting',
+    description: 'Interior painting for living room and dining room walls.',
+    homeownerAddress: '654 Maple Drive, Halifax, NS B3H 5E5',
+    quotationAmount: 520,
+    orderDetails: 'Interior painting for living room and dining room, primer and two coats of paint, ceiling touch-ups.',
+    priority: 'medium',
+    status: 'completed',
+    requestDate: '2024-01-05T16:45:00Z',
+    scheduledDate: '2024-01-12T08:00:00Z',
+    messages: []
+  }
+];
+
+// Mock messages data for provider messaging
+export const mockMessages = [
+  {
+    id: 1,
+    homeownerId: 1,
+    providerId: 1,
+    homeownerName: 'Sarah Johnson',
+    orderType: 'Home Cleaning',
+    orderId: 1,
+    lastMessage: 'When can you schedule the cleaning?',
+    lastMessageTime: '2024-01-15T14:30:00Z',
     messages: [
       {
         id: 1,
-        senderId: 1,
-        senderType: "provider",
-        message: "Hi! We've confirmed your window cleaning appointment for December 15th at 10 AM. Is this time still good for you?",
-        timestamp: "2024-12-10T14:00:00Z",
+        content: 'Hi! I\'m interested in your home cleaning service. Can you provide a quote for my 3-bedroom house?',
+        timestamp: '2024-01-15T10:00:00Z',
+        sender: 'homeowner',
         read: true
       },
       {
         id: 2,
-        senderId: 1,
-        senderType: "homeowner", 
-        message: "Yes, that works perfect! Thank you for confirming.",
-        timestamp: "2024-12-10T15:00:00Z",
+        content: 'Hello Sarah! I\'d be happy to help with your home cleaning needs. Based on your requirements, I can provide a comprehensive deep cleaning service. Would you like to schedule an assessment?',
+        timestamp: '2024-01-15T10:15:00Z',
+        sender: 'provider',
         read: true
+      },
+      {
+        id: 3,
+        content: 'That sounds great! What would be the cost for a deep cleaning of my 3-bedroom house?',
+        timestamp: '2024-01-15T10:30:00Z',
+        sender: 'homeowner',
+        read: true
+      },
+      {
+        id: 4,
+        content: 'For a 3-bedroom house deep cleaning, my rate is $350. This includes all rooms, bathrooms, kitchen, and window washing. The service typically takes 4-5 hours.',
+        timestamp: '2024-01-15T11:00:00Z',
+        sender: 'provider',
+        read: true
+      },
+      {
+        id: 5,
+        content: 'That works for me! When can you schedule the cleaning?',
+        timestamp: '2024-01-15T14:30:00Z',
+        sender: 'homeowner',
+        read: false
       }
     ]
   },
   {
     id: 2,
-    quotationId: 2,
-    homeownerId: 1,
-    homeownerName: "John Smith",
-    providerId: 2,
-    providerName: "Elite Electrical",
-    serviceType: "Electrical Work",
-    serviceCategory: "Home Maintenance & Repairs",
-    description: "Install new outlets in kitchen and fix flickering lights",
-    quotationAmount: 450,
-    orderDate: "2024-12-08T09:00:00Z",
-    scheduledDate: "2024-12-18T08:00:00Z",
-    status: "in_progress",
-    workProgress: [
+    homeownerId: 2,
+    providerId: 1,
+    homeownerName: 'Mike Wilson',
+    orderType: 'Electrical Work',
+    orderId: 2,
+    lastMessage: 'I\'ve sent you the detailed quotation. Please review it.',
+    lastMessageTime: '2024-01-13T16:20:00Z',
+    messages: [
       {
         id: 1,
-        timestamp: "2024-12-08T09:00:00Z",
-        update: "Order confirmed",
-        updatedBy: "homeowner",
-        status: "scheduled"
+        content: 'I need some electrical work done in my home office. Can you help with outlet installation?',
+        timestamp: '2024-01-12T09:30:00Z',
+        sender: 'homeowner',
+        read: true
       },
       {
         id: 2,
-        timestamp: "2024-12-18T08:00:00Z",
-        update: "Work started - Installing kitchen outlets",
-        updatedBy: "provider",
-        status: "in_progress"
+        content: 'Absolutely! I can help with outlet installation. How many outlets do you need and in which rooms?',
+        timestamp: '2024-01-12T10:00:00Z',
+        sender: 'provider',
+        read: true
+      },
+      {
+        id: 3,
+        content: 'I need 3 outlets in my home office and also looking to upgrade my kitchen lighting. Can you handle both?',
+        timestamp: '2024-01-12T10:15:00Z',
+        sender: 'homeowner',
+        read: true
+      },
+      {
+        id: 4,
+        content: 'Yes, I can handle both projects. Let me prepare a detailed quotation for you including materials and labor.',
+        timestamp: '2024-01-13T09:00:00Z',
+        sender: 'provider',
+        read: true
+      },
+      {
+        id: 5,
+        content: 'I\'ve sent you the detailed quotation. Please review it and let me know if you have any questions.',
+        timestamp: '2024-01-13T16:20:00Z',
+        sender: 'provider',
+        read: true
       }
-    ],
-    invoice: {
-      id: 2,
-      amount: 450,
-      status: "pending",
-      dueDate: "2024-12-25T00:00:00Z",
-      items: [
-        { description: "Kitchen outlet installation", quantity: 3, rate: 120, amount: 360 },
-        { description: "Light fixture repair", quantity: 1, rate: 90, amount: 90 }
-      ]
-    },
-    messages: []
+    ]
+  },
+  {
+    id: 3,
+    homeownerId: 3,
+    providerId: 1,
+    homeownerName: 'Emily Davis',
+    orderType: 'Plumbing',
+    orderId: 3,
+    lastMessage: 'Perfect! I\'ll be there tomorrow at 1 PM.',
+    lastMessageTime: '2024-01-15T18:45:00Z',
+    messages: [
+      {
+        id: 1,
+        content: 'I have a kitchen sink that needs repair and my bathroom faucet needs replacement. Are you available this week?',
+        timestamp: '2024-01-10T11:15:00Z',
+        sender: 'homeowner',
+        read: true
+      },
+      {
+        id: 2,
+        content: 'Hi Emily! I can definitely help with both the sink repair and faucet replacement. Let me schedule a time to assess the work needed.',
+        timestamp: '2024-01-10T12:00:00Z',
+        sender: 'provider',
+        read: true
+      },
+      {
+        id: 3,
+        content: 'Great! I\'m available most afternoons this week. What time works best for you?',
+        timestamp: '2024-01-10T13:30:00Z',
+        sender: 'homeowner',
+        read: true
+      },
+      {
+        id: 4,
+        content: 'How about Tuesday at 1 PM? I can come by, assess the issues, and provide you with a quote.',
+        timestamp: '2024-01-15T18:00:00Z',
+        sender: 'provider',
+        read: true
+      },
+      {
+        id: 5,
+        content: 'Perfect! I\'ll be there tomorrow at 1 PM.',
+        timestamp: '2024-01-15T18:45:00Z',
+        sender: 'homeowner',
+        read: false
+      }
+    ]
+  },
+  {
+    id: 4,
+    homeownerId: 4,
+    providerId: 1,
+    homeownerName: 'David Brown',
+    orderType: 'Landscaping',
+    orderId: 4,
+    lastMessage: 'The front yard looks amazing! Thank you for the excellent work.',
+    lastMessageTime: '2024-01-14T17:30:00Z',
+    messages: [
+      {
+        id: 1,
+        content: 'I\'m looking for landscaping services for my front and back yard. Can you provide a quote?',
+        timestamp: '2024-01-08T14:20:00Z',
+        sender: 'homeowner',
+        read: true
+      },
+      {
+        id: 2,
+        content: 'I\'d be happy to help with your landscaping project! What type of work are you looking for?',
+        timestamp: '2024-01-08T15:00:00Z',
+        sender: 'provider',
+        read: true
+      },
+      {
+        id: 3,
+        content: 'I need front yard garden design and planting, plus general backyard maintenance and cleanup.',
+        timestamp: '2024-01-08T15:30:00Z',
+        sender: 'homeowner',
+        read: true
+      },
+      {
+        id: 4,
+        content: 'Started the landscaping work today. The front yard design is coming along great!',
+        timestamp: '2024-01-14T10:00:00Z',
+        sender: 'provider',
+        read: true
+      },
+      {
+        id: 5,
+        content: 'The front yard looks amazing! Thank you for the excellent work.',
+        timestamp: '2024-01-14T17:30:00Z',
+        sender: 'homeowner',
+        read: false
+      }
+    ]
   }
 ];
 
