@@ -16,7 +16,7 @@ const ServiceProviderLanding = () => {
     },
     {
       icon: <Calendar className="h-8 w-8 text-blue-600" />,
-      title: "Calendar Management",
+      title: "Calendar Management", 
       description: "Schedule appointments and manage your availability seamlessly"
     },
     {
@@ -33,7 +33,7 @@ const ServiceProviderLanding = () => {
 
   const benefits = [
     "Get more customers through our marketplace",
-    "Manage your business with powerful CRM tools",
+    "Manage your business with powerful CRM tools", 
     "Track your earnings and growth",
     "Build your reputation with customer reviews",
     "Streamline your scheduling and appointments",
@@ -41,10 +41,42 @@ const ServiceProviderLanding = () => {
   ];
 
   const stats = [
-    { label: "Active Providers", value: "2,500+" },
-    { label: "Jobs Completed", value: "15,000+" },
+    { label: "Active Providers", value: "500+" },
+    { label: "Jobs Completed", value: "5,000+" },
     { label: "Customer Satisfaction", value: "4.8/5" },
-    { label: "Average Earnings", value: "$3,200/mo" }
+    { label: "Average Earnings", value: "$2,800/mo" }
+  ];
+
+  // How it works steps for service providers
+  const howItWorksSteps = [
+    {
+      step: "1",
+      title: "Create your profile",
+      description: "Sign up and showcase your services and expertise",
+      icon: "👤",
+      color: "bg-blue-500"
+    },
+    {
+      step: "2",
+      title: "Receive job requests", 
+      description: "Get notified when customers need your services",
+      icon: "📧",
+      color: "bg-green-500"
+    },
+    {
+      step: "3",
+      title: "Send quotes",
+      description: "Create professional quotes and win more jobs",
+      icon: "💼",
+      color: "bg-purple-500"
+    },
+    {
+      step: "4",
+      title: "Grow your business",
+      description: "Use our tools to manage and scale your operations",
+      icon: "📈",
+      color: "bg-orange-500"
+    }
   ];
 
   return (
