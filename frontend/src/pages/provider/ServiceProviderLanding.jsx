@@ -32,14 +32,6 @@ import { Label } from '../../components/ui/label';
 const ServiceProviderLanding = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    address: '',
-    province: '',
-    city: ''
-  });
   const navigate = useNavigate();
 
   useEffect(() => {
