@@ -485,9 +485,84 @@ const ProviderMessaging = () => {
                   ))}
                 </div>
 
+                {/* Proposal Form */}
+                {showProposalForm && (
+                  <div className="bg-gray-50 border-t border-b p-4">
+                    <h3 className="font-semibold text-gray-900 mb-4">Create Service Proposal</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Service Type</label>
+                        <input
+                          type="text"
+                          value={proposalData.serviceType}
+                          onChange={(e) => setProposalData({...proposalData, serviceType: e.target.value})}
+                          placeholder="e.g., Home Cleaning"
+                          className="w-full p-2 border border-gray-300 rounded-md"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
+                        <input
+                          type="number"
+                          value={proposalData.price}
+                          onChange={(e) => setProposalData({...proposalData, price: e.target.value})}
+                          placeholder="350"
+                          className="w-full p-2 border border-gray-300 rounded-md"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Estimated Time</label>
+                        <input
+                          type="text"
+                          value={proposalData.estimatedTime}
+                          onChange={(e) => setProposalData({...proposalData, estimatedTime: e.target.value})}
+                          placeholder="4-5 hours"
+                          className="w-full p-2 border border-gray-300 rounded-md"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                        <input
+                          type="date"
+                          value={proposalData.startDate}
+                          onChange={(e) => setProposalData({...proposalData, startDate: e.target.value})}
+                          className="w-full p-2 border border-gray-300 rounded-md"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <textarea
+                          value={proposalData.description}
+                          onChange={(e) => setProposalData({...proposalData, description: e.target.value})}
+                          placeholder="Detailed description of the service..."
+                          rows={3}
+                          className="w-full p-2 border border-gray-300 rounded-md"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex space-x-3 mt-4">
+                      <Button onClick={handleSendProposal} disabled={!proposalData.serviceType || !proposalData.price}>
+                        <FileText className="h-4 w-4 mr-2" />
+                        Send Proposal
+                      </Button>
+                      <Button variant="outline" onClick={() => setShowProposalForm(false)}>
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
                 {/* Message Input */}
                 <div className="bg-white border-t p-4">
                   <div className="flex items-center space-x-2">
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => setShowProposalForm(!showProposalForm)}
+                      className="text-blue-600 hover:text-blue-700"
+                    >
+                      <FileText className="h-4 w-4" />
+                    </Button>
                     <Button variant="ghost" size="sm">
                       <Paperclip className="h-4 w-4" />
                     </Button>
