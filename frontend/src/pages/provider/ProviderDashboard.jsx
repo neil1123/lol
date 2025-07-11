@@ -160,8 +160,8 @@ const ProviderDashboard = () => {
       )}
 
       <div className="flex">
-        {/* Desktop Sidebar */}
-        <div className="hidden lg:block w-64 bg-white shadow-sm min-h-screen">
+        {/* Desktop Sidebar - Only show on desktop */}
+        <div className="hidden xl:block w-64 bg-white shadow-sm min-h-screen">
           <div className="p-4">
             <nav className="space-y-2">
               {sidebarItems.map((item) => (
