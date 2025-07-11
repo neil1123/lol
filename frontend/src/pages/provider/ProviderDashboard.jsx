@@ -89,15 +89,26 @@ const ProviderDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Mobile Header */}
       <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
+            {/* Mobile Menu Button */}
             <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="md:hidden"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
               <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
-              <span className="text-sm text-gray-600">for Merchants</span>
+              <span className="text-sm text-gray-600 hidden sm:inline">for Merchants</span>
             </div>
-            <div className="flex items-center space-x-4">
+            
+            {/* Desktop Right Side */}
+            <div className="hidden md:flex items-center space-x-4">
               <Button variant="ghost" size="sm">
                 <Bell className="h-4 w-4" />
               </Button>
@@ -113,13 +124,68 @@ const ProviderDashboard = () => {
                 <LogOut className="h-4 w-4" />
               </Button>
             </div>
+
+            {/* Mobile Right Side */}
+            <div className="md:hidden flex items-center space-x-2">
+              <Button variant="ghost" size="sm">
+                <Bell className="h-4 w-4" />
+              </Button>
+              <Avatar className="h-8 w-8">
+                <AvatarFallback className="bg-blue-100 text-blue-600">
+                  ES
+                </AvatarFallback>
+              </Avatar>
+            </div>
           </div>
         </div>
       </header>
 
+      {/* Mobile Navigation Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setIsMobileMenuOpen(false)} />
+          <div className="fixed top-0 left-0 w-64 h-full bg-white shadow-lg">
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold">Navigation</h2>
+                <Button variant="ghost" size="sm" onClick={() => setIsMobileMenuOpen(false)}>
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+              <nav className="space-y-2">
+                {sidebarItems.map((item) => (
+                  <Button
+                    key={item.id}
+                    variant={activeTab === item.id ? "default" : "ghost"}
+                    className="w-full justify-start"
+                    onClick={() => {
+                      setActiveTab(item.id);
+                      navigate(item.path);
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <item.icon className="h-4 w-4 mr-3" />
+                    {item.label}
+                  </Button>
+                ))}
+                <hr className="my-4" />
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="h-4 w-4 mr-3" />
+                  Logout
+                </Button>
+              </nav>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex">
-        {/* Sidebar */}
-        <div className="w-64 bg-white shadow-sm min-h-screen">
+        {/* Desktop Sidebar */}
+        <div className="hidden md:block w-64 bg-white shadow-sm min-h-screen">
           <div className="p-4">
             <nav className="space-y-2">
               {sidebarItems.map((item) => (
@@ -128,6 +194,17 @@ const ProviderDashboard = () => {
                   variant={activeTab === item.id ? "default" : "ghost"}
                   className="w-full justify-start"
                   onClick={() => {
+                    setActiveTab(item.id);
+                    navigate(item.path);
+                  }}
+                >
+                  <item.icon className="h-4 w-4 mr-3" />
+                  {item.label}
+                </Button>
+              ))}
+            </nav>
+          </div>
+        </div>
                     setActiveTab(item.id);
                     navigate(item.path);
                   }}
