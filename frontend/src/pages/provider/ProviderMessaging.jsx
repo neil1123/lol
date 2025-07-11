@@ -72,23 +72,29 @@ const ProviderMessaging = () => {
     }
   }, []);
 
-  const handleSendMessage = () => {
-    if (!newMessage.trim() || !selectedConversation) return;
+  const handleSendProposal = () => {
+    if (!selectedConversation || !proposalData.serviceType || !proposalData.price) return;
 
-    const message = {
+    const proposal = {
       id: Date.now(),
-      content: newMessage,
+      content: `Proposal for ${proposalData.serviceType}`,
       timestamp: new Date().toISOString(),
       sender: 'provider',
-      read: true
+      read: true,
+      type: 'proposal',
+      proposalData: {
+        ...proposalData,
+        price: parseFloat(proposalData.price),
+        status: 'pending' // pending, accepted, rejected
+      }
     };
 
     const updatedMessages = messages.map(conv => {
       if (conv.id === selectedConversation.id) {
         return {
           ...conv,
-          messages: [...conv.messages, message],
-          lastMessage: newMessage,
+          messages: [...conv.messages, proposal],
+          lastMessage: `Proposal sent: ${proposalData.serviceType}`,
           lastMessageTime: new Date().toISOString()
         };
       }
@@ -98,11 +104,67 @@ const ProviderMessaging = () => {
     setMessages(updatedMessages);
     setSelectedConversation({
       ...selectedConversation,
-      messages: [...selectedConversation.messages, message],
-      lastMessage: newMessage,
+      messages: [...selectedConversation.messages, proposal],
+      lastMessage: `Proposal sent: ${proposalData.serviceType}`,
       lastMessageTime: new Date().toISOString()
     });
-    setNewMessage('');
+    
+    // Reset form
+    setProposalData({
+      serviceType: '',
+      description: '',
+      price: '',
+      estimatedTime: '',
+      startDate: '',
+      additionalNotes: ''
+    });
+    setShowProposalForm(false);
+  };
+
+  const handleProposalResponse = (messageId, response) => {
+    const updatedMessages = messages.map(conv => {
+      if (conv.id === selectedConversation.id) {
+        const updatedConvMessages = conv.messages.map(msg => {
+          if (msg.id === messageId && msg.type === 'proposal') {
+            return {
+              ...msg,
+              proposalData: {
+                ...msg.proposalData,
+                status: response
+              }
+            };
+          }
+          return msg;
+        });
+        return { ...conv, messages: updatedConvMessages };
+      }
+      return conv;
+    });
+
+    setMessages(updatedMessages);
+    
+    const updatedSelectedConv = {
+      ...selectedConversation,
+      messages: selectedConversation.messages.map(msg => {
+        if (msg.id === messageId && msg.type === 'proposal') {
+          return {
+            ...msg,
+            proposalData: {
+              ...msg.proposalData,
+              status: response
+            }
+          };
+        }
+        return msg;
+      })
+    };
+    
+    setSelectedConversation(updatedSelectedConv);
+
+    // If accepted, create an order (you can integrate with your order system here)
+    if (response === 'accepted') {
+      console.log('Proposal accepted! Creating order...', updatedSelectedConv.messages.find(m => m.id === messageId));
+    }
   };
 
   const formatTime = (timestamp) => {
