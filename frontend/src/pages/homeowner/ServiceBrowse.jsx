@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, Star, Filter, ArrowLeft, SlidersHorizontal } from 'lucide-react';
+import { Search, MapPin, Star, Filter, ArrowLeft, SlidersHorizontal, Menu, X } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
@@ -15,6 +15,7 @@ const ServiceBrowse = () => {
   const [selectedServices, setSelectedServices] = useState([]);
   const [sortBy, setSortBy] = useState('rating');
   const [showFilters, setShowFilters] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
