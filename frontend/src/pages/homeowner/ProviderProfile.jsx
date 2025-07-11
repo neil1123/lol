@@ -112,46 +112,46 @@ const ProviderProfile = () => {
       </header>
 
       {/* Provider Header */}
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="bg-blue-50 border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
           {/* Image Gallery */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6 h-48 sm:h-64">
-            <div className="col-span-2 bg-gradient-to-br from-blue-200 to-blue-300 rounded-lg flex items-center justify-center shadow-lg">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 sm:mb-6 h-32 sm:h-48 lg:h-64">
+            <div className="col-span-2 bg-blue-100 rounded-lg flex items-center justify-center shadow-sm">
               <div className="text-center">
-                <div className="text-3xl sm:text-4xl mb-2">🧹</div>
+                <div className="text-2xl sm:text-3xl lg:text-4xl mb-1 sm:mb-2">🧹</div>
                 <p className="text-xs sm:text-sm text-blue-800 font-semibold">Professional Cleaning</p>
               </div>
             </div>
             <div className="grid grid-rows-2 gap-2">
-              <div className="bg-gradient-to-br from-green-200 to-green-300 rounded-lg flex items-center justify-center shadow-lg">
-                <div className="text-xl sm:text-2xl">✨</div>
+              <div className="bg-blue-100 rounded-lg flex items-center justify-center shadow-sm">
+                <div className="text-lg sm:text-xl lg:text-2xl">✨</div>
               </div>
-              <div className="bg-gradient-to-br from-orange-200 to-orange-300 rounded-lg flex items-center justify-center shadow-lg">
-                <div className="text-xl sm:text-2xl">🏠</div>
+              <div className="bg-blue-100 rounded-lg flex items-center justify-center shadow-sm">
+                <div className="text-lg sm:text-xl lg:text-2xl">🏠</div>
               </div>
             </div>
             <div className="grid grid-rows-2 gap-2">
-              <div className="bg-gradient-to-br from-purple-200 to-purple-300 rounded-lg flex items-center justify-center shadow-lg">
-                <div className="text-xl sm:text-2xl">💯</div>
+              <div className="bg-blue-100 rounded-lg flex items-center justify-center shadow-sm">
+                <div className="text-lg sm:text-xl lg:text-2xl">💯</div>
               </div>
-              <div className="bg-gradient-to-br from-yellow-200 to-yellow-300 rounded-lg flex items-center justify-center shadow-lg">
-                <div className="text-xl sm:text-2xl">⭐</div>
+              <div className="bg-blue-100 rounded-lg flex items-center justify-center shadow-sm">
+                <div className="text-lg sm:text-xl lg:text-2xl">⭐</div>
               </div>
             </div>
           </div>
           
-          <div className="flex flex-col lg:flex-row justify-between items-start">
-            <div className="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-6 w-full lg:w-auto">
-              <Avatar className="h-16 w-16 sm:h-20 sm:w-20 mx-auto sm:mx-0">
-                <AvatarFallback className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+          <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:justify-between lg:items-start">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-6 w-full lg:w-auto">
+              <Avatar className="h-16 w-16 sm:h-20 sm:w-20 flex-shrink-0">
+                <AvatarFallback className="text-lg sm:text-xl lg:text-2xl font-bold bg-blue-600 text-white">
                   {provider.name.split(' ').map(n => n[0]).join('')}
                 </AvatarFallback>
               </Avatar>
               
-              <div className="text-center sm:text-left flex-1">
-                <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-3 mb-2">
-                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{provider.name}</h1>
-                  <button className="p-2 hover:bg-white/50 rounded-full transition-colors">
+              <div className="text-center sm:text-left flex-1 min-w-0">
+                <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-2 sm:space-y-0 sm:space-x-3 mb-3">
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 truncate">{provider.name}</h1>
+                  <button className="p-2 hover:bg-white/50 rounded-full transition-colors flex-shrink-0">
                     <svg className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" fill="currentColor" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
@@ -160,12 +160,12 @@ const ProviderProfile = () => {
                 
                 <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 mb-3">
                   <div className="flex items-center space-x-2">
-                    <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                    <div className="bg-blue-600 text-white px-2 py-1 rounded-full text-sm font-bold shadow-sm">
                       {provider.rating} ★
                     </div>
-                    <span className="text-gray-600">({provider.reviews} Reviews)</span>
+                    <span className="text-gray-600 text-sm">({provider.reviews} Reviews)</span>
                   </div>
-                  <Badge className="bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-lg">
+                  <Badge className="bg-blue-600 text-white hover:bg-blue-700 shadow-sm">
                     <Shield className="h-3 w-3 mr-1" />
                     Verified Pro
                   </Badge>
@@ -173,52 +173,52 @@ const ProviderProfile = () => {
                 
                 <div className="flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-4 mb-4 text-gray-600">
                   <div className="flex items-center space-x-1">
-                    <MapPin className="h-4 w-4 text-blue-600" />
-                    <span className="font-medium">{provider.location}</span>
+                    <MapPin className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                    <span className="font-medium text-sm sm:text-base">{provider.location}</span>
                   </div>
                 </div>
                 
                 {/* Service Tags */}
-                <div className="flex flex-wrap justify-center sm:justify-start gap-2 mb-4">
-                  <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Chairs & wardrobe cleaning</Badge>
-                  <Badge className="bg-green-100 text-green-800 hover:bg-green-200">Deep cleaning</Badge>
-                  <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Vacuum & sanitize</Badge>
+                <div className="flex flex-wrap justify-center sm:justify-start gap-1 sm:gap-2 mb-4">
+                  <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Chairs & wardrobe cleaning</Badge>
+                  <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Deep cleaning</Badge>
+                  <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Vacuum & sanitize</Badge>
                 </div>
               </div>
             </div>
             
-            <div className="mt-6 lg:mt-0 w-full lg:w-auto flex flex-col space-y-3">
+            <div className="w-full lg:w-auto lg:max-w-xs flex flex-col space-y-2 sm:space-y-3">
               <Button 
-                className="w-full lg:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg" 
+                className="w-full bg-blue-600 hover:bg-blue-700 shadow-sm" 
                 onClick={() => setActiveTab('quote')}
               >
                 🎯 Get Quotation
               </Button>
               <Button
                 variant="outline"
-                className="w-full lg:w-auto bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800 border-0 shadow-lg"
+                className="w-full bg-blue-600 text-white hover:bg-blue-700 border-blue-600 shadow-sm"
               >
                 💰 Starts from $199.00
               </Button>
               <Button
                 variant="outline"
-                className="w-full lg:w-auto bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 border-0 shadow-lg"
+                className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white shadow-sm"
               >
                 <MessageCircle className="h-4 w-4 mr-2" />
                 💬 Get best deal
-                <span className="ml-2 text-xs bg-white/20 px-2 py-1 rounded-full">Response in 1 hr</span>
+                <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Response in 1 hr</span>
               </Button>
             </div>
           </div>
 
           {/* Rating Section */}
           <div className="mt-6 flex justify-center lg:justify-end">
-            <div className="text-center bg-white/70 backdrop-blur-sm rounded-xl p-4 shadow-lg">
-              <div className="text-sm text-gray-700 mb-2 font-medium">⭐ Click to rate this provider</div>
-              <div className="flex space-x-1">
+            <div className="text-center bg-white/70 backdrop-blur-sm rounded-lg p-3 sm:p-4 shadow-sm border border-blue-200">
+              <div className="text-xs sm:text-sm text-gray-700 mb-2 font-medium">⭐ Click to rate this provider</div>
+              <div className="flex space-x-1 justify-center">
                 {[1, 2, 3, 4, 5].map((star) => (
-                  <button key={star} className="text-gray-300 hover:text-yellow-400 transition-colors transform hover:scale-110">
-                    <Star className="h-6 w-6" />
+                  <button key={star} className="text-gray-300 hover:text-blue-500 transition-colors transform hover:scale-110">
+                    <Star className="h-5 w-5 sm:h-6 sm:w-6" />
                   </button>
                 ))}
               </div>
