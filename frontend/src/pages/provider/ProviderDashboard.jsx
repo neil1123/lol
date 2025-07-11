@@ -262,13 +262,13 @@ const ProviderDashboard = () => {
                     Weekly Performance
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="px-4 py-6">
                   <div className="h-48 md:h-64">
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       {mockDashboardData.weeklyData.map((day, index) => (
-                        <div key={index} className="flex items-center justify-between">
-                          <span className="text-sm text-gray-600 min-w-12">{day.day}</span>
-                          <div className="flex-1 mx-4">
+                        <div key={index} className="flex items-center gap-3">
+                          <span className="text-sm text-gray-600 w-8 text-left">{day.day}</span>
+                          <div className="flex-1 min-w-0">
                             <div className="bg-gray-200 rounded-full h-2">
                               <div 
                                 className="bg-blue-600 h-2 rounded-full" 
@@ -276,7 +276,7 @@ const ProviderDashboard = () => {
                               />
                             </div>
                           </div>
-                          <span className="text-sm font-medium text-gray-900 min-w-16">${day.revenue}</span>
+                          <span className="text-sm font-medium text-gray-900 w-12 text-right">${day.revenue}</span>
                         </div>
                       ))}
                     </div>
