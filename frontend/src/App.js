@@ -35,6 +35,11 @@ const Home = () => {
     helloWorldApi();
   }, []);
 
+  // Redirect to homeowners by default
+  useEffect(() => {
+    window.location.href = '/homeowners';
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="text-center">
