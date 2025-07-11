@@ -258,6 +258,7 @@ export const mockQuotationRequests = [
 ];
 
 export const mockQuotations = [
+  {
     id: 1,
     homeownerId: 1,
     providerId: 1,
@@ -279,11 +280,11 @@ export const mockQuotations = [
     serviceType: "Home Cleaning",
     description: "Deep cleaning for 3-bedroom house, move-in cleaning",
     status: "quoted",
-    requestDate: "2024-01-14",
-    quotationAmount: 250,
-    quotationDetails: "Complete deep cleaning including all rooms, bathrooms, kitchen deep clean, interior windows",
-    providerResponse: "Available this weekend. Estimated 4-6 hours with our team of 2 cleaners.",
-    homeownerAddress: "456 Oak Ave, Toronto, ON",
+    requestDate: "2024-01-10",
+    quotationAmount: 280,
+    quotationDetails: "Complete deep cleaning service including all rooms, kitchen appliances, bathrooms, and windows. Estimated 4-5 hours with 2 cleaners.",
+    providerResponse: "We can schedule this for next week. Our team uses eco-friendly products and we're fully insured.",
+    homeownerAddress: "456 Oak Street, Toronto, ON",
     homeownerName: "Sarah Johnson",
     providerName: "CleanPro Services"
   },
@@ -292,12 +293,12 @@ export const mockQuotations = [
     homeownerId: 1,
     providerId: 3,
     serviceType: "Landscaping",
-    description: "Spring cleanup and new flower bed installation",
+    description: "Spring cleanup and lawn maintenance setup",
     status: "accepted",
-    requestDate: "2024-01-13",
-    quotationAmount: 420,
-    quotationDetails: "Complete spring cleanup, soil preparation, and installation of seasonal flower beds with mulching",
-    providerResponse: "Perfect timing for spring preparation. We'll include premium soil and starter fertilizer.",
+    requestDate: "2024-01-08",
+    quotationAmount: 450,
+    quotationDetails: "Full spring cleanup including leaf removal, pruning, lawn aeration, and fertilization. Setting up bi-weekly maintenance schedule.",
+    providerResponse: "Great timing for spring prep! We'll start with cleanup and then establish your maintenance routine.",
     homeownerAddress: "123 Main St, Toronto, ON",
     homeownerName: "John Smith",
     providerName: "GreenThumb Landscaping"
