@@ -446,13 +446,13 @@ ${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additi
                       <div className="flex items-center space-x-3">
                         <Avatar className="h-12 w-12">
                           <AvatarFallback className="bg-blue-100 text-blue-600">
-                            {conversation.customerName.charAt(0).toUpperCase()}
+                            {conversation.homeownerName.charAt(0).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
                             <h3 className="font-semibold text-gray-900 truncate">
-                              {conversation.customerName}
+                              {conversation.homeownerName}
                             </h3>
                             <span className="text-xs text-gray-500">
                               {new Date(conversation.lastMessageTime).toLocaleTimeString([], { 
@@ -462,10 +462,10 @@ ${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additi
                             </span>
                           </div>
                           <p className="text-sm text-gray-600 truncate">
-                            {conversation.serviceType}
+                            {conversation.orderType}
                           </p>
                           <p className="text-xs text-gray-500 truncate">
-                            {conversation.messages[conversation.messages.length - 1]?.text || 'No messages yet'}
+                            {conversation.lastMessage || 'No messages yet'}
                           </p>
                         </div>
                         {conversation.unreadCount > 0 && (
