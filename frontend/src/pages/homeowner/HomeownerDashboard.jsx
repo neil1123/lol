@@ -176,7 +176,7 @@ const HomeownerDashboard = () => {
           </Button>
         </div>
         
-        <nav className="mt-8">
+        <nav className="mt-8 flex-1 flex flex-col justify-between">
           <ul className="space-y-2 px-4">
             {sidebarItems.map((item) => {
               const Icon = item.icon;
@@ -198,6 +198,22 @@ const HomeownerDashboard = () => {
               );
             })}
           </ul>
+          
+          {/* Logout Button */}
+          <div className="px-4 pb-4">
+            <Button
+              variant="outline"
+              onClick={() => {
+                localStorage.removeItem('userType');
+                localStorage.removeItem('user');
+                navigate('/homeowners');
+              }}
+              className="w-full justify-start h-12 text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+            >
+              <ArrowRight className="h-5 w-5 mr-3 rotate-180" />
+              Log Out
+            </Button>
+          </div>
         </nav>
       </div>
 
