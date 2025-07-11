@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Implement mobile responsiveness with hamburger menu navigation to prevent horizontal scrolling and ensure all content fits properly within mobile viewports. The user wants a 3-line hamburger menu that contains the whole navigation bar for mobile devices."
+user_problem_statement: "Enhance the ServiceProviderLanding.jsx page by improving the 'How Doord works for home service companies' section with bigger cards and a center line that glows on scroll. Remove the 'Become our partner' section as requested. The reviews section should remain as already implemented."
 
 frontend:
   - task: "Implement hamburger menu for HomeownerLanding.jsx"
