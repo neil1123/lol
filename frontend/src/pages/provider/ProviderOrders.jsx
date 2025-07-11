@@ -38,6 +38,7 @@ const ProviderOrders = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [showNewOrderForm, setShowNewOrderForm] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [newOrder, setNewOrder] = useState({
     customerName: '',
     customerEmail: '',
@@ -52,12 +53,10 @@ const ProviderOrders = () => {
   });
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userType');
-    navigate('/homeservices');
+    handleStandardLogout(navigate);
   };
 
-  const sidebarItems = [
+  const sidebarItems = STANDARD_PROVIDER_SIDEBAR;
     { id: 'home', label: 'Dashboard', icon: Home, path: '/homeservices/dashboard' },
     { id: 'orders', label: 'Orders', icon: Package, path: '/homeservices/orders' },
     { id: 'messages', label: 'Messages', icon: MessageSquare, path: '/homeservices/messages' },
