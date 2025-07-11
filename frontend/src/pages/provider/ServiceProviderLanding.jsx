@@ -17,18 +17,242 @@ import {
   MessageCircle,
   TrendingUp,
   Award,
-  Globe
+  Globe,
+  PlayCircle,
+  MapPin
 } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
-import { useNavigate } from 'react-router-dom';
 
 const ServiceProviderLanding = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    address: '',
+    province: '',
+    city: ''
+  });
   const navigate = useNavigate();
+
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form submitted:', formData);
+    // Navigate to registration completion or dashboard
+    navigate('/homeservices/auth');
+  };
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
+              <span className="ml-2 text-sm text-gray-600">for Service Providers</span>
+            </div>
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate('/homeowners')}
+                className="text-sm"
+              >
+                For Homeowners
+              </Button>
+              <Button variant="outline" onClick={() => navigate('/homeservices/auth')}>
+                Sign In
+              </Button>
+              <Button onClick={() => navigate('/homeservices/auth')}>
+                Get Started
+              </Button>
+            </div>
+            
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2"
+              >
+                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
+            </div>
+          </div>
+          
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden border-t bg-white py-4">
+              <div className="flex flex-col space-y-3">
+                <Button 
+                  variant="ghost" 
+                  onClick={() => {
+                    navigate('/homeowners');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="justify-start"
+                >
+                  For Homeowners
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    navigate('/homeservices/auth');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="justify-start"
+                >
+                  Sign In
+                </Button>
+                <Button 
+                  onClick={() => {
+                    navigate('/homeservices/auth');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="justify-start"
+                >
+                  Get Started
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      </header>
+
+      {/* Hero Section with Dashboard */}
+      <section className="py-20 bg-gradient-to-br from-blue-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div>
+              <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                Unlock a new{' '}
+                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  revenue stream
+                </span>
+              </h1>
+              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                Build your service business with Doord's marketplace platform. Connect with customers, 
+                streamline operations, and unlock new revenue streams with our comprehensive suite of tools.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button 
+                  size="lg"
+                  onClick={() => navigate('/homeservices/auth')}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                >
+                  Get Started
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+                <Button 
+                  variant="outline"
+                  size="lg"
+                  className="px-8 py-4 text-lg font-semibold rounded-xl border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300"
+                >
+                  <PlayCircle className="mr-2 h-5 w-5" />
+                  Watch Demo
+                </Button>
+              </div>
+            </div>
+
+            {/* Right Dashboard Screenshot */}
+            <div className="relative">
+              <div className="bg-white rounded-2xl shadow-2xl p-6 border border-gray-200">
+                {/* Dashboard Header */}
+                <div className="flex items-center justify-between mb-6 pb-4 border-b">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                      <span className="text-white font-bold text-sm">ES</span>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">Elite Solutions</h3>
+                      <p className="text-sm text-gray-600">Provider Dashboard</p>
+                    </div>
+                  </div>
+                  <Badge className="bg-green-100 text-green-800">Active</Badge>
+                </div>
+
+                {/* Dashboard Stats */}
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="text-center p-4 bg-blue-50 rounded-lg">
+                    <div className="text-2xl font-bold text-blue-600">12</div>
+                    <div className="text-sm text-gray-600">Total Orders</div>
+                    <div className="text-xs text-green-600">+12% from last month</div>
+                  </div>
+                  <div className="text-center p-4 bg-green-50 rounded-lg">
+                    <div className="text-2xl font-bold text-green-600">$24,500</div>
+                    <div className="text-sm text-gray-600">Total Sales</div>
+                    <div className="text-xs text-green-600">+8% from last month</div>
+                  </div>
+                  <div className="text-center p-4 bg-purple-50 rounded-lg">
+                    <div className="text-2xl font-bold text-purple-600">96%</div>
+                    <div className="text-sm text-gray-600">Conversion</div>
+                    <div className="text-xs text-green-600">+2% from last month</div>
+                  </div>
+                  <div className="text-center p-4 bg-orange-50 rounded-lg">
+                    <div className="text-2xl font-bold text-orange-600">30</div>
+                    <div className="text-sm text-gray-600">Customers</div>
+                    <div className="text-xs text-green-600">+15% from last month</div>
+                  </div>
+                </div>
+
+                {/* Mini Chart */}
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2">Weekly Performance</h4>
+                  <div className="flex items-end space-x-2 h-20">
+                    <div className="w-8 bg-blue-200 rounded-t" style={{height: '60%'}}></div>
+                    <div className="w-8 bg-blue-300 rounded-t" style={{height: '40%'}}></div>
+                    <div className="w-8 bg-blue-400 rounded-t" style={{height: '80%'}}></div>
+                    <div className="w-8 bg-blue-500 rounded-t" style={{height: '70%'}}></div>
+                    <div className="w-8 bg-blue-600 rounded-t" style={{height: '90%'}}></div>
+                    <div className="w-8 bg-blue-500 rounded-t" style={{height: '65%'}}></div>
+                    <div className="w-8 bg-blue-400 rounded-t" style={{height: '75%'}}></div>
+                  </div>
+                  <div className="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>Mon</span>
+                    <span>Wed</span>
+                    <span>Fri</span>
+                    <span>Sun</span>
+                  </div>
+                </div>
+
+                {/* Recent Activity */}
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2">Recent Activity</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2 text-xs">
+                      <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                      <span className="text-gray-600">New quote request from Sarah Johnson</span>
+                    </div>
+                    <div className="flex items-center space-x-2 text-xs">
+                      <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+                      <span className="text-gray-600">Payment received for Job #1234</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating Elements */}
+              <div className="absolute -top-4 -right-4 w-16 h-16 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                <TrendingUp className="h-8 w-8 text-white" />
+              </div>
+              <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                <DollarSign className="h-10 w-10 text-white" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
   const features = [
     {
