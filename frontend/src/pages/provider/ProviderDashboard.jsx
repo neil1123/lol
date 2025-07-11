@@ -58,7 +58,29 @@ const ProviderDashboard = () => {
     }
   ];
 
-  const upcomingAppointments = mockCalendarEvents.slice(0, 3);
+  const upcomingAppointments = [
+    {
+      id: 1,
+      customerName: 'Sarah Johnson',
+      service: 'Home Cleaning',
+      date: '2024-01-16',
+      time: '10:00 AM'
+    },
+    {
+      id: 2,
+      customerName: 'Mike Wilson',
+      service: 'Electrical Work',
+      date: '2024-01-17',
+      time: '2:00 PM'
+    },
+    {
+      id: 3,
+      customerName: 'Emily Davis',
+      service: 'Plumbing',
+      date: '2024-01-18',
+      time: '9:00 AM'
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
