@@ -69,7 +69,7 @@ const ServiceProviderLanding = () => {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
-              <span className="ml-2 text-sm text-gray-600">for Service Providers</span>
+              <span className="ml-2 text-sm text-gray-600">for Merchants</span>
             </div>
             
             {/* Desktop Navigation */}
