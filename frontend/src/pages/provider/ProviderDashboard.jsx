@@ -225,23 +225,24 @@ const ProviderDashboard = () => {
                 <div className="h-64 flex items-end justify-between space-x-2">
                   {mockDashboardData.weeklyData.map((day, index) => (
                     <div key={index} className="flex-1 flex flex-col items-center">
-                      <div className="w-full flex flex-col items-center space-y-1">
-                        {/* Revenue Bar */}
-                        <div
-                          className="w-full bg-gradient-to-t from-green-500 to-green-400 rounded-t-sm"
-                          style={{ height: `${(day.revenue / 2000) * 100}%` }}
-                          title={`Revenue: $${day.revenue}`}
-                        ></div>
+                      <div className="w-full flex space-x-1 items-end h-48">
                         {/* Orders Bar */}
                         <div
-                          className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-sm"
-                          style={{ height: `${(day.orders / 25) * 100}%` }}
+                          className="w-1/2 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-sm min-h-[8px]"
+                          style={{ height: `${Math.max(8, (day.orders / 25) * 180)}px` }}
                           title={`Orders: ${day.orders}`}
+                        ></div>
+                        {/* Revenue Bar */}
+                        <div
+                          className="w-1/2 bg-gradient-to-t from-green-500 to-green-400 rounded-t-sm min-h-[8px]"
+                          style={{ height: `${Math.max(8, (day.revenue / 3500) * 180)}px` }}
+                          title={`Revenue: $${day.revenue}`}
                         ></div>
                       </div>
                       <div className="mt-2 text-center">
-                        <div className="text-xs font-medium text-gray-900">{day.orders}</div>
+                        <div className="text-xs font-medium text-gray-900">{day.orders} orders</div>
                         <div className="text-xs text-gray-600">{day.day}</div>
+                        <div className="text-xs text-green-600">${day.revenue}</div>
                       </div>
                     </div>
                   ))}
