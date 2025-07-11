@@ -116,19 +116,19 @@ const HomeownerLanding = () => {
               </div>
             </div>
             
-            {/* Quick stats */}
-            <div className="grid grid-cols-3 gap-8 max-w-lg mx-auto text-center">
-              <div>
-                <div className="text-2xl font-bold text-blue-600">500+</div>
-                <div className="text-sm text-gray-600">Verified Providers</div>
+            {/* Trust indicators */}
+            <div className="flex items-center justify-center space-x-8 text-gray-600">
+              <div className="flex items-center space-x-2">
+                <Shield className="h-5 w-5 text-blue-600" />
+                <span className="text-sm">Verified Providers</span>
               </div>
-              <div>
-                <div className="text-2xl font-bold text-green-600">4.8★</div>
-                <div className="text-sm text-gray-600">Average Rating</div>
+              <div className="flex items-center space-x-2">
+                <Star className="h-5 w-5 text-yellow-500 fill-current" />
+                <span className="text-sm">Top Rated Services</span>
               </div>
-              <div>
-                <div className="text-2xl font-bold text-purple-600">24/7</div>
-                <div className="text-sm text-gray-600">Support</div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="h-5 w-5 text-green-600" />
+                <span className="text-sm">Quality Guaranteed</span>
               </div>
             </div>
           </div>
