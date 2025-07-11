@@ -63,16 +63,6 @@ const ServiceProviderLanding = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    navigate('/homeservices/auth');
-  };
-
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
