@@ -12,6 +12,7 @@ const HomeownerQuotations = () => {
   const navigate = useNavigate();
   const [quotations, setQuotations] = useState([]);
   const [localQuotes, setLocalQuotes] = useState([]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     // Load mock quotations
