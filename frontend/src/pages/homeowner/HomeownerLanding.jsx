@@ -89,7 +89,7 @@ const HomeownerLanding = () => {
       <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Home services at your 
               <span className="text-blue-600"> door step</span>
             </h2>
@@ -99,31 +99,88 @@ const HomeownerLanding = () => {
             </p>
             
             {/* Search Bar */}
-            <div className="bg-white rounded-xl shadow-lg p-6 max-w-4xl mx-auto">
-              <div className="flex flex-col md:flex-row gap-4">
+            <div className="bg-white rounded-xl shadow-lg p-6 max-w-2xl mx-auto mb-8">
+              <div className="flex gap-4">
                 <div className="flex-1 relative">
                   <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   <Input
-                    placeholder="What service do you need?"
+                    placeholder="What service do you need? (e.g., plumbing, cleaning)"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10 h-12 text-lg"
                   />
                 </div>
-                <div className="flex-1 relative">
-                  <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                  <Input
-                    placeholder="Enter your location"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    className="pl-10 h-12 text-lg"
-                  />
-                </div>
                 <Button onClick={handleSearch} className="h-12 px-8 text-lg">
-                  Search Services
+                  Find Services
                 </Button>
               </div>
             </div>
+            
+            {/* Quick stats */}
+            <div className="grid grid-cols-3 gap-8 max-w-lg mx-auto text-center">
+              <div>
+                <div className="text-2xl font-bold text-blue-600">500+</div>
+                <div className="text-sm text-gray-600">Verified Providers</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-green-600">4.8★</div>
+                <div className="text-sm text-gray-600">Average Rating</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-purple-600">24/7</div>
+                <div className="text-sm text-gray-600">Support</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h3 className="text-4xl font-bold text-gray-900 mb-4">
+              How It Works
+            </h3>
+            <p className="text-xl text-gray-600">
+              Get your home projects done in 4 simple steps
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-4 gap-8">
+            {howItWorksSteps.map((step, index) => (
+              <div key={index} className="text-center group">
+                {/* Animated step circle */}
+                <div className={`w-20 h-20 ${step.color} rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold transform group-hover:scale-110 transition-all duration-300 shadow-lg`}>
+                  {step.step}
+                </div>
+                
+                {/* Step content */}
+                <div className="space-y-3">
+                  <div className="text-4xl mb-3">{step.icon}</div>
+                  <h4 className="text-xl font-semibold text-gray-900">{step.title}</h4>
+                  <p className="text-gray-600">{step.description}</p>
+                </div>
+                
+                {/* Connecting arrow */}
+                {index < howItWorksSteps.length - 1 && (
+                  <div className="hidden md:block absolute top-10 left-1/2 transform translate-x-12 text-gray-300">
+                    <ArrowRight className="h-8 w-8" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          
+          <div className="text-center mt-12">
+            <Button 
+              size="lg" 
+              onClick={() => navigate('/homeowners/browse')}
+              className="animate-pulse"
+            >
+              Start Your Project Now
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
           </div>
         </div>
       </section>
