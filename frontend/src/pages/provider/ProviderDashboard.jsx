@@ -216,7 +216,7 @@ const ProviderDashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="h-64 flex items-end justify-between space-x-2">
-                  {mockDashboardStats.weeklyData.map((day, index) => (
+                  {mockDashboardData.weeklyData.map((day, index) => (
                     <div key={index} className="flex-1 flex flex-col items-center">
                       <div
                         className="w-full bg-blue-600 rounded-t-sm"
