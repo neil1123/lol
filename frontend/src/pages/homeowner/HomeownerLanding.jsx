@@ -318,7 +318,7 @@ const HomeownerLanding = () => {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 mt-32 lg:mt-40 bg-white">
+      <section className="py-20 mt-12 lg:mt-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h3 className="text-4xl font-bold text-gray-900 mb-4">
