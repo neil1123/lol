@@ -86,6 +86,16 @@ const HomeownerLanding = () => {
       review: "Amazing attention to detail! The painters were neat, fast, and the quality is exceptional. Our home looks brand new!",
       avatar: "JP",
       date: "2 months ago"
+    },
+    {
+      id: 6,
+      name: "Robert Wilson",
+      location: "Halifax, NS",
+      service: "HVAC Services",
+      rating: 5,
+      review: "Professional HVAC installation and maintenance. The technician was punctual, courteous, and explained everything thoroughly. Great value for money!",
+      avatar: "RW",
+      date: "1 month ago"
     }
   ];
 
