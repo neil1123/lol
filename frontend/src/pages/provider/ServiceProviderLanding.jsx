@@ -129,124 +129,142 @@ const ServiceProviderLanding = () => {
       </header>
 
       {/* Hero Section with Dashboard */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 to-white">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left Content */}
             <div>
               <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                Unlock a new{' '}
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  revenue stream
-                </span>
+                Unlock a new revenue stream
               </h1>
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
                 Build your service business with Doord's marketplace platform. Connect with customers, 
                 streamline operations, and unlock new revenue streams with our comprehensive suite of tools.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button 
-                  size="lg"
-                  onClick={() => navigate('/homeservices/auth')}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                >
-                  Get Started
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                <Button 
-                  variant="outline"
-                  size="lg"
-                  className="px-8 py-4 text-lg font-semibold rounded-xl border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300"
-                >
-                  <PlayCircle className="mr-2 h-5 w-5" />
-                  Watch Demo
-                </Button>
-              </div>
+              <Button 
+                size="lg"
+                onClick={() => navigate('/homeservices/auth')}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                Get Started
+              </Button>
             </div>
 
-            {/* Right Dashboard Screenshot */}
+            {/* Right Dashboard Mockup */}
             <div className="relative">
-              <div className="bg-white rounded-2xl shadow-2xl p-6 border border-gray-200">
+              <div className="bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden">
                 {/* Dashboard Header */}
-                <div className="flex items-center justify-between mb-6 pb-4 border-b">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold text-sm">ES</span>
+                <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-2xl font-bold text-blue-600">Doord</h2>
+                    <div className="flex items-center space-x-4">
+                      <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-sm">SE</span>
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold">Stella Ekubo</div>
+                        <div className="text-xs text-gray-500">Provider</div>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">Elite Solutions</h3>
-                      <p className="text-sm text-gray-600">Provider Dashboard</p>
-                    </div>
-                  </div>
-                  <Badge className="bg-green-100 text-green-800">Active</Badge>
-                </div>
-
-                {/* Dashboard Stats */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="text-center p-4 bg-blue-50 rounded-lg">
-                    <div className="text-2xl font-bold text-blue-600">12</div>
-                    <div className="text-sm text-gray-600">Total Orders</div>
-                    <div className="text-xs text-green-600">+12% from last month</div>
-                  </div>
-                  <div className="text-center p-4 bg-green-50 rounded-lg">
-                    <div className="text-2xl font-bold text-green-600">$24,500</div>
-                    <div className="text-sm text-gray-600">Total Sales</div>
-                    <div className="text-xs text-green-600">+8% from last month</div>
-                  </div>
-                  <div className="text-center p-4 bg-purple-50 rounded-lg">
-                    <div className="text-2xl font-bold text-purple-600">96%</div>
-                    <div className="text-sm text-gray-600">Conversion</div>
-                    <div className="text-xs text-green-600">+2% from last month</div>
-                  </div>
-                  <div className="text-center p-4 bg-orange-50 rounded-lg">
-                    <div className="text-2xl font-bold text-orange-600">30</div>
-                    <div className="text-sm text-gray-600">Customers</div>
-                    <div className="text-xs text-green-600">+15% from last month</div>
                   </div>
                 </div>
 
-                {/* Mini Chart */}
-                <div className="mb-4">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-2">Weekly Performance</h4>
-                  <div className="flex items-end space-x-2 h-20">
-                    <div className="w-8 bg-blue-200 rounded-t" style={{height: '60%'}}></div>
-                    <div className="w-8 bg-blue-300 rounded-t" style={{height: '40%'}}></div>
-                    <div className="w-8 bg-blue-400 rounded-t" style={{height: '80%'}}></div>
-                    <div className="w-8 bg-blue-500 rounded-t" style={{height: '70%'}}></div>
-                    <div className="w-8 bg-blue-600 rounded-t" style={{height: '90%'}}></div>
-                    <div className="w-8 bg-blue-500 rounded-t" style={{height: '65%'}}></div>
-                    <div className="w-8 bg-blue-400 rounded-t" style={{height: '75%'}}></div>
-                  </div>
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>Mon</span>
-                    <span>Wed</span>
-                    <span>Fri</span>
-                    <span>Sun</span>
+                {/* Dashboard Navigation */}
+                <div className="bg-white px-6 py-3 border-b border-gray-100">
+                  <div className="flex items-center space-x-6">
+                    <div className="flex items-center space-x-2 text-blue-600 font-medium">
+                      <Home className="h-4 w-4" />
+                      <span className="text-sm">Home</span>
+                    </div>
+                    <div className="flex items-center space-x-2 text-gray-600">
+                      <ShoppingCart className="h-4 w-4" />
+                      <span className="text-sm">Orders</span>
+                      <span className="bg-blue-600 text-white text-xs rounded-full px-2 py-0.5">5</span>
+                    </div>
+                    <div className="flex items-center space-x-2 text-gray-600">
+                      <Calendar className="h-4 w-4" />
+                      <span className="text-sm">Services</span>
+                    </div>
+                    <div className="flex items-center space-x-2 text-gray-600">
+                      <MessageCircle className="h-4 w-4" />
+                      <span className="text-sm">Messages</span>
+                      <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5">3</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Recent Activity */}
-                <div>
-                  <h4 className="text-sm font-semibold text-gray-700 mb-2">Recent Activity</h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2 text-xs">
-                      <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                      <span className="text-gray-600">New quote request from Sarah Johnson</span>
+                {/* Dashboard Content */}
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-6">Dashboard</h3>
+                  
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <div className="text-sm text-gray-600 mb-1">Total Orders</div>
+                      <div className="text-2xl font-bold text-blue-600">5</div>
                     </div>
-                    <div className="flex items-center space-x-2 text-xs">
-                      <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                      <span className="text-gray-600">Payment received for Job #1234</span>
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <div className="text-sm text-gray-600 mb-1">Total sales</div>
+                      <div className="text-2xl font-bold text-green-600">$5,500</div>
+                    </div>
+                    <div className="bg-purple-50 p-4 rounded-lg">
+                      <div className="text-sm text-gray-600 mb-1">Conversion</div>
+                      <div className="text-2xl font-bold text-purple-600">1.04%</div>
+                    </div>
+                    <div className="bg-orange-50 p-4 rounded-lg">
+                      <div className="text-sm text-gray-600 mb-1">Customers</div>
+                      <div className="text-2xl font-bold text-orange-600">80</div>
+                    </div>
+                  </div>
+
+                  {/* Chart Section */}
+                  <div className="mb-6">
+                    <h4 className="text-sm font-semibold text-gray-700 mb-3">This week</h4>
+                    <div className="flex items-end space-x-2 h-24 mb-2">
+                      <div className="w-8 bg-blue-300 rounded-t" style={{height: '40%'}}></div>
+                      <div className="w-8 bg-blue-400 rounded-t" style={{height: '60%'}}></div>
+                      <div className="w-8 bg-blue-500 rounded-t" style={{height: '80%'}}></div>
+                      <div className="w-8 bg-blue-600 rounded-t" style={{height: '70%'}}></div>
+                      <div className="w-8 bg-blue-500 rounded-t" style={{height: '90%'}}></div>
+                      <div className="w-8 bg-blue-400 rounded-t" style={{height: '50%'}}></div>
+                      <div className="w-8 bg-blue-300 rounded-t" style={{height: '65%'}}></div>
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>Mon</span>
+                      <span>Wed</span>
+                      <span>Fri</span>
+                      <span>Sun</span>
+                    </div>
+                  </div>
+
+                  {/* Calendar Section */}
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-700 mb-3">March 2025</h4>
+                    <div className="grid grid-cols-7 gap-1 text-xs">
+                      <div className="text-center py-1 text-gray-500">S</div>
+                      <div className="text-center py-1 text-gray-500">M</div>
+                      <div className="text-center py-1 text-gray-500">T</div>
+                      <div className="text-center py-1 text-gray-500">W</div>
+                      <div className="text-center py-1 text-gray-500">T</div>
+                      <div className="text-center py-1 text-gray-500">F</div>
+                      <div className="text-center py-1 text-gray-500">S</div>
+                      {/* Calendar days */}
+                      {Array.from({length: 31}, (_, i) => (
+                        <div key={i} className={`text-center py-1 ${i === 14 ? 'bg-blue-600 text-white rounded' : 'text-gray-700'}`}>
+                          {i + 1}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Floating Elements */}
-              <div className="absolute -top-4 -right-4 w-16 h-16 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg">
-                <TrendingUp className="h-8 w-8 text-white" />
+              {/* Floating Success Indicators */}
+              <div className="absolute -top-4 -right-4 w-12 h-12 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                <TrendingUp className="h-6 w-6 text-white" />
               </div>
-              <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-                <DollarSign className="h-10 w-10 text-white" />
+              <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                <DollarSign className="h-8 w-8 text-white" />
               </div>
             </div>
           </div>
