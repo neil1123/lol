@@ -92,6 +92,7 @@ function App() {
           <Route path="/homeservices/quotations" element={<ProviderQuotations />} />
           <Route path="/homeservices/calendar" element={<ProviderCalendar />} />
           <Route path="/homeservices/customers" element={<ProviderCustomers />} />
+          <Route path="/homeservices/settings" element={<ProviderSettings />} />
         </Routes>
       </BrowserRouter>
     </div>
