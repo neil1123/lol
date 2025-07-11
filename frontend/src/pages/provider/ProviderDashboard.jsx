@@ -170,7 +170,7 @@ const ProviderDashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">Conversion Rate</p>
-                    <p className="text-3xl font-bold text-gray-900">{mockDashboardStats.conversionRate}%</p>
+                    <p className="text-3xl font-bold text-gray-900">{mockDashboardData.customerSatisfaction * 20}%</p>
                   </div>
                   <div className="bg-purple-100 p-3 rounded-full">
                     <Clock className="h-6 w-6 text-purple-600" />
