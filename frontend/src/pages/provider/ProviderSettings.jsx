@@ -202,7 +202,7 @@ const ProviderSettings = () => {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
-                    <Notifications className="h-5 w-5" />
+                    <Bell className="h-5 w-5" />
                     <span>Notification Preferences</span>
                   </CardTitle>
                 </CardHeader>
