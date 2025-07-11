@@ -251,6 +251,9 @@ const ProviderProfile = () => {
                 <span className="truncate">💬 Get best deal</span>
                 <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full hidden sm:inline">1 hr</span>
               </Button>
+              <p className="text-center text-sm text-gray-600">
+                Starts from $199.99
+              </p>
             </div>
           </div>
 
