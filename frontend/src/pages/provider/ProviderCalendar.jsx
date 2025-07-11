@@ -116,6 +116,9 @@ const ProviderCalendar = () => {
                 </Avatar>
                 <span className="text-sm font-medium">Elite Solutions</span>
               </div>
+              <Button variant="ghost" size="sm" onClick={handleLogout} title="Logout">
+                <LogOut className="h-4 w-4" />
+              </Button>
             </div>
           </div>
         </div>
