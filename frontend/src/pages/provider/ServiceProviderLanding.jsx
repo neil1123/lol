@@ -629,130 +629,404 @@ const ServiceProviderLanding = () => {
       </section>
 
       {/* Partner Registration Form */}
-      <section className="py-20 bg-blue-600">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              BECOME OUR PARTNER
-            </h2>
-            <p className="text-xl text-blue-100">
-              Join Hands, Unlock Opportunities
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Left Content */}
+            <div>
+              <h2 className="text-5xl font-bold text-gray-900 mb-6">
+                BECOME OUR PARTNER
+              </h2>
+              <p className="text-xl text-gray-600 mb-8">
+                Join Hands, Unlock Opportunities
+              </p>
+              <div className="space-y-6">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <CheckCircle className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">Instant Access to Customers</h3>
+                    <p className="text-gray-600">Connect with ready-to-book customers in Halifax</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                    <DollarSign className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">Instant Payments</h3>
+                    <p className="text-gray-600">Get paid immediately after job completion</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                    <BarChart3 className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">Business Growth Tools</h3>
+                    <p className="text-gray-600">Complete dashboard to manage and grow your business</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Form */}
+            <div>
+              <Card className="shadow-2xl border-0">
+                <CardContent className="p-8">
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">
+                          First Name
+                        </Label>
+                        <Input
+                          id="firstName"
+                          value={formData.firstName}
+                          onChange={(e) => handleInputChange('firstName', e.target.value)}
+                          className="mt-1 h-12"
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="lastName" className="text-sm font-medium text-gray-700">
+                          Last Name
+                        </Label>
+                        <Input
+                          id="lastName"
+                          value={formData.lastName}
+                          onChange={(e) => handleInputChange('lastName', e.target.value)}
+                          className="mt-1 h-12"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                        Email
+                      </Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        className="mt-1 h-12"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="address" className="text-sm font-medium text-gray-700">
+                        Address
+                      </Label>
+                      <Input
+                        id="address"
+                        value={formData.address}
+                        onChange={(e) => handleInputChange('address', e.target.value)}
+                        className="mt-1 h-12"
+                        required
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="province" className="text-sm font-medium text-gray-700">
+                          Province
+                        </Label>
+                        <select
+                          id="province"
+                          value={formData.province}
+                          onChange={(e) => handleInputChange('province', e.target.value)}
+                          className="mt-1 w-full h-12 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          required
+                        >
+                          <option value="">Select Province</option>
+                          <option value="NS">Nova Scotia</option>
+                          <option value="ON">Ontario</option>
+                          <option value="QC">Quebec</option>
+                          <option value="BC">British Columbia</option>
+                          <option value="AB">Alberta</option>
+                          <option value="MB">Manitoba</option>
+                          <option value="SK">Saskatchewan</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="city" className="text-sm font-medium text-gray-700">
+                          City
+                        </Label>
+                        <select
+                          id="city"
+                          value={formData.city}
+                          onChange={(e) => handleInputChange('city', e.target.value)}
+                          className="mt-1 w-full h-12 p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          required
+                        >
+                          <option value="">Select City</option>
+                          <option value="Halifax">Halifax</option>
+                          <option value="Toronto">Toronto</option>
+                          <option value="Vancouver">Vancouver</option>
+                          <option value="Montreal">Montreal</option>
+                          <option value="Calgary">Calgary</option>
+                          <option value="Ottawa">Ottawa</option>
+                          <option value="Edmonton">Edmonton</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <Button 
+                      type="submit"
+                      size="lg" 
+                      className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                    >
+                      Next
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Provider Reviews Section */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <h3 className="text-4xl font-bold text-gray-900 mb-6">
+              Trusted by service professionals
+            </h3>
+            <p className="text-xl text-gray-600">
+              Join thousands of service providers who have transformed their businesses with Doord.
             </p>
           </div>
 
-          <Card className="bg-white">
-            <CardContent className="p-8">
-              <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">
-                    First Name
-                  </Label>
-                  <Input
-                    id="firstName"
-                    value={formData.firstName}
-                    onChange={(e) => handleInputChange('firstName', e.target.value)}
-                    className="mt-1"
-                    required
-                  />
-                </div>
+          {/* Reviews Grid */}
+          <div className="relative">
+            {/* Desktop: Grid Layout */}
+            <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardContent className="p-8 text-center">
+                  <div className="flex justify-center mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <blockquote className="text-lg text-gray-700 text-center mb-6 leading-relaxed">
+                    "Doord has completely transformed my business. I've seen a 40% increase in bookings and my revenue has doubled in just 6 months."
+                  </blockquote>
+                  <div className="flex items-center justify-center space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                      SM
+                    </div>
+                    <div className="text-center">
+                      <h4 className="font-semibold text-gray-900">Sarah Miller</h4>
+                      <p className="text-sm text-gray-600">Halifax, NS</p>
+                      <p className="text-xs text-blue-600 font-medium">Cleaning Services</p>
+                    </div>
+                  </div>
+                  <div className="flex justify-center mt-6">
+                    <span className="bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
+                      Cleaning Services
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
 
-                <div>
-                  <Label htmlFor="lastName" className="text-sm font-medium text-gray-700">
-                    Last Name
-                  </Label>
-                  <Input
-                    id="lastName"
-                    value={formData.lastName}
-                    onChange={(e) => handleInputChange('lastName', e.target.value)}
-                    className="mt-1"
-                    required
-                  />
-                </div>
+              <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardContent className="p-8 text-center">
+                  <div className="flex justify-center mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <blockquote className="text-lg text-gray-700 text-center mb-6 leading-relaxed">
+                    "The payment system is incredibly fast and reliable. I get paid instantly after completing jobs, which has improved my cash flow significantly."
+                  </blockquote>
+                  <div className="flex items-center justify-center space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold">
+                      MJ
+                    </div>
+                    <div className="text-center">
+                      <h4 className="font-semibold text-gray-900">Mike Johnson</h4>
+                      <p className="text-sm text-gray-600">Halifax, NS</p>
+                      <p className="text-xs text-blue-600 font-medium">Electrical Services</p>
+                    </div>
+                  </div>
+                  <div className="flex justify-center mt-6">
+                    <span className="bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
+                      Electrical Services
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
 
-                <div className="md:col-span-2">
-                  <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                    Email
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    className="mt-1"
-                    required
-                  />
-                </div>
+              <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardContent className="p-8 text-center">
+                  <div className="flex justify-center mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <blockquote className="text-lg text-gray-700 text-center mb-6 leading-relaxed">
+                    "The customer quality is outstanding. Doord connects me with serious customers who value professional service and are willing to pay fair prices."
+                  </blockquote>
+                  <div className="flex items-center justify-center space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                      LW
+                    </div>
+                    <div className="text-center">
+                      <h4 className="font-semibold text-gray-900">Lisa Wang</h4>
+                      <p className="text-sm text-gray-600">Halifax, NS</p>
+                      <p className="text-xs text-blue-600 font-medium">Landscaping</p>
+                    </div>
+                  </div>
+                  <div className="flex justify-center mt-6">
+                    <span className="bg-purple-50 text-purple-700 px-4 py-2 rounded-full text-sm font-medium">
+                      Landscaping
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
 
-                <div className="md:col-span-2">
-                  <Label htmlFor="address" className="text-sm font-medium text-gray-700">
-                    Address
-                  </Label>
-                  <Input
-                    id="address"
-                    value={formData.address}
-                    onChange={(e) => handleInputChange('address', e.target.value)}
-                    className="mt-1"
-                    required
-                  />
-                </div>
+              <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardContent className="p-8 text-center">
+                  <div className="flex justify-center mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <blockquote className="text-lg text-gray-700 text-center mb-6 leading-relaxed">
+                    "The scheduling system is a game-changer. Customers can book directly and I never miss an appointment. My efficiency has improved by 60%."
+                  </blockquote>
+                  <div className="flex items-center justify-center space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold">
+                      RB
+                    </div>
+                    <div className="text-center">
+                      <h4 className="font-semibold text-gray-900">Robert Brown</h4>
+                      <p className="text-sm text-gray-600">Halifax, NS</p>
+                      <p className="text-xs text-blue-600 font-medium">Plumbing Services</p>
+                    </div>
+                  </div>
+                  <div className="flex justify-center mt-6">
+                    <span className="bg-orange-50 text-orange-700 px-4 py-2 rounded-full text-sm font-medium">
+                      Plumbing Services
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
 
-                <div>
-                  <Label htmlFor="province" className="text-sm font-medium text-gray-700">
-                    Province
-                  </Label>
-                  <select
-                    id="province"
-                    value={formData.province}
-                    onChange={(e) => handleInputChange('province', e.target.value)}
-                    className="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  >
-                    <option value="">Select Province</option>
-                    <option value="NS">Nova Scotia</option>
-                    <option value="ON">Ontario</option>
-                    <option value="QC">Quebec</option>
-                    <option value="BC">British Columbia</option>
-                    <option value="AB">Alberta</option>
-                    <option value="MB">Manitoba</option>
-                    <option value="SK">Saskatchewan</option>
-                  </select>
-                </div>
+              <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardContent className="p-8 text-center">
+                  <div className="flex justify-center mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <blockquote className="text-lg text-gray-700 text-center mb-6 leading-relaxed">
+                    "Professional platform with excellent customer support. The dashboard helps me track everything and the booking system is seamless."
+                  </blockquote>
+                  <div className="flex items-center justify-center space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold">
+                      JD
+                    </div>
+                    <div className="text-center">
+                      <h4 className="font-semibold text-gray-900">Jessica Davis</h4>
+                      <p className="text-sm text-gray-600">Halifax, NS</p>
+                      <p className="text-xs text-blue-600 font-medium">HVAC Services</p>
+                    </div>
+                  </div>
+                  <div className="flex justify-center mt-6">
+                    <span className="bg-teal-50 text-teal-700 px-4 py-2 rounded-full text-sm font-medium">
+                      HVAC Services
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
 
-                <div>
-                  <Label htmlFor="city" className="text-sm font-medium text-gray-700">
-                    City
-                  </Label>
-                  <select
-                    id="city"
-                    value={formData.city}
-                    onChange={(e) => handleInputChange('city', e.target.value)}
-                    className="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  >
-                    <option value="">Select City</option>
-                    <option value="Halifax">Halifax</option>
-                    <option value="Toronto">Toronto</option>
-                    <option value="Vancouver">Vancouver</option>
-                    <option value="Montreal">Montreal</option>
-                    <option value="Calgary">Calgary</option>
-                    <option value="Ottawa">Ottawa</option>
-                    <option value="Edmonton">Edmonton</option>
-                  </select>
-                </div>
+              <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardContent className="p-8 text-center">
+                  <div className="flex justify-center mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <blockquote className="text-lg text-gray-700 text-center mb-6 leading-relaxed">
+                    "Since joining Doord, I've expanded my team and doubled my revenue. The platform brings consistent, high-quality leads every week."
+                  </blockquote>
+                  <div className="flex items-center justify-center space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold">
+                      DM
+                    </div>
+                    <div className="text-center">
+                      <h4 className="font-semibold text-gray-900">David Miller</h4>
+                      <p className="text-sm text-gray-600">Halifax, NS</p>
+                      <p className="text-xs text-blue-600 font-medium">Handyman Services</p>
+                    </div>
+                  </div>
+                  <div className="flex justify-center mt-6">
+                    <span className="bg-red-50 text-red-700 px-4 py-2 rounded-full text-sm font-medium">
+                      Handyman Services
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
-                <div className="md:col-span-2">
-                  <Button 
-                    type="submit"
-                    size="lg" 
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                  >
-                    Next
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
+            {/* Mobile: Horizontal Scroll */}
+            <div className="md:hidden">
+              <div className="flex overflow-x-auto space-x-6 pb-6 scrollbar-hide">
+                {/* Mobile cards with same content but horizontal scroll */}
+                <Card className="border-0 shadow-lg flex-shrink-0 w-80">
+                  <CardContent className="p-6 text-center">
+                    <div className="flex justify-center mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                      ))}
+                    </div>
+                    <blockquote className="text-base text-gray-700 text-center mb-6 leading-relaxed">
+                      "Doord has completely transformed my business. I've seen a 40% increase in bookings and my revenue has doubled in just 6 months."
+                    </blockquote>
+                    <div className="flex items-center justify-center space-x-3">
+                      <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                        SM
+                      </div>
+                      <div className="text-center">
+                        <h4 className="font-semibold text-gray-900">Sarah Miller</h4>
+                        <p className="text-sm text-gray-600">Halifax, NS</p>
+                        <p className="text-xs text-blue-600 font-medium">Cleaning Services</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                {/* Add other mobile cards similarly */}
+              </div>
+              
+              <div className="flex justify-center mt-4">
+                <p className="text-sm text-gray-500">← Swipe to see more reviews →</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Call to Action */}
+          <div className="text-center mt-16">
+            <p className="text-lg text-gray-600 mb-6">
+              Join thousands of satisfied service providers in Halifax
+            </p>
+            <Button 
+              size="lg"
+              onClick={() => navigate('/homeservices/auth')}
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            >
+              Get Started Free
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </section>
 
