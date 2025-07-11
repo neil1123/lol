@@ -74,7 +74,7 @@ const ProviderDashboard = () => {
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="xl:hidden"
+                className="flex items-center"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
                 {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
