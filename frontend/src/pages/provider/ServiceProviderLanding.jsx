@@ -31,6 +31,7 @@ import { Label } from '../../components/ui/label';
 
 const ServiceProviderLanding = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -40,6 +41,35 @@ const ServiceProviderLanding = () => {
     city: ''
   });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const howItWorksSection = document.getElementById('how-it-works');
+      if (howItWorksSection) {
+        const rect = howItWorksSection.getBoundingClientRect();
+        const sectionTop = rect.top;
+        const sectionHeight = rect.height;
+        const windowHeight = window.innerHeight;
+        
+        // Calculate scroll progress through the section
+        const scrolled = Math.max(0, windowHeight - sectionTop);
+        const progress = Math.min(1, scrolled / (sectionHeight + windowHeight));
+        
+        setScrollProgress(progress);
+        
+        // Update glowing orb position
+        const timelineOrb = document.getElementById('timeline-orb');
+        if (timelineOrb) {
+          const orbPosition = progress * 100;
+          timelineOrb.style.top = `${orbPosition}%`;
+          timelineOrb.style.boxShadow = `0 0 ${20 + progress * 30}px rgba(59, 130, 246, ${0.3 + progress * 0.7})`;
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
