@@ -86,6 +86,8 @@ function App() {
           <Route path="/homeservices" element={<ServiceProviderLanding />} />
           <Route path="/homeservices/auth" element={<ProviderAuth />} />
           <Route path="/homeservices/dashboard" element={<ProviderDashboard />} />
+          <Route path="/homeservices/orders" element={<ProviderOrders />} />
+          <Route path="/homeservices/messages" element={<ProviderMessaging />} />
           <Route path="/homeservices/quotations" element={<ProviderQuotations />} />
           <Route path="/homeservices/calendar" element={<ProviderCalendar />} />
           <Route path="/homeservices/customers" element={<ProviderCustomers />} />
