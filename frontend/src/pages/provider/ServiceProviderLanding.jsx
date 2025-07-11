@@ -342,186 +342,286 @@ const ServiceProviderLanding = () => {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+      <section className="py-32 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-10 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/4 right-10 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl font-bold text-gray-900 mb-6">
               How Doord works for Home service companies?
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               A streamlined process designed to help you focus on what you do best while we handle the rest.
             </p>
           </div>
 
-          <div className="space-y-16">
-            {/* Step 1 */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <div className="flex items-center mb-4">
-                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mr-4">
-                    1
-                  </div>
-                  <h3 className="text-2xl font-semibold text-gray-900">Customers order</h3>
-                </div>
-                <p className="text-lg text-gray-600 mb-6">
-                  Communicate with the customer to understand their needs. Check details on chat.
-                </p>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                    Real-time customer communication
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                    Detailed service requirements
-                  </li>
-                </ul>
-              </div>
-              <div className="bg-white rounded-2xl shadow-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold">New Order</h4>
-                  <Badge className="bg-blue-100 text-blue-800">Active</Badge>
-                </div>
-                <h5 className="font-medium mb-2">House Cleaning Service</h5>
-                <p className="text-sm text-gray-600">3-bedroom house, deep cleaning required</p>
-              </div>
-            </div>
+          {/* Timeline with Center Line */}
+          <div className="relative">
+            {/* Center Line */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-200 via-blue-500 to-blue-200 hidden lg:block"></div>
+            
+            {/* Glowing Orb */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 top-0 w-4 h-4 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50 animate-pulse hidden lg:block" id="timeline-orb"></div>
 
-            {/* Step 2 */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="lg:order-2">
-                <div className="flex items-center mb-4">
-                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mr-4">
-                    2
+            <div className="space-y-24">
+              {/* Step 1 */}
+              <div className="relative">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                  <div className="lg:pr-16">
+                    <div className="bg-white rounded-3xl shadow-2xl p-10 border border-gray-100 hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2">
+                      <div className="flex items-center mb-6">
+                        <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl flex items-center justify-center font-bold text-2xl mr-6 shadow-lg">
+                          1
+                        </div>
+                        <h3 className="text-3xl font-bold text-gray-900">Customers order</h3>
+                      </div>
+                      <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                        Communicate with the customer to understand their needs. Check details on chat and provide personalized service recommendations.
+                      </p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center text-green-600">
+                          <CheckCircle className="h-5 w-5 mr-3" />
+                          <span className="font-medium">Real-time communication</span>
+                        </div>
+                        <div className="flex items-center text-green-600">
+                          <CheckCircle className="h-5 w-5 mr-3" />
+                          <span className="font-medium">Detailed requirements</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-semibold text-gray-900">Understand Requirement & Provide Quotation</h3>
+                  <div className="lg:pl-16">
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border border-blue-200">
+                      <div className="flex items-center justify-between mb-6">
+                        <h4 className="text-xl font-bold text-gray-900">New Order Received</h4>
+                        <Badge className="bg-blue-600 text-white px-3 py-1 text-sm">Active</Badge>
+                      </div>
+                      <div className="space-y-4">
+                        <div>
+                          <h5 className="text-lg font-semibold text-gray-800">House Cleaning Service</h5>
+                          <p className="text-gray-600">3-bedroom house, deep cleaning required</p>
+                        </div>
+                        <div className="flex items-center space-x-4 text-sm text-gray-600">
+                          <div className="flex items-center">
+                            <MapPin className="h-4 w-4 mr-1" />
+                            <span>Halifax, NS</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Clock className="h-4 w-4 mr-1" />
+                            <span>Flexible timing</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-lg text-gray-600 mb-6">
-                  Analyze the requirements and send a detailed quotation. Include timelines, materials, and any additional costs.
-                </p>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                    Detailed cost breakdown
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                    Timeline estimation
-                  </li>
-                </ul>
+                {/* Step Connector */}
+                <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-12 w-8 h-8 bg-blue-500 rounded-full border-4 border-white shadow-lg hidden lg:block"></div>
               </div>
-              <div className="lg:order-1 bg-white rounded-2xl shadow-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold">Quotation</h4>
-                  <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
-                </div>
-                <div className="text-2xl font-bold text-green-600 mb-2">$425</div>
-                <div className="space-y-1 text-sm">
-                  <div>Service: Deep Cleaning</div>
-                  <div>Duration: 4 hours</div>
-                </div>
-              </div>
-            </div>
 
-            {/* Step 3 */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <div className="flex items-center mb-4">
-                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mr-4">
-                    3
+              {/* Step 2 */}
+              <div className="relative">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                  <div className="lg:order-2 lg:pl-16">
+                    <div className="bg-white rounded-3xl shadow-2xl p-10 border border-gray-100 hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2">
+                      <div className="flex items-center mb-6">
+                        <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl flex items-center justify-center font-bold text-2xl mr-6 shadow-lg">
+                          2
+                        </div>
+                        <h3 className="text-3xl font-bold text-gray-900">Provide Quotation</h3>
+                      </div>
+                      <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                        Analyze requirements and send detailed quotation. Include timelines, materials, and any additional costs for complete transparency.
+                      </p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center text-green-600">
+                          <CheckCircle className="h-5 w-5 mr-3" />
+                          <span className="font-medium">Detailed breakdown</span>
+                        </div>
+                        <div className="flex items-center text-green-600">
+                          <CheckCircle className="h-5 w-5 mr-3" />
+                          <span className="font-medium">Timeline estimation</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-semibold text-gray-900">Order confirmation</h3>
+                  <div className="lg:order-1 lg:pr-16">
+                    <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-2xl p-8 border border-yellow-200">
+                      <div className="flex items-center justify-between mb-6">
+                        <h4 className="text-xl font-bold text-gray-900">Quotation Sent</h4>
+                        <Badge className="bg-yellow-600 text-white px-3 py-1 text-sm">Pending</Badge>
+                      </div>
+                      <div className="space-y-4">
+                        <div className="text-center">
+                          <div className="text-4xl font-bold text-green-600 mb-2">$425</div>
+                          <div className="text-gray-600">Total Cost</div>
+                        </div>
+                        <div className="space-y-2 text-sm text-gray-600">
+                          <div className="flex justify-between">
+                            <span>Service Duration:</span>
+                            <span className="font-medium">4 hours</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Team Size:</span>
+                            <span className="font-medium">2 cleaners</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-lg text-gray-600 mb-6">
-                  Once the customer approves, proceed with confirming the order.
-                </p>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                    Instant confirmation
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                    Schedule coordination
-                  </li>
-                </ul>
+                {/* Step Connector */}
+                <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-12 w-8 h-8 bg-green-500 rounded-full border-4 border-white shadow-lg hidden lg:block"></div>
               </div>
-              <div className="bg-white rounded-2xl shadow-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold">Order Confirmed</h4>
-                  <Badge className="bg-green-100 text-green-800">Approved</Badge>
-                </div>
-                <div className="text-lg font-medium">House Cleaning Service</div>
-                <div className="text-sm text-gray-600">Scheduled for Dec 15, 2024</div>
-              </div>
-            </div>
 
-            {/* Step 4 */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="lg:order-2">
-                <div className="flex items-center mb-4">
-                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mr-4">
-                    4
+              {/* Step 3 */}
+              <div className="relative">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                  <div className="lg:pr-16">
+                    <div className="bg-white rounded-3xl shadow-2xl p-10 border border-gray-100 hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2">
+                      <div className="flex items-center mb-6">
+                        <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-2xl flex items-center justify-center font-bold text-2xl mr-6 shadow-lg">
+                          3
+                        </div>
+                        <h3 className="text-3xl font-bold text-gray-900">Order Confirmation</h3>
+                      </div>
+                      <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                        Once customer approves, proceed with confirming the order. Coordinate scheduling and prepare for service delivery.
+                      </p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center text-green-600">
+                          <CheckCircle className="h-5 w-5 mr-3" />
+                          <span className="font-medium">Instant confirmation</span>
+                        </div>
+                        <div className="flex items-center text-green-600">
+                          <CheckCircle className="h-5 w-5 mr-3" />
+                          <span className="font-medium">Schedule coordination</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-semibold text-gray-900">Complete the Job</h3>
+                  <div className="lg:pl-16">
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 border border-green-200">
+                      <div className="flex items-center justify-between mb-6">
+                        <h4 className="text-xl font-bold text-gray-900">Order Confirmed</h4>
+                        <Badge className="bg-green-600 text-white px-3 py-1 text-sm">Approved</Badge>
+                      </div>
+                      <div className="space-y-4">
+                        <div>
+                          <h5 className="text-lg font-semibold text-gray-800">House Cleaning Service</h5>
+                          <p className="text-gray-600">Scheduled for December 15, 2024</p>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Time:</span>
+                          <span className="font-medium text-gray-800">10:00 AM - 2:00 PM</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-lg text-gray-600 mb-6">
-                  Start and complete the work as per the agreed terms. Keep the customer updated on progress.
-                </p>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                    Progress tracking
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                    Quality assurance
-                  </li>
-                </ul>
+                {/* Step Connector */}
+                <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-12 w-8 h-8 bg-purple-500 rounded-full border-4 border-white shadow-lg hidden lg:block"></div>
               </div>
-              <div className="lg:order-1 bg-white rounded-2xl shadow-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold">Job Status</h4>
-                  <Badge className="bg-blue-100 text-blue-800">In Progress</Badge>
-                </div>
-                <div className="text-lg font-medium mb-2">House Cleaning</div>
-                <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                  <div className="bg-blue-600 h-2 rounded-full" style={{width: '75%'}}></div>
-                </div>
-                <div className="text-sm text-gray-600">75% Complete</div>
-              </div>
-            </div>
 
-            {/* Step 5 */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <div className="flex items-center mb-4">
-                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mr-4">
-                    5
+              {/* Step 4 */}
+              <div className="relative">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                  <div className="lg:order-2 lg:pl-16">
+                    <div className="bg-white rounded-3xl shadow-2xl p-10 border border-gray-100 hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2">
+                      <div className="flex items-center mb-6">
+                        <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl flex items-center justify-center font-bold text-2xl mr-6 shadow-lg">
+                          4
+                        </div>
+                        <h3 className="text-3xl font-bold text-gray-900">Complete the Job</h3>
+                      </div>
+                      <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                        Start and complete work as per agreed terms. Keep customer updated on progress and ensure quality delivery.
+                      </p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center text-green-600">
+                          <CheckCircle className="h-5 w-5 mr-3" />
+                          <span className="font-medium">Progress tracking</span>
+                        </div>
+                        <div className="flex items-center text-green-600">
+                          <CheckCircle className="h-5 w-5 mr-3" />
+                          <span className="font-medium">Quality assurance</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="text-2xl font-semibold text-gray-900">Job Done & Final Payment</h3>
+                  <div className="lg:order-1 lg:pr-16">
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border border-blue-200">
+                      <div className="flex items-center justify-between mb-6">
+                        <h4 className="text-xl font-bold text-gray-900">Job in Progress</h4>
+                        <Badge className="bg-blue-600 text-white px-3 py-1 text-sm">Active</Badge>
+                      </div>
+                      <div className="space-y-4">
+                        <div>
+                          <h5 className="text-lg font-semibold text-gray-800">House Cleaning</h5>
+                          <div className="w-full bg-gray-200 rounded-full h-3 mt-2">
+                            <div className="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-1000" style={{width: '75%'}}></div>
+                          </div>
+                          <p className="text-sm text-gray-600 mt-1">75% Complete</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-lg text-gray-600 mb-6">
-                  Complete the job to receive payment. Mark the job as complete for payment.
-                </p>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                    Instant payment processing
-                  </li>
-                  <li className="flex items-center">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                    Customer satisfaction rating
-                  </li>
-                </ul>
+                {/* Step Connector */}
+                <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-12 w-8 h-8 bg-orange-500 rounded-full border-4 border-white shadow-lg hidden lg:block"></div>
               </div>
-              <div className="bg-white rounded-2xl shadow-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold">Payment Complete</h4>
-                  <Badge className="bg-green-100 text-green-800">Paid</Badge>
+
+              {/* Step 5 */}
+              <div className="relative">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                  <div className="lg:pr-16">
+                    <div className="bg-white rounded-3xl shadow-2xl p-10 border border-gray-100 hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2">
+                      <div className="flex items-center mb-6">
+                        <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl flex items-center justify-center font-bold text-2xl mr-6 shadow-lg">
+                          5
+                        </div>
+                        <h3 className="text-3xl font-bold text-gray-900">Get Paid Instantly</h3>
+                      </div>
+                      <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                        Complete the job to receive payment instantly. Mark job as complete and get paid through secure payment processing.
+                      </p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center text-green-600">
+                          <CheckCircle className="h-5 w-5 mr-3" />
+                          <span className="font-medium">Instant payment</span>
+                        </div>
+                        <div className="flex items-center text-green-600">
+                          <CheckCircle className="h-5 w-5 mr-3" />
+                          <span className="font-medium">Customer rating</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="lg:pl-16">
+                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 border border-green-200">
+                      <div className="flex items-center justify-between mb-6">
+                        <h4 className="text-xl font-bold text-gray-900">Payment Received</h4>
+                        <Badge className="bg-green-600 text-white px-3 py-1 text-sm">Completed</Badge>
+                      </div>
+                      <div className="space-y-4">
+                        <div className="text-center">
+                          <div className="text-4xl font-bold text-green-600 mb-2">$425</div>
+                          <div className="text-gray-600">Paid Instantly</div>
+                        </div>
+                        <div className="flex items-center justify-center space-x-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                          ))}
+                          <span className="ml-2 text-gray-600">5.0 rating</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-green-600 mb-2">$425</div>
-                <div className="text-sm text-gray-600">Paid Instantly</div>
               </div>
             </div>
           </div>
