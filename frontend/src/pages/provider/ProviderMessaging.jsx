@@ -72,6 +72,40 @@ const ProviderMessaging = () => {
     }
   }, []);
 
+  const handleSendMessage = () => {
+    if (!newMessage.trim() || !selectedConversation) return;
+
+    const message = {
+      id: Date.now(),
+      content: newMessage,
+      timestamp: new Date().toISOString(),
+      sender: 'provider',
+      read: true,
+      type: 'text'
+    };
+
+    const updatedMessages = messages.map(conv => {
+      if (conv.id === selectedConversation.id) {
+        return {
+          ...conv,
+          messages: [...conv.messages, message],
+          lastMessage: newMessage,
+          lastMessageTime: new Date().toISOString()
+        };
+      }
+      return conv;
+    });
+
+    setMessages(updatedMessages);
+    setSelectedConversation({
+      ...selectedConversation,
+      messages: [...selectedConversation.messages, message],
+      lastMessage: newMessage,
+      lastMessageTime: new Date().toISOString()
+    });
+    setNewMessage('');
+  };
+
   const handleSendProposal = () => {
     if (!selectedConversation || !proposalData.serviceType || !proposalData.price) return;
 
