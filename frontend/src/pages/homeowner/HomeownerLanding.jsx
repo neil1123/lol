@@ -33,6 +33,13 @@ const HomeownerLanding = () => {
               <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
             </div>
             <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate('/homeservices')}
+                className="text-sm"
+              >
+                For Service Providers
+              </Button>
               <Button variant="ghost" onClick={() => navigate('/homeowners/quotations')}>
                 My Quotations
               </Button>
