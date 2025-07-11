@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 const HomeownerLanding = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const featuredServices = serviceCategories.slice(0, 3);
