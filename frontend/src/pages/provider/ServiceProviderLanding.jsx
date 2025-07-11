@@ -6,6 +6,7 @@ import { Badge } from '../../components/ui/badge';
 import { useNavigate } from 'react-router-dom';
 
 const ServiceProviderLanding = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const features = [
