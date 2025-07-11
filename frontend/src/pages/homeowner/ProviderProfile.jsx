@@ -239,110 +239,109 @@ const ProviderProfile = () => {
           
           <TabsContent value="overview" className="space-y-6">
             {/* Price List Section */}
-            <Card className="border-0 shadow-lg bg-gradient-to-r from-blue-50 to-indigo-50">
-              <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-t-lg">
+            <Card className="border border-gray-200 shadow-sm">
+              <CardHeader className="bg-blue-600 text-white rounded-t-lg">
                 <CardTitle className="text-xl font-bold">💰 Price list</CardTitle>
               </CardHeader>
-              <CardContent className="p-6">
-                <div className="grid md:grid-cols-3 gap-6">
-                  <div className="bg-white border-2 border-blue-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <CardContent className="p-4 sm:p-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                  <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow">
                     <div className="text-center mb-4">
-                      <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-2xl text-white">🏠</span>
+                      <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-xl sm:text-2xl text-blue-600">🏠</span>
                       </div>
-                      <h4 className="font-bold text-lg mb-2 text-gray-800">Basic House Cleaning</h4>
-                      <div className="text-3xl font-bold text-blue-600 mb-2">$149</div>
+                      <h4 className="font-bold text-base sm:text-lg mb-2 text-gray-800">Basic House Cleaning</h4>
+                      <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">$149</div>
                     </div>
-                    <p className="text-sm text-gray-600 mb-4">Standard cleaning service for homes up to 1500 sq ft. Includes all basic cleaning tasks.</p>
+                    <p className="text-sm text-gray-600 mb-4 text-center">Standard cleaning service for homes up to 1500 sq ft. Includes all basic cleaning tasks.</p>
                     <button className="text-blue-600 text-sm hover:underline mb-4 block mx-auto">View details →</button>
                     <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">Get Quotation</Button>
                   </div>
                   
-                  <div className="bg-white border-2 border-green-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:scale-105">
+                  <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow">
                     <div className="text-center mb-4">
-                      <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-2xl text-white">✨</span>
+                      <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-xl sm:text-2xl text-blue-600">✨</span>
                       </div>
-                      <h4 className="font-bold text-lg mb-2 text-gray-800">Deep House Cleaning</h4>
-                      <div className="text-3xl font-bold text-green-600 mb-2">$199</div>
+                      <h4 className="font-bold text-base sm:text-lg mb-2 text-gray-800">Deep House Cleaning</h4>
+                      <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">$199</div>
                     </div>
-                    <p className="text-sm text-gray-600 mb-4">Comprehensive deep cleaning with detailed attention to every corner of your home.</p>
-                    <button className="text-green-600 text-sm hover:underline mb-4 block mx-auto">View details →</button>
-                    <Button variant="outline" className="w-full border-green-600 text-green-600 hover:bg-green-600 hover:text-white">Get Quotation</Button>
+                    <p className="text-sm text-gray-600 mb-4 text-center">Comprehensive deep cleaning with detailed attention to every corner of your home.</p>
+                    <button className="text-blue-600 text-sm hover:underline mb-4 block mx-auto">View details →</button>
+                    <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">Get Quotation</Button>
                   </div>
                   
-                  <div className="bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-300 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:scale-105 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 text-xs font-bold rounded-bl-lg">
+                  <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow relative">
+                    <div className="absolute top-0 right-0 bg-blue-600 text-white px-2 py-1 text-xs font-bold rounded-bl-lg">
                       POPULAR
                     </div>
                     <div className="text-center mb-4">
-                      <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-2xl text-white">🌟</span>
+                      <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-xl sm:text-2xl text-white">🌟</span>
                       </div>
-                      <h4 className="font-bold text-lg mb-2 text-gray-800">Premium Package</h4>
-                      <div className="text-3xl font-bold text-purple-600 mb-2">$299</div>
+                      <h4 className="font-bold text-base sm:text-lg mb-2 text-gray-800">Premium Package</h4>
+                      <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">$299</div>
                     </div>
-                    <p className="text-sm text-gray-600 mb-4">Complete premium service with eco-friendly products and post-cleaning maintenance.</p>
-                    <button className="text-purple-600 text-sm hover:underline mb-4 block mx-auto">View details →</button>
-                    <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">Get Quotation</Button>
+                    <p className="text-sm text-gray-600 mb-4 text-center">Complete premium service with eco-friendly products and post-cleaning maintenance.</p>
+                    <button className="text-blue-600 text-sm hover:underline mb-4 block mx-auto">View details →</button>
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700">Get Quotation</Button>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             {/* Quick Information */}
-            <Card className="border-0 shadow-lg bg-gradient-to-r from-green-50 to-emerald-50">
-              <CardHeader className="bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-t-lg">
+            <Card className="border border-gray-200 shadow-sm">
+              <CardHeader className="bg-blue-600 text-white rounded-t-lg">
                 <CardTitle className="text-xl font-bold">⚡ Quick information</CardTitle>
               </CardHeader>
-              <CardContent className="p-6">
-                <div className="space-y-6">
-                  <div className="bg-white rounded-lg p-4 border-l-4 border-yellow-500">
-                    <h5 className="font-bold mb-3 text-gray-800 flex items-center">
-                      <span className="text-yellow-500 mr-2">📅</span> Year of establishment
+              <CardContent className="p-4 sm:p-6">
+                <div className="space-y-4 sm:space-y-6">
+                  <div className="bg-blue-50 rounded-lg p-3 sm:p-4 border-l-4 border-blue-500">
+                    <h5 className="font-bold mb-2 sm:mb-3 text-gray-800 flex items-center text-sm sm:text-base">
+                      <span className="text-blue-600 mr-2">📅</span> Year of establishment
                     </h5>
-                    <div className="bg-yellow-100 inline-block px-4 py-2 rounded-full">
-                      <span className="font-bold text-yellow-800">{provider.yearEstablished}</span>
+                    <div className="bg-white border border-blue-200 inline-block px-3 py-2 rounded-full">
+                      <span className="font-bold text-blue-800 text-sm sm:text-base">{provider.yearEstablished}</span>
                     </div>
                   </div>
                   
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <div className="bg-white rounded-xl p-4 border-2 border-blue-200 hover:shadow-md transition-shadow">
-                      <h5 className="font-bold mb-3 flex items-center text-blue-700">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                    <div className="bg-white rounded-lg p-3 sm:p-4 border border-gray-200 hover:shadow-sm transition-shadow">
+                      <h5 className="font-bold mb-2 sm:mb-3 flex items-center text-blue-700 text-sm sm:text-base">
                         <span className="mr-2">🧹</span> Cleaning service for
                       </h5>
-                      <div className="flex flex-wrap gap-2">
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Chair</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Mattress</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Sofa</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Carpet</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Kitchen</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Bathroom</Badge>
-                        <Badge className="bg-gray-200 text-gray-700 hover:bg-gray-300">+6</Badge>
+                      <div className="flex flex-wrap gap-1 sm:gap-2">
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Chair</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Mattress</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Sofa</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Carpet</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Kitchen</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Bathroom</Badge>
                       </div>
                     </div>
                     
-                    <div className="bg-white rounded-xl p-4 border-2 border-green-200 hover:shadow-md transition-shadow">
-                      <h5 className="font-bold mb-3 flex items-center text-green-700">
+                    <div className="bg-white rounded-lg p-3 sm:p-4 border border-gray-200 hover:shadow-sm transition-shadow">
+                      <h5 className="font-bold mb-2 sm:mb-3 flex items-center text-blue-700 text-sm sm:text-base">
                         <span className="mr-2">🌟</span> Service type
                       </h5>
-                      <div className="flex flex-wrap gap-2">
-                        <Badge className="bg-green-100 text-green-800 hover:bg-green-200">Deep clean</Badge>
-                        <Badge className="bg-green-100 text-green-800 hover:bg-green-200">Vacuum</Badge>
-                        <Badge className="bg-green-100 text-green-800 hover:bg-green-200">Sanitize</Badge>
-                        <Badge className="bg-green-100 text-green-800 hover:bg-green-200">Organize</Badge>
+                      <div className="flex flex-wrap gap-1 sm:gap-2">
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Deep clean</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Vacuum</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Sanitize</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Organize</Badge>
                       </div>
                     </div>
                     
-                    <div className="bg-white rounded-xl p-4 border-2 border-purple-200 hover:shadow-md transition-shadow">
-                      <h5 className="font-bold mb-3 flex items-center text-purple-700">
+                    <div className="bg-white rounded-lg p-3 sm:p-4 border border-gray-200 hover:shadow-sm transition-shadow sm:col-span-2 lg:col-span-1">
+                      <h5 className="font-bold mb-2 sm:mb-3 flex items-center text-blue-700 text-sm sm:text-base">
                         <span className="mr-2">🏢</span> Properties served
                       </h5>
-                      <div className="flex flex-wrap gap-2">
-                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Commercial</Badge>
-                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Office</Badge>
-                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Residential</Badge>
-                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Retail</Badge>
+                      <div className="flex flex-wrap gap-1 sm:gap-2">
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Commercial</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Office</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Residential</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Retail</Badge>
                       </div>
                     </div>
                   </div>
@@ -350,44 +349,44 @@ const ProviderProfile = () => {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg bg-gradient-to-r from-orange-50 to-red-50">
-              <CardHeader className="bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-t-lg">
+            <Card className="border border-gray-200 shadow-sm">
+              <CardHeader className="bg-blue-600 text-white rounded-t-lg">
                 <CardTitle className="text-xl font-bold">📋 About {provider.name}</CardTitle>
               </CardHeader>
-              <CardContent className="p-6">
-                <p className="text-gray-700 mb-6 text-lg leading-relaxed">{provider.description}</p>
+              <CardContent className="p-4 sm:p-6">
+                <p className="text-gray-700 mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">{provider.description}</p>
                 
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div className="bg-white rounded-xl p-6 border-2 border-orange-200">
-                    <h4 className="font-bold mb-4 text-orange-700 flex items-center text-lg">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
+                  <div className="bg-blue-50 rounded-lg p-4 sm:p-6 border border-blue-200">
+                    <h4 className="font-bold mb-3 sm:mb-4 text-blue-700 flex items-center text-sm sm:text-lg">
                       <span className="mr-2">🎯</span> Specialties
                     </h4>
-                    <ul className="space-y-3">
+                    <ul className="space-y-2 sm:space-y-3">
                       {provider.specialties.map((specialty, index) => (
                         <li key={index} className="flex items-center space-x-3">
-                          <span className="w-3 h-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"></span>
-                          <span className="text-gray-700 font-medium">{specialty}</span>
+                          <span className="w-2 h-2 bg-blue-600 rounded-full flex-shrink-0"></span>
+                          <span className="text-gray-700 font-medium text-sm sm:text-base">{specialty}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
                   
-                  <div className="bg-white rounded-xl p-6 border-2 border-red-200">
-                    <h4 className="font-bold mb-4 text-red-700 flex items-center text-lg">
+                  <div className="bg-white rounded-lg p-4 sm:p-6 border border-gray-200">
+                    <h4 className="font-bold mb-3 sm:mb-4 text-blue-700 flex items-center text-sm sm:text-lg">
                       <span className="mr-2">📊</span> Quick Facts
                     </h4>
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
-                        <span className="text-gray-700 font-medium">Jobs Completed</span>
-                        <span className="font-bold text-red-600 text-lg">{provider.completedJobs}</span>
+                    <div className="space-y-3 sm:space-y-4">
+                      <div className="flex justify-between items-center p-2 sm:p-3 bg-blue-50 rounded-lg">
+                        <span className="text-gray-700 font-medium text-sm sm:text-base">Jobs Completed</span>
+                        <span className="font-bold text-blue-600 text-sm sm:text-lg">{provider.completedJobs}</span>
                       </div>
-                      <div className="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
-                        <span className="text-gray-700 font-medium">Response Time</span>
-                        <span className="font-bold text-orange-600">{provider.responseTime}</span>
+                      <div className="flex justify-between items-center p-2 sm:p-3 bg-gray-50 rounded-lg">
+                        <span className="text-gray-700 font-medium text-sm sm:text-base">Response Time</span>
+                        <span className="font-bold text-blue-600 text-sm sm:text-base">{provider.responseTime}</span>
                       </div>
-                      <div className="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
-                        <span className="text-gray-700 font-medium">Year Established</span>
-                        <span className="font-bold text-yellow-600">{provider.yearEstablished}</span>
+                      <div className="flex justify-between items-center p-2 sm:p-3 bg-blue-50 rounded-lg">
+                        <span className="text-gray-700 font-medium text-sm sm:text-base">Year Established</span>
+                        <span className="font-bold text-blue-600 text-sm sm:text-base">{provider.yearEstablished}</span>
                       </div>
                     </div>
                   </div>
