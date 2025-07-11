@@ -19,6 +19,7 @@ import ProviderOrders from "./pages/provider/ProviderOrders";
 import ProviderMessaging from "./pages/provider/ProviderMessaging";
 import ProviderCalendar from "./pages/provider/ProviderCalendar";
 import ProviderCustomers from "./pages/provider/ProviderCustomers";
+import ProviderSettings from "./pages/provider/ProviderSettings";
 import ProviderAuth from "./pages/provider/ProviderAuth";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
