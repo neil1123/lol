@@ -10,7 +10,9 @@ import {
   Bell,
   LogOut,
   MessageSquare,
-  Users
+  Users,
+  Menu,
+  X
 } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
@@ -22,6 +24,7 @@ import { STANDARD_PROVIDER_SIDEBAR, handleStandardLogout } from '../../constants
 const ProviderDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('home');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     handleStandardLogout(navigate);
