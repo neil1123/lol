@@ -37,31 +37,33 @@ const ProviderAuth = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    console.log('Login attempt:', signInData.email, signInData.password);
+    console.log('Login attempt:', signInData);
     
-    // Mock authentication with specific credentials
-    setTimeout(() => {
-      // Check for specific user credentials
-      if (signInData.email === 'edwarddethe@gmail.com' && signInData.password === 'Neildethe1*') {
-        console.log('Login successful');
-        localStorage.setItem('userType', 'provider');
-        localStorage.setItem('user', JSON.stringify({
-          id: 1,
-          businessName: 'Elite Home Solutions',
-          ownerName: 'Edward Dethe',
-          email: signInData.email,
-          type: 'provider'
-        }));
-        
-        setIsLoading(false);
-        navigate('/homeservices/dashboard');
-      } else {
-        // Invalid credentials
-        console.log('Login failed: Invalid credentials');
-        setIsLoading(false);
-        alert('Invalid credentials. Please check your email and password.');
-      }
-    }, 1000);
+    // Simple direct authentication
+    if (signInData.email === 'edwarddethe@gmail.com' && signInData.password === 'Neildethe1*') {
+      console.log('Login successful - setting user data');
+      
+      // Set user authentication data
+      localStorage.setItem('userType', 'provider');
+      localStorage.setItem('user', JSON.stringify({
+        id: 1,
+        businessName: 'Elite Home Solutions',
+        ownerName: 'Edward Dethe',
+        email: signInData.email,
+        type: 'provider'
+      }));
+      
+      console.log('User data set, navigating to dashboard');
+      setIsLoading(false);
+      
+      // Navigate to dashboard
+      window.location.href = '/homeservices/dashboard';
+      
+    } else {
+      console.log('Login failed: Invalid credentials');
+      setIsLoading(false);
+      alert('Invalid credentials. Please use: edwarddethe@gmail.com / Neildethe1*');
+    }
   };
 
   const handleSignUp = async (e) => {
