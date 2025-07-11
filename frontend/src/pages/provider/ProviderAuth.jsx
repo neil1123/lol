@@ -37,18 +37,26 @@ const ProviderAuth = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Mock authentication
+    // Mock authentication with specific credentials
     setTimeout(() => {
-      localStorage.setItem('userType', 'provider');
-      localStorage.setItem('user', JSON.stringify({
-        id: 1,
-        businessName: 'Elite Home Solutions',
-        email: signInData.email,
-        type: 'provider'
-      }));
-      
-      setIsLoading(false);
-      navigate('/homeservices/dashboard');
+      // Check for specific user credentials
+      if (signInData.email === 'edwarddethe@gmail.com' && signInData.password === 'Neildethe1*') {
+        localStorage.setItem('userType', 'provider');
+        localStorage.setItem('user', JSON.stringify({
+          id: 1,
+          businessName: 'Elite Home Solutions',
+          ownerName: 'Edward Dethe',
+          email: signInData.email,
+          type: 'provider'
+        }));
+        
+        setIsLoading(false);
+        navigate('/homeservices/dashboard');
+      } else {
+        // Invalid credentials
+        setIsLoading(false);
+        alert('Invalid credentials. Please check your email and password.');
+      }
     }, 1000);
   };
 
