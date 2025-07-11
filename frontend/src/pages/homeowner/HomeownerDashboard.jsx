@@ -212,152 +212,421 @@ const HomeownerDashboard = () => {
 
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto p-6">
-          {/* Featured Services Section */}
-          <div className="mb-8">
-            {/* Desktop View */}
-            <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-              {featuredServices.map((service) => (
-                <Card 
-                  key={service.id} 
-                  className={`${service.color} text-white cursor-pointer hover:scale-105 transition-transform duration-200`}
-                  onClick={() => handleServiceClick(service.id)}
-                >
-                  <CardContent className="p-6">
-                    <div className="text-4xl mb-4">{service.icon}</div>
-                    <h3 className="text-lg font-bold mb-2">{service.title}</h3>
-                    <p className="text-sm opacity-90 mb-4">{service.description}</p>
-                    <Button 
-                      variant="secondary" 
-                      size="sm" 
-                      className="w-full"
+          {/* Home Dashboard Content */}
+          {activeTab === 'home' && (
+            <>
+              {/* Featured Services Section */}
+              <div className="mb-8">
+                {/* Desktop View */}
+                <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                  {featuredServices.map((service) => (
+                    <Card 
+                      key={service.id} 
+                      className={`${service.color} text-white cursor-pointer hover:scale-105 transition-transform duration-200`}
+                      onClick={() => handleServiceClick(service.id)}
                     >
-                      {service.action}
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-            
-            {/* Mobile View - Horizontal Scroll */}
-            <div className="md:hidden">
-              <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide">
-                {featuredServices.map((service) => (
-                  <Card 
-                    key={service.id} 
-                    className={`${service.color} text-white cursor-pointer hover:scale-105 transition-transform duration-200 flex-shrink-0 w-80`}
-                    onClick={() => handleServiceClick(service.id)}
-                  >
-                    <CardContent className="p-6">
-                      <div className="text-4xl mb-4">{service.icon}</div>
-                      <h3 className="text-lg font-bold mb-2">{service.title}</h3>
-                      <p className="text-sm opacity-90 mb-4">{service.description}</p>
-                      <Button 
-                        variant="secondary" 
-                        size="sm" 
-                        className="w-full"
+                      <CardContent className="p-6">
+                        <div className="text-4xl mb-4">{service.icon}</div>
+                        <h3 className="text-lg font-bold mb-2">{service.title}</h3>
+                        <p className="text-sm opacity-90 mb-4">{service.description}</p>
+                        <Button 
+                          variant="secondary" 
+                          size="sm" 
+                          className="w-full"
+                        >
+                          {service.action}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+                
+                {/* Mobile View - Horizontal Scroll */}
+                <div className="md:hidden">
+                  <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide">
+                    {featuredServices.map((service) => (
+                      <Card 
+                        key={service.id} 
+                        className={`${service.color} text-white cursor-pointer hover:scale-105 transition-transform duration-200 flex-shrink-0 w-80`}
+                        onClick={() => handleServiceClick(service.id)}
                       >
-                        {service.action}
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
+                        <CardContent className="p-6">
+                          <div className="text-4xl mb-4">{service.icon}</div>
+                          <h3 className="text-lg font-bold mb-2">{service.title}</h3>
+                          <p className="text-sm opacity-90 mb-4">{service.description}</p>
+                          <Button 
+                            variant="secondary" 
+                            size="sm" 
+                            className="w-full"
+                          >
+                            {service.action}
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          {/* Home Services Section */}
-          <div className="mb-8">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-bold text-gray-900 mb-4">
-                Home services at your door step
-              </h3>
-            </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-6">
-              {serviceCategories.flatMap(category => 
-                category.services.slice(0, 2).map(service => (
-                  <Card 
-                    key={service.id} 
-                    className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
-                    onClick={() => handleServiceClick(service.id)}
+              {/* Home Services Section */}
+              <div className="mb-8">
+                <div className="text-center mb-8">
+                  <h3 className="text-3xl font-bold text-gray-900 mb-4">
+                    Home services at your door step
+                  </h3>
+                </div>
+                
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-6">
+                  {serviceCategories.flatMap(category => 
+                    category.services.slice(0, 2).map(service => (
+                      <Card 
+                        key={service.id} 
+                        className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+                        onClick={() => handleServiceClick(service.id)}
+                      >
+                        <CardContent className="p-4 text-center">
+                          <div className="text-2xl mb-2">{service.icon}</div>
+                          <h4 className="font-semibold text-xs">{service.name}</h4>
+                          <p className="text-xs text-gray-600 mt-1">{category.name}</p>
+                        </CardContent>
+                      </Card>
+                    ))
+                  )}
+                </div>
+                
+                <div className="text-center">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setActiveTab('book-service')}
+                    className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
                   >
-                    <CardContent className="p-4 text-center">
-                      <div className="text-2xl mb-2">{service.icon}</div>
-                      <h4 className="font-semibold text-xs">{service.name}</h4>
-                      <p className="text-xs text-gray-600 mt-1">{category.name}</p>
-                    </CardContent>
-                  </Card>
-                ))
-              )}
-            </div>
-            
-            <div className="text-center">
-              <Button 
-                variant="outline" 
-                onClick={() => navigate('/homeowners/browse')}
-                className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
-              >
-                View More Services
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
-          </div>
+                    View More Services
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
 
-          {/* Most Booked Services */}
-          <div className="mb-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Most booked services</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {mostBookedServices.map((service, index) => (
-                <Card 
-                  key={index} 
-                  className="cursor-pointer hover:shadow-lg transition-shadow duration-200"
-                  onClick={() => handleServiceClick(index)}
-                >
-                  <CardContent className="p-6">
-                    <div className="flex items-center mb-4">
-                      <div className="text-3xl mr-4">{service.icon}</div>
-                      <div>
-                        <h4 className="font-bold text-lg">{service.name}</h4>
-                        <p className="text-sm text-gray-600">PRICING UNDER</p>
-                        <p className="text-sm font-semibold text-blue-600">{service.priceRange}</p>
-                      </div>
-                    </div>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+              {/* Most Booked Services */}
+              <div className="mb-8">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Most booked services</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {mostBookedServices.map((service, index) => (
+                    <Card 
+                      key={index} 
+                      className="cursor-pointer hover:shadow-lg transition-shadow duration-200"
+                      onClick={() => handleServiceClick(index)}
                     >
-                      Book Now
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
+                      <CardContent className="p-6">
+                        <div className="flex items-center mb-4">
+                          <div className="text-3xl mr-4">{service.icon}</div>
+                          <div>
+                            <h4 className="font-bold text-lg">{service.name}</h4>
+                            <p className="text-sm text-gray-600">PRICING UNDER</p>
+                            <p className="text-sm font-semibold text-blue-600">{service.priceRange}</p>
+                          </div>
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+                        >
+                          Book Now
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
 
-          {/* Customer Testimonials */}
-          <div className="mb-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">What our customers say</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {testimonials.map((testimonial) => (
-                <Card key={testimonial.id} className="hover:shadow-lg transition-shadow duration-200">
+              {/* Customer Testimonials */}
+              <div className="mb-8">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">What our customers say</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {testimonials.map((testimonial) => (
+                    <Card key={testimonial.id} className="hover:shadow-lg transition-shadow duration-200">
+                      <CardHeader>
+                        <CardTitle className="text-lg">{testimonial.title}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-gray-700 mb-4 text-sm">{testimonial.content}</p>
+                        <div className="flex items-center space-x-1 mb-2">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                          ))}
+                        </div>
+                        <p className="text-sm font-semibold">- {testimonial.author}</p>
+                        <p className="text-xs text-gray-500">{testimonial.location}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Orders Section */}
+          {activeTab === 'orders' && (
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">My Orders</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg">{testimonial.title}</CardTitle>
+                    <CardTitle className="flex items-center space-x-2">
+                      <Clock className="h-5 w-5 text-blue-600" />
+                      <span>Recent Orders</span>
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700 mb-4 text-sm">{testimonial.content}</p>
-                    <div className="flex items-center space-x-1 mb-2">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      ))}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between p-3 border rounded-lg">
+                        <div>
+                          <h4 className="font-semibold">Window Cleaning</h4>
+                          <p className="text-sm text-gray-600">Clean Pro Services</p>
+                          <p className="text-xs text-gray-500">Scheduled for Dec 15, 2024</p>
+                        </div>
+                        <Badge className="bg-blue-100 text-blue-800">Scheduled</Badge>
+                      </div>
+                      <div className="flex items-center justify-between p-3 border rounded-lg">
+                        <div>
+                          <h4 className="font-semibold">House Cleaning</h4>
+                          <p className="text-sm text-gray-600">Elite Cleaners</p>
+                          <p className="text-xs text-gray-500">Completed Dec 10, 2024</p>
+                        </div>
+                        <Badge className="bg-green-100 text-green-800">Completed</Badge>
+                      </div>
                     </div>
-                    <p className="text-sm font-semibold">- {testimonial.author}</p>
-                    <p className="text-xs text-gray-500">{testimonial.location}</p>
                   </CardContent>
                 </Card>
-              ))}
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* Book Service Section */}
+          {activeTab === 'book-service' && (
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Book a Service</h2>
+              <div className="mb-6">
+                <div className="relative">
+                  <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                  <Input
+                    placeholder="Search for services..."
+                    className="pl-10 h-12"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                {serviceCategories.flatMap(category => 
+                  category.services.map(service => (
+                    <Card 
+                      key={service.id} 
+                      className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
+                      onClick={() => navigate('/homeowners/browse')}
+                    >
+                      <CardContent className="p-4 text-center">
+                        <div className="text-3xl mb-3">{service.icon}</div>
+                        <h4 className="font-semibold text-sm">{service.name}</h4>
+                        <p className="text-xs text-gray-600 mt-1">{category.name}</p>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Messages Section */}
+          {activeTab === 'messages' && (
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Messages</h2>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Conversation List */}
+                <div className="lg:col-span-1">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Conversations</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
+                              CP
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="font-semibold text-sm">Clean Pro Services</h4>
+                              <p className="text-xs text-gray-600">Window cleaning confirmed for Dec 15</p>
+                              <p className="text-xs text-gray-400">2 hours ago</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center text-white font-semibold">
+                              EC
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="font-semibold text-sm">Elite Cleaners</h4>
+                              <p className="text-xs text-gray-600">Thank you for your rating!</p>
+                              <p className="text-xs text-gray-400">1 day ago</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Message View */}
+                <div className="lg:col-span-2">
+                  <Card className="h-96">
+                    <CardHeader>
+                      <CardTitle className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                          CP
+                        </div>
+                        <span>Clean Pro Services</span>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex flex-col h-full">
+                      <div className="flex-1 space-y-3 mb-4">
+                        <div className="flex">
+                          <div className="bg-gray-100 rounded-lg p-3 max-w-xs">
+                            <p className="text-sm">Hi! We've confirmed your window cleaning appointment for December 15th at 10 AM. Is this time still good for you?</p>
+                            <p className="text-xs text-gray-500 mt-1">2 hours ago</p>
+                          </div>
+                        </div>
+                        <div className="flex justify-end">
+                          <div className="bg-blue-600 text-white rounded-lg p-3 max-w-xs">
+                            <p className="text-sm">Yes, that works perfect! Thank you for confirming.</p>
+                            <p className="text-xs text-blue-200 mt-1">1 hour ago</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex space-x-2">
+                        <Input placeholder="Type your message..." className="flex-1" />
+                        <Button>Send</Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Reports & Issues Section */}
+          {activeTab === 'reports' && (
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Reports & Issues</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Report an Issue</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Issue Type</label>
+                      <select className="w-full p-2 border rounded-lg">
+                        <option>Service Quality</option>
+                        <option>Payment Issue</option>
+                        <option>Provider No-Show</option>
+                        <option>Billing Dispute</option>
+                        <option>Other</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Description</label>
+                      <textarea 
+                        className="w-full p-2 border rounded-lg h-24" 
+                        placeholder="Please describe the issue..."
+                      ></textarea>
+                    </div>
+                    <Button className="w-full">Submit Report</Button>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Recent Reports</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="p-3 border rounded-lg">
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="font-semibold text-sm">Service Quality Issue</h4>
+                          <Badge className="bg-yellow-100 text-yellow-800">In Progress</Badge>
+                        </div>
+                        <p className="text-xs text-gray-600">Cleaning service was not completed as agreed</p>
+                        <p className="text-xs text-gray-400 mt-1">Submitted 3 days ago</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+
+          {/* Settings Section */}
+          {activeTab === 'settings' && (
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Settings</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Account Information</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Full Name</label>
+                      <Input defaultValue="John Smith" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Email</label>
+                      <Input defaultValue="john.smith@example.com" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Phone</label>
+                      <Input defaultValue="+1 (555) 123-4567" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Address</label>
+                      <Input defaultValue="123 Main St, City, State 12345" />
+                    </div>
+                    <Button className="w-full">Update Profile</Button>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Preferences</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Email Notifications</span>
+                      <input type="checkbox" defaultChecked className="rounded" />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">SMS Notifications</span>
+                      <input type="checkbox" defaultChecked className="rounded" />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm">Marketing Communications</span>
+                      <input type="checkbox" className="rounded" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Preferred Contact Method</label>
+                      <select className="w-full p-2 border rounded-lg">
+                        <option>Email</option>
+                        <option>Phone</option>
+                        <option>SMS</option>
+                      </select>
+                    </div>
+                    <Button className="w-full">Save Preferences</Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
         </main>
       </div>
 
