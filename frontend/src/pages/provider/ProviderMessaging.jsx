@@ -116,8 +116,8 @@ const ProviderMessaging = () => {
     if (selectedConversation) {
       const proposalMessage = {
         id: Date.now(),
-        senderId: 'provider',
-        text: `Service Proposal:
+        sender: 'provider',
+        content: `Service Proposal:
 📋 Service: ${proposalData.serviceType}
 💰 Price: $${proposalData.price}
 ⏱️ Estimated Time: ${proposalData.estimatedTime}
@@ -125,7 +125,7 @@ const ProviderMessaging = () => {
 📝 Description: ${proposalData.description}
 ${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additionalNotes}` : ''}`,
         timestamp: new Date().toISOString(),
-        isRead: true,
+        read: true,
         isProposal: true
       };
 
