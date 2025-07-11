@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, MapPin, Star, ArrowRight, Shield, Clock, Users, CheckCircle, Menu, X } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
@@ -10,7 +10,14 @@ import { useNavigate } from 'react-router-dom';
 const HomeownerLanding = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is logged in
+    const userType = localStorage.getItem('userType');
+    setIsLoggedIn(userType === 'homeowner');
+  }, []);
 
   const featuredServices = serviceCategories.slice(0, 3);
   const topProviders = mockProviders.slice(0, 3);
