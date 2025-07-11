@@ -256,7 +256,8 @@ export const mockQuotationRequests = [
     ]
   }
 ];
-  {
+
+export const mockQuotations = [
     id: 1,
     homeownerId: 1,
     providerId: 1,
