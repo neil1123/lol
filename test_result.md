@@ -158,4 +158,4 @@ test_plan:
 
 agent_communication:
   - agent: "main"
-    message: "Successfully implemented dedicated homeowner dashboard with sidebar navigation, featured services, service categories, and testimonials. Authentication flow updated to redirect to dashboard. Navigation properly integrated with login/logout functionality. Dashboard matches reference design with consistent white/blue theme and full mobile responsiveness."
+    message: "Successfully enhanced the ServiceProviderLanding.jsx page with bigger cards in 'How Doord works' section, implemented scroll-triggered glow effects on center line and orb, and removed the 'Become our partner' section as requested. The page now has much more prominent visual hierarchy and engaging scroll animations. All changes implemented and need frontend testing to verify functionality."
