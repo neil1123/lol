@@ -36,15 +36,15 @@ const ProviderDashboard = () => {
   const recentActivity = [
     {
       id: 1,
-      type: 'quote_request',
-      message: 'New quote request from Sarah Johnson',
+      type: 'new_order',
+      message: 'New order request from Sarah Johnson',
       time: '2 hours ago',
       status: 'pending'
     },
     {
       id: 2,
-      type: 'appointment',
-      message: 'Appointment confirmed with Mike Wilson',
+      type: 'order_confirmed',
+      message: 'Order confirmed with Mike Wilson',
       time: '4 hours ago',
       status: 'confirmed'
     },
@@ -58,7 +58,7 @@ const ProviderDashboard = () => {
     {
       id: 4,
       type: 'payment',
-      message: 'Payment received for Job #1234',
+      message: 'Payment received for Order #1234',
       time: '2 days ago',
       status: 'completed'
     }
