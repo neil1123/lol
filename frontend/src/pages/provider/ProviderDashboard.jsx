@@ -161,7 +161,7 @@ const ProviderDashboard = () => {
 
       <div className="flex">
         {/* Desktop Sidebar - Only show on desktop */}
-        <div className="hidden xl:block w-64 bg-white shadow-sm min-h-screen">
+        <div className="w-64 bg-white shadow-sm min-h-screen" style={{ display: 'none' }}>
           <div className="p-4">
             <nav className="space-y-2">
               {sidebarItems.map((item) => (
@@ -183,7 +183,7 @@ const ProviderDashboard = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 p-4 md:p-8">
+        <div className="w-full p-4 md:p-8">
           <div className="max-w-7xl mx-auto">
             {/* Dashboard Header */}
             <div className="mb-8">
