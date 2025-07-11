@@ -371,8 +371,13 @@ const ServiceProviderLanding = () => {
 
           {/* Timeline with Center Line */}
           <div className="relative">
-            {/* Center Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-200 via-blue-500 to-blue-200 hidden lg:block"></div>
+            {/* Center Line with Dynamic Glow */}
+            <div 
+              className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-200 via-blue-500 to-blue-200 hidden lg:block"
+              style={{
+                filter: `drop-shadow(0 0 ${10 + scrollProgress * 20}px rgba(59, 130, 246, ${0.3 + scrollProgress * 0.4}))`
+              }}
+            ></div>
             
             {/* Glowing Orb */}
             <div className="absolute left-1/2 transform -translate-x-1/2 top-0 w-4 h-4 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50 animate-pulse hidden lg:block" id="timeline-orb"></div>
