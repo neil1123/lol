@@ -285,7 +285,7 @@ const ProviderDashboard = () => {
               </Card>
 
               {/* Recent Activity */}
-              <Card>
+              <Card className="mt-6 lg:mt-0">
                 <CardHeader>
                   <CardTitle>Recent Activity</CardTitle>
                 </CardHeader>
