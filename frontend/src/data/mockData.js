@@ -120,7 +120,142 @@ export const mockProviders = [
   }
 ];
 
-export const mockQuotations = [
+// Enhanced mock orders with detailed workflow
+export const mockOrders = [
+  {
+    id: 1,
+    quotationId: 1,
+    homeownerId: 1,
+    homeownerName: "John Smith",
+    homeownerEmail: "john.smith@example.com",
+    homeownerPhone: "+1 (555) 123-4567",
+    homeownerAddress: "123 Main St, Halifax, NS",
+    providerId: 1,
+    providerName: "CleanPro Services",
+    providerEmail: "contact@cleanpro.com",
+    providerPhone: "+1 (555) 987-6543",
+    serviceType: "Window Cleaning",
+    serviceCategory: "Cleaning & Exterior Maintenance",
+    description: "Need professional window cleaning for 2-story house, approximately 20 windows",
+    quotationAmount: 180,
+    orderDate: "2024-12-10T10:00:00Z",
+    scheduledDate: "2024-12-15T10:00:00Z",
+    status: "scheduled", // pending_quotation, quotation_sent, scheduled, in_progress, completed, cancelled
+    workProgress: [
+      {
+        id: 1,
+        timestamp: "2024-12-10T10:00:00Z",
+        update: "Order confirmed",
+        updatedBy: "homeowner",
+        status: "scheduled"
+      }
+    ],
+    invoice: {
+      id: 1,
+      amount: 180,
+      status: "pending", // pending, sent, paid
+      dueDate: "2024-12-22T00:00:00Z",
+      items: [
+        { description: "Window Cleaning - 20 windows", quantity: 1, rate: 180, amount: 180 }
+      ]
+    },
+    messages: [
+      {
+        id: 1,
+        senderId: 1,
+        senderType: "provider",
+        message: "Hi! We've confirmed your window cleaning appointment for December 15th at 10 AM. Is this time still good for you?",
+        timestamp: "2024-12-10T14:00:00Z",
+        read: true
+      },
+      {
+        id: 2,
+        senderId: 1,
+        senderType: "homeowner", 
+        message: "Yes, that works perfect! Thank you for confirming.",
+        timestamp: "2024-12-10T15:00:00Z",
+        read: true
+      }
+    ]
+  },
+  {
+    id: 2,
+    quotationId: 2,
+    homeownerId: 1,
+    homeownerName: "John Smith",
+    providerId: 2,
+    providerName: "Elite Electrical",
+    serviceType: "Electrical Work",
+    serviceCategory: "Home Maintenance & Repairs",
+    description: "Install new outlets in kitchen and fix flickering lights",
+    quotationAmount: 450,
+    orderDate: "2024-12-08T09:00:00Z",
+    scheduledDate: "2024-12-18T08:00:00Z",
+    status: "in_progress",
+    workProgress: [
+      {
+        id: 1,
+        timestamp: "2024-12-08T09:00:00Z",
+        update: "Order confirmed",
+        updatedBy: "homeowner",
+        status: "scheduled"
+      },
+      {
+        id: 2,
+        timestamp: "2024-12-18T08:00:00Z",
+        update: "Work started - Installing kitchen outlets",
+        updatedBy: "provider",
+        status: "in_progress"
+      }
+    ],
+    invoice: {
+      id: 2,
+      amount: 450,
+      status: "pending",
+      dueDate: "2024-12-25T00:00:00Z",
+      items: [
+        { description: "Kitchen outlet installation", quantity: 3, rate: 120, amount: 360 },
+        { description: "Light fixture repair", quantity: 1, rate: 90, amount: 90 }
+      ]
+    },
+    messages: []
+  }
+];
+
+// Enhanced quotations with detailed workflow
+export const mockQuotationRequests = [
+  {
+    id: 3,
+    homeownerId: 1,
+    homeownerName: "John Smith",
+    homeownerEmail: "john.smith@example.com",
+    homeownerPhone: "+1 (555) 123-4567",
+    homeownerAddress: "123 Main St, Halifax, NS",
+    serviceType: "House Cleaning",
+    serviceCategory: "Cleaning & Exterior Maintenance",
+    description: "Deep cleaning for 3-bedroom house before family visit. Need kitchen, bathrooms, living areas cleaned thoroughly.",
+    preferredDate: "2024-12-20",
+    urgency: "medium",
+    budget: "200-300",
+    propertySize: "2000-3000 sq ft",
+    additionalRequirements: "Pet-friendly cleaning products preferred",
+    status: "pending_quotes", // pending_quotes, quotes_received, quote_accepted, cancelled
+    requestDate: "2024-12-12T10:00:00Z",
+    quotes: [
+      {
+        id: 1,
+        providerId: 1,
+        providerName: "CleanPro Services",
+        amount: 250,
+        estimatedDuration: "4-5 hours",
+        description: "Complete deep cleaning package including all requested areas. Using eco-friendly, pet-safe products.",
+        availability: "December 20th, 21st, or 22nd",
+        status: "sent",
+        sentDate: "2024-12-12T16:00:00Z"
+      }
+    ]
+  }
+];
   {
     id: 1,
     homeownerId: 1,
