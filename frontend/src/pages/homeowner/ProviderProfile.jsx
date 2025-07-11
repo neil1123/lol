@@ -224,6 +224,85 @@ const ProviderProfile = () => {
           </TabsList>
           
           <TabsContent value="overview" className="space-y-6">
+            {/* Price List Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Price list</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="border rounded-lg p-4">
+                    <h4 className="font-semibold text-lg mb-2">House cleaning services</h4>
+                    <p className="text-sm text-gray-600 mb-4">House cleaning services offers comprehensive...</p>
+                    <button className="text-blue-600 text-sm hover:underline mb-4">View details</button>
+                    <Button variant="outline" className="w-full">Get Quotation</Button>
+                  </div>
+                  
+                  <div className="border rounded-lg p-4">
+                    <h4 className="font-semibold text-lg mb-2">House cleaning services</h4>
+                    <p className="text-sm text-gray-600 mb-4">House cleaning services offers comprehensive...</p>
+                    <button className="text-blue-600 text-sm hover:underline mb-4">View details</button>
+                    <Button variant="outline" className="w-full">Get Quotation</Button>
+                  </div>
+                  
+                  <div className="border rounded-lg p-4">
+                    <h4 className="font-semibold text-lg mb-2">House cleaning services</h4>
+                    <p className="text-sm text-gray-600 mb-4">House cleaning services offers comprehensive...</p>
+                    <button className="text-blue-600 text-sm hover:underline mb-4">View details</button>
+                    <Button className="w-full">Get Quotation</Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Information */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick information</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <h5 className="font-semibold mb-2">Year of establishment</h5>
+                    <p className="text-gray-700">{provider.yearEstablished}</p>
+                  </div>
+                  
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div>
+                      <h5 className="font-semibold mb-2 flex items-center">
+                        <span className="mr-2">✓</span> Cleaning service for
+                      </h5>
+                      <div className="flex flex-wrap gap-2">
+                        <Badge variant="secondary">Chair</Badge>
+                        <Badge variant="secondary">Mattress</Badge>
+                        <Badge variant="secondary">+6</Badge>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h5 className="font-semibold mb-2 flex items-center">
+                        <span className="mr-2">✓</span> Service type
+                      </h5>
+                      <div className="flex flex-wrap gap-2">
+                        <Badge variant="secondary">Deep clean</Badge>
+                        <Badge variant="secondary">Vacuum</Badge>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h5 className="font-semibold mb-2 flex items-center">
+                        <span className="mr-2">✓</span> Properties served
+                      </h5>
+                      <div className="flex flex-wrap gap-2">
+                        <Badge variant="secondary">Commercial</Badge>
+                        <Badge variant="secondary">Office</Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card>
               <CardHeader>
                 <CardTitle>About {provider.name}</CardTitle>
