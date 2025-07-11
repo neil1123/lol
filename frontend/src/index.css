@@ -80,3 +80,12 @@ code {
 .step-2 { animation-delay: 0.3s; }
 .step-3 { animation-delay: 0.5s; }
 .step-4 { animation-delay: 0.7s; }
+
+/* Hide scrollbar for horizontal scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
