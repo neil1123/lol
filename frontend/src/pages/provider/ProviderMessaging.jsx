@@ -20,7 +20,10 @@ import {
   DollarSign,
   CheckCircle,
   X,
-  LogOut
+  LogOut,
+  Menu,
+  ArrowLeft,
+  ChevronRight
 } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
@@ -29,6 +32,7 @@ import { Avatar, AvatarFallback } from '../../components/ui/avatar';
 import { Input } from '../../components/ui/input';
 import { Textarea } from '../../components/ui/textarea';
 import { mockMessages } from '../../data/mockData';
+import { STANDARD_PROVIDER_SIDEBAR, handleStandardLogout } from '../../constants/providerSidebarConfig';
 
 const ProviderMessaging = () => {
   const navigate = useNavigate();
@@ -37,6 +41,9 @@ const ProviderMessaging = () => {
   const [newMessage, setNewMessage] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [showProposalForm, setShowProposalForm] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
+  const [showChat, setShowChat] = useState(false);
   const [proposalData, setProposalData] = useState({
     serviceType: '',
     description: '',
@@ -47,224 +54,193 @@ const ProviderMessaging = () => {
   });
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userType');
-    navigate('/homeservices');
+    handleStandardLogout(navigate);
   };
 
-  const sidebarItems = [
-    { id: 'home', label: 'Dashboard', icon: Home, path: '/homeservices/dashboard' },
-    { id: 'orders', label: 'Orders', icon: Package, path: '/homeservices/orders' },
-    { id: 'messages', label: 'Messages', icon: MessageSquare, path: '/homeservices/messages' },
-    { id: 'calendar', label: 'Calendar', icon: Calendar, path: '/homeservices/calendar' },
-    { id: 'customers', label: 'Customers', icon: Users, path: '/homeservices/customers' },
-    { id: 'settings', label: 'Settings', icon: Settings, path: '/homeservices/settings' }
-  ];
+  const sidebarItems = STANDARD_PROVIDER_SIDEBAR;
 
   useEffect(() => {
-    // Filter messages for current provider (mock provider ID = 1)
-    const providerMessages = mockMessages.filter(msg => msg.providerId === 1);
-    setMessages(providerMessages);
+    // Check if mobile view
+    const checkMobileView = () => {
+      setIsMobileView(window.innerWidth < 768);
+    };
     
-    // Set first conversation as selected by default
-    if (providerMessages.length > 0) {
-      setSelectedConversation(providerMessages[0]);
-    }
+    checkMobileView();
+    window.addEventListener('resize', checkMobileView);
+    
+    setMessages(mockMessages);
+    
+    return () => window.removeEventListener('resize', checkMobileView);
   }, []);
 
+  const handleConversationSelect = (conversation) => {
+    setSelectedConversation(conversation);
+    if (isMobileView) {
+      setShowChat(true);
+    }
+  };
+
+  const handleBackToList = () => {
+    setShowChat(false);
+    setSelectedConversation(null);
+  };
+
   const handleSendMessage = () => {
-    if (!newMessage.trim() || !selectedConversation) return;
-
-    const message = {
-      id: Date.now(),
-      content: newMessage,
-      timestamp: new Date().toISOString(),
-      sender: 'provider',
-      read: true,
-      type: 'text'
-    };
-
-    const updatedMessages = messages.map(conv => {
-      if (conv.id === selectedConversation.id) {
-        return {
-          ...conv,
-          messages: [...conv.messages, message],
-          lastMessage: newMessage,
-          lastMessageTime: new Date().toISOString()
-        };
-      }
-      return conv;
-    });
-
-    setMessages(updatedMessages);
-    setSelectedConversation({
-      ...selectedConversation,
-      messages: [...selectedConversation.messages, message],
-      lastMessage: newMessage,
-      lastMessageTime: new Date().toISOString()
-    });
-    setNewMessage('');
-  };
-
-  const handleSendProposal = () => {
-    if (!selectedConversation || !proposalData.serviceType || !proposalData.price) return;
-
-    const proposal = {
-      id: Date.now(),
-      content: `Proposal for ${proposalData.serviceType}`,
-      timestamp: new Date().toISOString(),
-      sender: 'provider',
-      read: true,
-      type: 'proposal',
-      proposalData: {
-        ...proposalData,
-        price: parseFloat(proposalData.price),
-        status: 'pending' // pending, accepted, rejected
-      }
-    };
-
-    const updatedMessages = messages.map(conv => {
-      if (conv.id === selectedConversation.id) {
-        return {
-          ...conv,
-          messages: [...conv.messages, proposal],
-          lastMessage: `Proposal sent: ${proposalData.serviceType}`,
-          lastMessageTime: new Date().toISOString()
-        };
-      }
-      return conv;
-    });
-
-    setMessages(updatedMessages);
-    setSelectedConversation({
-      ...selectedConversation,
-      messages: [...selectedConversation.messages, proposal],
-      lastMessage: `Proposal sent: ${proposalData.serviceType}`,
-      lastMessageTime: new Date().toISOString()
-    });
-    
-    // Reset form
-    setProposalData({
-      serviceType: '',
-      description: '',
-      price: '',
-      estimatedTime: '',
-      startDate: '',
-      additionalNotes: ''
-    });
-    setShowProposalForm(false);
-  };
-
-  const handleProposalResponse = (messageId, response) => {
-    const updatedMessages = messages.map(conv => {
-      if (conv.id === selectedConversation.id) {
-        const updatedConvMessages = conv.messages.map(msg => {
-          if (msg.id === messageId && msg.type === 'proposal') {
-            return {
-              ...msg,
-              proposalData: {
-                ...msg.proposalData,
-                status: response
-              }
-            };
-          }
-          return msg;
-        });
-        return { ...conv, messages: updatedConvMessages };
-      }
-      return conv;
-    });
-
-    setMessages(updatedMessages);
-    
-    const updatedSelectedConv = {
-      ...selectedConversation,
-      messages: selectedConversation.messages.map(msg => {
-        if (msg.id === messageId && msg.type === 'proposal') {
+    if (newMessage.trim() && selectedConversation) {
+      const updatedMessages = messages.map(msg => {
+        if (msg.id === selectedConversation.id) {
           return {
             ...msg,
-            proposalData: {
-              ...msg.proposalData,
-              status: response
-            }
+            messages: [...msg.messages, {
+              id: Date.now(),
+              senderId: 'provider',
+              text: newMessage,
+              timestamp: new Date().toISOString(),
+              isRead: true
+            }]
           };
         }
         return msg;
-      })
-    };
-    
-    setSelectedConversation(updatedSelectedConv);
-
-    // If accepted, create an order (you can integrate with your order system here)
-    if (response === 'accepted') {
-      console.log('Proposal accepted! Creating order...', updatedSelectedConv.messages.find(m => m.id === messageId));
+      });
+      setMessages(updatedMessages);
+      setNewMessage('');
     }
   };
 
-  const formatTime = (timestamp) => {
-    return new Date(timestamp).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const formatDate = (timestamp) => {
-    const date = new Date(timestamp);
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    if (date.toDateString() === today.toDateString()) {
-      return 'Today';
-    } else if (date.toDateString() === yesterday.toDateString()) {
-      return 'Yesterday';
-    } else {
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    }
-  };
-
-  const getUnreadCount = (conversation) => {
-    return conversation.messages.filter(msg => !msg.read && msg.sender === 'homeowner').length;
-  };
-
-  const filteredMessages = messages.filter(msg =>
-    msg.homeownerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    msg.orderType.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMessages = messages.filter(msg => 
+    msg.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    msg.serviceType.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleSendProposal = () => {
+    if (selectedConversation) {
+      const proposalMessage = {
+        id: Date.now(),
+        senderId: 'provider',
+        text: `Service Proposal:
+📋 Service: ${proposalData.serviceType}
+💰 Price: $${proposalData.price}
+⏱️ Estimated Time: ${proposalData.estimatedTime}
+📅 Start Date: ${proposalData.startDate}
+📝 Description: ${proposalData.description}
+${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additionalNotes}` : ''}`,
+        timestamp: new Date().toISOString(),
+        isRead: true,
+        isProposal: true
+      };
+
+      const updatedMessages = messages.map(msg => {
+        if (msg.id === selectedConversation.id) {
+          return {
+            ...msg,
+            messages: [...msg.messages, proposalMessage]
+          };
+        }
+        return msg;
+      });
+
+      setMessages(updatedMessages);
+      setShowProposalForm(false);
+      setProposalData({
+        serviceType: '',
+        description: '',
+        price: '',
+        estimatedTime: '',
+        startDate: '',
+        additionalNotes: ''
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Mobile Header */}
       <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
+            {/* Mobile Menu Button */}
             <div className="flex items-center space-x-4">
+              {isMobileView && showChat ? (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={handleBackToList}
+                >
+                  <ArrowLeft className="h-6 w-6" />
+                </Button>
+              ) : (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                >
+                  {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                </Button>
+              )}
               <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
-              <span className="text-sm text-gray-600">for Merchants</span>
+              <span className="text-sm text-gray-600 hidden sm:inline">for Merchants</span>
             </div>
-            <div className="flex items-center space-x-4">
+            
+            {/* Mobile Right Side */}
+            <div className="flex items-center space-x-2">
               <Button variant="ghost" size="sm">
                 <Bell className="h-4 w-4" />
               </Button>
-              <div className="flex items-center space-x-2">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-blue-100 text-blue-600">
-                    ES
-                  </AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium">Elite Solutions</span>
-              </div>
-              <Button variant="ghost" size="sm" onClick={handleLogout} title="Logout">
-                <LogOut className="h-4 w-4" />
-              </Button>
+              <Avatar className="h-8 w-8">
+                <AvatarFallback className="bg-blue-100 text-blue-600">
+                  ES
+                </AvatarFallback>
+              </Avatar>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="w-64 bg-white shadow-sm min-h-screen">
+      {/* Mobile Navigation Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setIsMobileMenuOpen(false)} />
+          <div className="fixed top-0 left-0 w-64 h-full bg-white shadow-lg">
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold">Navigation</h2>
+                <Button variant="ghost" size="sm" onClick={() => setIsMobileMenuOpen(false)}>
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+              <nav className="space-y-2">
+                {sidebarItems.map((item) => (
+                  <Button
+                    key={item.id}
+                    variant={item.id === 'messages' ? "default" : "ghost"}
+                    className="w-full justify-start"
+                    onClick={() => {
+                      navigate(item.path);
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <item.icon className="h-4 w-4 mr-3" />
+                    {item.label}
+                  </Button>
+                ))}
+                <hr className="my-4" />
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="h-4 w-4 mr-3" />
+                  Logout
+                </Button>
+              </nav>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="flex h-screen">
+        {/* Desktop Sidebar - Hidden on mobile */}
+        <div className="hidden md:block w-64 bg-white shadow-sm">
           <div className="p-4">
             <nav className="space-y-2">
               {sidebarItems.map((item) => (
@@ -283,327 +259,410 @@ const ProviderMessaging = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 flex h-screen">
-          {/* Conversations List */}
-          <div className="w-80 bg-white border-r">
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold">Messages</h2>
-                <Badge variant="secondary">{messages.length}</Badge>
-              </div>
-              
-              {/* Search */}
-              <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Search conversations..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              
-              {/* Conversations */}
-              <div className="space-y-2">
-                {filteredMessages.map((conversation) => (
-                  <div
-                    key={conversation.id}
-                    className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                      selectedConversation?.id === conversation.id
-                        ? 'bg-blue-50 border-blue-200'
-                        : 'hover:bg-gray-50'
-                    }`}
-                    onClick={() => setSelectedConversation(conversation)}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <Avatar>
-                        <AvatarFallback className="bg-blue-100 text-blue-600">
-                          {conversation.homeownerName.split(' ').map(n => n[0]).join('')}
-                        </AvatarFallback>
-                      </Avatar>
-                      
-                      <div className="flex-1 min-w-0">
+        <div className="flex-1 flex flex-col">
+          {/* Mobile: Show either user list or chat */}
+          {isMobileView ? (
+            <>
+              {!showChat ? (
+                /* User List for Mobile */
+                <div className="flex-1 p-4">
+                  <div className="mb-6">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Messages</h2>
+                    <p className="text-gray-600">Connect with your customers</p>
+                  </div>
+
+                  {/* Search */}
+                  <div className="mb-4">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Input
+                        placeholder="Search conversations..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="pl-10"
+                      />
+                    </div>
+                  </div>
+
+                  {/* User List */}
+                  <div className="space-y-2">
+                    {filteredMessages.map((conversation) => (
+                      <Card 
+                        key={conversation.id} 
+                        className="cursor-pointer hover:bg-gray-50 transition-colors"
+                        onClick={() => handleConversationSelect(conversation)}
+                      >
+                        <CardContent className="p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <Avatar className="h-12 w-12">
+                                <AvatarFallback className="bg-blue-100 text-blue-600">
+                                  {conversation.customerName.charAt(0).toUpperCase()}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center justify-between">
+                                  <h3 className="font-semibold text-gray-900 truncate">
+                                    {conversation.customerName}
+                                  </h3>
+                                  <span className="text-xs text-gray-500">
+                                    {new Date(conversation.lastMessageTime).toLocaleTimeString([], { 
+                                      hour: '2-digit', 
+                                      minute: '2-digit' 
+                                    })}
+                                  </span>
+                                </div>
+                                <p className="text-sm text-gray-600 truncate">
+                                  {conversation.serviceType}
+                                </p>
+                                <p className="text-xs text-gray-500 truncate">
+                                  {conversation.messages[conversation.messages.length - 1]?.text || 'No messages yet'}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              {conversation.unreadCount > 0 && (
+                                <Badge variant="default" className="bg-blue-600">
+                                  {conversation.unreadCount}
+                                </Badge>
+                              )}
+                              <ChevronRight className="h-4 w-4 text-gray-400" />
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                /* Chat View for Mobile */
+                <div className="flex-1 flex flex-col">
+                  {selectedConversation && (
+                    <>
+                      {/* Chat Header */}
+                      <div className="bg-white border-b p-4">
                         <div className="flex items-center justify-between">
-                          <h3 className="font-medium truncate">{conversation.homeownerName}</h3>
-                          <span className="text-xs text-gray-500">
-                            {formatDate(conversation.lastMessageTime)}
-                          </span>
-                        </div>
-                        
-                        <p className="text-sm text-gray-600 mb-1">{conversation.orderType}</p>
-                        
-                        <div className="flex items-center justify-between">
-                          <p className="text-sm text-gray-500 truncate">
-                            {conversation.lastMessage}
-                          </p>
-                          {getUnreadCount(conversation) > 0 && (
-                            <Badge className="bg-blue-600 text-white text-xs">
-                              {getUnreadCount(conversation)}
-                            </Badge>
-                          )}
+                          <div className="flex items-center space-x-3">
+                            <Avatar className="h-10 w-10">
+                              <AvatarFallback className="bg-blue-100 text-blue-600">
+                                {selectedConversation.customerName.charAt(0).toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <h3 className="font-semibold text-gray-900">{selectedConversation.customerName}</h3>
+                              <p className="text-sm text-gray-600">{selectedConversation.serviceType}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Button variant="ghost" size="sm">
+                              <Phone className="h-4 w-4" />
+                            </Button>
+                            <Button variant="ghost" size="sm">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
 
-          {/* Chat Area */}
-          <div className="flex-1 flex flex-col max-h-[calc(100vh-64px)]">
-            {selectedConversation ? (
-              <>
-                {/* Chat Header */}
-                <div className="bg-white border-b p-4 flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <Avatar>
-                      <AvatarFallback className="bg-blue-100 text-blue-600">
-                        {selectedConversation.homeownerName.split(' ').map(n => n[0]).join('')}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <h3 className="font-medium">{selectedConversation.homeownerName}</h3>
-                      <p className="text-sm text-gray-600">{selectedConversation.orderType}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2">
-                    <Button variant="ghost" size="sm">
-                      <Phone className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                      <Video className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                      <MoreVertical className="h-4 w-4" />
-                    </Button>
+                      {/* Chat Messages */}
+                      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                        {selectedConversation.messages.map((message) => (
+                          <div key={message.id} className={`flex ${message.senderId === 'provider' ? 'justify-end' : 'justify-start'}`}>
+                            <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                              message.senderId === 'provider' 
+                                ? 'bg-blue-600 text-white' 
+                                : 'bg-gray-100 text-gray-900'
+                            }`}>
+                              <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                              <p className={`text-xs mt-1 ${
+                                message.senderId === 'provider' 
+                                  ? 'text-blue-100' 
+                                  : 'text-gray-500'
+                              }`}>
+                                {new Date(message.timestamp).toLocaleTimeString([], { 
+                                  hour: '2-digit', 
+                                  minute: '2-digit' 
+                                })}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Message Input */}
+                      <div className="bg-white border-t p-4">
+                        <div className="flex items-center space-x-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => setShowProposalForm(true)}
+                          >
+                            <FileText className="h-4 w-4" />
+                          </Button>
+                          <Input
+                            placeholder="Type your message..."
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                            className="flex-1"
+                          />
+                          <Button onClick={handleSendMessage} size="sm">
+                            <Send className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+            </>
+          ) : (
+            /* Desktop View */
+            <div className="flex-1 flex">
+              {/* Conversations List */}
+              <div className="w-80 bg-white border-r">
+                <div className="p-4 border-b">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Messages</h2>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      placeholder="Search conversations..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
                   </div>
                 </div>
 
-                {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-[calc(100vh-200px)]">
-                  {selectedConversation.messages.map((message) => (
+                <div className="overflow-y-auto">
+                  {filteredMessages.map((conversation) => (
                     <div
-                      key={message.id}
-                      className={`flex ${message.sender === 'provider' ? 'justify-end' : 'justify-start'}`}
+                      key={conversation.id}
+                      className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${
+                        selectedConversation?.id === conversation.id ? 'bg-blue-50 border-r-2 border-blue-600' : ''
+                      }`}
+                      onClick={() => handleConversationSelect(conversation)}
                     >
-                      {message.type === 'proposal' ? (
-                        <div
-                          className={`max-w-md ${
-                            message.sender === 'provider'
-                              ? 'bg-blue-50 border-blue-200'
-                              : 'bg-gray-50 border-gray-200'
-                          } border rounded-lg p-4`}
-                        >
-                          <div className="flex items-center space-x-2 mb-3">
-                            <FileText className="h-4 w-4 text-blue-600" />
-                            <span className="font-semibold text-blue-600">Service Proposal</span>
+                      <div className="flex items-center space-x-3">
+                        <Avatar className="h-12 w-12">
+                          <AvatarFallback className="bg-blue-100 text-blue-600">
+                            {conversation.customerName.charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <h3 className="font-semibold text-gray-900 truncate">
+                              {conversation.customerName}
+                            </h3>
+                            <span className="text-xs text-gray-500">
+                              {new Date(conversation.lastMessageTime).toLocaleTimeString([], { 
+                                hour: '2-digit', 
+                                minute: '2-digit' 
+                              })}
+                            </span>
                           </div>
-                          
-                          <div className="space-y-2 mb-4">
-                            <div>
-                              <span className="font-medium text-gray-700">Service: </span>
-                              <span className="text-gray-900">{message.proposalData.serviceType}</span>
-                            </div>
-                            <div>
-                              <span className="font-medium text-gray-700">Price: </span>
-                              <span className="text-green-600 font-bold">${message.proposalData.price}</span>
-                            </div>
-                            <div>
-                              <span className="font-medium text-gray-700">Estimated Time: </span>
-                              <span className="text-gray-900">{message.proposalData.estimatedTime}</span>
-                            </div>
-                            {message.proposalData.startDate && (
-                              <div>
-                                <span className="font-medium text-gray-700">Start Date: </span>
-                                <span className="text-gray-900">{message.proposalData.startDate}</span>
-                              </div>
-                            )}
-                            {message.proposalData.description && (
-                              <div>
-                                <span className="font-medium text-gray-700">Description: </span>
-                                <p className="text-gray-900 text-sm">{message.proposalData.description}</p>
-                              </div>
-                            )}
-                          </div>
-
-                          {message.proposalData.status === 'pending' && message.sender === 'provider' && (
-                            <div className="flex space-x-2">
-                              <button
-                                onClick={() => handleProposalResponse(message.id, 'accepted')}
-                                className="flex-1 bg-green-600 text-white py-2 px-3 rounded text-sm font-medium hover:bg-green-700 flex items-center justify-center space-x-1"
-                              >
-                                <CheckCircle className="h-4 w-4" />
-                                <span>Accept</span>
-                              </button>
-                              <button
-                                onClick={() => handleProposalResponse(message.id, 'rejected')}
-                                className="flex-1 bg-red-600 text-white py-2 px-3 rounded text-sm font-medium hover:bg-red-700 flex items-center justify-center space-x-1"
-                              >
-                                <X className="h-4 w-4" />
-                                <span>Decline</span>
-                              </button>
-                            </div>
-                          )}
-
-                          {message.proposalData.status === 'accepted' && (
-                            <div className="bg-green-100 text-green-800 py-2 px-3 rounded text-sm font-medium text-center">
-                              ✅ Proposal Accepted - Order Created!
-                            </div>
-                          )}
-
-                          {message.proposalData.status === 'rejected' && (
-                            <div className="bg-red-100 text-red-800 py-2 px-3 rounded text-sm font-medium text-center">
-                              ❌ Proposal Declined
-                            </div>
-                          )}
-
-                          <p className={`text-xs mt-2 ${
-                            message.sender === 'provider' ? 'text-blue-500' : 'text-gray-500'
-                          }`}>
-                            {formatTime(message.timestamp)}
+                          <p className="text-sm text-gray-600 truncate">
+                            {conversation.serviceType}
+                          </p>
+                          <p className="text-xs text-gray-500 truncate">
+                            {conversation.messages[conversation.messages.length - 1]?.text || 'No messages yet'}
                           </p>
                         </div>
-                      ) : (
-                        <div
-                          className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                            message.sender === 'provider'
-                              ? 'bg-blue-600 text-white'
-                              : 'bg-gray-100 text-gray-900'
-                          }`}
-                        >
-                          <p className="text-sm">{message.content}</p>
-                          <p className={`text-xs mt-1 ${
-                            message.sender === 'provider' ? 'text-blue-100' : 'text-gray-500'
-                          }`}>
-                            {formatTime(message.timestamp)}
-                          </p>
-                        </div>
-                      )}
+                        {conversation.unreadCount > 0 && (
+                          <Badge variant="default" className="bg-blue-600">
+                            {conversation.unreadCount}
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
+              </div>
 
-                {/* Proposal Form */}
-                {showProposalForm && (
-                  <div className="bg-gray-50 border-t border-b p-4">
-                    <h3 className="font-semibold text-gray-900 mb-4">Create Service Proposal</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Service Type</label>
-                        <input
-                          type="text"
-                          value={proposalData.serviceType}
-                          onChange={(e) => setProposalData({...proposalData, serviceType: e.target.value})}
-                          placeholder="e.g., Home Cleaning"
-                          className="w-full p-2 border border-gray-300 rounded-md"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
-                        <input
-                          type="number"
-                          value={proposalData.price}
-                          onChange={(e) => setProposalData({...proposalData, price: e.target.value})}
-                          placeholder="350"
-                          className="w-full p-2 border border-gray-300 rounded-md"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Estimated Time</label>
-                        <input
-                          type="text"
-                          value={proposalData.estimatedTime}
-                          onChange={(e) => setProposalData({...proposalData, estimatedTime: e.target.value})}
-                          placeholder="4-5 hours"
-                          className="w-full p-2 border border-gray-300 rounded-md"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
-                        <input
-                          type="date"
-                          value={proposalData.startDate}
-                          onChange={(e) => setProposalData({...proposalData, startDate: e.target.value})}
-                          className="w-full p-2 border border-gray-300 rounded-md"
-                        />
-                      </div>
-                      <div className="md:col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                        <textarea
-                          value={proposalData.description}
-                          onChange={(e) => setProposalData({...proposalData, description: e.target.value})}
-                          placeholder="Detailed description of the service..."
-                          rows={3}
-                          className="w-full p-2 border border-gray-300 rounded-md"
-                        />
+              {/* Chat Area */}
+              <div className="flex-1 flex flex-col">
+                {selectedConversation ? (
+                  <>
+                    {/* Chat Header */}
+                    <div className="bg-white border-b p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <Avatar className="h-10 w-10">
+                            <AvatarFallback className="bg-blue-100 text-blue-600">
+                              {selectedConversation.customerName.charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <h3 className="font-semibold text-gray-900">{selectedConversation.customerName}</h3>
+                            <p className="text-sm text-gray-600">{selectedConversation.serviceType}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Button variant="ghost" size="sm">
+                            <Phone className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm">
+                            <Video className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex space-x-3 mt-4">
-                      <Button onClick={handleSendProposal} disabled={!proposalData.serviceType || !proposalData.price}>
-                        <FileText className="h-4 w-4 mr-2" />
-                        Send Proposal
-                      </Button>
-                      <Button variant="outline" onClick={() => setShowProposalForm(false)}>
-                        Cancel
-                      </Button>
+
+                    {/* Chat Messages */}
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                      {selectedConversation.messages.map((message) => (
+                        <div key={message.id} className={`flex ${message.senderId === 'provider' ? 'justify-end' : 'justify-start'}`}>
+                          <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                            message.senderId === 'provider' 
+                              ? 'bg-blue-600 text-white' 
+                              : 'bg-gray-100 text-gray-900'
+                          }`}>
+                            <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                            <p className={`text-xs mt-1 ${
+                              message.senderId === 'provider' 
+                                ? 'text-blue-100' 
+                                : 'text-gray-500'
+                            }`}>
+                              {new Date(message.timestamp).toLocaleTimeString([], { 
+                                hour: '2-digit', 
+                                minute: '2-digit' 
+                              })}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Message Input */}
+                    <div className="bg-white border-t p-4">
+                      <div className="flex items-center space-x-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => setShowProposalForm(true)}
+                        >
+                          <FileText className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm">
+                          <Paperclip className="h-4 w-4" />
+                        </Button>
+                        <Input
+                          placeholder="Type your message..."
+                          value={newMessage}
+                          onChange={(e) => setNewMessage(e.target.value)}
+                          onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                          className="flex-1"
+                        />
+                        <Button onClick={handleSendMessage} size="sm">
+                          <Send className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex-1 flex items-center justify-center">
+                    <div className="text-center">
+                      <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">Select a conversation</h3>
+                      <p className="text-gray-600">Choose a conversation from the list to start messaging</p>
                     </div>
                   </div>
                 )}
-
-                {/* Message Input */}
-                <div className="bg-white border-t p-4">
-                  <div className="flex items-center space-x-2">
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={() => setShowProposalForm(!showProposalForm)}
-                      className="text-blue-600 hover:text-blue-700"
-                    >
-                      <FileText className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                      <Paperclip className="h-4 w-4" />
-                    </Button>
-                    <Textarea
-                      placeholder="Type your message..."
-                      value={newMessage}
-                      onChange={(e) => setNewMessage(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                          e.preventDefault();
-                          handleSendMessage();
-                        }
-                      }}
-                      className="flex-1 min-h-[40px] max-h-32 resize-none"
-                      rows={1}
-                    />
-                    <Button variant="ghost" size="sm">
-                      <Smile className="h-4 w-4" />
-                    </Button>
-                    <Button onClick={handleSendMessage} disabled={!newMessage.trim()}>
-                      <Send className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <div className="flex-1 flex items-center justify-center">
-                <div className="text-center">
-                  <MessageSquare className="h-16 w-16 mx-auto text-gray-400 mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">
-                    Select a conversation
-                  </h3>
-                  <p className="text-gray-500">
-                    Choose a conversation from the list to start messaging
-                  </p>
-                </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Proposal Form Modal */}
+      {showProposalForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span>Send Proposal</span>
+                <Button variant="ghost" size="sm" onClick={() => setShowProposalForm(false)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Service Type</label>
+                <Input
+                  value={proposalData.serviceType}
+                  onChange={(e) => setProposalData({...proposalData, serviceType: e.target.value})}
+                  placeholder="e.g., Plumbing, Electrical, Cleaning"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
+                <Input
+                  type="number"
+                  value={proposalData.price}
+                  onChange={(e) => setProposalData({...proposalData, price: e.target.value})}
+                  placeholder="0.00"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Estimated Time</label>
+                <Input
+                  value={proposalData.estimatedTime}
+                  onChange={(e) => setProposalData({...proposalData, estimatedTime: e.target.value})}
+                  placeholder="e.g., 2-3 hours"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                <Input
+                  type="date"
+                  value={proposalData.startDate}
+                  onChange={(e) => setProposalData({...proposalData, startDate: e.target.value})}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <Textarea
+                  value={proposalData.description}
+                  onChange={(e) => setProposalData({...proposalData, description: e.target.value})}
+                  placeholder="Describe the service you'll provide..."
+                  rows={3}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Additional Notes (Optional)</label>
+                <Textarea
+                  value={proposalData.additionalNotes}
+                  onChange={(e) => setProposalData({...proposalData, additionalNotes: e.target.value})}
+                  placeholder="Any additional information..."
+                  rows={2}
+                />
+              </div>
+              
+              <div className="flex space-x-2">
+                <Button 
+                  onClick={handleSendProposal}
+                  className="flex-1"
+                  disabled={!proposalData.serviceType || !proposalData.price || !proposalData.description}
+                >
+                  Send Proposal
+                </Button>
+                <Button variant="outline" onClick={() => setShowProposalForm(false)}>
+                  Cancel
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
