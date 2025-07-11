@@ -10,6 +10,7 @@ import { Textarea } from '../../components/ui/textarea';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
 import { mockProviders } from '../../data/mockData';
+import QuotationRequestForm from '../../components/QuotationRequestForm';
 
 const ProviderProfile = () => {
   const { id } = useParams();
