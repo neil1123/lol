@@ -205,7 +205,7 @@ const HomeownerLanding = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-50">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
         {/* Background Elements */}
         <div className="absolute inset-0 overflow-hidden">
           {/* Gradient Circles */}
