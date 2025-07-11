@@ -167,7 +167,7 @@ const ProviderOrders = () => {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
-              <span className="text-sm text-gray-600">Provider Dashboard</span>
+              <span className="text-sm text-gray-600">for Merchants</span>
             </div>
             <div className="flex items-center space-x-4">
               <Button variant="ghost" size="sm">
