@@ -20,6 +20,8 @@ const ProviderProfile = () => {
   const [preferredDate, setPreferredDate] = useState('');
   const [contactMethod, setContactMethod] = useState('email');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isQuotationFormOpen, setIsQuotationFormOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const provider = mockProviders.find(p => p.id === parseInt(id));
 
