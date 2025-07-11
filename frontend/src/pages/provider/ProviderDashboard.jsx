@@ -84,7 +84,7 @@ const ProviderDashboard = () => {
             </div>
             
             {/* Desktop Right Side */}
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden lg:flex items-center space-x-4">
               <Button variant="ghost" size="sm">
                 <Bell className="h-4 w-4" />
               </Button>
@@ -102,7 +102,7 @@ const ProviderDashboard = () => {
             </div>
 
             {/* Mobile Right Side */}
-            <div className="md:hidden flex items-center space-x-2">
+            <div className="lg:hidden flex items-center space-x-2">
               <Button variant="ghost" size="sm">
                 <Bell className="h-4 w-4" />
               </Button>
