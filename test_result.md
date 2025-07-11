@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Enhance the ServiceProviderLanding.jsx page by improving the 'How Doord works for home service companies' section with bigger cards and a center line that glows on scroll. Remove the 'Become our partner' section as requested. The reviews section should remain as already implemented."
+user_problem_statement: "Transform the service provider workflow to be order-centric instead of quotation-centric. Update the dashboard sidebar to replace 'Quotations' with 'Orders' where quotation is part of the order flow. Add a messaging system for providers to communicate with homeowners. Add enhanced performance graphs to the weekly performance chart showing both orders and revenue. Allow businesses to create and manage orders directly instead of just quotations."
 
 frontend:
   - task: "Enhance 'How Doord works' section with bigger cards and glowing center line"
