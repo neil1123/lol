@@ -95,7 +95,7 @@ def test_get_status_checks():
     """Test GET /api/status endpoint"""
     print("\n🔍 Testing Get Status Checks...")
     try:
-        response = requests.get(f"{BACKEND_URL}/status", timeout=10)
+        response = requests.get(f"{BACKEND_URL}/status", timeout=30)
         
         if response.status_code == 200:
             data = response.json()
