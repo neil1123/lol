@@ -36,6 +36,21 @@ const ProviderMessaging = () => {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [newMessage, setNewMessage] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [showProposalForm, setShowProposalForm] = useState(false);
+  const [proposalData, setProposalData] = useState({
+    serviceType: '',
+    description: '',
+    price: '',
+    estimatedTime: '',
+    startDate: '',
+    additionalNotes: ''
+  });
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userType');
+    navigate('/homeservices');
+  };
 
   const sidebarItems = [
     { id: 'home', label: 'Dashboard', icon: Home, path: '/homeservices/dashboard' },
