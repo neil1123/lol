@@ -18,7 +18,7 @@ import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Avatar, AvatarFallback } from '../../components/ui/avatar';
-import { mockDashboardStats, mockCalendarEvents } from '../../data/mockData';
+import { mockDashboardData, mockCalendarEvents } from '../../data/mockData';
 
 const ProviderDashboard = () => {
   const navigate = useNavigate();
