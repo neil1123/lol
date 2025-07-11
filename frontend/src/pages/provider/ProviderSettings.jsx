@@ -15,7 +15,7 @@ import {
   MapPin,
   CreditCard,
   Shield,
-  Notifications,
+  Bell as NotificationIcon,
   Key
 } from 'lucide-react';
 import { Button } from '../../components/ui/button';
