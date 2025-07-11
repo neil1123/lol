@@ -15,13 +15,21 @@ import {
   Star,
   ArrowRight,
   Clock,
-  CheckCircle
+  CheckCircle,
+  FileText,
+  Send,
+  Phone,
+  Mail,
+  MapPin,
+  DollarSign
 } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Input } from '../../components/ui/input';
-import { serviceCategories } from '../../data/mockData';
+import { Textarea } from '../../components/ui/textarea';
+import { Label } from '../../components/ui/label';
+import { serviceCategories, mockOrders, mockQuotationRequests } from '../../data/mockData';
 
 const HomeownerDashboard = () => {
   const navigate = useNavigate();
