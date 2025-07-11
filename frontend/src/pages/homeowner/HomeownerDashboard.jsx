@@ -121,24 +121,26 @@ const HomeownerDashboard = () => {
     setActiveTab(itemId);
     setIsSidebarOpen(false);
     
-    // Navigate based on sidebar item
+    // Handle navigation within dashboard
     switch(itemId) {
       case 'orders':
-        navigate('/homeowners/quotations');
+        // We'll create an orders section within dashboard
         break;
       case 'book-service':
-        navigate('/homeowners/browse');
+        // We'll create a book service section within dashboard
         break;
       case 'messages':
-        // Navigate to messages page when created
+        // We'll create a messages section within dashboard
         break;
       case 'reports':
-        // Navigate to reports page when created
+        // We'll create a reports section within dashboard
         break;
       case 'settings':
-        // Navigate to settings page when created
+        // We'll create a settings section within dashboard
         break;
+      case 'home':
       default:
+        // Stay on home dashboard
         break;
     }
   };
