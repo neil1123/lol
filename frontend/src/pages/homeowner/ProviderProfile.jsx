@@ -230,77 +230,110 @@ const ProviderProfile = () => {
           
           <TabsContent value="overview" className="space-y-6">
             {/* Price List Section */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Price list</CardTitle>
+            <Card className="border-0 shadow-lg bg-gradient-to-r from-blue-50 to-indigo-50">
+              <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-t-lg">
+                <CardTitle className="text-xl font-bold">💰 Price list</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-6">
                 <div className="grid md:grid-cols-3 gap-6">
-                  <div className="border rounded-lg p-4">
-                    <h4 className="font-semibold text-lg mb-2">House cleaning services</h4>
-                    <p className="text-sm text-gray-600 mb-4">House cleaning services offers comprehensive...</p>
-                    <button className="text-blue-600 text-sm hover:underline mb-4">View details</button>
-                    <Button variant="outline" className="w-full">Get Quotation</Button>
+                  <div className="bg-white border-2 border-blue-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:scale-105">
+                    <div className="text-center mb-4">
+                      <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-2xl text-white">🏠</span>
+                      </div>
+                      <h4 className="font-bold text-lg mb-2 text-gray-800">Basic House Cleaning</h4>
+                      <div className="text-3xl font-bold text-blue-600 mb-2">$149</div>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-4">Standard cleaning service for homes up to 1500 sq ft. Includes all basic cleaning tasks.</p>
+                    <button className="text-blue-600 text-sm hover:underline mb-4 block mx-auto">View details →</button>
+                    <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">Get Quotation</Button>
                   </div>
                   
-                  <div className="border rounded-lg p-4">
-                    <h4 className="font-semibold text-lg mb-2">House cleaning services</h4>
-                    <p className="text-sm text-gray-600 mb-4">House cleaning services offers comprehensive...</p>
-                    <button className="text-blue-600 text-sm hover:underline mb-4">View details</button>
-                    <Button variant="outline" className="w-full">Get Quotation</Button>
+                  <div className="bg-white border-2 border-green-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:scale-105">
+                    <div className="text-center mb-4">
+                      <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-2xl text-white">✨</span>
+                      </div>
+                      <h4 className="font-bold text-lg mb-2 text-gray-800">Deep House Cleaning</h4>
+                      <div className="text-3xl font-bold text-green-600 mb-2">$199</div>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-4">Comprehensive deep cleaning with detailed attention to every corner of your home.</p>
+                    <button className="text-green-600 text-sm hover:underline mb-4 block mx-auto">View details →</button>
+                    <Button variant="outline" className="w-full border-green-600 text-green-600 hover:bg-green-600 hover:text-white">Get Quotation</Button>
                   </div>
                   
-                  <div className="border rounded-lg p-4">
-                    <h4 className="font-semibold text-lg mb-2">House cleaning services</h4>
-                    <p className="text-sm text-gray-600 mb-4">House cleaning services offers comprehensive...</p>
-                    <button className="text-blue-600 text-sm hover:underline mb-4">View details</button>
-                    <Button className="w-full">Get Quotation</Button>
+                  <div className="bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-purple-300 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:scale-105 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 text-xs font-bold rounded-bl-lg">
+                      POPULAR
+                    </div>
+                    <div className="text-center mb-4">
+                      <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-2xl text-white">🌟</span>
+                      </div>
+                      <h4 className="font-bold text-lg mb-2 text-gray-800">Premium Package</h4>
+                      <div className="text-3xl font-bold text-purple-600 mb-2">$299</div>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-4">Complete premium service with eco-friendly products and post-cleaning maintenance.</p>
+                    <button className="text-purple-600 text-sm hover:underline mb-4 block mx-auto">View details →</button>
+                    <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">Get Quotation</Button>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             {/* Quick Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick information</CardTitle>
+            <Card className="border-0 shadow-lg bg-gradient-to-r from-green-50 to-emerald-50">
+              <CardHeader className="bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-t-lg">
+                <CardTitle className="text-xl font-bold">⚡ Quick information</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <h5 className="font-semibold mb-2">Year of establishment</h5>
-                    <p className="text-gray-700">{provider.yearEstablished}</p>
+              <CardContent className="p-6">
+                <div className="space-y-6">
+                  <div className="bg-white rounded-lg p-4 border-l-4 border-yellow-500">
+                    <h5 className="font-bold mb-3 text-gray-800 flex items-center">
+                      <span className="text-yellow-500 mr-2">📅</span> Year of establishment
+                    </h5>
+                    <div className="bg-yellow-100 inline-block px-4 py-2 rounded-full">
+                      <span className="font-bold text-yellow-800">{provider.yearEstablished}</span>
+                    </div>
                   </div>
                   
                   <div className="grid md:grid-cols-3 gap-6">
-                    <div>
-                      <h5 className="font-semibold mb-2 flex items-center">
-                        <span className="mr-2">✓</span> Cleaning service for
+                    <div className="bg-white rounded-xl p-4 border-2 border-blue-200 hover:shadow-md transition-shadow">
+                      <h5 className="font-bold mb-3 flex items-center text-blue-700">
+                        <span className="mr-2">🧹</span> Cleaning service for
                       </h5>
                       <div className="flex flex-wrap gap-2">
-                        <Badge variant="secondary">Chair</Badge>
-                        <Badge variant="secondary">Mattress</Badge>
-                        <Badge variant="secondary">+6</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Chair</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Mattress</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Sofa</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Carpet</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Kitchen</Badge>
+                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Bathroom</Badge>
+                        <Badge className="bg-gray-200 text-gray-700 hover:bg-gray-300">+6</Badge>
                       </div>
                     </div>
                     
-                    <div>
-                      <h5 className="font-semibold mb-2 flex items-center">
-                        <span className="mr-2">✓</span> Service type
+                    <div className="bg-white rounded-xl p-4 border-2 border-green-200 hover:shadow-md transition-shadow">
+                      <h5 className="font-bold mb-3 flex items-center text-green-700">
+                        <span className="mr-2">🌟</span> Service type
                       </h5>
                       <div className="flex flex-wrap gap-2">
-                        <Badge variant="secondary">Deep clean</Badge>
-                        <Badge variant="secondary">Vacuum</Badge>
+                        <Badge className="bg-green-100 text-green-800 hover:bg-green-200">Deep clean</Badge>
+                        <Badge className="bg-green-100 text-green-800 hover:bg-green-200">Vacuum</Badge>
+                        <Badge className="bg-green-100 text-green-800 hover:bg-green-200">Sanitize</Badge>
+                        <Badge className="bg-green-100 text-green-800 hover:bg-green-200">Organize</Badge>
                       </div>
                     </div>
                     
-                    <div>
-                      <h5 className="font-semibold mb-2 flex items-center">
-                        <span className="mr-2">✓</span> Properties served
+                    <div className="bg-white rounded-xl p-4 border-2 border-purple-200 hover:shadow-md transition-shadow">
+                      <h5 className="font-bold mb-3 flex items-center text-purple-700">
+                        <span className="mr-2">🏢</span> Properties served
                       </h5>
                       <div className="flex flex-wrap gap-2">
-                        <Badge variant="secondary">Commercial</Badge>
-                        <Badge variant="secondary">Office</Badge>
+                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Commercial</Badge>
+                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Office</Badge>
+                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Residential</Badge>
+                        <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-200">Retail</Badge>
                       </div>
                     </div>
                   </div>
@@ -308,40 +341,44 @@ const ProviderProfile = () => {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>About {provider.name}</CardTitle>
+            <Card className="border-0 shadow-lg bg-gradient-to-r from-orange-50 to-red-50">
+              <CardHeader className="bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-t-lg">
+                <CardTitle className="text-xl font-bold">📋 About {provider.name}</CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 mb-4">{provider.description}</p>
+              <CardContent className="p-6">
+                <p className="text-gray-700 mb-6 text-lg leading-relaxed">{provider.description}</p>
                 
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="font-semibold mb-2">Specialties</h4>
-                    <ul className="space-y-1">
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="bg-white rounded-xl p-6 border-2 border-orange-200">
+                    <h4 className="font-bold mb-4 text-orange-700 flex items-center text-lg">
+                      <span className="mr-2">🎯</span> Specialties
+                    </h4>
+                    <ul className="space-y-3">
                       {provider.specialties.map((specialty, index) => (
-                        <li key={index} className="flex items-center space-x-2">
-                          <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                          <span className="text-gray-600">{specialty}</span>
+                        <li key={index} className="flex items-center space-x-3">
+                          <span className="w-3 h-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"></span>
+                          <span className="text-gray-700 font-medium">{specialty}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
                   
-                  <div>
-                    <h4 className="font-semibold mb-2">Quick Facts</h4>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Jobs Completed</span>
-                        <span className="font-semibold">{provider.completedJobs}</span>
+                  <div className="bg-white rounded-xl p-6 border-2 border-red-200">
+                    <h4 className="font-bold mb-4 text-red-700 flex items-center text-lg">
+                      <span className="mr-2">📊</span> Quick Facts
+                    </h4>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                        <span className="text-gray-700 font-medium">Jobs Completed</span>
+                        <span className="font-bold text-red-600 text-lg">{provider.completedJobs}</span>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Response Time</span>
-                        <span className="font-semibold">{provider.responseTime}</span>
+                      <div className="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+                        <span className="text-gray-700 font-medium">Response Time</span>
+                        <span className="font-bold text-orange-600">{provider.responseTime}</span>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Year Established</span>
-                        <span className="font-semibold">{provider.yearEstablished}</span>
+                      <div className="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+                        <span className="text-gray-700 font-medium">Year Established</span>
+                        <span className="font-bold text-yellow-600">{provider.yearEstablished}</span>
                       </div>
                     </div>
                   </div>
