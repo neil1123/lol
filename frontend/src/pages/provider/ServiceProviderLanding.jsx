@@ -155,59 +155,69 @@ const ServiceProviderLanding = () => {
             
             {/* Right side - Dashboard preview */}
             <div className="relative">
-              <div className="bg-white rounded-lg shadow-2xl p-4 transform rotate-3 hover:rotate-0 transition-transform duration-300">
-                <div className="bg-gray-100 rounded-lg p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold">Dashboard Preview</h3>
-                    <span className="text-sm text-green-600 font-medium">Live Demo</span>
+              <div className="bg-white rounded-lg shadow-2xl p-6 hover:shadow-3xl transition-shadow duration-300">
+                <div className="bg-gray-50 rounded-lg p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-xl font-semibold">Sales Dashboard</h3>
+                    <span className="text-sm text-green-600 font-medium bg-green-100 px-3 py-1 rounded-full">Live Demo</span>
                   </div>
                   
-                  {/* Mock dashboard elements */}
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="bg-blue-500 text-white p-4 rounded-lg">
-                      <div className="text-2xl font-bold">5</div>
-                      <div className="text-sm">Total Orders</div>
+                  {/* Sales metrics */}
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-lg">
+                      <div className="text-2xl font-bold">$2,850</div>
+                      <div className="text-sm opacity-90">Monthly Revenue</div>
                     </div>
-                    <div className="bg-green-500 text-white p-4 rounded-lg">
-                      <div className="text-2xl font-bold">$450</div>
-                      <div className="text-sm">Total Sales</div>
+                    <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-lg">
+                      <div className="text-2xl font-bold">24</div>
+                      <div className="text-sm opacity-90">New Customers</div>
                     </div>
                   </div>
                   
-                  {/* Mock chart */}
-                  <div className="bg-white p-4 rounded-lg">
-                    <div className="text-sm font-medium mb-2">Weekly Performance</div>
-                    <div className="flex items-end space-x-1 h-20">
-                      {[40, 60, 80, 100, 75, 90, 60].map((height, index) => (
+                  {/* Revenue growth chart */}
+                  <div className="bg-white p-4 rounded-lg mb-4">
+                    <div className="text-sm font-medium mb-3 flex items-center justify-between">
+                      <span>Revenue Growth</span>
+                      <span className="text-green-600 text-xs">+23% this month</span>
+                    </div>
+                    <div className="flex items-end space-x-2 h-20">
+                      {[60, 75, 85, 95, 110, 120, 105].map((height, index) => (
                         <div
                           key={index}
-                          className="bg-blue-400 rounded-t-sm flex-1"
+                          className="bg-gradient-to-t from-blue-400 to-blue-500 rounded-t-sm flex-1"
                           style={{ height: `${height}%` }}
                         ></div>
                       ))}
                     </div>
                   </div>
                   
-                  {/* Mock appointments */}
-                  <div className="mt-4 space-y-2">
-                    <div className="text-sm font-medium">Upcoming Appointments</div>
+                  {/* Recent sales */}
+                  <div className="space-y-3">
+                    <div className="text-sm font-medium">Recent Sales</div>
                     <div className="bg-white p-3 rounded-lg flex items-center justify-between">
                       <div>
-                        <div className="font-medium text-sm">Kitchen Repair</div>
-                        <div className="text-xs text-gray-500">John Smith - Today 2:00 PM</div>
+                        <div className="font-medium text-sm">Kitchen Deep Clean</div>
+                        <div className="text-xs text-gray-500">Sarah J. - Completed</div>
                       </div>
-                      <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Confirmed</span>
+                      <span className="text-sm font-bold text-green-600">+$180</span>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg flex items-center justify-between">
+                      <div>
+                        <div className="font-medium text-sm">Bathroom Renovation</div>
+                        <div className="text-xs text-gray-500">Mike W. - In Progress</div>
+                      </div>
+                      <span className="text-sm font-bold text-blue-600">$450</span>
                     </div>
                   </div>
                 </div>
               </div>
               
-              {/* Floating elements */}
-              <div className="absolute -top-4 -right-4 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-sm font-medium animate-bounce">
-                New Quote Request!
+              {/* Floating sales notifications */}
+              <div className="absolute -top-4 -right-4 bg-green-500 text-white px-4 py-2 rounded-full text-sm font-medium animate-bounce shadow-lg">
+                +$180 New Sale!
               </div>
-              <div className="absolute -bottom-4 -left-4 bg-green-400 text-green-900 px-3 py-1 rounded-full text-sm font-medium animate-pulse">
-                +$250 Earned Today
+              <div className="absolute -bottom-4 -left-4 bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-medium animate-pulse shadow-lg">
+                3 New Leads Today
               </div>
             </div>
           </div>
