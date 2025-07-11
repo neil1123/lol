@@ -2,25 +2,20 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   BarChart3, 
-  Calendar, 
-  Users, 
-  MessageSquare, 
-  Settings, 
-  Home,
   TrendingUp,
   DollarSign,
   Clock,
   Star,
   Plus,
   Bell,
-  LogOut,
-  Package
+  LogOut
 } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Avatar, AvatarFallback } from '../../components/ui/avatar';
-import { mockDashboardData, mockCalendarEvents } from '../../data/mockData';
+import { mockDashboardData } from '../../data/mockData';
+import { STANDARD_PROVIDER_SIDEBAR, handleStandardLogout } from '../../constants/providerSidebarConfig';
 
 const ProviderDashboard = () => {
   const navigate = useNavigate();
