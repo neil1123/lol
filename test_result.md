@@ -105,113 +105,41 @@
 user_problem_statement: "Enhance the ServiceProviderLanding.jsx page by improving the 'How Doord works for home service companies' section with bigger cards and a center line that glows on scroll. Remove the 'Become our partner' section as requested. The reviews section should remain as already implemented."
 
 frontend:
-  - task: "Implement hamburger menu for HomeownerLanding.jsx"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/pages/homeowner/HomeownerLanding.jsx"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: false
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Successfully implemented hamburger menu with mobile responsive navigation. Menu opens/closes properly with all navigation items accessible."
-
-  - task: "Implement hamburger menu for ServiceProviderLanding.jsx"
+  - task: "Enhance 'How Doord works' section with bigger cards and glowing center line"
     implemented: true
     working: true
     file: "/app/frontend/src/pages/provider/ServiceProviderLanding.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: true
         agent: "main"
-        comment: "Successfully implemented hamburger menu with mobile responsive navigation. Menu opens/closes properly with all navigation items accessible."
+        comment: "Successfully enhanced the 'How Doord works' section with bigger cards (w-20 h-20 icons, text-4xl headings), improved spacing (space-y-32), dynamic center line with glow effect on scroll, and enhanced card hover effects with scale and shadow animations."
 
-  - task: "Verify ServiceBrowse.jsx mobile navigation"
+  - task: "Remove 'Become our partner' section"
     implemented: true
     working: true
-    file: "/app/frontend/src/pages/homeowner/ServiceBrowse.jsx"
-    stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "ServiceBrowse.jsx already has hamburger menu implemented properly - confirmed working"
-
-  - task: "Implement hamburger menu for HomeownerQuotations.jsx"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/pages/homeowner/HomeownerQuotations.jsx"
-    stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Successfully implemented hamburger menu with mobile responsive navigation."
-
-  - task: "Optimize mobile search bars across all pages"
-    implemented: true
-    working: true
-    file: "multiple"
-    stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "All search bars are mobile-optimized and fit perfectly within mobile viewport"
-
-  - task: "Create dedicated homeowner dashboard"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/pages/homeowner/HomeownerDashboard.jsx"
+    file: "/app/frontend/src/pages/provider/ServiceProviderLanding.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: true
         agent: "main"
-        comment: "Successfully created homeowner dashboard with sidebar navigation, featured services, service categories, and testimonials. Matches reference design with white/blue theme."
+        comment: "Successfully removed the entire 'Become our partner' section including form, validation logic, and related state management. Cleaned up unused imports and handlers."
 
-  - task: "Update authentication to redirect to dashboard"
+  - task: "Implement scroll-triggered glow effects"
     implemented: true
     working: true
-    file: "/app/frontend/src/pages/homeowner/HomeownerAuth.jsx"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: false
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Updated sign-in and sign-up flows to redirect to /homeowners/dashboard after successful authentication"
-
-  - task: "Add dashboard navigation to landing page"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/pages/homeowner/HomeownerLanding.jsx"
+    file: "/app/frontend/src/pages/provider/ServiceProviderLanding.jsx"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: true
         agent: "main"
-        comment: "Added Dashboard button to navigation when user is logged in, along with Sign Out functionality"
-
-  - task: "Add dashboard route to App.js"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/App.js"
-    stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Added /homeowners/dashboard route to application routing"
+        comment: "Added useEffect hook to track scroll progress through 'How It Works' section. Implemented dynamic glow effects on center line and glowing orb that intensify based on scroll position. Enhanced visual feedback with drop-shadow filters."
 
 metadata:
   created_by: "main_agent"
