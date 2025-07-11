@@ -185,9 +185,12 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Enhance 'How Doord works' section with bigger cards and glowing center line"
-    - "Remove 'Become our partner' section"
-    - "Implement scroll-triggered glow effects"
+    - "Update Provider Dashboard sidebar to replace 'Quotations' with 'Orders' and add 'Messages'"
+    - "Create comprehensive Provider Orders management system"
+    - "Create Provider Messaging system"
+    - "Enhance weekly performance chart with orders and revenue data"
+    - "Add new routes for Orders and Messages"
+    - "Update mock data for orders and messages"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
