@@ -149,7 +149,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "All mobile responsiveness tasks completed successfully"
+    - "Enhance 'How Doord works' section with bigger cards and glowing center line"
+    - "Remove 'Become our partner' section"
+    - "Implement scroll-triggered glow effects"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
