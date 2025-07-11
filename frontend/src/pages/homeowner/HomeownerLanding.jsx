@@ -25,6 +25,70 @@ const HomeownerLanding = () => {
     }
   }, [navigate]);
 
+  // Auto-switch reviews every 4 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveReviewIndex((prevIndex) => 
+        prevIndex === customerReviews.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const customerReviews = [
+    {
+      id: 1,
+      name: "Sarah Johnson",
+      location: "Halifax, NS",
+      service: "House Cleaning",
+      rating: 5,
+      review: "Absolutely fantastic service! The team arrived on time, was incredibly professional, and left my house spotless. I've never seen my windows so clean!",
+      avatar: "SJ",
+      date: "2 weeks ago"
+    },
+    {
+      id: 2,
+      name: "Michael Chen",
+      location: "Toronto, ON",
+      service: "Electrical Work",
+      rating: 5,
+      review: "Outstanding electrical work. The electrician was knowledgeable, explained everything clearly, and completed the job efficiently. Highly recommend!",
+      avatar: "MC",
+      date: "1 month ago"
+    },
+    {
+      id: 3,
+      name: "Emily Rodriguez",
+      location: "Vancouver, BC",
+      service: "Landscaping",
+      rating: 5,
+      review: "Transformed our backyard completely! The team was creative, professional, and delivered exactly what we envisioned. Worth every penny!",
+      avatar: "ER",
+      date: "3 weeks ago"
+    },
+    {
+      id: 4,
+      name: "David Thompson",
+      location: "Calgary, AB",
+      service: "Plumbing",
+      rating: 5,
+      review: "Quick response time and excellent service. Fixed our emergency plumbing issue within hours. Professional and reasonably priced!",
+      avatar: "DT",
+      date: "1 week ago"
+    },
+    {
+      id: 5,
+      name: "Jessica Park",
+      location: "Montreal, QC",
+      service: "Interior Painting",
+      rating: 5,
+      review: "Amazing attention to detail! The painters were neat, fast, and the quality is exceptional. Our home looks brand new!",
+      avatar: "JP",
+      date: "2 months ago"
+    }
+  ];
+
   const featuredServices = serviceCategories.slice(0, 3);
   const topProviders = mockProviders.slice(0, 3);
 
