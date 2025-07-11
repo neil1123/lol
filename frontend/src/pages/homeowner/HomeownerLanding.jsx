@@ -25,16 +25,16 @@ const HomeownerLanding = () => {
     }
   }, [navigate]);
 
-  // Auto-switch reviews every 4 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveReviewIndex((prevIndex) => 
-        prevIndex === customerReviews.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 4000);
+  // Auto-switch reviews every 4 seconds - REMOVED
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setActiveReviewIndex((prevIndex) => 
+  //       prevIndex === customerReviews.length - 1 ? 0 : prevIndex + 1
+  //     );
+  //   }, 4000);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const customerReviews = [
     {
@@ -50,7 +50,7 @@ const HomeownerLanding = () => {
     {
       id: 2,
       name: "Michael Chen",
-      location: "Toronto, ON",
+      location: "Halifax, NS",
       service: "Electrical Work",
       rating: 5,
       review: "Outstanding electrical work. The electrician was knowledgeable, explained everything clearly, and completed the job efficiently. Highly recommend!",
@@ -60,7 +60,7 @@ const HomeownerLanding = () => {
     {
       id: 3,
       name: "Emily Rodriguez",
-      location: "Vancouver, BC",
+      location: "Halifax, NS",
       service: "Landscaping",
       rating: 5,
       review: "Transformed our backyard completely! The team was creative, professional, and delivered exactly what we envisioned. Worth every penny!",
@@ -70,7 +70,7 @@ const HomeownerLanding = () => {
     {
       id: 4,
       name: "David Thompson",
-      location: "Calgary, AB",
+      location: "Halifax, NS",
       service: "Plumbing",
       rating: 5,
       review: "Quick response time and excellent service. Fixed our emergency plumbing issue within hours. Professional and reasonably priced!",
@@ -80,7 +80,7 @@ const HomeownerLanding = () => {
     {
       id: 5,
       name: "Jessica Park",
-      location: "Montreal, QC",
+      location: "Halifax, NS",
       service: "Interior Painting",
       rating: 5,
       review: "Amazing attention to detail! The painters were neat, fast, and the quality is exceptional. Our home looks brand new!",
