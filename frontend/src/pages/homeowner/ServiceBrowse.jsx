@@ -211,19 +211,63 @@ const ServiceBrowse = () => {
         ) : (
           <div className="grid gap-6">
             {sortedProviders.map(provider => (
-              <Card key={provider.id} className="hover:shadow-lg transition-shadow">
+              <Card 
+                key={provider.id} 
+                className="hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => navigate(`/homeowners/provider/${provider.id}`)}
+              >
                 <CardContent className="p-6">
-                  <div className="flex flex-col lg:flex-row justify-between">
+                  <div className="flex flex-col lg:flex-row gap-6">
+                    {/* Image Gallery */}
+                    <div className="lg:w-80">
+                      <div className="grid grid-cols-4 gap-2 h-48">
+                        <div className="col-span-2 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
+                          <div className="text-center">
+                            <div className="text-3xl mb-2">
+                              {provider.services.includes('Home Cleaning') || provider.services.includes('Office Cleaning') ? '🧹' :
+                               provider.services.includes('Plumber') ? '🔧' :
+                               provider.services.includes('Electrician') ? '⚡' :
+                               provider.services.includes('Landscaping') ? '🌱' : '🏠'}
+                            </div>
+                            <p className="text-xs text-gray-600">Professional Services</p>
+                          </div>
+                        </div>
+                        <div className="grid grid-rows-2 gap-2">
+                          <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-lg flex items-center justify-center">
+                            <div className="text-xl">✨</div>
+                          </div>
+                          <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center">
+                            <div className="text-xl">🏠</div>
+                          </div>
+                        </div>
+                        <div className="grid grid-rows-2 gap-2">
+                          <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg flex items-center justify-center">
+                            <div className="text-xl">💯</div>
+                          </div>
+                          <div className="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-lg flex items-center justify-center">
+                            <div className="text-xl">⭐</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Content */}
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-4">
                         <div>
-                          <h3 className="text-xl font-semibold text-gray-900">{provider.name}</h3>
+                          <div className="flex items-center space-x-3 mb-2">
+                            <h3 className="text-xl font-semibold text-gray-900">{provider.name}</h3>
+                            <button className="p-1 hover:bg-gray-100 rounded-full">
+                              <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                              </svg>
+                            </button>
+                          </div>
                           <div className="flex items-center space-x-2 mt-1">
-                            <div className="flex items-center space-x-1">
-                              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                              <span className="font-semibold">{provider.rating}</span>
-                              <span className="text-gray-500">({provider.reviews} reviews)</span>
+                            <div className="bg-blue-600 text-white px-2 py-1 rounded text-sm font-semibold">
+                              {provider.rating} ★
                             </div>
+                            <span className="text-gray-500">({provider.reviews} reviews)</span>
                             <span className="text-gray-300">•</span>
                             <span className="text-gray-600">{provider.completedJobs} jobs completed</span>
                           </div>
@@ -234,31 +278,46 @@ const ServiceBrowse = () => {
                       
                       <div className="flex flex-wrap gap-2 mb-4">
                         {provider.services.map(service => (
-                          <Badge key={service} variant="secondary">{service}</Badge>
+                          <Badge key={service} variant="outline">{service}</Badge>
                         ))}
                       </div>
                       
-                      <div className="flex items-center space-x-4 text-sm text-gray-500">
+                      <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
                         <span>📍 {provider.location}</span>
                         <span>⏱️ {provider.responseTime}</span>
                         <span>📅 Est. {provider.yearEstablished}</span>
                       </div>
-                    </div>
-                    
-                    <div className="lg:ml-6 mt-4 lg:mt-0 flex flex-col space-y-2">
-                      <Button
-                        onClick={() => navigate(`/homeowners/provider/${provider.id}`)}
-                        variant="outline"
-                        className="w-full lg:w-auto"
-                      >
-                        View Profile
-                      </Button>
-                      <Button
-                        onClick={() => handleRequestQuote(provider.id)}
-                        className="w-full lg:w-auto"
-                      >
-                        Request Quote
-                      </Button>
+                      
+                      <div className="flex space-x-3">
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/homeowners/provider/${provider.id}`);
+                          }}
+                          className="flex-1"
+                        >
+                          Get Quotation
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRequestQuote(provider.id);
+                          }}
+                          className="bg-blue-600 text-white hover:bg-blue-700"
+                        >
+                          Starts from $199.00
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // Handle messaging
+                          }}
+                        >
+                          Get best deal
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
