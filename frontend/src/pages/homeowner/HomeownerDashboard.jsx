@@ -212,7 +212,8 @@ const HomeownerDashboard = () => {
         <main className="flex-1 overflow-y-auto p-6">
           {/* Featured Services Section */}
           <div className="mb-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            {/* Desktop View */}
+            <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
               {featuredServices.map((service) => (
                 <Card 
                   key={service.id} 
@@ -233,6 +234,32 @@ const HomeownerDashboard = () => {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+            
+            {/* Mobile View - Horizontal Scroll */}
+            <div className="md:hidden">
+              <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide">
+                {featuredServices.map((service) => (
+                  <Card 
+                    key={service.id} 
+                    className={`${service.color} text-white cursor-pointer hover:scale-105 transition-transform duration-200 flex-shrink-0 w-80`}
+                    onClick={() => handleServiceClick(service.id)}
+                  >
+                    <CardContent className="p-6">
+                      <div className="text-4xl mb-4">{service.icon}</div>
+                      <h3 className="text-lg font-bold mb-2">{service.title}</h3>
+                      <p className="text-sm opacity-90 mb-4">{service.description}</p>
+                      <Button 
+                        variant="secondary" 
+                        size="sm" 
+                        className="w-full"
+                      >
+                        {service.action}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
 
