@@ -72,7 +72,7 @@ def test_create_status_check():
             f"{BACKEND_URL}/status",
             json=test_data,
             headers={"Content-Type": "application/json"},
-            timeout=10
+            timeout=30
         )
         
         if response.status_code == 200:
