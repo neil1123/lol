@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Star, MapPin, Clock, Shield, Phone, Mail, Calendar, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Star, MapPin, Clock, Shield, Phone, Mail, Calendar, MessageCircle, Menu, X } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
@@ -18,6 +18,7 @@ const ProviderProfile = () => {
   const [quoteDescription, setQuoteDescription] = useState('');
   const [preferredDate, setPreferredDate] = useState('');
   const [contactMethod, setContactMethod] = useState('email');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const provider = mockProviders.find(p => p.id === parseInt(id));
 
