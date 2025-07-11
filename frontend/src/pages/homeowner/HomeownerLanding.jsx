@@ -135,6 +135,18 @@ const HomeownerLanding = () => {
                 >
                   For Service Providers
                 </Button>
+                {isLoggedIn && (
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => {
+                      navigate('/homeowners/dashboard');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="justify-start"
+                  >
+                    Dashboard
+                  </Button>
+                )}
                 <Button 
                   variant="ghost" 
                   onClick={() => {
@@ -145,25 +157,42 @@ const HomeownerLanding = () => {
                 >
                   My Quotations
                 </Button>
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                    navigate('/homeowners/auth');
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="justify-start"
-                >
-                  Sign In
-                </Button>
-                <Button 
-                  onClick={() => {
-                    navigate('/homeowners/auth');
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="justify-start"
-                >
-                  Sign Up
-                </Button>
+                {isLoggedIn ? (
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      localStorage.removeItem('userType');
+                      localStorage.removeItem('user');
+                      setIsLoggedIn(false);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="justify-start"
+                  >
+                    Sign Out
+                  </Button>
+                ) : (
+                  <>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => {
+                        navigate('/homeowners/auth');
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="justify-start"
+                    >
+                      Sign In
+                    </Button>
+                    <Button 
+                      onClick={() => {
+                        navigate('/homeowners/auth');
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="justify-start"
+                    >
+                      Sign Up
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           )}
