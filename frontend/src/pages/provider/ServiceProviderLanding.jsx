@@ -46,7 +46,6 @@ const ServiceProviderLanding = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
-    // Navigate to registration completion or dashboard
     navigate('/homeservices/auth');
   };
 
@@ -254,500 +253,465 @@ const ServiceProviderLanding = () => {
         </div>
       </section>
 
-  const features = [
-    {
-      icon: <BarChart3 className="h-8 w-8 text-blue-600" />,
-      title: "Smart Dashboard",
-      description: "Track your sales, orders, and performance metrics in real-time"
-    },
-    {
-      icon: <Calendar className="h-8 w-8 text-blue-600" />,
-      title: "Calendar Management", 
-      description: "Schedule appointments and manage your availability seamlessly"
-    },
-    {
-      icon: <Users className="h-8 w-8 text-blue-600" />,
-      title: "Customer Management",
-      description: "Keep track of all your customers and their service history"
-    },
-    {
-      icon: <DollarSign className="h-8 w-8 text-blue-600" />,
-      title: "Quote Management",
-      description: "Create and send professional quotes to potential customers"
-    }
-  ];
-
-  const benefits = [
-    "Get more customers through our marketplace",
-    "Manage your business with powerful CRM tools", 
-    "Track your earnings and growth",
-    "Build your reputation with customer reviews",
-    "Streamline your scheduling and appointments",
-    "Professional quote and invoice management"
-  ];
-
-  const stats = [
-    { label: "Active Providers", value: "500+" },
-    { label: "Jobs Completed", value: "5,000+" },
-    { label: "Customer Satisfaction", value: "4.8/5" },
-    { label: "Average Earnings", value: "$2,800/mo" }
-  ];
-
-  // How it works steps for service providers
-  const howItWorksSteps = [
-    {
-      step: "1",
-      title: "Create your profile",
-      description: "Sign up and showcase your services and expertise",
-      icon: "👤",
-      color: "bg-blue-500"
-    },
-    {
-      step: "2",
-      title: "Receive job requests", 
-      description: "Get notified when customers need your services",
-      icon: "📧",
-      color: "bg-green-500"
-    },
-    {
-      step: "3",
-      title: "Send quotes",
-      description: "Create professional quotes and win more jobs",
-      icon: "💼",
-      color: "bg-purple-500"
-    },
-    {
-      step: "4",
-      title: "Grow your business",
-      description: "Use our tools to manage and scale your operations",
-      icon: "📈",
-      color: "bg-orange-500"
-    }
-  ];
-
-  return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      {/* Features Section */}
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
-              <span className="ml-2 text-sm text-gray-600">for Service Providers</span>
-            </div>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate('/homeowners')}
-                className="text-sm"
-              >
-                For Homeowners
-              </Button>
-              <Button variant="outline" onClick={() => navigate('/homeservices/auth')}>
-                Sign In
-              </Button>
-              <Button onClick={() => navigate('/homeservices/auth')}>
-                Get Started
-              </Button>
-            </div>
-            
-            {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <Button
-                variant="ghost"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2"
-              >
-                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </Button>
-            </div>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Elevate your business with powerful tools
+            </h2>
+            <p className="text-xl text-gray-600">
+              Everything you need to grow your service business, from customer acquisition to payment processing.
+            </p>
           </div>
-          
-          {/* Mobile Menu */}
-          {isMobileMenuOpen && (
-            <div className="md:hidden border-t bg-white py-4">
-              <div className="flex flex-col space-y-3">
-                <Button 
-                  variant="ghost" 
-                  onClick={() => {
-                    navigate('/homeowners');
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="justify-start"
-                >
-                  For Homeowners
-                </Button>
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                    navigate('/homeservices/auth');
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="justify-start"
-                >
-                  Sign In
-                </Button>
-                <Button 
-                  onClick={() => {
-                    navigate('/homeservices/auth');
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="justify-start"
-                >
-                  Get Started
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
-      </header>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left side - Text content */}
-            <div>
-              <h2 className="text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                Grow Your Home Services
-                <span className="text-blue-600"> Business</span>
-              </h2>
-              <p className="text-xl text-gray-600 mb-8">
-                Join hundreds of service providers who use Doord to manage their business,
-                get more customers, and increase their earnings.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <Button 
-                  size="lg" 
-                  onClick={() => navigate('/homeservices/auth')}
-                  className="text-lg px-8 py-4"
-                >
-                  Start Your Free Trial
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  onClick={() => navigate('/homeservices/dashboard')}
-                  className="text-lg px-8 py-4"
-                >
-                  See Demo Dashboard
-                </Button>
-              </div>
-              
-              {/* Quick stats */}
-              <div className="grid grid-cols-2 gap-6">
-                {stats.map((stat, index) => (
-                  <div key={index} className="text-center p-4 bg-white rounded-lg shadow-sm">
-                    <div className="text-2xl font-bold text-blue-600">{stat.value}</div>
-                    <div className="text-sm text-gray-600">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            {/* Right side - Dashboard preview */}
-            <div className="relative">
-              <div className="bg-white rounded-lg shadow-2xl p-6 hover:shadow-3xl transition-shadow duration-300">
-                <div className="bg-gray-50 rounded-lg p-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-xl font-semibold">Sales Dashboard</h3>
-                    <span className="text-sm text-green-600 font-medium bg-green-100 px-3 py-1 rounded-full">Live Demo</span>
-                  </div>
-                  
-                  {/* Sales metrics */}
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-lg">
-                      <div className="text-2xl font-bold">$2,850</div>
-                      <div className="text-sm opacity-90">Monthly Revenue</div>
-                    </div>
-                    <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-lg">
-                      <div className="text-2xl font-bold">24</div>
-                      <div className="text-sm opacity-90">New Customers</div>
-                    </div>
-                  </div>
-                  
-                  {/* Revenue growth chart */}
-                  <div className="bg-white p-4 rounded-lg mb-4">
-                    <div className="text-sm font-medium mb-3 flex items-center justify-between">
-                      <span>Revenue Growth</span>
-                      <span className="text-green-600 text-xs">+23% this month</span>
-                    </div>
-                    <div className="flex items-end space-x-2 h-20">
-                      {[60, 75, 85, 95, 110, 120, 105].map((height, index) => (
-                        <div
-                          key={index}
-                          className="bg-gradient-to-t from-blue-400 to-blue-500 rounded-t-sm flex-1"
-                          style={{ height: `${height}%` }}
-                        ></div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {/* Recent sales */}
-                  <div className="space-y-3">
-                    <div className="text-sm font-medium">Recent Sales</div>
-                    <div className="bg-white p-3 rounded-lg flex items-center justify-between">
-                      <div>
-                        <div className="font-medium text-sm">Kitchen Deep Clean</div>
-                        <div className="text-xs text-gray-500">Sarah J. - Completed</div>
-                      </div>
-                      <span className="text-sm font-bold text-green-600">+$180</span>
-                    </div>
-                    <div className="bg-white p-3 rounded-lg flex items-center justify-between">
-                      <div>
-                        <div className="font-medium text-sm">Bathroom Renovation</div>
-                        <div className="text-xs text-gray-500">Mike W. - In Progress</div>
-                      </div>
-                      <span className="text-sm font-bold text-blue-600">$450</span>
-                    </div>
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Globe className="h-8 w-8 text-blue-600" />
                 </div>
-              </div>
-              
-              {/* Floating sales notifications */}
-              <div className="absolute -top-4 -right-4 bg-green-500 text-white px-4 py-2 rounded-full text-sm font-medium animate-bounce shadow-lg">
-                +$180 New Sale!
-              </div>
-              <div className="absolute -bottom-4 -left-4 bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-medium animate-pulse shadow-lg">
-                3 New Leads Today
-              </div>
-            </div>
+                <h3 className="text-xl font-semibold mb-4">Marketplace Access</h3>
+                <p className="text-gray-600">
+                  Connect with thousands of customers actively looking for your services. 
+                  Get discovered and grow your customer base effortlessly.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Calendar className="h-8 w-8 text-green-600" />
+                </div>
+                <h3 className="text-xl font-semibold mb-4">Smart Scheduling</h3>
+                <p className="text-gray-600">
+                  Automated booking system that syncs with your calendar. 
+                  Let customers book appointments 24/7 while you focus on your work.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <CardContent className="p-8 text-center">
+                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CreditCard className="h-8 w-8 text-purple-600" />
+                </div>
+                <h3 className="text-xl font-semibold mb-4">Secure Payments</h3>
+                <p className="text-gray-600">
+                  Get paid instantly with our secure payment processing. 
+                  Multiple payment methods supported with transparent fee structure.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">
-              How It Works for Service Providers
-            </h3>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              How Doord works for Home service companies?
+            </h2>
             <p className="text-xl text-gray-600">
-              Start growing your business in 4 simple steps
+              A streamlined process designed to help you focus on what you do best while we handle the rest.
             </p>
           </div>
-          
-          <div className="grid md:grid-cols-4 gap-8">
-            {howItWorksSteps.map((step, index) => (
-              <div key={index} className="text-center group relative">
-                {/* Animated step circle */}
-                <div className={`w-20 h-20 ${step.color} rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold transform group-hover:scale-110 transition-all duration-300 shadow-lg`}>
-                  {step.step}
+
+          <div className="space-y-16">
+            {/* Step 1 */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="flex items-center mb-4">
+                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mr-4">
+                    1
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-900">Customers order</h3>
                 </div>
-                
-                {/* Step content */}
-                <div className="space-y-3">
-                  <div className="text-4xl mb-3">{step.icon}</div>
-                  <h4 className="text-xl font-semibold text-gray-900">{step.title}</h4>
-                  <p className="text-gray-600">{step.description}</p>
+                <p className="text-lg text-gray-600 mb-6">
+                  Communicate with the customer to understand their needs. Check details on chat.
+                </p>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                    Real-time customer communication
+                  </li>
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                    Detailed service requirements
+                  </li>
+                </ul>
+              </div>
+              <div className="bg-white rounded-2xl shadow-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-semibold">New Order</h4>
+                  <Badge className="bg-blue-100 text-blue-800">Active</Badge>
+                </div>
+                <h5 className="font-medium mb-2">House Cleaning Service</h5>
+                <p className="text-sm text-gray-600">3-bedroom house, deep cleaning required</p>
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="lg:order-2">
+                <div className="flex items-center mb-4">
+                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mr-4">
+                    2
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-900">Understand Requirement & Provide Quotation</h3>
+                </div>
+                <p className="text-lg text-gray-600 mb-6">
+                  Analyze the requirements and send a detailed quotation. Include timelines, materials, and any additional costs.
+                </p>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                    Detailed cost breakdown
+                  </li>
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                    Timeline estimation
+                  </li>
+                </ul>
+              </div>
+              <div className="lg:order-1 bg-white rounded-2xl shadow-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-semibold">Quotation</h4>
+                  <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+                </div>
+                <div className="text-2xl font-bold text-green-600 mb-2">$425</div>
+                <div className="space-y-1 text-sm">
+                  <div>Service: Deep Cleaning</div>
+                  <div>Duration: 4 hours</div>
                 </div>
               </div>
-            ))}
-          </div>
-          
-          <div className="text-center mt-12">
-            <Button 
-              size="lg" 
-              onClick={() => navigate('/homeservices/auth')}
-            >
-              Join Doord Today
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            </div>
+
+            {/* Step 3 */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="flex items-center mb-4">
+                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mr-4">
+                    3
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-900">Order confirmation</h3>
+                </div>
+                <p className="text-lg text-gray-600 mb-6">
+                  Once the customer approves, proceed with confirming the order.
+                </p>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                    Instant confirmation
+                  </li>
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                    Schedule coordination
+                  </li>
+                </ul>
+              </div>
+              <div className="bg-white rounded-2xl shadow-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-semibold">Order Confirmed</h4>
+                  <Badge className="bg-green-100 text-green-800">Approved</Badge>
+                </div>
+                <div className="text-lg font-medium">House Cleaning Service</div>
+                <div className="text-sm text-gray-600">Scheduled for Dec 15, 2024</div>
+              </div>
+            </div>
+
+            {/* Step 4 */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="lg:order-2">
+                <div className="flex items-center mb-4">
+                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mr-4">
+                    4
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-900">Complete the Job</h3>
+                </div>
+                <p className="text-lg text-gray-600 mb-6">
+                  Start and complete the work as per the agreed terms. Keep the customer updated on progress.
+                </p>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                    Progress tracking
+                  </li>
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                    Quality assurance
+                  </li>
+                </ul>
+              </div>
+              <div className="lg:order-1 bg-white rounded-2xl shadow-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-semibold">Job Status</h4>
+                  <Badge className="bg-blue-100 text-blue-800">In Progress</Badge>
+                </div>
+                <div className="text-lg font-medium mb-2">House Cleaning</div>
+                <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                  <div className="bg-blue-600 h-2 rounded-full" style={{width: '75%'}}></div>
+                </div>
+                <div className="text-sm text-gray-600">75% Complete</div>
+              </div>
+            </div>
+
+            {/* Step 5 */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="flex items-center mb-4">
+                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mr-4">
+                    5
+                  </div>
+                  <h3 className="text-2xl font-semibold text-gray-900">Job Done & Final Payment</h3>
+                </div>
+                <p className="text-lg text-gray-600 mb-6">
+                  Complete the job to receive payment. Mark the job as complete for payment.
+                </p>
+                <ul className="space-y-2 text-gray-600">
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                    Instant payment processing
+                  </li>
+                  <li className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                    Customer satisfaction rating
+                  </li>
+                </ul>
+              </div>
+              <div className="bg-white rounded-2xl shadow-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-semibold">Payment Complete</h4>
+                  <Badge className="bg-green-100 text-green-800">Paid</Badge>
+                </div>
+                <div className="text-2xl font-bold text-green-600 mb-2">$425</div>
+                <div className="text-sm text-gray-600">Paid Instantly</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Partner Registration Form */}
+      <section className="py-20 bg-blue-600">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">
-              Everything You Need to Run Your Business
-            </h3>
-            <p className="text-lg text-gray-600">
-              Powerful tools designed specifically for home service providers
+            <h2 className="text-4xl font-bold text-white mb-4">
+              BECOME OUR PARTNER
+            </h2>
+            <p className="text-xl text-blue-100">
+              Join Hands, Unlock Opportunities
             </p>
           </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                    {feature.icon}
-                  </div>
-                  <h4 className="text-xl font-semibold mb-2">{feature.title}</h4>
-                  <p className="text-gray-600">{feature.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+
+          <Card className="bg-white">
+            <CardContent className="p-8">
+              <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">
+                    First Name
+                  </Label>
+                  <Input
+                    id="firstName"
+                    value={formData.firstName}
+                    onChange={(e) => handleInputChange('firstName', e.target.value)}
+                    className="mt-1"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="lastName" className="text-sm font-medium text-gray-700">
+                    Last Name
+                  </Label>
+                  <Input
+                    id="lastName"
+                    value={formData.lastName}
+                    onChange={(e) => handleInputChange('lastName', e.target.value)}
+                    className="mt-1"
+                    required
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                    Email
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    className="mt-1"
+                    required
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <Label htmlFor="address" className="text-sm font-medium text-gray-700">
+                    Address
+                  </Label>
+                  <Input
+                    id="address"
+                    value={formData.address}
+                    onChange={(e) => handleInputChange('address', e.target.value)}
+                    className="mt-1"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="province" className="text-sm font-medium text-gray-700">
+                    Province
+                  </Label>
+                  <select
+                    id="province"
+                    value={formData.province}
+                    onChange={(e) => handleInputChange('province', e.target.value)}
+                    className="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    required
+                  >
+                    <option value="">Select Province</option>
+                    <option value="NS">Nova Scotia</option>
+                    <option value="ON">Ontario</option>
+                    <option value="QC">Quebec</option>
+                    <option value="BC">British Columbia</option>
+                    <option value="AB">Alberta</option>
+                    <option value="MB">Manitoba</option>
+                    <option value="SK">Saskatchewan</option>
+                  </select>
+                </div>
+
+                <div>
+                  <Label htmlFor="city" className="text-sm font-medium text-gray-700">
+                    City
+                  </Label>
+                  <select
+                    id="city"
+                    value={formData.city}
+                    onChange={(e) => handleInputChange('city', e.target.value)}
+                    className="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    required
+                  >
+                    <option value="">Select City</option>
+                    <option value="Halifax">Halifax</option>
+                    <option value="Toronto">Toronto</option>
+                    <option value="Vancouver">Vancouver</option>
+                    <option value="Montreal">Montreal</option>
+                    <option value="Calgary">Calgary</option>
+                    <option value="Ottawa">Ottawa</option>
+                    <option value="Edmonton">Edmonton</option>
+                  </select>
+                </div>
+
+                <div className="md:col-span-2">
+                  <Button 
+                    type="submit"
+                    size="lg" 
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    Next
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-6">
-                Why Choose Doord for Your Business?
-              </h3>
-              <div className="space-y-4">
-                {benefits.map((benefit, index) => (
-                  <div key={index} className="flex items-start space-x-3">
-                    <CheckCircle className="h-6 w-6 text-green-500 mt-1 flex-shrink-0" />
-                    <span className="text-gray-700">{benefit}</span>
-                  </div>
-                ))}
+      {/* Final CTA Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-bold text-gray-900 mb-6">
+            Ready to grow your business?
+          </h2>
+          <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
+            Join thousands of service providers who have transformed their businesses with Doord. 
+            Start connecting with more customers and increase your revenue today.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="h-8 w-8 text-green-600" />
               </div>
+              <h3 className="text-lg font-semibold mb-2">Free to get started</h3>
+              <p className="text-gray-600">No upfront costs or monthly fees</p>
             </div>
             
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg p-8">
-              <div className="text-center">
-                <div className="text-4xl font-bold text-blue-600 mb-2">Free</div>
-                <div className="text-lg text-gray-600 mb-4">30-day trial</div>
-                <p className="text-gray-600 mb-6">
-                  Try all features risk-free. No credit card required.
-                </p>
-                <Button 
-                  size="lg" 
-                  onClick={() => navigate('/homeservices/auth')}
-                  className="w-full"
-                >
-                  Get Started Today
-                </Button>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="h-8 w-8 text-blue-600" />
               </div>
+              <h3 className="text-lg font-semibold mb-2">Instant customer access</h3>
+              <p className="text-gray-600">Connect with ready-to-book customers</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <BarChart3 className="h-8 w-8 text-purple-600" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Complete business tools</h3>
+              <p className="text-gray-600">Everything you need in one platform</p>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Success Stories */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">
-              Success Stories
-            </h3>
-            <p className="text-lg text-gray-600">
-              See how other service providers are growing with Doord
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Mike's Plumbing",
-                service: "Plumbing Services",
-                quote: "Doord helped me double my customer base in just 6 months. The dashboard makes it so easy to track everything.",
-                rating: 5,
-                growth: "+150% revenue"
-              },
-              {
-                name: "CleanPro Services",
-                service: "Cleaning Services",
-                quote: "The quote management system is incredible. I can send professional quotes in minutes instead of hours.",
-                rating: 5,
-                growth: "+80% efficiency"
-              },
-              {
-                name: "Elite Electrical",
-                service: "Electrical Services",
-                quote: "Customer management has never been easier. I can see my entire business at a glance.",
-                rating: 5,
-                growth: "+200% customers"
-              }
-            ].map((story, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="text-lg">{story.name}</CardTitle>
-                      <p className="text-sm text-gray-600">{story.service}</p>
-                    </div>
-                    <Badge className="bg-green-100 text-green-800">{story.growth}</Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center mb-3">
-                    {[...Array(story.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                  <p className="text-gray-700 italic">"{story.quote}"</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-blue-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h3 className="text-3xl font-bold mb-4">
-            Ready to Grow Your Business?
-          </h3>
-          <p className="text-xl mb-8">
-            Join thousands of successful service providers on Doord
-          </p>
           <Button 
-            size="lg" 
-            variant="secondary"
+            size="lg"
             onClick={() => navigate('/homeservices/auth')}
-            className="text-lg px-8 py-4"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-12 py-4 text-xl font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
           >
-            Start Your Free Trial
-            <ArrowRight className="ml-2 h-5 w-5" />
+            Get Started Free
+            <ArrowRight className="ml-2 h-6 w-6" />
           </Button>
+          <p className="text-gray-500 mt-4">No credit card required • Free for up to 10 bookings</p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-gray-900 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Doord.</h4>
-              <p className="text-gray-400">
-                The complete business management platform for home service providers
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="md:col-span-2">
+              <h3 className="text-2xl font-bold text-blue-400 mb-4">Doord.</h3>
+              <p className="text-gray-300 mb-6">
+                The ultimate marketplace platform for home service providers. 
+                Connect, grow, and succeed with Doord.
               </p>
+              <div className="flex space-x-4">
+                <Button variant="ghost" size="sm" className="text-gray-300 hover:text-white">
+                  About Us
+                </Button>
+                <Button variant="ghost" size="sm" className="text-gray-300 hover:text-white">
+                  Contact
+                </Button>
+              </div>
             </div>
+            
             <div>
-              <h5 className="font-semibold mb-4">Platform</h5>
-              <ul className="space-y-2 text-gray-400">
-                <li>Dashboard</li>
-                <li>Calendar</li>
-                <li>Customer Management</li>
-                <li>Quotes & Invoices</li>
+              <h4 className="font-semibold mb-4">For Providers</h4>
+              <ul className="space-y-2 text-gray-300">
+                <li><a href="#" className="hover:text-white">Get Started</a></li>
+                <li><a href="#" className="hover:text-white">Dashboard</a></li>
+                <li><a href="#" className="hover:text-white">Support</a></li>
               </ul>
             </div>
+            
             <div>
-              <h5 className="font-semibold mb-4">Resources</h5>
-              <ul className="space-y-2 text-gray-400">
-                <li>Help Center</li>
-                <li>Training Videos</li>
-                <li>Best Practices</li>
-                <li>Community</li>
-              </ul>
-            </div>
-            <div>
-              <h5 className="font-semibold mb-4">Company</h5>
-              <ul className="space-y-2 text-gray-400">
-                <li>About Us</li>
-                <li>Careers</li>
-                <li>Press</li>
-                <li>Contact</li>
+              <h4 className="font-semibold mb-4">Company</h4>
+              <ul className="space-y-2 text-gray-300">
+                <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
+                <li><a href="#" className="hover:text-white">Terms of Service</a></li>
+                <li><a href="#" className="hover:text-white">Help Center</a></li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+          
+          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
             <p>&copy; 2024 Doord. All rights reserved.</p>
           </div>
         </div>
