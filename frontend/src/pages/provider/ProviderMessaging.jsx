@@ -489,12 +489,12 @@ ${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additi
                         <div className="flex items-center space-x-3">
                           <Avatar className="h-10 w-10">
                             <AvatarFallback className="bg-blue-100 text-blue-600">
-                              {selectedConversation.customerName.charAt(0).toUpperCase()}
+                              {selectedConversation.homeownerName.charAt(0).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <h3 className="font-semibold text-gray-900">{selectedConversation.customerName}</h3>
-                            <p className="text-sm text-gray-600">{selectedConversation.serviceType}</p>
+                            <h3 className="font-semibold text-gray-900">{selectedConversation.homeownerName}</h3>
+                            <p className="text-sm text-gray-600">{selectedConversation.orderType}</p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
