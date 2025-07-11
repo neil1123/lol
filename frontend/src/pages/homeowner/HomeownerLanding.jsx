@@ -612,7 +612,7 @@ const HomeownerLanding = () => {
           </div>
 
           {/* Reviews Carousel with Deck Effect */}
-          <div className="relative max-w-4xl mx-auto">
+          <div className="relative max-w-6xl mx-auto">
             <div className="relative h-80 flex items-center justify-center">
               {customerReviews.map((review, index) => {
                 const isActive = index === activeReviewIndex;
@@ -624,56 +624,56 @@ const HomeownerLanding = () => {
                 let opacityClass = '';
                 
                 if (isActive) {
-                  transformClass = 'translate-x-0 translate-y-0 scale-100 rotate-0';
+                  transformClass = 'translate-x-0 translate-y-0 scale-100';
                   zIndexClass = 'z-30';
                   opacityClass = 'opacity-100';
                 } else if (isPrev) {
-                  transformClass = 'translate-x-[-120px] translate-y-4 scale-95 rotate-[-2deg]';
+                  transformClass = 'translate-x-[-200px] translate-y-2 scale-95';
                   zIndexClass = 'z-20';
-                  opacityClass = 'opacity-70';
+                  opacityClass = 'opacity-80';
                 } else if (isNext) {
-                  transformClass = 'translate-x-[120px] translate-y-4 scale-95 rotate-[2deg]';
+                  transformClass = 'translate-x-[200px] translate-y-2 scale-95';
                   zIndexClass = 'z-20';
-                  opacityClass = 'opacity-70';
+                  opacityClass = 'opacity-80';
                 } else {
-                  transformClass = 'translate-x-0 translate-y-8 scale-90 rotate-0';
+                  transformClass = 'translate-x-0 translate-y-4 scale-90';
                   zIndexClass = 'z-10';
-                  opacityClass = 'opacity-40';
+                  opacityClass = 'opacity-60';
                 }
 
                 return (
                   <div
                     key={review.id}
-                    className={`absolute w-full max-w-2xl transition-all duration-700 ease-in-out ${transformClass} ${zIndexClass} ${opacityClass}`}
+                    className={`absolute w-full max-w-3xl transition-all duration-700 ease-in-out ${transformClass} ${zIndexClass} ${opacityClass}`}
                   >
                     <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100 hover:shadow-3xl transition-shadow duration-300">
                       {/* Rating Stars */}
                       <div className="flex justify-center mb-6">
                         {[...Array(review.rating)].map((_, i) => (
-                          <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                          <Star key={i} className="h-6 w-6 text-yellow-400 fill-current" />
                         ))}
                       </div>
 
                       {/* Review Text */}
-                      <blockquote className="text-lg text-gray-700 text-center mb-8 leading-relaxed font-medium">
+                      <blockquote className="text-xl text-gray-700 text-center mb-8 leading-relaxed font-medium max-w-4xl mx-auto">
                         "{review.review}"
                       </blockquote>
 
                       {/* Customer Info */}
-                      <div className="flex items-center justify-center space-x-4">
-                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                      <div className="flex items-center justify-center space-x-6">
+                        <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
                           {review.avatar}
                         </div>
                         <div className="text-center">
-                          <h4 className="font-semibold text-gray-900">{review.name}</h4>
-                          <p className="text-sm text-gray-600">{review.location}</p>
-                          <p className="text-xs text-blue-600 font-medium">{review.service} • {review.date}</p>
+                          <h4 className="font-bold text-xl text-gray-900">{review.name}</h4>
+                          <p className="text-lg text-gray-600">{review.location}</p>
+                          <p className="text-sm text-blue-600 font-medium">{review.service} • {review.date}</p>
                         </div>
                       </div>
 
                       {/* Service Badge */}
-                      <div className="flex justify-center mt-6">
-                        <span className="bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
+                      <div className="flex justify-center mt-8">
+                        <span className="bg-blue-50 text-blue-700 px-6 py-3 rounded-full text-base font-medium">
                           {review.service}
                         </span>
                       </div>
