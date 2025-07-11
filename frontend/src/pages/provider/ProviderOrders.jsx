@@ -690,6 +690,7 @@ const ProviderOrders = () => {
               )}
             </TabsContent>
           </Tabs>
+          </div>
         </div>
       </div>
     </div>
