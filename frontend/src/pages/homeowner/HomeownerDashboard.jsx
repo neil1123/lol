@@ -830,6 +830,215 @@ const HomeownerDashboard = () => {
         </main>
       </div>
 
+      {/* Order Details Modal */}
+      {selectedOrder && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Order Details</h2>
+                <Button 
+                  variant="ghost" 
+                  onClick={() => setSelectedOrder(null)}
+                  className="p-2"
+                >
+                  <X className="h-6 w-6" />
+                </Button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Order Information */}
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Order Information</h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="font-medium">Order ID:</span>
+                      <span>#{selectedOrder.id}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Service:</span>
+                      <span>{selectedOrder.serviceType}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Provider:</span>
+                      <span>{selectedOrder.providerName}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Amount:</span>
+                      <span className="text-lg font-bold text-green-600">${selectedOrder.quotationAmount}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Status:</span>
+                      <Badge className={`${
+                        selectedOrder.status === 'completed' ? 'bg-green-100 text-green-800' :
+                        selectedOrder.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
+                        selectedOrder.status === 'scheduled' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {selectedOrder.status.replace('_', ' ').toUpperCase()}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Order Date:</span>
+                      <span>{new Date(selectedOrder.orderDate).toLocaleDateString()}</span>
+                    </div>
+                    {selectedOrder.scheduledDate && (
+                      <div className="flex justify-between">
+                        <span className="font-medium">Scheduled:</span>
+                        <span>{new Date(selectedOrder.scheduledDate).toLocaleString()}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Provider Information */}
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Provider Details</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-2">
+                      <User className="h-4 w-4 text-gray-400" />
+                      <span>{selectedOrder.providerName}</span>
+                    </div>
+                    {selectedOrder.providerEmail && (
+                      <div className="flex items-center space-x-2">
+                        <Mail className="h-4 w-4 text-gray-400" />
+                        <span>{selectedOrder.providerEmail}</span>
+                      </div>
+                    )}
+                    {selectedOrder.providerPhone && (
+                      <div className="flex items-center space-x-2">
+                        <Phone className="h-4 w-4 text-gray-400" />
+                        <span>{selectedOrder.providerPhone}</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="mt-6">
+                    <h4 className="font-semibold mb-2">Service Address</h4>
+                    <div className="flex items-start space-x-2">
+                      <MapPin className="h-4 w-4 text-gray-400 mt-1" />
+                      <span className="text-sm">{selectedOrder.homeownerAddress}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Service Description */}
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold mb-2">Service Description</h3>
+                <p className="text-gray-700 bg-gray-50 p-4 rounded-lg">{selectedOrder.description}</p>
+              </div>
+              
+              {/* Work Progress Timeline */}
+              {selectedOrder.workProgress && selectedOrder.workProgress.length > 0 && (
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold mb-4">Work Progress</h3>
+                  <div className="space-y-4">
+                    {selectedOrder.workProgress.map((progress, index) => (
+                      <div key={progress.id} className="flex items-start space-x-4">
+                        <div className="flex flex-col items-center">
+                          <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
+                          {index < selectedOrder.workProgress.length - 1 && (
+                            <div className="w-0.5 h-8 bg-gray-300 mt-2"></div>
+                          )}
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium">{progress.update}</p>
+                          <p className="text-sm text-gray-500">
+                            {new Date(progress.timestamp).toLocaleString()} - Updated by {progress.updatedBy}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Invoice Section */}
+              {selectedOrder.invoice && (
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold mb-4">Invoice Details</h3>
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="font-medium">Invoice #{selectedOrder.invoice.id}</span>
+                      <Badge className={`${
+                        selectedOrder.invoice.status === 'paid' ? 'bg-green-100 text-green-800' :
+                        selectedOrder.invoice.status === 'sent' ? 'bg-blue-100 text-blue-800' :
+                        'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {selectedOrder.invoice.status.toUpperCase()}
+                      </Badge>
+                    </div>
+                    
+                    <div className="space-y-2 mb-4">
+                      {selectedOrder.invoice.items.map((item, index) => (
+                        <div key={index} className="flex justify-between items-center">
+                          <div>
+                            <span className="font-medium">{item.description}</span>
+                            <span className="text-sm text-gray-500 ml-2">
+                              (Qty: {item.quantity} × ${item.rate})
+                            </span>
+                          </div>
+                          <span className="font-bold">${item.amount}</span>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <div className="border-t pt-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-lg font-bold">Total Amount:</span>
+                        <span className="text-xl font-bold text-green-600">${selectedOrder.invoice.amount}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-sm text-gray-500">
+                        <span>Due Date:</span>
+                        <span>{new Date(selectedOrder.invoice.dueDate).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                    
+                    {selectedOrder.invoice.status !== 'paid' && (
+                      <div className="mt-4 flex gap-2">
+                        <Button className="bg-green-600 hover:bg-green-700">
+                          Pay Now
+                        </Button>
+                        <Button variant="outline">
+                          Download Invoice
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+              
+              {/* Action Buttons */}
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedConversation(selectedOrder);
+                    setSelectedOrder(null);
+                    setActiveTab('messages');
+                  }}
+                >
+                  <MessageCircle className="h-4 w-4 mr-2" />
+                  Message Provider
+                </Button>
+                {selectedOrder.status === 'completed' && (
+                  <Button variant="outline">
+                    <Star className="h-4 w-4 mr-2" />
+                    Rate Service
+                  </Button>
+                )}
+                {selectedOrder.status !== 'completed' && selectedOrder.status !== 'cancelled' && (
+                  <Button variant="outline" className="text-red-600 border-red-200 hover:bg-red-50">
+                    Cancel Order
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
         <div 
