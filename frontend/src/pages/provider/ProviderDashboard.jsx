@@ -188,7 +188,7 @@ const ProviderDashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-gray-600">Total Customers</p>
-                    <p className="text-3xl font-bold text-gray-900">{mockDashboardStats.totalCustomers}</p>
+                    <p className="text-3xl font-bold text-gray-900">{mockDashboardData.recentCustomers.length * 10}</p>
                   </div>
                   <div className="bg-orange-100 p-3 rounded-full">
                     <Users className="h-6 w-6 text-orange-600" />
