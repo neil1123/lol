@@ -351,7 +351,7 @@ const ProviderMessaging = () => {
           </div>
 
           {/* Chat Area */}
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col max-h-[calc(100vh-64px)]">
             {selectedConversation ? (
               <>
                 {/* Chat Header */}
