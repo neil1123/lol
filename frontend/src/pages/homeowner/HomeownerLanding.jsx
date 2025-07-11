@@ -253,7 +253,7 @@ const HomeownerLanding = () => {
 
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto mb-8">
-              <div className="relative backdrop-blur-md bg-white/80 rounded-2xl p-2 shadow-2xl border border-white/50">
+              <div className="relative bg-white rounded-2xl p-2 shadow-lg border border-gray-200">
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
                   <div className="relative flex-1">
                     <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
