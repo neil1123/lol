@@ -1,56 +1,45 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Home, 
   Calendar, 
-  Users, 
-  MessageSquare, 
-  Settings, 
   Plus,
   ChevronLeft,
   ChevronRight,
   Bell,
-  Package,
-  LogOut
+  LogOut,
+  Menu,
+  X
 } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Avatar, AvatarFallback } from '../../components/ui/avatar';
-import { mockCalendarEvents } from '../../data/mockData';
+import { STANDARD_PROVIDER_SIDEBAR, handleStandardLogout } from '../../constants/providerSidebarConfig';
 
 const ProviderCalendar = () => {
   const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userType');
-    navigate('/homeservices');
+    handleStandardLogout(navigate);
   };
 
-  const sidebarItems = [
-    { id: 'home', label: 'Dashboard', icon: Home, path: '/homeservices/dashboard' },
-    { id: 'orders', label: 'Orders', icon: Package, path: '/homeservices/orders' },
-    { id: 'messages', label: 'Messages', icon: MessageSquare, path: '/homeservices/messages' },
-    { id: 'calendar', label: 'Calendar', icon: Calendar, path: '/homeservices/calendar' },
-    { id: 'customers', label: 'Customers', icon: Users, path: '/homeservices/customers' },
-    { id: 'settings', label: 'Settings', icon: Settings, path: '/homeservices/settings' }
-  ];
+  const sidebarItems = STANDARD_PROVIDER_SIDEBAR;
 
+  // Generate calendar days
   const getDaysInMonth = (date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const daysInMonth = lastDay.getDate();
-    const startDay = firstDay.getDay();
-
+    const startingDayOfWeek = firstDay.getDay();
+    
     const days = [];
     
     // Add empty cells for days before the first day of the month
-    for (let i = 0; i < startDay; i++) {
+    for (let i = 0; i < startingDayOfWeek; i++) {
       days.push(null);
     }
     
@@ -62,71 +51,112 @@ const ProviderCalendar = () => {
     return days;
   };
 
-  const formatMonthYear = (date) => {
-    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const days = getDaysInMonth(currentDate);
+  const monthYear = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+  const previousMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
   };
 
-  const navigateMonth = (direction) => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(currentDate.getMonth() + direction);
-    setCurrentDate(newDate);
+  const nextMonth = () => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
   };
 
-  const getEventsForDate = (day) => {
-    if (!day) return [];
-    const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    return mockCalendarEvents.filter(event => event.date === dateStr);
+  // Mock appointments
+  const appointments = [
+    { date: 15, title: 'Home Cleaning - Sarah J.', time: '10:00 AM' },
+    { date: 18, title: 'Electrical Work - Mike W.', time: '2:00 PM' },
+    { date: 22, title: 'Plumbing - Emily D.', time: '9:00 AM' }
+  ];
+
+  const hasAppointment = (day) => {
+    return appointments.some(apt => apt.date === day);
   };
 
-  const getDayEvents = (day) => {
-    const events = getEventsForDate(day);
-    return events.slice(0, 2); // Show max 2 events per day
+  const getAppointment = (day) => {
+    return appointments.find(apt => apt.date === day);
   };
-
-  const todayEvents = mockCalendarEvents.filter(event => {
-    const today = new Date().toISOString().split('T')[0];
-    return event.date === today;
-  });
-
-  const upcomingEvents = mockCalendarEvents.filter(event => {
-    const eventDate = new Date(event.date);
-    const today = new Date();
-    return eventDate > today;
-  }).slice(0, 5);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Mobile Header */}
       <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
+            {/* Mobile Menu Button */}
             <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
-              <span className="text-sm text-gray-600">for Merchants</span>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="flex items-center"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
+              <h1 className="text-xl md:text-2xl font-bold text-blue-600">Doord.</h1>
+              <span className="text-sm text-gray-600 hidden sm:inline">for Merchants</span>
             </div>
-            <div className="flex items-center space-x-4">
+            
+            {/* Mobile Right Side */}
+            <div className="flex items-center space-x-2">
               <Button variant="ghost" size="sm">
                 <Bell className="h-4 w-4" />
               </Button>
-              <div className="flex items-center space-x-2">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-blue-100 text-blue-600">
-                    ES
-                  </AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium">Elite Solutions</span>
-              </div>
-              <Button variant="ghost" size="sm" onClick={handleLogout} title="Logout">
-                <LogOut className="h-4 w-4" />
-              </Button>
+              <Avatar className="h-8 w-8">
+                <AvatarFallback className="bg-blue-100 text-blue-600">
+                  ES
+                </AvatarFallback>
+              </Avatar>
             </div>
           </div>
         </div>
       </header>
 
+      {/* Mobile Navigation Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setIsMobileMenuOpen(false)} />
+          <div className="fixed top-0 left-0 w-64 h-full bg-white shadow-lg">
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold">Navigation</h2>
+                <Button variant="ghost" size="sm" onClick={() => setIsMobileMenuOpen(false)}>
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+              <nav className="space-y-2">
+                {sidebarItems.map((item) => (
+                  <Button
+                    key={item.id}
+                    variant={item.id === 'calendar' ? "default" : "ghost"}
+                    className="w-full justify-start"
+                    onClick={() => {
+                      navigate(item.path);
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <item.icon className="h-4 w-4 mr-3" />
+                    {item.label}
+                  </Button>
+                ))}
+                <hr className="my-4" />
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="h-4 w-4 mr-3" />
+                  Logout
+                </Button>
+              </nav>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex">
-        {/* Sidebar */}
-        <div className="w-64 bg-white shadow-sm min-h-screen">
+        {/* Desktop Sidebar - Hidden on mobile */}
+        <div className="w-64 bg-white shadow-sm min-h-screen" style={{ display: 'none' }}>
           <div className="p-4">
             <nav className="space-y-2">
               {sidebarItems.map((item) => (
@@ -145,86 +175,78 @@ const ProviderCalendar = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 p-8">
-          <div className="flex items-center justify-between mb-8">
-            <div className="text-left">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2 text-left">Calendar</h2>
-              <p className="text-gray-600 text-left">Manage your appointments and schedule</p>
+        <div className="w-full p-4 md:p-8">
+          <div className="max-w-4xl mx-auto">
+            {/* Header */}
+            <div className="mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="text-left">
+                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Calendar</h2>
+                  <p className="text-gray-600">Manage your appointments and schedule</p>
+                </div>
+                <Button className="w-full sm:w-auto">
+                  <Plus className="h-4 w-4 mr-2" />
+                  New Appointment
+                </Button>
+              </div>
             </div>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              New Appointment
-            </Button>
-          </div>
 
-          <div className="grid lg:grid-cols-4 gap-6">
             {/* Calendar */}
-            <Card className="lg:col-span-3">
+            <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle>{formatMonthYear(currentDate)}</CardTitle>
+                  <CardTitle className="text-lg md:text-xl">{monthYear}</CardTitle>
                   <div className="flex items-center space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => navigateMonth(-1)}
-                    >
+                    <Button variant="outline" size="sm" onClick={previousMonth}>
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setCurrentDate(new Date())}
-                    >
-                      Today
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => navigateMonth(1)}
-                    >
+                    <Button variant="outline" size="sm" onClick={nextMonth}>
                       <ChevronRight className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
+                {/* Calendar Grid */}
                 <div className="grid grid-cols-7 gap-1 mb-4">
-                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                    <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
+                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                    <div key={day} className="p-2 text-center text-sm font-medium text-gray-500">
                       {day}
                     </div>
                   ))}
                 </div>
                 
                 <div className="grid grid-cols-7 gap-1">
-                  {getDaysInMonth(currentDate).map((day, index) => (
+                  {days.map((day, index) => (
                     <div
                       key={index}
-                      className={`min-h-[120px] p-2 border rounded-lg cursor-pointer transition-colors ${
-                        day ? 'hover:bg-gray-50' : ''
-                      } ${
-                        selectedDate === day ? 'bg-blue-50 border-blue-300' : 'border-gray-200'
-                      }`}
-                      onClick={() => setSelectedDate(day)}
+                      className={`
+                        relative p-2 h-12 sm:h-16 md:h-20 border border-gray-100 rounded cursor-pointer transition-colors
+                        ${day ? 'hover:bg-gray-50' : ''}
+                        ${day === new Date().getDate() && 
+                          currentDate.getMonth() === new Date().getMonth() && 
+                          currentDate.getFullYear() === new Date().getFullYear() 
+                          ? 'bg-blue-50 border-blue-200' : ''}
+                      `}
                     >
                       {day && (
                         <>
-                          <div className="font-medium text-sm mb-1">{day}</div>
-                          <div className="space-y-1">
-                            {getDayEvents(day).map((event, eventIndex) => (
-                              <div
-                                key={eventIndex}
-                                className={`text-xs p-1 rounded text-white truncate ${
-                                  event.status === 'confirmed' 
-                                    ? 'bg-green-500' 
-                                    : 'bg-yellow-500'
-                                }`}
-                              >
-                                {event.time} - {event.customer}
+                          <span className={`text-sm ${
+                            day === new Date().getDate() && 
+                            currentDate.getMonth() === new Date().getMonth() && 
+                            currentDate.getFullYear() === new Date().getFullYear()
+                              ? 'font-semibold text-blue-600' 
+                              : 'text-gray-900'
+                          }`}>
+                            {day}
+                          </span>
+                          {hasAppointment(day) && (
+                            <div className="absolute bottom-1 left-1 right-1">
+                              <div className="bg-blue-600 text-white text-xs rounded px-1 py-0.5 truncate">
+                                {getAppointment(day)?.title.split(' - ')[0]}
                               </div>
-                            ))}
-                          </div>
+                            </div>
+                          )}
                         </>
                       )}
                     </div>
@@ -233,70 +255,29 @@ const ProviderCalendar = () => {
               </CardContent>
             </Card>
 
-            {/* Sidebar with today's events and upcoming */}
-            <div className="space-y-6">
-              {/* Today's Events */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Today's Appointments</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {todayEvents.length === 0 ? (
-                    <p className="text-gray-500 text-sm">No appointments today</p>
-                  ) : (
-                    <div className="space-y-3">
-                      {todayEvents.map((event) => (
-                        <div key={event.id} className="p-3 border rounded-lg">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="font-medium text-sm">{event.time}</span>
-                            <Badge className={
-                              event.status === 'confirmed' 
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-yellow-100 text-yellow-800'
-                            }>
-                              {event.status}
-                            </Badge>
-                          </div>
-                          <h4 className="font-semibold text-sm">{event.title}</h4>
-                          <p className="text-xs text-gray-600">{event.customer}</p>
+            {/* Upcoming Appointments */}
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Appointments</h3>
+              <div className="space-y-3">
+                {appointments.map((appointment, index) => (
+                  <Card key={index} className="hover:shadow-md transition-shadow">
+                    <CardContent className="p-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                          <h4 className="font-medium text-gray-900">{appointment.title}</h4>
+                          <p className="text-sm text-gray-600">
+                            {monthYear.split(' ')[0]} {appointment.date}, {appointment.time}
+                          </p>
                         </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Upcoming Events */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Upcoming Appointments</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {upcomingEvents.length === 0 ? (
-                    <p className="text-gray-500 text-sm">No upcoming appointments</p>
-                  ) : (
-                    <div className="space-y-3">
-                      {upcomingEvents.map((event) => (
-                        <div key={event.id} className="p-3 border rounded-lg">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="font-medium text-sm">{event.date}</span>
-                            <Badge className={
-                              event.status === 'confirmed' 
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-yellow-100 text-yellow-800'
-                            }>
-                              {event.status}
-                            </Badge>
-                          </div>
-                          <h4 className="font-semibold text-sm">{event.title}</h4>
-                          <p className="text-xs text-gray-600">{event.customer}</p>
-                          <p className="text-xs text-gray-600">{event.time}</p>
+                        <div className="flex space-x-2">
+                          <Button variant="outline" size="sm">Edit</Button>
+                          <Button variant="outline" size="sm">Cancel</Button>
                         </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
         </div>
