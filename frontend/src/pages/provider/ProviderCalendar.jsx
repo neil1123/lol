@@ -24,11 +24,18 @@ const ProviderCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
 
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userType');
+    navigate('/homeservices');
+  };
+
   const sidebarItems = [
     { id: 'home', label: 'Dashboard', icon: Home, path: '/homeservices/dashboard' },
+    { id: 'orders', label: 'Orders', icon: Package, path: '/homeservices/orders' },
+    { id: 'messages', label: 'Messages', icon: MessageSquare, path: '/homeservices/messages' },
     { id: 'calendar', label: 'Calendar', icon: Calendar, path: '/homeservices/calendar' },
     { id: 'customers', label: 'Customers', icon: Users, path: '/homeservices/customers' },
-    { id: 'quotes', label: 'Quotations', icon: MessageSquare, path: '/homeservices/quotations' },
     { id: 'settings', label: 'Settings', icon: Settings, path: '/homeservices/settings' }
   ];
 
