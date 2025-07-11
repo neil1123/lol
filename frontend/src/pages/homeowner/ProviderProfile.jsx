@@ -109,6 +109,32 @@ const ProviderProfile = () => {
       {/* Provider Header */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Image Gallery */}
+          <div className="grid grid-cols-4 gap-2 mb-6 h-64">
+            <div className="col-span-2 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
+              <div className="text-center">
+                <div className="text-4xl mb-2">🧹</div>
+                <p className="text-sm text-gray-600">Professional Cleaning</p>
+              </div>
+            </div>
+            <div className="grid grid-rows-2 gap-2">
+              <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-lg flex items-center justify-center">
+                <div className="text-2xl">🏠</div>
+              </div>
+              <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center">
+                <div className="text-2xl">✨</div>
+              </div>
+            </div>
+            <div className="grid grid-rows-2 gap-2">
+              <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg flex items-center justify-center">
+                <div className="text-2xl">🧽</div>
+              </div>
+              <div className="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-lg flex items-center justify-center">
+                <div className="text-2xl">💯</div>
+              </div>
+            </div>
+          </div>
+          
           <div className="flex flex-col lg:flex-row justify-between items-start">
             <div className="flex items-start space-x-6">
               <Avatar className="h-20 w-20">
@@ -118,12 +144,21 @@ const ProviderProfile = () => {
               </Avatar>
               
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">{provider.name}</h1>
-                <div className="flex items-center space-x-4 mt-2">
+                <div className="flex items-center space-x-3 mb-2">
+                  <h1 className="text-3xl font-bold text-gray-900">{provider.name}</h1>
+                  <button className="p-2 hover:bg-gray-100 rounded-full">
+                    <svg className="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  </button>
+                </div>
+                
+                <div className="flex items-center space-x-4 mb-3">
                   <div className="flex items-center space-x-1">
-                    <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                    <span className="font-semibold text-lg">{provider.rating}</span>
-                    <span className="text-gray-500">({provider.reviews} reviews)</span>
+                    <div className="bg-blue-600 text-white px-2 py-1 rounded text-sm font-semibold">
+                      {provider.rating} ★
+                    </div>
+                    <span className="text-gray-500">({provider.reviews} Reviews)</span>
                   </div>
                   <Badge variant="secondary" className="bg-green-100 text-green-800">
                     <Shield className="h-3 w-3 mr-1" />
@@ -131,31 +166,48 @@ const ProviderProfile = () => {
                   </Badge>
                 </div>
                 
-                <div className="flex items-center space-x-4 mt-3 text-gray-600">
+                <div className="flex items-center space-x-4 mb-4 text-gray-600">
                   <div className="flex items-center space-x-1">
                     <MapPin className="h-4 w-4" />
                     <span>{provider.location}</span>
                   </div>
-                  <div className="flex items-center space-x-1">
-                    <Clock className="h-4 w-4" />
-                    <span>{provider.responseTime}</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <Calendar className="h-4 w-4" />
-                    <span>Est. {provider.yearEstablished}</span>
-                  </div>
+                </div>
+                
+                {/* Service Tags */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <Badge variant="outline">Chairs and wardrobe cleaning</Badge>
+                  <Badge variant="outline">Deep cleaning</Badge>
+                  <Badge variant="outline">Vacuum</Badge>
                 </div>
               </div>
             </div>
             
             <div className="mt-6 lg:mt-0 flex flex-col space-y-2">
               <Button className="w-full lg:w-auto" onClick={() => setActiveTab('quote')}>
-                Request Quote
+                Get Quotation
+              </Button>
+              <Button variant="outline" className="w-full lg:w-auto bg-blue-600 text-white hover:bg-blue-700">
+                Starts from $199.00
               </Button>
               <Button variant="outline" className="w-full lg:w-auto">
                 <MessageCircle className="h-4 w-4 mr-2" />
-                Message
+                Get best deal
+                <span className="ml-2 text-xs">Response in 1 hrs</span>
               </Button>
+            </div>
+          </div>
+
+          {/* Rating Section */}
+          <div className="mt-6 flex items-center justify-end">
+            <div className="text-center">
+              <div className="text-sm text-gray-600 mb-2">Click to rate</div>
+              <div className="flex space-x-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button key={star} className="text-gray-300 hover:text-yellow-400 transition-colors">
+                    <Star className="h-6 w-6" />
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
