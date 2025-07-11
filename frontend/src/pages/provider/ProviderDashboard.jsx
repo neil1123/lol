@@ -234,30 +234,68 @@ const ProviderDashboard = () => {
                     <span className="text-sm font-medium text-gray-600">Revenue</span>
                   </div>
                 </div>
-                <div className="h-64 flex items-end justify-between space-x-2">
-                  {mockDashboardData.weeklyData.map((day, index) => (
-                    <div key={index} className="flex-1 flex flex-col items-center">
-                      <div className="w-full flex space-x-1 items-end h-48">
-                        {/* Orders Bar */}
-                        <div
-                          className="w-1/2 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-sm min-h-[8px]"
-                          style={{ height: `${Math.max(8, (day.orders / 25) * 180)}px` }}
-                          title={`Orders: ${day.orders}`}
-                        ></div>
-                        {/* Revenue Bar */}
-                        <div
-                          className="w-1/2 bg-gradient-to-t from-green-500 to-green-400 rounded-t-sm min-h-[8px]"
-                          style={{ height: `${Math.max(8, (day.revenue / 3500) * 180)}px` }}
-                          title={`Revenue: $${day.revenue}`}
-                        ></div>
+                <div className="relative">
+                  <div className="h-64 flex items-end justify-between space-x-2">
+                    {mockDashboardData.weeklyData.map((day, index) => (
+                      <div key={index} className="flex-1 flex flex-col items-center">
+                        <div className="w-full flex space-x-1 items-end h-48">
+                          {/* Orders Bar */}
+                          <div
+                            className="w-1/2 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-sm min-h-[8px]"
+                            style={{ height: `${Math.max(8, (day.orders / 25) * 180)}px` }}
+                            title={`Orders: ${day.orders}`}
+                          ></div>
+                          {/* Revenue Bar */}
+                          <div
+                            className="w-1/2 bg-gradient-to-t from-green-500 to-green-400 rounded-t-sm min-h-[8px]"
+                            style={{ height: `${Math.max(8, (day.revenue / 3500) * 180)}px` }}
+                            title={`Revenue: $${day.revenue}`}
+                          ></div>
+                        </div>
+                        <div className="mt-2 text-center">
+                          <div className="text-xs font-medium text-gray-900">{day.orders} orders</div>
+                          <div className="text-xs text-gray-600">{day.day}</div>
+                          <div className="text-xs text-green-600">${day.revenue}</div>
+                        </div>
                       </div>
-                      <div className="mt-2 text-center">
-                        <div className="text-xs font-medium text-gray-900">{day.orders} orders</div>
-                        <div className="text-xs text-gray-600">{day.day}</div>
-                        <div className="text-xs text-green-600">${day.revenue}</div>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                  
+                  {/* Sales Curve Line */}
+                  <svg className="absolute top-0 left-0 w-full h-64 pointer-events-none" style={{ zIndex: 10 }}>
+                    <defs>
+                      <linearGradient id="salesGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style={{ stopColor: '#ef4444', stopOpacity: 1 }} />
+                        <stop offset="100%" style={{ stopColor: '#f87171', stopOpacity: 0.8 }} />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d={`M ${20} ${248 - (mockDashboardData.weeklyData[0].revenue / 3500) * 180} 
+                          Q ${mockDashboardData.weeklyData.length > 1 ? 90 : 20} ${248 - (mockDashboardData.weeklyData[1]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 180} 
+                          ${160} ${248 - (mockDashboardData.weeklyData[2]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 180}
+                          Q ${230} ${248 - (mockDashboardData.weeklyData[3]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 180}
+                          ${300} ${248 - (mockDashboardData.weeklyData[4]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 180}
+                          Q ${370} ${248 - (mockDashboardData.weeklyData[5]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 180}
+                          ${440} ${248 - (mockDashboardData.weeklyData[6]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 180}`}
+                      stroke="url(#salesGradient)"
+                      strokeWidth="3"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    {/* Data points */}
+                    {mockDashboardData.weeklyData.map((day, index) => (
+                      <circle
+                        key={index}
+                        cx={20 + (index * 70)}
+                        cy={248 - (day.revenue / 3500) * 180}
+                        r="4"
+                        fill="#ef4444"
+                        stroke="#ffffff"
+                        strokeWidth="2"
+                      />
+                    ))}
+                  </svg>
                 </div>
                 <div className="mt-4 flex justify-center space-x-6">
                   <div className="flex items-center space-x-2">
@@ -267,6 +305,10 @@ const ProviderDashboard = () => {
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 bg-green-500 rounded"></div>
                     <span className="text-sm text-gray-600">Revenue</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 bg-red-500 rounded"></div>
+                    <span className="text-sm text-gray-600">Sales Trend</span>
                   </div>
                 </div>
               </CardContent>
