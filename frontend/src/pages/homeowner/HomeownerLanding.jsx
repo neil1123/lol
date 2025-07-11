@@ -229,22 +229,57 @@ const HomeownerLanding = () => {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {topProviders.map(provider => (
-              <Card key={provider.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg">{provider.name}</CardTitle>
-                    <div className="flex items-center space-x-1">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="font-semibold">{provider.rating}</span>
-                      <span className="text-gray-500">({provider.reviews})</span>
+              <Card 
+                key={provider.id} 
+                className="hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => navigate(`/homeowners/provider/${provider.id}`)}
+              >
+                <CardContent className="p-4">
+                  {/* Image Gallery */}
+                  <div className="grid grid-cols-4 gap-1 h-32 mb-4">
+                    <div className="col-span-2 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-2xl mb-1">
+                          {provider.services.includes('Home Cleaning') || provider.services.includes('Office Cleaning') ? '🧹' :
+                           provider.services.includes('Plumber') ? '🔧' :
+                           provider.services.includes('Electrician') ? '⚡' :
+                           provider.services.includes('Landscaping') ? '🌱' : '🏠'}
+                        </div>
+                        <p className="text-xs text-gray-600">Professional</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-rows-2 gap-1">
+                      <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-lg flex items-center justify-center">
+                        <div className="text-lg">✨</div>
+                      </div>
+                      <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center">
+                        <div className="text-lg">🏠</div>
+                      </div>
+                    </div>
+                    <div className="grid grid-rows-2 gap-1">
+                      <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg flex items-center justify-center">
+                        <div className="text-lg">💯</div>
+                      </div>
+                      <div className="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-lg flex items-center justify-center">
+                        <div className="text-lg">⭐</div>
+                      </div>
                     </div>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 mb-3">{provider.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  
+                  <div className="flex items-center justify-between mb-2">
+                    <CardTitle className="text-lg">{provider.name}</CardTitle>
+                    <div className="flex items-center space-x-1">
+                      <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-semibold">
+                        {provider.rating} ★
+                      </div>
+                      <span className="text-gray-500 text-xs">({provider.reviews})</span>
+                    </div>
+                  </div>
+                  
+                  <p className="text-gray-600 mb-3 text-sm">{provider.description}</p>
+                  <div className="flex flex-wrap gap-1 mb-4">
                     {provider.services.slice(0, 3).map(service => (
-                      <Badge key={service} variant="secondary">{service}</Badge>
+                      <Badge key={service} variant="secondary" className="text-xs">{service}</Badge>
                     ))}
                   </div>
                   <div className="flex items-center justify-between">
@@ -254,7 +289,10 @@ const HomeownerLanding = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => navigate(`/homeowners/provider/${provider.id}`)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/homeowners/provider/${provider.id}`);
+                      }}
                     >
                       View Profile
                     </Button>
