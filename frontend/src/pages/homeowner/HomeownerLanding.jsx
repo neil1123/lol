@@ -81,15 +81,32 @@ const HomeownerLanding = () => {
               >
                 For Service Providers
               </Button>
+              {isLoggedIn && (
+                <Button variant="ghost" onClick={() => navigate('/homeowners/dashboard')}>
+                  Dashboard
+                </Button>
+              )}
               <Button variant="ghost" onClick={() => navigate('/homeowners/quotations')}>
                 My Quotations
               </Button>
-              <Button variant="outline" onClick={() => navigate('/homeowners/auth')}>
-                Sign In
-              </Button>
-              <Button onClick={() => navigate('/homeowners/auth')}>
-                Sign Up
-              </Button>
+              {isLoggedIn ? (
+                <Button variant="outline" onClick={() => {
+                  localStorage.removeItem('userType');
+                  localStorage.removeItem('user');
+                  setIsLoggedIn(false);
+                }}>
+                  Sign Out
+                </Button>
+              ) : (
+                <>
+                  <Button variant="outline" onClick={() => navigate('/homeowners/auth')}>
+                    Sign In
+                  </Button>
+                  <Button onClick={() => navigate('/homeowners/auth')}>
+                    Sign Up
+                  </Button>
+                </>
+              )}
             </div>
             
             {/* Mobile Menu Button */}
