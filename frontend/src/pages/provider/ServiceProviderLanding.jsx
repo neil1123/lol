@@ -446,42 +446,42 @@ const ServiceProviderLanding = () => {
 
               {/* Step 2 */}
               <div className="relative">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                  <div className="lg:order-2 lg:pl-16">
-                    <div className="bg-white rounded-3xl shadow-2xl p-10 border border-gray-100 hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2">
-                      <div className="flex items-center mb-6">
-                        <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl flex items-center justify-center font-bold text-2xl mr-6 shadow-lg">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                  <div className="lg:order-2 lg:pl-20">
+                    <div className="bg-white rounded-3xl shadow-2xl p-12 border border-gray-100 hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105">
+                      <div className="flex items-center mb-8">
+                        <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-3xl flex items-center justify-center font-bold text-3xl mr-8 shadow-xl">
                           2
                         </div>
-                        <h3 className="text-3xl font-bold text-gray-900">Provide Quotation</h3>
+                        <h3 className="text-4xl font-bold text-gray-900">Provide Quotation</h3>
                       </div>
-                      <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                      <p className="text-xl text-gray-600 mb-10 leading-relaxed">
                         Analyze requirements and send detailed quotation. Include timelines, materials, and any additional costs for complete transparency.
                       </p>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 gap-6">
                         <div className="flex items-center text-green-600">
-                          <CheckCircle className="h-5 w-5 mr-3" />
-                          <span className="font-medium">Detailed breakdown</span>
+                          <CheckCircle className="h-6 w-6 mr-4" />
+                          <span className="font-semibold text-lg">Detailed breakdown</span>
                         </div>
                         <div className="flex items-center text-green-600">
-                          <CheckCircle className="h-5 w-5 mr-3" />
-                          <span className="font-medium">Timeline estimation</span>
+                          <CheckCircle className="h-6 w-6 mr-4" />
+                          <span className="font-semibold text-lg">Timeline estimation</span>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="lg:order-1 lg:pr-16">
-                    <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-2xl p-8 border border-yellow-200">
-                      <div className="flex items-center justify-between mb-6">
-                        <h4 className="text-xl font-bold text-gray-900">Quotation Sent</h4>
-                        <Badge className="bg-yellow-600 text-white px-3 py-1 text-sm">Pending</Badge>
+                  <div className="lg:order-1 lg:pr-20">
+                    <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-3xl p-10 border border-yellow-200 shadow-lg">
+                      <div className="flex items-center justify-between mb-8">
+                        <h4 className="text-2xl font-bold text-gray-900">Quotation Sent</h4>
+                        <Badge className="bg-yellow-600 text-white px-4 py-2 text-base">Pending</Badge>
                       </div>
-                      <div className="space-y-4">
+                      <div className="space-y-6">
                         <div className="text-center">
-                          <div className="text-4xl font-bold text-green-600 mb-2">$425</div>
-                          <div className="text-gray-600">Total Cost</div>
+                          <div className="text-5xl font-bold text-green-600 mb-3">$425</div>
+                          <div className="text-gray-600 text-lg">Total Cost</div>
                         </div>
-                        <div className="space-y-2 text-sm text-gray-600">
+                        <div className="space-y-3 text-base text-gray-600">
                           <div className="flex justify-between">
                             <span>Service Duration:</span>
                             <span className="font-medium">4 hours</span>
@@ -496,7 +496,7 @@ const ServiceProviderLanding = () => {
                   </div>
                 </div>
                 {/* Step Connector */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-12 w-8 h-8 bg-green-500 rounded-full border-4 border-white shadow-lg hidden lg:block"></div>
+                <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-16 w-10 h-10 bg-green-500 rounded-full border-4 border-white shadow-xl hidden lg:block"></div>
               </div>
 
               {/* Step 3 */}
