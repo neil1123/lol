@@ -37,10 +37,13 @@ const ProviderAuth = () => {
     e.preventDefault();
     setIsLoading(true);
     
+    console.log('Login attempt:', signInData.email, signInData.password);
+    
     // Mock authentication with specific credentials
     setTimeout(() => {
       // Check for specific user credentials
       if (signInData.email === 'edwarddethe@gmail.com' && signInData.password === 'Neildethe1*') {
+        console.log('Login successful');
         localStorage.setItem('userType', 'provider');
         localStorage.setItem('user', JSON.stringify({
           id: 1,
@@ -54,6 +57,7 @@ const ProviderAuth = () => {
         navigate('/homeservices/dashboard');
       } else {
         // Invalid credentials
+        console.log('Login failed: Invalid credentials');
         setIsLoading(false);
         alert('Invalid credentials. Please check your email and password.');
       }
