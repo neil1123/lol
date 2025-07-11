@@ -15,6 +15,8 @@ import HomeownerDashboard from "./pages/homeowner/HomeownerDashboard";
 import ServiceProviderLanding from "./pages/provider/ServiceProviderLanding";
 import ProviderDashboard from "./pages/provider/ProviderDashboard";
 import ProviderQuotations from "./pages/provider/ProviderQuotations";
+import ProviderOrders from "./pages/provider/ProviderOrders";
+import ProviderMessaging from "./pages/provider/ProviderMessaging";
 import ProviderCalendar from "./pages/provider/ProviderCalendar";
 import ProviderCustomers from "./pages/provider/ProviderCustomers";
 import ProviderAuth from "./pages/provider/ProviderAuth";
