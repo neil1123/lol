@@ -284,7 +284,7 @@ const HomeownerLanding = () => {
                   variant="outline"
                   size="sm"
                   onClick={() => navigate('/homeowners/browse')}
-                  className="bg-white/60 hover:bg-white/80 border-white/50 backdrop-blur-sm text-gray-700 hover:text-blue-700 transition-all duration-300 rounded-full px-6 py-2"
+                  className="bg-white hover:bg-gray-50 border-gray-200 text-gray-700 hover:text-blue-700 transition-all duration-300 rounded-full px-6 py-2"
                 >
                   {service}
                 </Button>
