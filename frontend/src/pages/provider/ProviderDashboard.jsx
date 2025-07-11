@@ -22,21 +22,10 @@ const ProviderDashboard = () => {
   const [activeTab, setActiveTab] = useState('home');
 
   const handleLogout = () => {
-    // Clear any stored auth tokens/data
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userType');
-    // Redirect to provider landing page
-    navigate('/homeservices');
+    handleStandardLogout(navigate);
   };
 
-  const sidebarItems = [
-    { id: 'home', label: 'Dashboard', icon: Home, path: '/homeservices/dashboard' },
-    { id: 'orders', label: 'Orders', icon: Package, path: '/homeservices/orders' },
-    { id: 'messages', label: 'Messages', icon: MessageSquare, path: '/homeservices/messages' },
-    { id: 'calendar', label: 'Calendar', icon: Calendar, path: '/homeservices/calendar' },
-    { id: 'customers', label: 'Customers', icon: Users, path: '/homeservices/customers' },
-    { id: 'settings', label: 'Settings', icon: Settings, path: '/homeservices/settings' }
-  ];
+  const sidebarItems = STANDARD_PROVIDER_SIDEBAR;
 
   const recentActivity = [
     {
