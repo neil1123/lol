@@ -391,48 +391,48 @@ const ServiceProviderLanding = () => {
             <div className="space-y-24">
               {/* Step 1 */}
               <div className="relative">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                  <div className="lg:pr-16">
-                    <div className="bg-white rounded-3xl shadow-2xl p-10 border border-gray-100 hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2">
-                      <div className="flex items-center mb-6">
-                        <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl flex items-center justify-center font-bold text-2xl mr-6 shadow-lg">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                  <div className="lg:pr-20">
+                    <div className="bg-white rounded-3xl shadow-2xl p-12 border border-gray-100 hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105">
+                      <div className="flex items-center mb-8">
+                        <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-3xl flex items-center justify-center font-bold text-3xl mr-8 shadow-xl">
                           1
                         </div>
-                        <h3 className="text-3xl font-bold text-gray-900">Customers order</h3>
+                        <h3 className="text-4xl font-bold text-gray-900">Customers order</h3>
                       </div>
-                      <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                      <p className="text-xl text-gray-600 mb-10 leading-relaxed">
                         Communicate with the customer to understand their needs. Check details on chat and provide personalized service recommendations.
                       </p>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 gap-6">
                         <div className="flex items-center text-green-600">
-                          <CheckCircle className="h-5 w-5 mr-3" />
-                          <span className="font-medium">Real-time communication</span>
+                          <CheckCircle className="h-6 w-6 mr-4" />
+                          <span className="font-semibold text-lg">Real-time communication</span>
                         </div>
                         <div className="flex items-center text-green-600">
-                          <CheckCircle className="h-5 w-5 mr-3" />
-                          <span className="font-medium">Detailed requirements</span>
+                          <CheckCircle className="h-6 w-6 mr-4" />
+                          <span className="font-semibold text-lg">Detailed requirements</span>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="lg:pl-16">
-                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border border-blue-200">
-                      <div className="flex items-center justify-between mb-6">
-                        <h4 className="text-xl font-bold text-gray-900">New Order Received</h4>
-                        <Badge className="bg-blue-600 text-white px-3 py-1 text-sm">Active</Badge>
+                  <div className="lg:pl-20">
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-10 border border-blue-200 shadow-lg">
+                      <div className="flex items-center justify-between mb-8">
+                        <h4 className="text-2xl font-bold text-gray-900">New Order Received</h4>
+                        <Badge className="bg-blue-600 text-white px-4 py-2 text-base">Active</Badge>
                       </div>
-                      <div className="space-y-4">
+                      <div className="space-y-6">
                         <div>
-                          <h5 className="text-lg font-semibold text-gray-800">House Cleaning Service</h5>
-                          <p className="text-gray-600">3-bedroom house, deep cleaning required</p>
+                          <h5 className="text-xl font-semibold text-gray-800">House Cleaning Service</h5>
+                          <p className="text-gray-600 text-lg">3-bedroom house, deep cleaning required</p>
                         </div>
-                        <div className="flex items-center space-x-4 text-sm text-gray-600">
+                        <div className="flex items-center space-x-6 text-base text-gray-600">
                           <div className="flex items-center">
-                            <MapPin className="h-4 w-4 mr-1" />
+                            <MapPin className="h-5 w-5 mr-2" />
                             <span>Halifax, NS</span>
                           </div>
                           <div className="flex items-center">
-                            <Clock className="h-4 w-4 mr-1" />
+                            <Clock className="h-5 w-5 mr-2" />
                             <span>Flexible timing</span>
                           </div>
                         </div>
@@ -441,7 +441,7 @@ const ServiceProviderLanding = () => {
                   </div>
                 </div>
                 {/* Step Connector */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-12 w-8 h-8 bg-blue-500 rounded-full border-4 border-white shadow-lg hidden lg:block"></div>
+                <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-16 w-10 h-10 bg-blue-500 rounded-full border-4 border-white shadow-xl hidden lg:block"></div>
               </div>
 
               {/* Step 2 */}
