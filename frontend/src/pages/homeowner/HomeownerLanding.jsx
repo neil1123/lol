@@ -205,53 +205,116 @@ const HomeownerLanding = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Home services at your 
-              <span className="text-blue-600"> door step</span>
-            </h2>
-            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
-              Connect with trusted local professionals for all your home maintenance needs.
-              Get quotes, compare services, and book with confidence.
-            </p>
-            
-            {/* Search Bar */}
-            <div className="bg-white rounded-xl shadow-lg p-6 max-w-2xl mx-auto mb-8">
-              <div className="flex gap-4">
-                <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                  <Input
-                    placeholder="What service do you need? (e.g., plumbing, cleaning)"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 h-12 text-lg"
-                  />
-                </div>
-                <Button onClick={handleSearch} className="h-12 px-8 text-lg">
-                  Find Services
-                </Button>
-              </div>
-            </div>
-            
-            {/* Trust indicators */}
-            <div className="flex items-center justify-center space-x-8 text-gray-600">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-50">
+        {/* Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Gradient Circles */}
+          <div className="absolute top-10 left-10 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-32 right-20 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
+          
+          {/* Floating Elements */}
+          <div className="absolute top-20 right-1/4 w-4 h-4 bg-blue-400 rounded-full opacity-30 animate-pulse"></div>
+          <div className="absolute top-1/3 left-1/3 w-3 h-3 bg-blue-600 rounded-full opacity-40 animate-bounce"></div>
+          <div className="absolute bottom-1/3 right-1/3 w-2 h-2 bg-blue-500 rounded-full opacity-50 animate-ping"></div>
+        </div>
+
+        {/* Main Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="backdrop-blur-sm bg-white/20 rounded-3xl p-8 sm:p-12 lg:p-16 border border-white/30 shadow-2xl">
+            {/* Trust Indicators */}
+            <div className="flex justify-center space-x-8 mb-8 opacity-70">
               <div className="flex items-center space-x-2">
                 <Shield className="h-5 w-5 text-blue-600" />
-                <span className="text-sm">Verified Providers</span>
+                <span className="text-sm font-medium text-gray-700">Verified Providers</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Star className="h-5 w-5 text-yellow-500 fill-current" />
-                <span className="text-sm">Top Rated Services</span>
+                <Clock className="h-5 w-5 text-blue-600" />
+                <span className="text-sm font-medium text-gray-700">Quick Response</span>
               </div>
               <div className="flex items-center space-x-2">
-                <CheckCircle className="h-5 w-5 text-green-600" />
-                <span className="text-sm">Quality Guaranteed</span>
+                <Users className="h-5 w-5 text-blue-600" />
+                <span className="text-sm font-medium text-gray-700">Trusted by 1000+</span>
               </div>
+            </div>
+
+            {/* Main Headline */}
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+              Home Services{' '}
+              <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                at your doorstep
+              </span>
+            </h1>
+            
+            <p className="text-xl sm:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+              Connect with verified professionals for all your home service needs. 
+              Get instant quotes, book services, and transform your home effortlessly.
+            </p>
+
+            {/* Search Bar */}
+            <div className="relative max-w-2xl mx-auto mb-8">
+              <div className="relative backdrop-blur-md bg-white/80 rounded-2xl p-2 shadow-2xl border border-white/50">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <Input
+                      placeholder="What service do you need? (e.g., cleaning, plumbing, electrical)"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-12 py-4 text-lg border-0 bg-transparent focus:ring-0 focus:outline-none placeholder:text-gray-500"
+                    />
+                  </div>
+                  <Button 
+                    size="lg" 
+                    onClick={() => navigate('/homeowners/browse')}
+                    className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 min-h-[56px] sm:min-h-[auto]"
+                  >
+                    Find Services
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Service Categories */}
+            <div className="flex flex-wrap justify-center gap-3 mb-8">
+              {['Cleaning', 'Plumbing', 'Electrical', 'Landscaping', 'Handyman'].map((service) => (
+                <Button
+                  key={service}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate('/homeowners/browse')}
+                  className="bg-white/60 hover:bg-white/80 border-white/50 backdrop-blur-sm text-gray-700 hover:text-blue-700 transition-all duration-300 rounded-full px-6 py-2"
+                >
+                  {service}
+                </Button>
+              ))}
+            </div>
+
+            {/* Call to Action */}
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+              <Button 
+                size="lg"
+                onClick={() => navigate('/homeowners/browse')}
+                className="bg-white text-blue-600 hover:bg-gray-50 border-2 border-blue-600 hover:border-blue-700 px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              >
+                Browse All Services
+              </Button>
+              <p className="text-gray-600 text-sm">
+                or{' '}
+                <button 
+                  onClick={() => navigate('/homeowners/auth')}
+                  className="text-blue-600 hover:text-blue-700 font-semibold underline"
+                >
+                  sign up for free
+                </button>
+              </p>
             </div>
           </div>
         </div>
+
+        {/* Bottom Gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent"></div>
       </section>
 
       {/* How It Works Section */}
