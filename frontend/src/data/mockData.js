@@ -289,31 +289,24 @@ export const mockQuotations = [
 ];
 
 export const mockDashboardData = {
-  totalSales: 24500,
+  totalSales: 15420,
   activeJobs: 12,
-  completedJobs: 89,
   customerSatisfaction: 4.8,
-  monthlyRevenue: [
-    { month: "Jan", revenue: 3200, orders: 23 },
-    { month: "Feb", revenue: 4100, orders: 31 },
-    { month: "Mar", revenue: 3800, orders: 28 },
-    { month: "Apr", revenue: 4500, orders: 35 },
-    { month: "May", revenue: 5200, orders: 42 },
-    { month: "Jun", revenue: 4800, orders: 38 }
+  weeklyData: [
+    { day: 'Mon', orders: 8, revenue: 1200 },
+    { day: 'Tue', orders: 12, revenue: 1800 },
+    { day: 'Wed', orders: 15, revenue: 2200 },
+    { day: 'Thu', orders: 10, revenue: 1500 },
+    { day: 'Fri', orders: 18, revenue: 2800 },
+    { day: 'Sat', orders: 22, revenue: 3200 },
+    { day: 'Sun', orders: 16, revenue: 2420 }
   ],
   recentCustomers: [
-    { id: 1, name: "John Smith", service: "Electrician", amount: 450, date: "2024-01-15" },
-    { id: 2, name: "Sarah Johnson", service: "Home Cleaning", amount: 280, date: "2024-01-14" },
-    { id: 3, name: "Mike Wilson", service: "Landscaping", amount: 420, date: "2024-01-13" }
-  ],
-  weeklyData: [
-    { day: "Mon", orders: 8, sales: 320 },
-    { day: "Tue", orders: 12, sales: 480 },
-    { day: "Wed", orders: 15, sales: 650 },
-    { day: "Thu", orders: 18, sales: 720 },
-    { day: "Fri", orders: 22, sales: 890 },
-    { day: "Sat", orders: 16, sales: 640 },
-    { day: "Sun", orders: 10, sales: 400 }
+    { name: 'Sarah Johnson', service: 'Home Cleaning', amount: 150 },
+    { name: 'Mike Wilson', service: 'Electrical Work', amount: 320 },
+    { name: 'Emily Davis', service: 'Plumbing', amount: 180 },
+    { name: 'David Brown', service: 'Painting', amount: 450 },
+    { name: 'Lisa Chen', service: 'Landscaping', amount: 280 }
   ]
 };
 
