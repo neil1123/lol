@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { X, Clock, MapPin, DollarSign, FileText, Calendar } from 'lucide-react';
-import { Button } from '../../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
-import { Input } from '../../components/ui/input';
-import { Textarea } from '../../components/ui/textarea';
-import { Label } from '../../components/ui/label';
+import { Button } from './ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Input } from './ui/input';
+import { Textarea } from './ui/textarea';
+import { Label } from './ui/label';
 
 const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName }) => {
   const [formData, setFormData] = useState({
