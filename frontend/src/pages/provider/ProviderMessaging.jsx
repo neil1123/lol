@@ -108,8 +108,8 @@ const ProviderMessaging = () => {
   };
 
   const filteredMessages = messages.filter(msg => 
-    (msg.customerName && msg.customerName.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (msg.serviceType && msg.serviceType.toLowerCase().includes(searchTerm.toLowerCase()))
+    (msg.homeownerName && msg.homeownerName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (msg.orderType && msg.orderType.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const handleSendProposal = () => {
