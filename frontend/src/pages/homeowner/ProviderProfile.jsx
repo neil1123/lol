@@ -232,7 +232,7 @@ const ProviderProfile = () => {
             <div className="w-full lg:w-auto lg:max-w-xs flex flex-col space-y-2 sm:space-y-3 px-2 sm:px-0">
               <Button 
                 className="w-full bg-blue-600 hover:bg-blue-700 shadow-sm text-sm sm:text-base" 
-                onClick={() => setActiveTab('quote')}
+                onClick={() => setIsQuotationFormOpen(true)}
               >
                 🎯 Get Quotation
               </Button>
@@ -245,6 +245,7 @@ const ProviderProfile = () => {
               <Button
                 variant="outline"
                 className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white shadow-sm text-sm sm:text-base"
+                onClick={() => setIsChatOpen(true)}
               >
                 <MessageCircle className="h-4 w-4 mr-2 flex-shrink-0" />
                 <span className="truncate">💬 Get best deal</span>
