@@ -258,7 +258,6 @@ const ServiceProviderLanding = () => {
             <Button 
               size="lg" 
               onClick={() => navigate('/homeservices/auth')}
-              className="animate-pulse"
             >
               Join Doord Today
               <ArrowRight className="ml-2 h-5 w-5" />
