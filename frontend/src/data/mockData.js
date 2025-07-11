@@ -482,13 +482,28 @@ export const mockDashboardData = {
   activeJobs: 12,
   customerSatisfaction: 4.8,
   weeklyData: [
-    { day: 'Mon', orders: 8, revenue: 1200 },
-    { day: 'Tue', orders: 12, revenue: 1800 },
-    { day: 'Wed', orders: 15, revenue: 2200 },
-    { day: 'Thu', orders: 10, revenue: 1500 },
-    { day: 'Fri', orders: 18, revenue: 2800 },
-    { day: 'Sat', orders: 22, revenue: 3200 },
-    { day: 'Sun', orders: 16, revenue: 2420 }
+    { day: 'Mon', orders: 8, revenue: 1200, thisWeek: 1200, lastMonth: 1100 },
+    { day: 'Tue', orders: 12, revenue: 1800, thisWeek: 1800, lastMonth: 1650 },
+    { day: 'Wed', orders: 15, revenue: 2200, thisWeek: 2200, lastMonth: 1900 },
+    { day: 'Thu', orders: 10, revenue: 1500, thisWeek: 1500, lastMonth: 1700 },
+    { day: 'Fri', orders: 18, revenue: 2800, thisWeek: 2800, lastMonth: 2400 },
+    { day: 'Sat', orders: 22, revenue: 3200, thisWeek: 3200, lastMonth: 2900 },
+    { day: 'Sun', orders: 16, revenue: 2420, thisWeek: 2420, lastMonth: 2200 }
+  ],
+  extendedWeeklyData: [
+    { day: 'Mon', thisWeek: 1200, lastMonth: 1100 },
+    { day: 'Mon-Mid', thisWeek: 1350, lastMonth: 1250 },
+    { day: 'Tue', thisWeek: 1800, lastMonth: 1650 },
+    { day: 'Tue-Mid', thisWeek: 1950, lastMonth: 1750 },
+    { day: 'Wed', thisWeek: 2200, lastMonth: 1900 },
+    { day: 'Wed-Mid', thisWeek: 1900, lastMonth: 1800 },
+    { day: 'Thu', thisWeek: 1500, lastMonth: 1700 },
+    { day: 'Thu-Mid', thisWeek: 1750, lastMonth: 1850 },
+    { day: 'Fri', thisWeek: 2800, lastMonth: 2400 },
+    { day: 'Fri-Mid', thisWeek: 3000, lastMonth: 2650 },
+    { day: 'Sat', thisWeek: 3200, lastMonth: 2900 },
+    { day: 'Sat-Mid', thisWeek: 2900, lastMonth: 2600 },
+    { day: 'Sun', thisWeek: 2420, lastMonth: 2200 }
   ],
   recentCustomers: [
     { name: 'Sarah Johnson', service: 'Home Cleaning', amount: 150 },
