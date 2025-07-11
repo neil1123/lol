@@ -324,19 +324,19 @@ const ProviderDashboard = () => {
                   <Button 
                     variant="outline" 
                     className="h-20 flex flex-col items-center justify-center space-y-2"
-                    onClick={() => navigate('/homeservices/quotations')}
+                    onClick={() => navigate('/homeservices/orders')}
                   >
                     <Plus className="h-6 w-6" />
-                    <span className="text-sm">New Quote</span>
+                    <span className="text-sm">New Order</span>
                   </Button>
                   
                   <Button 
                     variant="outline" 
                     className="h-20 flex flex-col items-center justify-center space-y-2"
-                    onClick={() => navigate('/homeservices/calendar')}
+                    onClick={() => navigate('/homeservices/messages')}
                   >
-                    <Calendar className="h-6 w-6" />
-                    <span className="text-sm">Add Appointment</span>
+                    <MessageSquare className="h-6 w-6" />
+                    <span className="text-sm">Messages</span>
                   </Button>
                   
                   <Button 
