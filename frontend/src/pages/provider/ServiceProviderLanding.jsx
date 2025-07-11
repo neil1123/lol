@@ -380,7 +380,13 @@ const ServiceProviderLanding = () => {
             ></div>
             
             {/* Glowing Orb */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 top-0 w-4 h-4 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50 animate-pulse hidden lg:block" id="timeline-orb"></div>
+            <div 
+              className="absolute left-1/2 transform -translate-x-1/2 top-0 w-6 h-6 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50 animate-pulse hidden lg:block transition-all duration-300" 
+              id="timeline-orb"
+              style={{
+                filter: `drop-shadow(0 0 ${15 + scrollProgress * 25}px rgba(59, 130, 246, ${0.4 + scrollProgress * 0.6}))`
+              }}
+            ></div>
 
             <div className="space-y-24">
               {/* Step 1 */}
