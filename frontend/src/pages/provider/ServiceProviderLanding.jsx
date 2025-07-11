@@ -111,48 +111,155 @@ const ServiceProviderLanding = () => {
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-5xl font-bold text-gray-900 mb-6">
-              Grow Your Home Services
-              <span className="text-blue-600"> Business</span>
-            </h2>
-            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
-              Join thousands of service providers who use Doord to manage their business,
-              get more customers, and increase their earnings.
-            </p>
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left side - Text content */}
+            <div>
+              <h2 className="text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                Grow Your Home Services
+                <span className="text-blue-600"> Business</span>
+              </h2>
+              <p className="text-xl text-gray-600 mb-8">
+                Join hundreds of service providers who use Doord to manage their business,
+                get more customers, and increase their earnings.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                <Button 
+                  size="lg" 
+                  onClick={() => navigate('/homeservices/auth')}
+                  className="text-lg px-8 py-4"
+                >
+                  Start Your Free Trial
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  onClick={() => navigate('/homeservices/dashboard')}
+                  className="text-lg px-8 py-4"
+                >
+                  See Demo Dashboard
+                </Button>
+              </div>
+              
+              {/* Quick stats */}
+              <div className="grid grid-cols-2 gap-6">
+                {stats.map((stat, index) => (
+                  <div key={index} className="text-center p-4 bg-white rounded-lg shadow-sm">
+                    <div className="text-2xl font-bold text-blue-600">{stat.value}</div>
+                    <div className="text-sm text-gray-600">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                onClick={() => navigate('/homeservices/auth')}
-                className="text-lg px-8 py-4"
-              >
-                Start Your Free Trial
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg"
-                onClick={() => navigate('/homeservices/dashboard')}
-                className="text-lg px-8 py-4"
-              >
-                See Demo Dashboard
-              </Button>
+            {/* Right side - Dashboard preview */}
+            <div className="relative">
+              <div className="bg-white rounded-lg shadow-2xl p-4 transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                <div className="bg-gray-100 rounded-lg p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold">Dashboard Preview</h3>
+                    <span className="text-sm text-green-600 font-medium">Live Demo</span>
+                  </div>
+                  
+                  {/* Mock dashboard elements */}
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="bg-blue-500 text-white p-4 rounded-lg">
+                      <div className="text-2xl font-bold">5</div>
+                      <div className="text-sm">Total Orders</div>
+                    </div>
+                    <div className="bg-green-500 text-white p-4 rounded-lg">
+                      <div className="text-2xl font-bold">$450</div>
+                      <div className="text-sm">Total Sales</div>
+                    </div>
+                  </div>
+                  
+                  {/* Mock chart */}
+                  <div className="bg-white p-4 rounded-lg">
+                    <div className="text-sm font-medium mb-2">Weekly Performance</div>
+                    <div className="flex items-end space-x-1 h-20">
+                      {[40, 60, 80, 100, 75, 90, 60].map((height, index) => (
+                        <div
+                          key={index}
+                          className="bg-blue-400 rounded-t-sm flex-1"
+                          style={{ height: `${height}%` }}
+                        ></div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Mock appointments */}
+                  <div className="mt-4 space-y-2">
+                    <div className="text-sm font-medium">Upcoming Appointments</div>
+                    <div className="bg-white p-3 rounded-lg flex items-center justify-between">
+                      <div>
+                        <div className="font-medium text-sm">Kitchen Repair</div>
+                        <div className="text-xs text-gray-500">John Smith - Today 2:00 PM</div>
+                      </div>
+                      <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Confirmed</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Floating elements */}
+              <div className="absolute -top-4 -right-4 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-sm font-medium animate-bounce">
+                New Quote Request!
+              </div>
+              <div className="absolute -bottom-4 -left-4 bg-green-400 text-green-900 px-3 py-1 rounded-full text-sm font-medium animate-pulse">
+                +$250 Earned Today
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-white">
+      {/* How It Works Section */}
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h3 className="text-4xl font-bold text-gray-900 mb-4">
+              How It Works for Service Providers
+            </h3>
+            <p className="text-xl text-gray-600">
+              Start growing your business in 4 simple steps
+            </p>
+          </div>
+          
           <div className="grid md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-4xl font-bold text-blue-600 mb-2">{stat.value}</div>
-                <div className="text-gray-600">{stat.label}</div>
+            {howItWorksSteps.map((step, index) => (
+              <div key={index} className="text-center group relative">
+                {/* Animated step circle */}
+                <div className={`w-20 h-20 ${step.color} rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold transform group-hover:scale-110 transition-all duration-300 shadow-lg`}>
+                  {step.step}
+                </div>
+                
+                {/* Step content */}
+                <div className="space-y-3">
+                  <div className="text-4xl mb-3">{step.icon}</div>
+                  <h4 className="text-xl font-semibold text-gray-900">{step.title}</h4>
+                  <p className="text-gray-600">{step.description}</p>
+                </div>
+                
+                {/* Connecting arrow */}
+                {index < howItWorksSteps.length - 1 && (
+                  <div className="hidden md:block absolute top-10 left-1/2 transform translate-x-12 text-gray-300">
+                    <ArrowRight className="h-8 w-8" />
+                  </div>
+                )}
               </div>
             ))}
+          </div>
+          
+          <div className="text-center mt-12">
+            <Button 
+              size="lg" 
+              onClick={() => navigate('/homeservices/auth')}
+              className="animate-pulse"
+            >
+              Join Doord Today
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
           </div>
         </div>
       </section>
