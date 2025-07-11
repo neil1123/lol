@@ -25,6 +25,14 @@ const ProviderDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('home');
 
+  const handleLogout = () => {
+    // Clear any stored auth tokens/data
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userType');
+    // Redirect to provider landing page
+    navigate('/homeservices');
+  };
+
   const sidebarItems = [
     { id: 'home', label: 'Dashboard', icon: Home, path: '/homeservices/dashboard' },
     { id: 'orders', label: 'Orders', icon: MessageSquare, path: '/homeservices/orders' },
