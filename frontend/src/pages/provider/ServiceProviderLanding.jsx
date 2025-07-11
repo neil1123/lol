@@ -90,7 +90,9 @@ const ServiceProviderLanding = () => {
               <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
               <span className="ml-2 text-sm text-gray-600">for Service Providers</span>
             </div>
-            <div className="flex items-center space-x-4">
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-4">
               <Button 
                 variant="ghost" 
                 onClick={() => navigate('/homeowners')}
@@ -105,7 +107,55 @@ const ServiceProviderLanding = () => {
                 Get Started
               </Button>
             </div>
+            
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2"
+              >
+                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
+            </div>
           </div>
+          
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden border-t bg-white py-4">
+              <div className="flex flex-col space-y-3">
+                <Button 
+                  variant="ghost" 
+                  onClick={() => {
+                    navigate('/homeowners');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="justify-start"
+                >
+                  For Homeowners
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    navigate('/homeservices/auth');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="justify-start"
+                >
+                  Sign In
+                </Button>
+                <Button 
+                  onClick={() => {
+                    navigate('/homeservices/auth');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="justify-start"
+                >
+                  Get Started
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
