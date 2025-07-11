@@ -93,10 +93,10 @@ const ProviderMessaging = () => {
             ...msg,
             messages: [...msg.messages, {
               id: Date.now(),
-              senderId: 'provider',
-              text: newMessage,
+              sender: 'provider',
+              content: newMessage,
               timestamp: new Date().toISOString(),
-              isRead: true
+              read: true
             }]
           };
         }
