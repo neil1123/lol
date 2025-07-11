@@ -35,7 +35,7 @@ const ProviderDashboard = () => {
 
   const sidebarItems = [
     { id: 'home', label: 'Dashboard', icon: Home, path: '/homeservices/dashboard' },
-    { id: 'orders', label: 'Orders', icon: MessageSquare, path: '/homeservices/orders' },
+    { id: 'orders', label: 'Orders', icon: Package, path: '/homeservices/orders' },
     { id: 'messages', label: 'Messages', icon: MessageSquare, path: '/homeservices/messages' },
     { id: 'calendar', label: 'Calendar', icon: Calendar, path: '/homeservices/calendar' },
     { id: 'customers', label: 'Customers', icon: Users, path: '/homeservices/customers' },
