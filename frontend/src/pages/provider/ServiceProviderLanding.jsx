@@ -58,7 +58,11 @@ const ServiceProviderLanding = () => {
               <span className="ml-2 text-sm text-gray-600">for Service Providers</span>
             </div>
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" onClick={() => navigate('/')}>
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate('/homeowners')}
+                className="text-sm"
+              >
                 For Homeowners
               </Button>
               <Button variant="outline" onClick={() => navigate('/homeservices/auth')}>
