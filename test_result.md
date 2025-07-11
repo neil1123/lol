@@ -105,41 +105,77 @@
 user_problem_statement: "Transform the service provider workflow to be order-centric instead of quotation-centric. Update the dashboard sidebar to replace 'Quotations' with 'Orders' where quotation is part of the order flow. Add a messaging system for providers to communicate with homeowners. Add enhanced performance graphs to the weekly performance chart showing both orders and revenue. Allow businesses to create and manage orders directly instead of just quotations."
 
 frontend:
-  - task: "Enhance 'How Doord works' section with bigger cards and glowing center line"
+  - task: "Update Provider Dashboard sidebar to replace 'Quotations' with 'Orders' and add 'Messages'"
     implemented: true
     working: true
-    file: "/app/frontend/src/pages/provider/ServiceProviderLanding.jsx"
+    file: "/app/frontend/src/pages/provider/ProviderDashboard.jsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
     status_history:
       - working: true
         agent: "main"
-        comment: "Successfully enhanced the 'How Doord works' section with bigger cards (w-20 h-20 icons, text-4xl headings), improved spacing (space-y-32), dynamic center line with glow effect on scroll, and enhanced card hover effects with scale and shadow animations."
+        comment: "Successfully updated provider dashboard sidebar to include 'Orders' and 'Messages' instead of 'Quotations'. Updated quick actions to focus on order creation and messaging."
 
-  - task: "Remove 'Become our partner' section"
+  - task: "Enhance weekly performance chart with orders and revenue data"
     implemented: true
     working: true
-    file: "/app/frontend/src/pages/provider/ServiceProviderLanding.jsx"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: true
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Successfully removed the entire 'Become our partner' section including form, validation logic, and related state management. Cleaned up unused imports and handlers."
-
-  - task: "Implement scroll-triggered glow effects"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/pages/provider/ServiceProviderLanding.jsx"
+    file: "/app/frontend/src/pages/provider/ProviderDashboard.jsx"
     stuck_count: 0
     priority: "medium"
     needs_retesting: true
     status_history:
       - working: true
         agent: "main"
-        comment: "Added useEffect hook to track scroll progress through 'How It Works' section. Implemented dynamic glow effects on center line and glowing orb that intensify based on scroll position. Enhanced visual feedback with drop-shadow filters."
+        comment: "Enhanced weekly performance chart to show both orders and revenue with dual bar chart visualization. Added proper legends and tooltips for better data representation."
+
+  - task: "Create comprehensive Provider Orders management system"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/provider/ProviderOrders.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Created complete order management system with 5-stage workflow: Pending, Quoted, Confirmed, In Progress, Completed. Allows businesses to create orders directly with quotation as part of the process. Includes customer contact info, priority levels, and status management."
+
+  - task: "Create Provider Messaging system"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/provider/ProviderMessaging.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Built comprehensive messaging system with conversation list, real-time chat interface, search functionality, and seamless integration with homeowner communication. Includes message status tracking and multimedia support."
+
+  - task: "Add new routes for Orders and Messages"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added new routes for /homeservices/orders and /homeservices/messages to support the new order-centric workflow and messaging system."
+
+  - task: "Update mock data for orders and messages"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/data/mockData.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Updated mock data structure to support order-centric workflow with comprehensive order details, priority levels, customer information, and realistic messaging conversations between providers and homeowners."
 
 metadata:
   created_by: "main_agent"
