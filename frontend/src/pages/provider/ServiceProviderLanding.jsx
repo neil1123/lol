@@ -1,5 +1,5 @@
-import React from 'react';
-import { ArrowRight, BarChart3, Calendar, Users, DollarSign, Star, CheckCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowRight, BarChart3, Calendar, Users, DollarSign, Star, CheckCircle, Menu, X } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
