@@ -382,7 +382,7 @@ const ProviderMessaging = () => {
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-[calc(100vh-200px)]">
                   {selectedConversation.messages.map((message) => (
                     <div
                       key={message.id}
