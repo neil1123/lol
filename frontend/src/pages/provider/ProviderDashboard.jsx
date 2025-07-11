@@ -216,16 +216,45 @@ const ProviderDashboard = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
+                <div className="mb-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium text-gray-600">Orders</span>
+                    <span className="text-sm font-medium text-gray-600">Revenue</span>
+                  </div>
+                </div>
                 <div className="h-64 flex items-end justify-between space-x-2">
                   {mockDashboardData.weeklyData.map((day, index) => (
                     <div key={index} className="flex-1 flex flex-col items-center">
-                      <div
-                        className="w-full bg-blue-600 rounded-t-sm"
-                        style={{ height: `${(day.orders / 25) * 100}%` }}
-                      ></div>
-                      <span className="text-xs text-gray-600 mt-2">{day.day}</span>
+                      <div className="w-full flex flex-col items-center space-y-1">
+                        {/* Revenue Bar */}
+                        <div
+                          className="w-full bg-gradient-to-t from-green-500 to-green-400 rounded-t-sm"
+                          style={{ height: `${(day.revenue / 2000) * 100}%` }}
+                          title={`Revenue: $${day.revenue}`}
+                        ></div>
+                        {/* Orders Bar */}
+                        <div
+                          className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-sm"
+                          style={{ height: `${(day.orders / 25) * 100}%` }}
+                          title={`Orders: ${day.orders}`}
+                        ></div>
+                      </div>
+                      <div className="mt-2 text-center">
+                        <div className="text-xs font-medium text-gray-900">{day.orders}</div>
+                        <div className="text-xs text-gray-600">{day.day}</div>
+                      </div>
                     </div>
                   ))}
+                </div>
+                <div className="mt-4 flex justify-center space-x-6">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 bg-blue-500 rounded"></div>
+                    <span className="text-sm text-gray-600">Orders</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 bg-green-500 rounded"></div>
+                    <span className="text-sm text-gray-600">Revenue</span>
+                  </div>
                 </div>
               </CardContent>
             </Card>
