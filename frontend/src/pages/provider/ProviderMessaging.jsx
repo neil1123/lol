@@ -388,20 +388,99 @@ const ProviderMessaging = () => {
                       key={message.id}
                       className={`flex ${message.sender === 'provider' ? 'justify-end' : 'justify-start'}`}
                     >
-                      <div
-                        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                          message.sender === 'provider'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-100 text-gray-900'
-                        }`}
-                      >
-                        <p className="text-sm">{message.content}</p>
-                        <p className={`text-xs mt-1 ${
-                          message.sender === 'provider' ? 'text-blue-100' : 'text-gray-500'
-                        }`}>
-                          {formatTime(message.timestamp)}
-                        </p>
-                      </div>
+                      {message.type === 'proposal' ? (
+                        <div
+                          className={`max-w-md ${
+                            message.sender === 'provider'
+                              ? 'bg-blue-50 border-blue-200'
+                              : 'bg-gray-50 border-gray-200'
+                          } border rounded-lg p-4`}
+                        >
+                          <div className="flex items-center space-x-2 mb-3">
+                            <FileText className="h-4 w-4 text-blue-600" />
+                            <span className="font-semibold text-blue-600">Service Proposal</span>
+                          </div>
+                          
+                          <div className="space-y-2 mb-4">
+                            <div>
+                              <span className="font-medium text-gray-700">Service: </span>
+                              <span className="text-gray-900">{message.proposalData.serviceType}</span>
+                            </div>
+                            <div>
+                              <span className="font-medium text-gray-700">Price: </span>
+                              <span className="text-green-600 font-bold">${message.proposalData.price}</span>
+                            </div>
+                            <div>
+                              <span className="font-medium text-gray-700">Estimated Time: </span>
+                              <span className="text-gray-900">{message.proposalData.estimatedTime}</span>
+                            </div>
+                            {message.proposalData.startDate && (
+                              <div>
+                                <span className="font-medium text-gray-700">Start Date: </span>
+                                <span className="text-gray-900">{message.proposalData.startDate}</span>
+                              </div>
+                            )}
+                            {message.proposalData.description && (
+                              <div>
+                                <span className="font-medium text-gray-700">Description: </span>
+                                <p className="text-gray-900 text-sm">{message.proposalData.description}</p>
+                              </div>
+                            )}
+                          </div>
+
+                          {message.proposalData.status === 'pending' && message.sender === 'provider' && (
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={() => handleProposalResponse(message.id, 'accepted')}
+                                className="flex-1 bg-green-600 text-white py-2 px-3 rounded text-sm font-medium hover:bg-green-700 flex items-center justify-center space-x-1"
+                              >
+                                <CheckCircle className="h-4 w-4" />
+                                <span>Accept</span>
+                              </button>
+                              <button
+                                onClick={() => handleProposalResponse(message.id, 'rejected')}
+                                className="flex-1 bg-red-600 text-white py-2 px-3 rounded text-sm font-medium hover:bg-red-700 flex items-center justify-center space-x-1"
+                              >
+                                <X className="h-4 w-4" />
+                                <span>Decline</span>
+                              </button>
+                            </div>
+                          )}
+
+                          {message.proposalData.status === 'accepted' && (
+                            <div className="bg-green-100 text-green-800 py-2 px-3 rounded text-sm font-medium text-center">
+                              ✅ Proposal Accepted - Order Created!
+                            </div>
+                          )}
+
+                          {message.proposalData.status === 'rejected' && (
+                            <div className="bg-red-100 text-red-800 py-2 px-3 rounded text-sm font-medium text-center">
+                              ❌ Proposal Declined
+                            </div>
+                          )}
+
+                          <p className={`text-xs mt-2 ${
+                            message.sender === 'provider' ? 'text-blue-500' : 'text-gray-500'
+                          }`}>
+                            {formatTime(message.timestamp)}
+                          </p>
+                        </div>
+                      ) : (
+                        <div
+                          className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                            message.sender === 'provider'
+                              ? 'bg-blue-600 text-white'
+                              : 'bg-gray-100 text-gray-900'
+                          }`}
+                        >
+                          <p className="text-sm">{message.content}</p>
+                          <p className={`text-xs mt-1 ${
+                            message.sender === 'provider' ? 'text-blue-100' : 'text-gray-500'
+                          }`}>
+                            {formatTime(message.timestamp)}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
