@@ -176,7 +176,6 @@ const HomeownerLanding = () => {
             <Button 
               size="lg" 
               onClick={() => navigate('/homeowners/browse')}
-              className="animate-pulse"
             >
               Start Your Project Now
               <ArrowRight className="ml-2 h-5 w-5" />
