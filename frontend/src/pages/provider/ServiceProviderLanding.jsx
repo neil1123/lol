@@ -372,7 +372,7 @@ const ServiceProviderLanding = () => {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-32 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+      <section id="how-it-works" className="py-32 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-10 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl"></div>
