@@ -51,10 +51,12 @@ export const serviceCategories = [
   {
     id: 5,
     name: "Specialty & Seasonal Services",
-    icon: "❄️",
+    icon: "⭐",
     services: [
-      { id: 21, name: "Appliance Repair", description: "Fixing washers, dryers, dishwashers, refrigerators", icon: "🔧" },
-      { id: 22, name: "Junk Removal", description: "Furniture, appliance, debris removal and disposal", icon: "🗑️" }
+      { id: 21, name: "Junk Removal", description: "Household clutter, construction debris, furniture disposal", icon: "🗑️" },
+      { id: 22, name: "Appliance Repair", description: "Fixing washing machines, dishwashers, refrigerators", icon: "🔧" },
+      { id: 23, name: "Home Automation & Security", description: "Smart locks, cameras, alarm systems", icon: "🔐" },
+      { id: 24, name: "Moving Services", description: "Packing, loading, and unloading help", icon: "📦" }
     ]
   }
 ];
@@ -62,59 +64,59 @@ export const serviceCategories = [
 export const mockProviders = [
   {
     id: 1,
-    name: "CleanPro Services",
-    description: "Professional cleaning services with eco-friendly products",
-    services: ["Home Cleaning", "Office Cleaning", "Window Cleaning"],
-    rating: 4.9,
-    reviews: 89,
-    completedJobs: 215,
-    location: "Halifax, NS",
-    responseTime: "Usually responds within 1 hour",
-    yearEstablished: "2018",
-    specialties: ["Deep cleaning", "Move-in/out cleaning", "Post-construction cleanup"],
-    priceRange: "$150-$400"
+    name: "Elite Home Solutions",
+    rating: 4.8,
+    reviews: 127,
+    services: ["Electrician", "Plumber", "HVAC Services"],
+    location: "Downtown Toronto",
+    yearEstablished: 2018,
+    description: "Professional home maintenance services with certified technicians",
+    avatar: null,
+    specialties: ["Emergency repairs", "Smart home installation", "Energy efficiency"],
+    responseTime: "Within 2 hours",
+    completedJobs: 340
   },
   {
     id: 2,
-    name: "Elite Electrical",
-    description: "Licensed electricians for residential and commercial work",
-    services: ["Electrician", "Home Renovations"],
-    rating: 4.8,
-    reviews: 156,
-    completedJobs: 342,
-    location: "Halifax, NS",
-    responseTime: "Usually responds within 2 hours",
-    yearEstablished: "2015",
-    specialties: ["Panel upgrades", "Smart home wiring", "Emergency repairs"],
-    priceRange: "$100-$800"
+    name: "CleanPro Services",
+    rating: 4.9,
+    reviews: 89,
+    services: ["Home Cleaning", "Office Cleaning", "Window Cleaning"],
+    location: "North York",
+    yearEstablished: 2020,
+    description: "Eco-friendly cleaning solutions for homes and offices",
+    avatar: null,
+    specialties: ["Deep cleaning", "Move-in/out cleaning", "Green products"],
+    responseTime: "Same day",
+    completedJobs: 215
   },
   {
     id: 3,
     name: "GreenThumb Landscaping",
-    description: "Complete outdoor maintenance and landscaping solutions",
-    services: ["Landscaping", "Lawn Mowing & Maintenance", "Snow Removal"],
     rating: 4.7,
-    reviews: 73,
-    completedJobs: 128,
-    location: "Halifax, NS",
-    responseTime: "Usually responds within 3 hours",
-    yearEstablished: "2020",
-    specialties: ["Garden design", "Seasonal cleanup", "Irrigation systems"],
-    priceRange: "$80-$500"
+    reviews: 156,
+    services: ["Landscaping", "Lawn Mowing & Maintenance", "Snow Removal"],
+    location: "Mississauga",
+    yearEstablished: 2016,
+    description: "Complete outdoor maintenance and landscaping services",
+    avatar: null,
+    specialties: ["Garden design", "Seasonal maintenance", "Irrigation systems"],
+    responseTime: "Within 4 hours",
+    completedJobs: 420
   },
   {
     id: 4,
-    name: "HandyMax Solutions",
-    description: "Reliable handyman services for all your home repair needs",
-    services: ["Handyman Services", "Painter", "Carpenter"],
+    name: "Handy Solutions Plus",
     rating: 4.6,
-    reviews: 92,
-    completedJobs: 187,
-    location: "Halifax, NS",
-    responseTime: "Usually responds within 4 hours",
-    yearEstablished: "2017",
-    specialties: ["Furniture assembly", "Drywall repair", "Kitchen installations"],
-    priceRange: "$60-$300"
+    reviews: 203,
+    services: ["Handyman Services", "Painter", "Carpenter"],
+    location: "Scarborough",
+    yearEstablished: 2015,
+    description: "Your one-stop shop for all home repair and improvement needs",
+    avatar: null,
+    specialties: ["Kitchen renovations", "Bathroom upgrades", "Custom carpentry"],
+    responseTime: "Within 3 hours",
+    completedJobs: 580
   }
 ];
 
@@ -262,7 +264,7 @@ export const mockQuotations = [
     providerId: 1,
     serviceType: "Electrician",
     description: "Need to install new outlets in kitchen and fix flickering lights",
-    status: "pending",
+    status: "pending", // pending, accepted, rejected, completed
     requestDate: "2024-01-15",
     quotationAmount: null,
     quotationDetails: null,
@@ -285,27 +287,67 @@ export const mockQuotations = [
     homeownerAddress: "456 Oak Street, Toronto, ON",
     homeownerName: "Sarah Johnson",
     providerName: "CleanPro Services"
+  },
+  {
+    id: 3,
+    homeownerId: 1,
+    providerId: 3,
+    serviceType: "Landscaping",
+    description: "Spring cleanup and lawn maintenance setup",
+    status: "accepted",
+    requestDate: "2024-01-08",
+    quotationAmount: 450,
+    quotationDetails: "Full spring cleanup including leaf removal, pruning, lawn aeration, and fertilization. Setting up bi-weekly maintenance schedule.",
+    providerResponse: "Great timing for spring prep! We'll start with cleanup and then establish your maintenance routine.",
+    homeownerAddress: "123 Main St, Toronto, ON",
+    homeownerName: "John Smith",
+    providerName: "GreenThumb Landscaping"
   }
 ];
 
-export const mockDashboardData = {
-  totalSales: 24500,
-  activeJobs: 12,
-  completedJobs: 89,
-  customerSatisfaction: 4.8,
-  monthlyRevenue: [
-    { month: "Jan", revenue: 3200, orders: 23 },
-    { month: "Feb", revenue: 4100, orders: 31 },
-    { month: "Mar", revenue: 3800, orders: 28 },
-    { month: "Apr", revenue: 4500, orders: 35 },
-    { month: "May", revenue: 5200, orders: 42 },
-    { month: "Jun", revenue: 4800, orders: 38 }
-  ],
-  recentCustomers: [
-    { id: 1, name: "John Smith", service: "Electrician", amount: 450, date: "2024-01-15" },
-    { id: 2, name: "Sarah Johnson", service: "Home Cleaning", amount: 280, date: "2024-01-14" },
-    { id: 3, name: "Mike Wilson", service: "Landscaping", amount: 420, date: "2024-01-13" }
-  ],
+export const mockOrders = [
+  {
+    id: 1,
+    quotationId: 3,
+    homeownerId: 1,
+    providerId: 3,
+    serviceType: "Landscaping",
+    status: "in-progress", // scheduled, in-progress, completed, cancelled
+    scheduledDate: "2024-01-20",
+    completedDate: null,
+    totalAmount: 420,
+    paymentStatus: "pending"
+  }
+];
+
+export const mockMessages = [
+  {
+    id: 1,
+    conversationId: 1,
+    senderId: 1,
+    receiverId: 2,
+    senderType: "homeowner", // homeowner, provider
+    message: "Hi, I'd like to get a quote for deep cleaning my 3-bedroom house",
+    timestamp: "2024-01-15T10:30:00Z",
+    read: true
+  },
+  {
+    id: 2,
+    conversationId: 1,
+    senderId: 2,
+    receiverId: 1,
+    senderType: "provider",
+    message: "Hello! I'd be happy to help. Could you tell me more about what type of cleaning you need?",
+    timestamp: "2024-01-15T10:45:00Z",
+    read: true
+  }
+];
+
+export const mockDashboardStats = {
+  totalOrders: 5,
+  totalSales: 450,
+  conversionRate: 1.04,
+  totalCustomers: 80,
   weeklyData: [
     { day: "Mon", orders: 8, sales: 320 },
     { day: "Tue", orders: 12, sales: 480 },
@@ -364,12 +406,4 @@ export const getQuotationsByProvider = (providerId) => {
 
 export const getQuotationsByHomeowner = (homeownerId) => {
   return mockQuotations.filter(q => q.homeownerId === homeownerId);
-};
-
-export const getOrdersByHomeowner = (homeownerId) => {
-  return mockOrders.filter(o => o.homeownerId === homeownerId);
-};
-
-export const getOrdersByProvider = (providerId) => {
-  return mockOrders.filter(o => o.providerId === providerId);
 };
