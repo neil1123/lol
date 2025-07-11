@@ -11,6 +11,7 @@ const HomeownerLanding = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [activeReviewIndex, setActiveReviewIndex] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
