@@ -131,8 +131,21 @@ const ServiceProviderLanding = () => {
       </header>
 
       {/* Hero Section with Dashboard */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-white relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Gradient Circles */}
+          <div className="absolute top-10 left-10 w-72 h-72 bg-blue-600/5 rounded-full blur-3xl"></div>
+          <div className="absolute top-32 right-20 w-96 h-96 bg-blue-400/5 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl"></div>
+          
+          {/* Floating Elements */}
+          <div className="absolute top-20 right-1/4 w-3 h-3 bg-blue-400 rounded-full opacity-30 animate-pulse"></div>
+          <div className="absolute top-1/3 left-1/3 w-2 h-2 bg-blue-600 rounded-full opacity-40 animate-bounce"></div>
+          <div className="absolute bottom-1/3 right-1/3 w-1 h-1 bg-blue-500 rounded-full opacity-50 animate-ping"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left Content */}
             <div>
@@ -146,7 +159,7 @@ const ServiceProviderLanding = () => {
               <Button 
                 size="lg"
                 onClick={() => navigate('/homeservices/auth')}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
                 Get Started
               </Button>
@@ -154,7 +167,7 @@ const ServiceProviderLanding = () => {
 
             {/* Right Dashboard Mockup */}
             <div className="relative">
-              <div className="bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden">
+              <div className="bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden backdrop-blur-sm">
                 {/* Dashboard Header */}
                 <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
                   <div className="flex items-center justify-between">
@@ -262,7 +275,7 @@ const ServiceProviderLanding = () => {
               </div>
 
               {/* Floating Success Indicators */}
-              <div className="absolute -top-4 -right-4 w-12 h-12 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+              <div className="absolute -top-4 -right-4 w-12 h-12 bg-green-500 rounded-full flex items-center justify-center shadow-lg animate-pulse">
                 <TrendingUp className="h-6 w-6 text-white" />
               </div>
               <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
