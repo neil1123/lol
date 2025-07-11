@@ -221,7 +221,7 @@ const HomeownerLanding = () => {
 
         {/* Main Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="backdrop-blur-sm bg-white/20 rounded-3xl p-8 sm:p-12 lg:p-16 border border-white/30 shadow-2xl">
+          <div className="p-8 sm:p-12 lg:p-16">
             {/* Trust Indicators - Hidden on Mobile */}
             <div className="hidden md:flex justify-center space-x-8 mb-8 opacity-70">
               <div className="flex items-center space-x-2">
