@@ -3,6 +3,21 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 
+// Homeowner Pages
+import HomeownerLanding from "./pages/homeowner/HomeownerLanding";
+import ServiceBrowse from "./pages/homeowner/ServiceBrowse";
+import ProviderProfile from "./pages/homeowner/ProviderProfile";
+import HomeownerQuotations from "./pages/homeowner/HomeownerQuotations";
+import HomeownerAuth from "./pages/homeowner/HomeownerAuth";
+
+// Service Provider Pages
+import ServiceProviderLanding from "./pages/provider/ServiceProviderLanding";
+import ProviderDashboard from "./pages/provider/ProviderDashboard";
+import ProviderQuotations from "./pages/provider/ProviderQuotations";
+import ProviderCalendar from "./pages/provider/ProviderCalendar";
+import ProviderCustomers from "./pages/provider/ProviderCustomers";
+import ProviderAuth from "./pages/provider/ProviderAuth";
+
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
@@ -21,18 +36,25 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold text-blue-600 mb-4">Welcome to Doord</h1>
+        <p className="text-xl text-gray-600 mb-8">Your Home Services Marketplace</p>
+        <div className="space-x-4">
+          <a 
+            href="/homeowners" 
+            className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            For Homeowners
+          </a>
+          <a 
+            href="/homeservices" 
+            className="inline-block bg-white text-blue-600 border-2 border-blue-600 px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors"
+          >
+            For Service Providers
+          </a>
+        </div>
+      </div>
     </div>
   );
 };
@@ -42,9 +64,22 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
+          <Route path="/" element={<Home />} />
+          
+          {/* Homeowner Routes */}
+          <Route path="/homeowners" element={<HomeownerLanding />} />
+          <Route path="/homeowners/auth" element={<HomeownerAuth />} />
+          <Route path="/homeowners/browse" element={<ServiceBrowse />} />
+          <Route path="/homeowners/provider/:id" element={<ProviderProfile />} />
+          <Route path="/homeowners/quotations" element={<HomeownerQuotations />} />
+          
+          {/* Service Provider Routes */}
+          <Route path="/homeservices" element={<ServiceProviderLanding />} />
+          <Route path="/homeservices/auth" element={<ProviderAuth />} />
+          <Route path="/homeservices/dashboard" element={<ProviderDashboard />} />
+          <Route path="/homeservices/quotations" element={<ProviderQuotations />} />
+          <Route path="/homeservices/calendar" element={<ProviderCalendar />} />
+          <Route path="/homeservices/customers" element={<ProviderCustomers />} />
         </Routes>
       </BrowserRouter>
     </div>
