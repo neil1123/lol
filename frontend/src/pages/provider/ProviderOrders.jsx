@@ -48,6 +48,12 @@ const ProviderOrders = () => {
     scheduledDate: ''
   });
 
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userType');
+    navigate('/homeservices');
+  };
+
   const sidebarItems = [
     { id: 'home', label: 'Dashboard', icon: Home, path: '/homeservices/dashboard' },
     { id: 'orders', label: 'Orders', icon: Package, path: '/homeservices/orders' },
