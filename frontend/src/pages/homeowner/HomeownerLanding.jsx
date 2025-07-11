@@ -602,8 +602,8 @@ const HomeownerLanding = () => {
       {/* Customer Reviews Section */}
       <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-20">
+            <h3 className="text-4xl font-bold text-gray-900 mb-6">
               What Our Customers Say
             </h3>
             <p className="text-xl text-gray-600">
@@ -611,98 +611,88 @@ const HomeownerLanding = () => {
             </p>
           </div>
 
-          {/* Reviews Carousel with Deck Effect */}
-          <div className="relative max-w-6xl mx-auto">
-            <div className="relative h-80 flex items-center justify-center">
-              {customerReviews.map((review, index) => {
-                const isActive = index === activeReviewIndex;
-                const isPrev = index === (activeReviewIndex - 1 + customerReviews.length) % customerReviews.length;
-                const isNext = index === (activeReviewIndex + 1) % customerReviews.length;
-                
-                let transformClass = '';
-                let zIndexClass = '';
-                let opacityClass = '';
-                
-                if (isActive) {
-                  transformClass = 'translate-x-0 translate-y-0 scale-100';
-                  zIndexClass = 'z-30';
-                  opacityClass = 'opacity-100';
-                } else if (isPrev) {
-                  transformClass = 'translate-x-[-200px] translate-y-2 scale-95';
-                  zIndexClass = 'z-20';
-                  opacityClass = 'opacity-80';
-                } else if (isNext) {
-                  transformClass = 'translate-x-[200px] translate-y-2 scale-95';
-                  zIndexClass = 'z-20';
-                  opacityClass = 'opacity-80';
-                } else {
-                  transformClass = 'translate-x-0 translate-y-4 scale-90';
-                  zIndexClass = 'z-10';
-                  opacityClass = 'opacity-60';
-                }
+          {/* Horizontal Scrollable Reviews */}
+          <div className="relative">
+            {/* Desktop: Grid Layout */}
+            <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {customerReviews.map((review) => (
+                <div key={review.id} className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+                  {/* Rating Stars */}
+                  <div className="flex justify-center mb-6">
+                    {[...Array(review.rating)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
 
-                return (
-                  <div
-                    key={review.id}
-                    className={`absolute w-full max-w-3xl transition-all duration-700 ease-in-out ${transformClass} ${zIndexClass} ${opacityClass}`}
-                  >
-                    <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100 hover:shadow-3xl transition-shadow duration-300">
-                      {/* Rating Stars */}
-                      <div className="flex justify-center mb-6">
-                        {[...Array(review.rating)].map((_, i) => (
-                          <Star key={i} className="h-6 w-6 text-yellow-400 fill-current" />
-                        ))}
-                      </div>
+                  {/* Review Text */}
+                  <blockquote className="text-lg text-gray-700 text-center mb-6 leading-relaxed">
+                    "{review.review}"
+                  </blockquote>
 
-                      {/* Review Text */}
-                      <blockquote className="text-xl text-gray-700 text-center mb-8 leading-relaxed font-medium max-w-4xl mx-auto">
-                        "{review.review}"
-                      </blockquote>
-
-                      {/* Customer Info */}
-                      <div className="flex items-center justify-center space-x-6">
-                        <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                          {review.avatar}
-                        </div>
-                        <div className="text-center">
-                          <h4 className="font-bold text-xl text-gray-900">{review.name}</h4>
-                          <p className="text-lg text-gray-600">{review.location}</p>
-                          <p className="text-sm text-blue-600 font-medium">{review.service} • {review.date}</p>
-                        </div>
-                      </div>
-
-                      {/* Service Badge */}
-                      <div className="flex justify-center mt-8">
-                        <span className="bg-blue-50 text-blue-700 px-6 py-3 rounded-full text-base font-medium">
-                          {review.service}
-                        </span>
-                      </div>
+                  {/* Customer Info */}
+                  <div className="flex items-center justify-center space-x-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                      {review.avatar}
+                    </div>
+                    <div className="text-center">
+                      <h4 className="font-semibold text-gray-900">{review.name}</h4>
+                      <p className="text-sm text-gray-600">{review.location}</p>
+                      <p className="text-xs text-blue-600 font-medium">{review.service} • {review.date}</p>
                     </div>
                   </div>
-                );
-              })}
-            </div>
 
-            {/* Navigation Dots */}
-            <div className="flex justify-center space-x-3 mt-12">
-              {customerReviews.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveReviewIndex(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === activeReviewIndex
-                      ? 'bg-blue-600 scale-125'
-                      : 'bg-gray-300 hover:bg-gray-400'
-                  }`}
-                />
+                  {/* Service Badge */}
+                  <div className="flex justify-center mt-6">
+                    <span className="bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
+                      {review.service}
+                    </span>
+                  </div>
+                </div>
               ))}
             </div>
 
-            {/* Auto-switch indicator */}
-            <div className="flex justify-center mt-6">
-              <div className="flex items-center space-x-2 text-sm text-gray-500">
-                <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
-                <span>Auto-switching every 4 seconds</span>
+            {/* Mobile: Horizontal Scroll */}
+            <div className="md:hidden">
+              <div className="flex overflow-x-auto space-x-6 pb-6 scrollbar-hide">
+                {customerReviews.map((review) => (
+                  <div key={review.id} className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 flex-shrink-0 w-80">
+                    {/* Rating Stars */}
+                    <div className="flex justify-center mb-4">
+                      {[...Array(review.rating)].map((_, i) => (
+                        <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                      ))}
+                    </div>
+
+                    {/* Review Text */}
+                    <blockquote className="text-base text-gray-700 text-center mb-6 leading-relaxed">
+                      "{review.review}"
+                    </blockquote>
+
+                    {/* Customer Info */}
+                    <div className="flex items-center justify-center space-x-3">
+                      <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                        {review.avatar}
+                      </div>
+                      <div className="text-center">
+                        <h4 className="font-semibold text-gray-900">{review.name}</h4>
+                        <p className="text-sm text-gray-600">{review.location}</p>
+                        <p className="text-xs text-blue-600 font-medium">{review.service}</p>
+                      </div>
+                    </div>
+
+                    {/* Service Badge */}
+                    <div className="flex justify-center mt-4">
+                      <span className="bg-blue-50 text-blue-700 px-3 py-2 rounded-full text-sm font-medium">
+                        {review.service}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Scroll Indicator for Mobile */}
+              <div className="flex justify-center mt-4">
+                <p className="text-sm text-gray-500">← Swipe to see more reviews →</p>
               </div>
             </div>
           </div>
@@ -710,7 +700,7 @@ const HomeownerLanding = () => {
           {/* Call to Action */}
           <div className="text-center mt-16">
             <p className="text-lg text-gray-600 mb-6">
-              Join thousands of satisfied customers
+              Join thousands of satisfied customers in Halifax
             </p>
             <Button 
               size="lg"
