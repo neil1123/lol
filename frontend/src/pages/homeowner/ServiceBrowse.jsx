@@ -168,7 +168,7 @@ const ServiceBrowse = () => {
                     <SelectTrigger className="w-full sm:w-48">
                       <SelectValue placeholder="Sort by" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="z-50">
                       <SelectItem value="rating">Highest Rated</SelectItem>
                       <SelectItem value="reviews">Most Reviews</SelectItem>
                       <SelectItem value="name">Name A-Z</SelectItem>
