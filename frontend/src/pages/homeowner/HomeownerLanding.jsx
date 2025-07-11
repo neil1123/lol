@@ -17,7 +17,12 @@ const HomeownerLanding = () => {
     // Check if user is logged in
     const userType = localStorage.getItem('userType');
     setIsLoggedIn(userType === 'homeowner');
-  }, []);
+    
+    // If user is logged in, redirect to dashboard
+    if (userType === 'homeowner') {
+      navigate('/homeowners/dashboard');
+    }
+  }, [navigate]);
 
   const featuredServices = serviceCategories.slice(0, 3);
   const topProviders = mockProviders.slice(0, 3);
