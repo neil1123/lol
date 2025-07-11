@@ -648,30 +648,36 @@ const HomeownerDashboard = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
-                        <div className="p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
-                              CP
-                            </div>
-                            <div className="flex-1">
-                              <h4 className="font-semibold text-sm">Clean Pro Services</h4>
-                              <p className="text-xs text-gray-600">Window cleaning confirmed for Dec 15</p>
-                              <p className="text-xs text-gray-400">2 hours ago</p>
+                        {userOrders.map(order => (
+                          <div 
+                            key={order.id}
+                            className={`p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors ${
+                              selectedConversation?.id === order.id ? 'border-blue-500 bg-blue-50' : ''
+                            }`}
+                            onClick={() => setSelectedConversation(order)}
+                          >
+                            <div className="flex items-center space-x-3">
+                              <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                                {order.providerName.split(' ').map(n => n[0]).join('')}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-semibold text-sm truncate">{order.providerName}</h4>
+                                <p className="text-xs text-gray-600 truncate">{order.serviceType}</p>
+                                <p className="text-xs text-gray-400">
+                                  Order #{order.id} - {order.status}
+                                </p>
+                                {order.messages && order.messages.length > 0 && (
+                                  <p className="text-xs text-gray-500 truncate mt-1">
+                                    {order.messages[order.messages.length - 1].message}
+                                  </p>
+                                )}
+                              </div>
+                              {order.messages && order.messages.some(m => !m.read && m.senderType === 'provider') && (
+                                <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                              )}
                             </div>
                           </div>
-                        </div>
-                        <div className="p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center text-white font-semibold">
-                              EC
-                            </div>
-                            <div className="flex-1">
-                              <h4 className="font-semibold text-sm">Elite Cleaners</h4>
-                              <p className="text-xs text-gray-600">Thank you for your rating!</p>
-                              <p className="text-xs text-gray-400">1 day ago</p>
-                            </div>
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     </CardContent>
                   </Card>
@@ -679,36 +685,94 @@ const HomeownerDashboard = () => {
 
                 {/* Message View */}
                 <div className="lg:col-span-2">
-                  <Card className="h-96">
-                    <CardHeader>
-                      <CardTitle className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                          CP
-                        </div>
-                        <span>Clean Pro Services</span>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex flex-col h-full">
-                      <div className="flex-1 space-y-3 mb-4">
-                        <div className="flex">
-                          <div className="bg-gray-100 rounded-lg p-3 max-w-xs">
-                            <p className="text-sm">Hi! We've confirmed your window cleaning appointment for December 15th at 10 AM. Is this time still good for you?</p>
-                            <p className="text-xs text-gray-500 mt-1">2 hours ago</p>
+                  {selectedConversation ? (
+                    <Card className="h-96">
+                      <CardHeader>
+                        <CardTitle className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                            {selectedConversation.providerName.split(' ').map(n => n[0]).join('')}
                           </div>
-                        </div>
-                        <div className="flex justify-end">
-                          <div className="bg-blue-600 text-white rounded-lg p-3 max-w-xs">
-                            <p className="text-sm">Yes, that works perfect! Thank you for confirming.</p>
-                            <p className="text-xs text-blue-200 mt-1">1 hour ago</p>
+                          <div>
+                            <span>{selectedConversation.providerName}</span>
+                            <p className="text-sm font-normal text-gray-600">{selectedConversation.serviceType} - Order #{selectedConversation.id}</p>
                           </div>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="flex flex-col h-full">
+                        <div className="flex-1 space-y-3 mb-4 overflow-y-auto">
+                          {selectedConversation.messages && selectedConversation.messages.length > 0 ? (
+                            selectedConversation.messages.map(message => (
+                              <div key={message.id} className={`flex ${message.senderType === 'homeowner' ? 'justify-end' : ''}`}>
+                                <div className={`max-w-xs lg:max-w-md rounded-lg p-3 ${
+                                  message.senderType === 'homeowner' 
+                                    ? 'bg-blue-600 text-white ml-auto' 
+                                    : 'bg-gray-100 text-gray-900'
+                                }`}>
+                                  <p className="text-sm">{message.message}</p>
+                                  <p className={`text-xs mt-1 ${
+                                    message.senderType === 'homeowner' ? 'text-blue-200' : 'text-gray-500'
+                                  }`}>
+                                    {new Date(message.timestamp).toLocaleTimeString()}
+                                  </p>
+                                </div>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="text-center text-gray-500 py-8">
+                              <MessageCircle className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                              <p>No messages yet. Start a conversation with your service provider!</p>
+                            </div>
+                          )}
                         </div>
+                        <div className="flex space-x-2">
+                          <Input 
+                            placeholder="Type your message..." 
+                            className="flex-1"
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            onKeyPress={(e) => {
+                              if (e.key === 'Enter') {
+                                // Handle send message
+                                setNewMessage('');
+                              }
+                            }}
+                          />
+                          <Button 
+                            onClick={() => {
+                              // Handle send message
+                              setNewMessage('');
+                            }}
+                          >
+                            <Send className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        
+                        {/* Quick Actions */}
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          <Button variant="outline" size="sm">
+                            <Phone className="h-4 w-4 mr-2" />
+                            Call Provider
+                          </Button>
+                          <Button variant="outline" size="sm">
+                            <Calendar className="h-4 w-4 mr-2" />
+                            Reschedule
+                          </Button>
+                          <Button variant="outline" size="sm">
+                            <FileText className="h-4 w-4 mr-2" />
+                            View Order Details
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    <Card className="h-96 flex items-center justify-center">
+                      <div className="text-center text-gray-500">
+                        <MessageCircle className="h-16 w-16 mx-auto mb-4 text-gray-300" />
+                        <h3 className="text-lg font-semibold mb-2">Select a Conversation</h3>
+                        <p>Choose a provider from the list to start messaging</p>
                       </div>
-                      <div className="flex space-x-2">
-                        <Input placeholder="Type your message..." className="flex-1" />
-                        <Button>Send</Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+                    </Card>
+                  )}
                 </div>
               </div>
             </div>
