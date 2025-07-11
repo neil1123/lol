@@ -35,6 +35,14 @@ const HomeownerDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('home');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedConversation, setSelectedConversation] = useState(null);
+  const [newMessage, setNewMessage] = useState('');
+
+  // Get current user's orders (assuming user ID 1 for demo)
+  const currentUserId = 1;
+  const userOrders = mockOrders.filter(order => order.homeownerId === currentUserId);
+  const userQuotationRequests = mockQuotationRequests.filter(req => req.homeownerId === currentUserId);
 
   const sidebarItems = [
     { id: 'home', label: 'Home', icon: Home, active: true },
