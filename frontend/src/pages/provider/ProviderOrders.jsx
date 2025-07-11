@@ -251,26 +251,22 @@ const ProviderOrders = () => {
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="w-full p-4 md:p-8">
-          <div className="flex items-center justify-between mb-8">
-            <div className="text-left">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 text-left">Orders</h2>
-              <p className="text-gray-600 text-left">Manage your orders from quotation to completion</p>
-            </div>
-            <Button onClick={() => setShowNewOrderForm(true)} className="hidden md:flex">
-              <Plus className="h-4 w-4 mr-2" />
-              New Order
-            </Button>
-          </div>
-
-          {/* Mobile New Order Button */}
-          <div className="md:hidden mb-4">
-            <Button onClick={() => setShowNewOrderForm(true)} className="w-full">
-              <Plus className="h-4 w-4 mr-2" />
-              New Order
-            </Button>
-          </div>
+          {/* Main Content */}
+          <div className="w-full p-4 md:p-8">
+            <div className="max-w-6xl mx-auto">
+              {/* Header */}
+              <div className="mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="text-left">
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Orders</h2>
+                    <p className="text-gray-600">Manage your orders from quotation to completion</p>
+                  </div>
+                  <Button onClick={() => setShowNewOrderForm(true)} className="w-full sm:w-auto">
+                    <Plus className="h-4 w-4 mr-2" />
+                    New Order
+                  </Button>
+                </div>
+              </div>
 
           {/* New Order Form */}
           {showNewOrderForm && (
