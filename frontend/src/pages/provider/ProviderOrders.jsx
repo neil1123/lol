@@ -163,37 +163,84 @@ const ProviderOrders = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Mobile Header */}
       <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
+            {/* Mobile Menu Button */}
             <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="flex items-center"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
               <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
-              <span className="text-sm text-gray-600">for Merchants</span>
+              <span className="text-sm text-gray-600 hidden sm:inline">for Merchants</span>
             </div>
-            <div className="flex items-center space-x-4">
+            
+            {/* Mobile Right Side */}
+            <div className="flex items-center space-x-2">
               <Button variant="ghost" size="sm">
                 <Bell className="h-4 w-4" />
               </Button>
-              <div className="flex items-center space-x-2">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-blue-100 text-blue-600">
-                    ES
-                  </AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium">Elite Solutions</span>
-              </div>
-              <Button variant="ghost" size="sm" onClick={handleLogout} title="Logout">
-                <LogOut className="h-4 w-4" />
-              </Button>
+              <Avatar className="h-8 w-8">
+                <AvatarFallback className="bg-blue-100 text-blue-600">
+                  ES
+                </AvatarFallback>
+              </Avatar>
             </div>
           </div>
         </div>
       </header>
 
+      {/* Mobile Navigation Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setIsMobileMenuOpen(false)} />
+          <div className="fixed top-0 left-0 w-64 h-full bg-white shadow-lg">
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold">Navigation</h2>
+                <Button variant="ghost" size="sm" onClick={() => setIsMobileMenuOpen(false)}>
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+              <nav className="space-y-2">
+                {sidebarItems.map((item) => (
+                  <Button
+                    key={item.id}
+                    variant={item.id === 'orders' ? "default" : "ghost"}
+                    className="w-full justify-start"
+                    onClick={() => {
+                      navigate(item.path);
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <item.icon className="h-4 w-4 mr-3" />
+                    {item.label}
+                  </Button>
+                ))}
+                <hr className="my-4" />
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="h-4 w-4 mr-3" />
+                  Logout
+                </Button>
+              </nav>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex">
-        {/* Sidebar */}
-        <div className="w-64 bg-white shadow-sm min-h-screen">
+        {/* Desktop Sidebar - Hidden on mobile */}
+        <div className="w-64 bg-white shadow-sm min-h-screen" style={{ display: 'none' }}>
           <div className="p-4">
             <nav className="space-y-2">
               {sidebarItems.map((item) => (
@@ -212,13 +259,21 @@ const ProviderOrders = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 p-8">
+        <div className="w-full p-4 md:p-8">
           <div className="flex items-center justify-between mb-8">
             <div className="text-left">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2 text-left">Orders</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 text-left">Orders</h2>
               <p className="text-gray-600 text-left">Manage your orders from quotation to completion</p>
             </div>
-            <Button onClick={() => setShowNewOrderForm(true)}>
+            <Button onClick={() => setShowNewOrderForm(true)} className="hidden md:flex">
+              <Plus className="h-4 w-4 mr-2" />
+              New Order
+            </Button>
+          </div>
+
+          {/* Mobile New Order Button */}
+          <div className="md:hidden mb-4">
+            <Button onClick={() => setShowNewOrderForm(true)} className="w-full">
               <Plus className="h-4 w-4 mr-2" />
               New Order
             </Button>
