@@ -223,7 +223,6 @@ const HomeownerQuotations = () => {
                         )}
                         
                         <div className="flex items-center space-x-4 text-sm text-gray-500">
-                          <span>📍 {quote.homeownerAddress}</span>
                           <span>📅 Requested on {formatDate(quote.requestDate)}</span>
                         </div>
                         
