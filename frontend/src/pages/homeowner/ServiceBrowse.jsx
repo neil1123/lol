@@ -108,77 +108,77 @@ const ServiceBrowse = () => {
         </div>
       </header>
 
-      {/* Search and Filters */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col lg:flex-row gap-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                <Input
-                  placeholder="Search services or providers..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 h-12"
-                />
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-4">
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48">
-                  <SelectValue placeholder="Sort by" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="rating">Highest Rated</SelectItem>
-                  <SelectItem value="reviews">Most Reviews</SelectItem>
-                  <SelectItem value="name">Name A-Z</SelectItem>
-                </SelectContent>
-              </Select>
-              
-              <Button
-                variant="outline"
-                onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center space-x-2"
-              >
-                <SlidersHorizontal className="h-4 w-4" />
-                <span>Filters</span>
-              </Button>
-            </div>
-          </div>
-          
-          {/* Filters Panel */}
-          {showFilters && (
-            <div className="mt-6 p-4 border rounded-lg bg-gray-50">
-              <h3 className="font-semibold mb-4">Filter by Services</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {serviceCategories.map(category => (
-                  <div key={category.id}>
-                    <h4 className="font-medium text-sm text-gray-700 mb-2">{category.name}</h4>
-                    <div className="space-y-2">
-                      {category.services.map(service => (
-                        <div key={service.id} className="flex items-center space-x-2">
-                          <Checkbox
-                            id={service.name}
-                            checked={selectedServices.includes(service.name)}
-                            onCheckedChange={() => handleServiceToggle(service.name)}
-                          />
-                          <label
-                            htmlFor={service.name}
-                            className="text-sm text-gray-600 cursor-pointer"
-                          >
-                            {service.name}
-                          </label>
+          {/* Search and Filters */}
+          <div className="bg-white border-b">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+              <div className="flex flex-col gap-4">
+                <div className="flex-1">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <Input
+                      placeholder="Search services or providers..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 h-12"
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-full sm:w-48">
+                      <SelectValue placeholder="Sort by" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="rating">Highest Rated</SelectItem>
+                      <SelectItem value="reviews">Most Reviews</SelectItem>
+                      <SelectItem value="name">Name A-Z</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="flex items-center justify-center space-x-2 w-full sm:w-auto"
+                  >
+                    <SlidersHorizontal className="h-4 w-4" />
+                    <span>Filters</span>
+                  </Button>
+                </div>
+                
+                {/* Filters Panel */}
+                {showFilters && (
+                  <div className="mt-4 p-4 border rounded-lg bg-gray-50">
+                    <h3 className="font-semibold mb-4">Filter by Services</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                      {serviceCategories.map(category => (
+                        <div key={category.id}>
+                          <h4 className="font-medium text-sm text-gray-700 mb-2">{category.name}</h4>
+                          <div className="space-y-2">
+                            {category.services.map(service => (
+                              <div key={service.id} className="flex items-center space-x-2">
+                                <Checkbox
+                                  id={service.name}
+                                  checked={selectedServices.includes(service.name)}
+                                  onCheckedChange={() => handleServiceToggle(service.name)}
+                                />
+                                <label
+                                  htmlFor={service.name}
+                                  className="text-sm text-gray-600 cursor-pointer"
+                                >
+                                  {service.name}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       ))}
                     </div>
                   </div>
-                ))}
+                )}
               </div>
             </div>
-          )}
-        </div>
-      </div>
+          </div>
 
       {/* Results */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
