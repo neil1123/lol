@@ -107,15 +107,53 @@ const HomeownerQuotations = () => {
               >
                 <ArrowLeft className="h-5 w-5" />
               </Button>
-              <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-blue-600">Doord.</h1>
             </div>
-            <div className="flex items-center space-x-4">
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-4">
               <Button variant="ghost" onClick={() => navigate('/homeowners/browse')}>
                 Browse Services
               </Button>
               <Button variant="outline">Sign In</Button>
             </div>
+            
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2"
+              >
+                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
+            </div>
           </div>
+          
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden border-t bg-white py-4">
+              <div className="flex flex-col space-y-3">
+                <Button 
+                  variant="ghost" 
+                  onClick={() => {
+                    navigate('/homeowners/browse');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="justify-start"
+                >
+                  Browse Services
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="justify-start"
+                >
+                  Sign In
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
