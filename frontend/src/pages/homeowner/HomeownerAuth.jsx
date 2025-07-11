@@ -64,7 +64,7 @@ const HomeownerAuth = () => {
       }));
       
       setIsLoading(false);
-      navigate('/homeowners');
+      navigate('/homeowners/dashboard');
     }, 1000);
   };
 
