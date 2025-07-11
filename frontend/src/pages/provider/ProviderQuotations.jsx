@@ -162,7 +162,7 @@ const ProviderQuotations = () => {
               {sidebarItems.map((item) => (
                 <Button
                   key={item.id}
-                  variant={item.id === 'quotes' ? "default" : "ghost"}
+                  variant={item.id === 'orders' ? "default" : "ghost"}
                   className="w-full justify-start"
                   onClick={() => navigate(item.path)}
                 >
