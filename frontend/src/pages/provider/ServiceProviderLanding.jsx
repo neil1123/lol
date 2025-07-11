@@ -388,7 +388,7 @@ const ServiceProviderLanding = () => {
               }}
             ></div>
 
-            <div className="space-y-24">
+            <div className="space-y-32">
               {/* Step 1 */}
               <div className="relative">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
