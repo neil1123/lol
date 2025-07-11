@@ -230,65 +230,91 @@ const ProviderDashboard = () => {
               <CardContent>
                 <div className="mb-4">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium text-gray-600">Orders</span>
-                    <span className="text-sm font-medium text-gray-600">Revenue</span>
+                    <span className="text-sm font-medium text-gray-600">Weekly Sales Performance</span>
+                    <span className="text-sm font-medium text-gray-600">Revenue Trends</span>
                   </div>
                 </div>
                 <div className="relative">
-                  <div className="h-64 flex items-end justify-between space-x-2">
-                    {mockDashboardData.weeklyData.map((day, index) => (
-                      <div key={index} className="flex-1 flex flex-col items-center">
-                        <div className="w-full flex space-x-1 items-end h-48">
-                          {/* Orders Bar */}
-                          <div
-                            className="w-1/2 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-sm min-h-[8px]"
-                            style={{ height: `${Math.max(8, (day.orders / 25) * 180)}px` }}
-                            title={`Orders: ${day.orders}`}
-                          ></div>
-                          {/* Revenue Bar */}
-                          <div
-                            className="w-1/2 bg-gradient-to-t from-green-500 to-green-400 rounded-t-sm min-h-[8px]"
-                            style={{ height: `${Math.max(8, (day.revenue / 3500) * 180)}px` }}
-                            title={`Revenue: $${day.revenue}`}
-                          ></div>
-                        </div>
-                        <div className="mt-2 text-center">
-                          <div className="text-xs font-medium text-gray-900">{day.orders} orders</div>
-                          <div className="text-xs text-gray-600">{day.day}</div>
-                          <div className="text-xs text-green-600">${day.revenue}</div>
-                        </div>
+                  <div className="h-64 flex items-center justify-center">
+                    {/* Chart Container - No bars, just lines */}
+                    <div className="w-full h-48 relative">
+                      {/* Day labels at bottom */}
+                      <div className="absolute bottom-0 left-0 right-0 flex justify-between text-xs text-gray-600 px-4">
+                        {mockDashboardData.weeklyData.map((day, index) => (
+                          <div key={index} className="text-center">
+                            <div className="font-medium">{day.day}</div>
+                            <div className="text-green-600">${day.revenue}</div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    </div>
                   </div>
                   
-                  {/* Sales Curve Line */}
+                  {/* Current Week Sales Line */}
                   <svg className="absolute top-0 left-0 w-full h-64 pointer-events-none" style={{ zIndex: 10 }}>
                     <defs>
-                      <linearGradient id="salesGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <linearGradient id="currentSalesGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style={{ stopColor: '#3b82f6', stopOpacity: 1 }} />
+                        <stop offset="100%" style={{ stopColor: '#60a5fa', stopOpacity: 0.8 }} />
+                      </linearGradient>
+                      <linearGradient id="lastMonthGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" style={{ stopColor: '#ef4444', stopOpacity: 1 }} />
                         <stop offset="100%" style={{ stopColor: '#f87171', stopOpacity: 0.8 }} />
                       </linearGradient>
                     </defs>
+                    
+                    {/* Current Week Sales Line */}
                     <path
-                      d={`M ${20} ${248 - (mockDashboardData.weeklyData[0].revenue / 3500) * 180} 
-                          Q ${mockDashboardData.weeklyData.length > 1 ? 90 : 20} ${248 - (mockDashboardData.weeklyData[1]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 180} 
-                          ${160} ${248 - (mockDashboardData.weeklyData[2]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 180}
-                          Q ${230} ${248 - (mockDashboardData.weeklyData[3]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 180}
-                          ${300} ${248 - (mockDashboardData.weeklyData[4]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 180}
-                          Q ${370} ${248 - (mockDashboardData.weeklyData[5]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 180}
-                          ${440} ${248 - (mockDashboardData.weeklyData[6]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 180}`}
-                      stroke="url(#salesGradient)"
+                      d={`M 60 ${200 - (mockDashboardData.weeklyData[0].revenue / 3500) * 140} 
+                          L 120 ${200 - (mockDashboardData.weeklyData[1]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 140} 
+                          L 180 ${200 - (mockDashboardData.weeklyData[2]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 140}
+                          L 240 ${200 - (mockDashboardData.weeklyData[3]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 140}
+                          L 300 ${200 - (mockDashboardData.weeklyData[4]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 140}
+                          L 360 ${200 - (mockDashboardData.weeklyData[5]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 140}
+                          L 420 ${200 - (mockDashboardData.weeklyData[6]?.revenue || mockDashboardData.weeklyData[0].revenue) / 3500 * 140}`}
+                      stroke="url(#currentSalesGradient)"
                       strokeWidth="3"
                       fill="none"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
-                    {/* Data points */}
+                    
+                    {/* Last Month Sales Line (with different data) */}
+                    <path
+                      d={`M 60 ${200 - (mockDashboardData.weeklyData[0].revenue * 0.8) / 3500 * 140} 
+                          L 120 ${200 - (mockDashboardData.weeklyData[1]?.revenue * 0.7 || mockDashboardData.weeklyData[0].revenue * 0.7) / 3500 * 140} 
+                          L 180 ${200 - (mockDashboardData.weeklyData[2]?.revenue * 0.9 || mockDashboardData.weeklyData[0].revenue * 0.9) / 3500 * 140}
+                          L 240 ${200 - (mockDashboardData.weeklyData[3]?.revenue * 0.75 || mockDashboardData.weeklyData[0].revenue * 0.75) / 3500 * 140}
+                          L 300 ${200 - (mockDashboardData.weeklyData[4]?.revenue * 0.85 || mockDashboardData.weeklyData[0].revenue * 0.85) / 3500 * 140}
+                          L 360 ${200 - (mockDashboardData.weeklyData[5]?.revenue * 0.78 || mockDashboardData.weeklyData[0].revenue * 0.78) / 3500 * 140}
+                          L 420 ${200 - (mockDashboardData.weeklyData[6]?.revenue * 0.82 || mockDashboardData.weeklyData[0].revenue * 0.82) / 3500 * 140}`}
+                      stroke="url(#lastMonthGradient)"
+                      strokeWidth="3"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeDasharray="5,5"
+                    />
+                    
+                    {/* Current Week Data points */}
                     {mockDashboardData.weeklyData.map((day, index) => (
                       <circle
-                        key={index}
-                        cx={20 + (index * 70)}
-                        cy={248 - (day.revenue / 3500) * 180}
+                        key={`current-${index}`}
+                        cx={60 + (index * 60)}
+                        cy={200 - (day.revenue / 3500) * 140}
+                        r="5"
+                        fill="#3b82f6"
+                        stroke="#ffffff"
+                        strokeWidth="2"
+                      />
+                    ))}
+                    
+                    {/* Last Month Data points */}
+                    {mockDashboardData.weeklyData.map((day, index) => (
+                      <circle
+                        key={`last-${index}`}
+                        cx={60 + (index * 60)}
+                        cy={200 - (day.revenue * (0.8 - index * 0.02)) / 3500 * 140}
                         r="4"
                         fill="#ef4444"
                         stroke="#ffffff"
@@ -300,15 +326,11 @@ const ProviderDashboard = () => {
                 <div className="mt-4 flex justify-center space-x-6">
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 bg-blue-500 rounded"></div>
-                    <span className="text-sm text-gray-600">Orders</span>
+                    <span className="text-sm text-gray-600">This Week</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-green-500 rounded"></div>
-                    <span className="text-sm text-gray-600">Revenue</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-red-500 rounded"></div>
-                    <span className="text-sm text-gray-600">Sales Trend</span>
+                    <div className="w-3 h-3 bg-red-500 rounded" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 2px, #ef4444 2px, #ef4444 4px)' }}></div>
+                    <span className="text-sm text-gray-600">Last Month</span>
                   </div>
                 </div>
               </CardContent>
