@@ -599,25 +599,6 @@ const HomeownerLanding = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-blue-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h3 className="text-3xl font-bold mb-4">
-            Ready to get started?
-          </h3>
-          <p className="text-xl mb-8">
-            Join thousands of satisfied homeowners who found their perfect service provider
-          </p>
-          <Button 
-            size="lg" 
-            variant="secondary"
-            onClick={() => navigate('/homeowners/browse')}
-          >
-            Browse Services Now
-          </Button>
-        </div>
-      </section>
-
       {/* Customer Reviews Section */}
       <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
