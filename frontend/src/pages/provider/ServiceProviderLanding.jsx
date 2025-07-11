@@ -250,13 +250,6 @@ const ServiceProviderLanding = () => {
                   <h4 className="text-xl font-semibold text-gray-900">{step.title}</h4>
                   <p className="text-gray-600">{step.description}</p>
                 </div>
-                
-                {/* Connecting arrow */}
-                {index < howItWorksSteps.length - 1 && (
-                  <div className="hidden md:block absolute top-10 left-1/2 transform translate-x-12 text-gray-300">
-                    <ArrowRight className="h-8 w-8" />
-                  </div>
-                )}
               </div>
             ))}
           </div>
