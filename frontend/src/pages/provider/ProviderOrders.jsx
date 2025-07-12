@@ -59,10 +59,22 @@ const ProviderOrders = () => {
   const sidebarItems = STANDARD_PROVIDER_SIDEBAR;
 
   useEffect(() => {
-    // Filter orders for current provider (mock provider ID = 1)
-    const providerOrders = mockOrders.filter(order => order.providerId === 1);
-    setOrders(providerOrders);
+    // Get orders from localStorage for persistence, or start with empty array for fresh platform
+    const storedOrders = localStorage.getItem('providerOrders');
+    if (storedOrders) {
+      setOrders(JSON.parse(storedOrders));
+    } else {
+      // Start with empty array for fresh platform
+      setOrders([]);
+    }
   }, []);
+
+  // Save orders to localStorage whenever orders change
+  useEffect(() => {
+    if (orders.length > 0) {
+      localStorage.setItem('providerOrders', JSON.stringify(orders));
+    }
+  }, [orders]);
 
   const handleCreateOrder = () => {
     const order = {
