@@ -391,7 +391,13 @@ const ProviderProfile = () => {
                     </div>
                     <p className="text-sm text-gray-600 mb-4 text-center">Comprehensive deep cleaning with detailed attention to every corner of your home.</p>
                     <button className="text-blue-600 text-sm hover:underline mb-4 block mx-auto">View details →</button>
-                    <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">Get Quotation</Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+                      onClick={handleRequestQuote}
+                    >
+                      Get Quotation
+                    </Button>
                   </div>
                   
                   <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow relative">
