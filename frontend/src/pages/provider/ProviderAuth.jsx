@@ -37,6 +37,24 @@ const ProviderAuth = () => {
     e.preventDefault();
     setIsLoading(true);
     
+    // TEMPORARY: Add hardcoded test account for immediate login
+    if (signInData.email === 'test@provider.com' && signInData.password === 'password123') {
+      localStorage.setItem('userType', 'provider');
+      localStorage.setItem('user', JSON.stringify({
+        id: 1,
+        businessName: 'Test Provider Business',
+        ownerName: 'Test Provider',
+        email: 'test@provider.com',
+        phone: '555-123-4567',
+        services: ['Home Cleaning'],
+        type: 'provider'
+      }));
+      
+      setIsLoading(false);
+      window.location.href = '/homeservices/dashboard';
+      return;
+    }
+    
     // Get stored users from localStorage
     const storedUsers = JSON.parse(localStorage.getItem('registeredProviders') || '[]');
     const user = storedUsers.find(u => u.email === signInData.email && u.password === signInData.password);
