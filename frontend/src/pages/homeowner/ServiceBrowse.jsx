@@ -49,7 +49,13 @@ const ServiceBrowse = () => {
       );
     
     const matchesServices = selectedServices.length === 0 ||
-      selectedServices.some(service => provider.services.includes(service));
+      selectedServices.some(service => {
+        // Handle partial matching for service categories (e.g., "Cleaning" matches "Home Cleaning")
+        return provider.services.some(providerService => 
+          providerService.toLowerCase().includes(service.toLowerCase()) ||
+          service.toLowerCase().includes(providerService.toLowerCase())
+        );
+      });
     
     return matchesSearch && matchesServices;
   });
