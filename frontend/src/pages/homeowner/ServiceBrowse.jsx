@@ -41,7 +41,33 @@ const ServiceBrowse = () => {
     if (serviceParam) setSelectedServices([serviceParam]);
   }, [location]);
 
-  const filteredProviders = mockProviders.filter(provider => {
+  // Get all providers: both mock providers and registered providers
+  const getAllProviders = () => {
+    const registeredProviders = JSON.parse(localStorage.getItem('registeredProviders') || '[]');
+    
+    // Convert registered providers to the format expected by the UI
+    const formattedRegisteredProviders = registeredProviders.map(provider => ({
+      id: provider.id,
+      name: provider.businessName,
+      description: `Professional ${provider.services} services`,
+      services: Array.isArray(provider.services) ? provider.services : [provider.services],
+      rating: 5.0, // New providers start with perfect rating
+      reviews: 0, // New providers start with 0 reviews
+      completedJobs: 0, // New providers start with 0 jobs
+      location: "Halifax, NS", // Default location
+      responseTime: "Usually responds within 1 hour",
+      yearEstablished: "2024",
+      specialties: ["Professional service", "Quality work", "Customer satisfaction"],
+      priceRange: "$50-$500"
+    }));
+    
+    // Combine mock providers with registered providers
+    return [...mockProviders, ...formattedRegisteredProviders];
+  };
+
+  const allProviders = getAllProviders();
+
+  const filteredProviders = allProviders.filter(provider => {
     const matchesSearch = !searchTerm || 
       provider.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       provider.services.some(service => 
