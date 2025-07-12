@@ -178,21 +178,23 @@ const ServiceBrowse = () => {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-full sm:w-48">
-                      <SelectValue placeholder="Sort by" />
-                    </SelectTrigger>
-                    <SelectContent className="z-50">
-                      <SelectItem value="rating">Highest Rated</SelectItem>
-                      <SelectItem value="reviews">Most Reviews</SelectItem>
-                      <SelectItem value="name">Name A-Z</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div className="relative">
+                    <Select value={sortBy} onValueChange={setSortBy}>
+                      <SelectTrigger className="w-full sm:w-48 bg-white">
+                        <SelectValue placeholder="Sort by" />
+                      </SelectTrigger>
+                      <SelectContent className="z-50 bg-white border border-gray-200 shadow-lg rounded-md">
+                        <SelectItem value="rating" className="hover:bg-gray-50">Highest Rated</SelectItem>
+                        <SelectItem value="reviews" className="hover:bg-gray-50">Most Reviews</SelectItem>
+                        <SelectItem value="name" className="hover:bg-gray-50">Name A-Z</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                   
                   <Button
                     variant="outline"
                     onClick={() => setShowFilters(!showFilters)}
-                    className="flex items-center justify-center space-x-2 w-full sm:w-auto"
+                    className="flex items-center justify-center space-x-2 w-full sm:w-auto bg-white hover:bg-gray-50 border-gray-200"
                   >
                     <SlidersHorizontal className="h-4 w-4" />
                     <span>Filters</span>
