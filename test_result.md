@@ -141,6 +141,54 @@ frontend:
         agent: "main"
         comment: "Successfully updated header navigation to be authentication-aware. Added proper login state checking and dynamic navigation (Dashboard, Sign In/Sign Out buttons)."
 
+  - task: "Manual orders go to confirmed status (not pending quotation)"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/provider/ProviderOrders.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Fixed manual order creation to set status as 'confirmed' instead of 'pending_quotation'. Manual orders are now properly confirmed orders."
+
+  - task: "Remove dummy customers for fresh platform"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/provider/ProviderCustomers.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Removed all mock customer data. Customers page now starts empty for fresh platform and uses localStorage for persistence."
+
+  - task: "Fix scroll issues in messages and customers pages"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/provider/ProviderMessaging.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added window.scrollTo(0, 0) in useEffect to ensure pages start at top. Fixed message loading from localStorage instead of mockMessages."
+
+  - task: "Connect registered providers to homeowner service listings"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/homeowner/ServiceBrowse.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Updated ServiceBrowse to load both mock providers AND registered providers from localStorage. New provider signups now appear in homeowner 'all services' page."
+
   - task: "Fix provider dashboard navigation buttons"
     implemented: true  
     working: true
