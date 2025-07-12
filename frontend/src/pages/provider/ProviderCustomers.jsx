@@ -405,6 +405,98 @@ const ProviderCustomers = () => {
           </div>
         </div>
       </div>
+
+      {/* Add Customer Form Modal */}
+      {showCustomerForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <Card className="w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span>Add New Customer</span>
+                <Button variant="ghost" size="sm" onClick={() => setShowCustomerForm(false)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Customer Name *
+                </label>
+                <Input
+                  value={customerForm.name}
+                  onChange={(e) => setCustomerForm({...customerForm, name: e.target.value})}
+                  placeholder="Enter customer name"
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email Address *
+                </label>
+                <Input
+                  type="email"
+                  value={customerForm.email}
+                  onChange={(e) => setCustomerForm({...customerForm, email: e.target.value})}
+                  placeholder="customer@email.com"
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Phone Number
+                </label>
+                <Input
+                  value={customerForm.phone}
+                  onChange={(e) => setCustomerForm({...customerForm, phone: e.target.value})}
+                  placeholder="(555) 123-4567"
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Address
+                </label>
+                <Input
+                  value={customerForm.address}
+                  onChange={(e) => setCustomerForm({...customerForm, address: e.target.value})}
+                  placeholder="Customer address"
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Notes
+                </label>
+                <Textarea
+                  value={customerForm.notes}
+                  onChange={(e) => setCustomerForm({...customerForm, notes: e.target.value})}
+                  placeholder="Any additional notes about the customer..."
+                  rows={3}
+                  className="w-full"
+                />
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <Button 
+                  onClick={handleAddCustomer}
+                  className="flex-1"
+                  disabled={!customerForm.name || !customerForm.email}
+                >
+                  Add Customer
+                </Button>
+                <Button variant="outline" onClick={() => setShowCustomerForm(false)} className="flex-1">
+                  Cancel
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
