@@ -39,17 +39,22 @@ const ProviderAuth = () => {
     
     console.log('Login attempt:', signInData);
     
-    // Simple direct authentication
-    if (signInData.email === 'edwarddethe@gmail.com' && signInData.password === 'Neildethe1*') {
+    // Get stored users from localStorage
+    const storedUsers = JSON.parse(localStorage.getItem('registeredProviders') || '[]');
+    const user = storedUsers.find(u => u.email === signInData.email && u.password === signInData.password);
+    
+    if (user) {
       console.log('Login successful - setting user data');
       
       // Set user authentication data
       localStorage.setItem('userType', 'provider');
       localStorage.setItem('user', JSON.stringify({
-        id: 1,
-        businessName: 'Elite Home Solutions',
-        ownerName: 'Edward Dethe',
-        email: signInData.email,
+        id: user.id,
+        businessName: user.businessName,
+        ownerName: user.ownerName,
+        email: user.email,
+        phone: user.phone,
+        services: user.services,
         type: 'provider'
       }));
       
@@ -62,7 +67,7 @@ const ProviderAuth = () => {
     } else {
       console.log('Login failed: Invalid credentials');
       setIsLoading(false);
-      alert('Invalid credentials. Please use: edwarddethe@gmail.com / Neildethe1*');
+      alert('Invalid credentials. Please check your email and password.');
     }
   };
 
