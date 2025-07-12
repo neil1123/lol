@@ -77,9 +77,13 @@ const ProviderOrders = () => {
   }, [orders]);
 
   const handleCreateOrder = () => {
+    // Generate a proper ID for the order
+    const orderId = Date.now() + Math.random();
+    const homeownerId = Date.now() + Math.random() + 1000;
+    
     const order = {
-      id: Date.now(),
-      homeownerId: Date.now(),
+      id: orderId,
+      homeownerId: homeownerId,
       providerId: 1,
       providerName: 'Elite Home Solutions',
       homeownerName: newOrder.customerName,
@@ -94,7 +98,8 @@ const ProviderOrders = () => {
       status: 'pending_quotation',
       requestDate: new Date().toISOString(),
       scheduledDate: newOrder.scheduledDate || null,
-      messages: []
+      messages: [],
+      isLocalOrder: true // Flag to identify locally created orders
     };
 
     setOrders([...orders, order]);
@@ -111,6 +116,16 @@ const ProviderOrders = () => {
       scheduledDate: ''
     });
     setShowNewOrderForm(false);
+  };
+
+  // Function to handle messaging with proper validation
+  const handleMessageCustomer = (order) => {
+    if (!order.id || order.status === 'pending_quotation') {
+      // Don't allow messaging for orders without proper setup or pending quotation
+      alert('Please send a quotation first before messaging the customer.');
+      return;
+    }
+    navigate('/homeservices/messages');
   };
 
   const handleUpdateOrderStatus = (orderId, newStatus) => {
