@@ -73,7 +73,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Navigate to="/homeowners" replace />} />
           
           {/* Homeowner Routes */}
           <Route path="/homeowners" element={<HomeownerLanding />} />
