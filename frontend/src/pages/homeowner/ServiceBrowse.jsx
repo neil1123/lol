@@ -45,21 +45,26 @@ const ServiceBrowse = () => {
   const getAllProviders = () => {
     const registeredProviders = JSON.parse(localStorage.getItem('registeredProviders') || '[]');
     
-    // Convert registered providers to the format expected by the UI
-    const formattedRegisteredProviders = registeredProviders.map(provider => ({
-      id: provider.id,
-      name: provider.businessName,
-      description: `Professional ${provider.services} services`,
-      services: Array.isArray(provider.services) ? provider.services : [provider.services],
-      rating: 5.0, // New providers start with perfect rating
-      reviews: 0, // New providers start with 0 reviews
-      completedJobs: 0, // New providers start with 0 jobs
-      location: "Halifax, NS", // Default location
-      responseTime: "Usually responds within 1 hour",
-      yearEstablished: "2024",
-      specialties: ["Professional service", "Quality work", "Customer satisfaction"],
-      priceRange: "$50-$500"
-    }));
+    // Filter only active providers and use their complete profile data
+    const formattedRegisteredProviders = registeredProviders
+      .filter(provider => provider.isActive !== false) // Only show active providers
+      .map(provider => ({
+        id: provider.id,
+        name: provider.businessName,
+        description: provider.description || `Professional ${Array.isArray(provider.services) ? provider.services.join(' and ') : provider.services} services`,
+        services: Array.isArray(provider.services) ? provider.services : [provider.services],
+        rating: provider.rating || 5.0,
+        reviews: provider.reviews || 0,
+        completedJobs: provider.completedJobs || 0,
+        location: provider.location || "Halifax, NS",
+        responseTime: provider.responseTime || "Usually responds within 1 hour",
+        yearEstablished: provider.yearEstablished || "2024",
+        specialties: provider.specialties || ["Professional service", "Quality work", "Customer satisfaction"],
+        priceRange: provider.priceRange || "$50-$500",
+        ownerName: provider.ownerName,
+        email: provider.email,
+        phone: provider.phone
+      }));
     
     // Combine mock providers with registered providers
     return [...mockProviders, ...formattedRegisteredProviders];
