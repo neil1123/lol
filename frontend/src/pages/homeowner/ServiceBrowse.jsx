@@ -21,11 +21,6 @@ const ServiceBrowse = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Check login status
-  useEffect(() => {
-    const userType = localStorage.getItem('userType');
-    setIsLoggedIn(userType === 'homeowner');
-  }, []);
 
   // Scroll to top when component mounts
   useEffect(() => {
