@@ -24,7 +24,41 @@ const ProviderProfile = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const provider = mockProviders.find(p => p.id === parseInt(id));
+  // Get provider from both mock providers and registered providers
+  const getProvider = (providerId) => {
+    // First check mock providers
+    const mockProvider = mockProviders.find(p => p.id === parseInt(providerId));
+    if (mockProvider) return mockProvider;
+    
+    // Then check registered providers
+    const registeredProviders = JSON.parse(localStorage.getItem('registeredProviders') || '[]');
+    const registeredProvider = registeredProviders.find(p => p.id === parseFloat(providerId));
+    
+    if (registeredProvider) {
+      // Convert registered provider to display format
+      return {
+        id: registeredProvider.id,
+        name: registeredProvider.businessName,
+        description: registeredProvider.description || `Professional ${Array.isArray(registeredProvider.services) ? registeredProvider.services.join(' and ') : registeredProvider.services} services`,
+        services: Array.isArray(registeredProvider.services) ? registeredProvider.services : [registeredProvider.services],
+        rating: registeredProvider.rating || 5.0,
+        reviews: registeredProvider.reviews || 0,
+        completedJobs: registeredProvider.completedJobs || 0,
+        location: registeredProvider.location || "Halifax, NS",
+        responseTime: registeredProvider.responseTime || "Usually responds within 1 hour",
+        yearEstablished: registeredProvider.yearEstablished || "2024",
+        specialties: registeredProvider.specialties || ["Professional service", "Quality work", "Customer satisfaction"],
+        priceRange: registeredProvider.priceRange || "$50-$500",
+        ownerName: registeredProvider.ownerName,
+        email: registeredProvider.email,
+        phone: registeredProvider.phone
+      };
+    }
+    
+    return null;
+  };
+
+  const provider = getProvider(id);
 
   // Check login status
   useEffect(() => {
