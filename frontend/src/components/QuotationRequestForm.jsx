@@ -26,11 +26,67 @@ const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName }) =>
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
+    // Get user data
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    
+    // Create quotation request
+    const quotationRequest = {
+      id: Date.now() + Math.random(),
+      homeownerId: user.id,
+      homeownerName: user.name,
+      homeownerEmail: user.email,
+      homeownerPhone: formData.phone || user.phone || '',
+      homeownerAddress: formData.address || user.address || '',
+      providerId: null, // Will be set when provider is determined
+      providerName: providerName,
+      serviceType: formData.serviceType,
+      description: formData.description,
+      preferredDate: formData.preferredDate,
+      preferredTime: formData.preferredTime,
+      urgency: formData.urgency,
+      budget: formData.budget,
+      propertySize: formData.propertySize,
+      additionalRequirements: formData.additionalRequirements,
+      status: 'pending_quote',
+      requestDate: new Date().toISOString(),
+      priority: formData.urgency
+    };
+    
+    // Store the request
+    const existingRequests = JSON.parse(localStorage.getItem('quotationRequests') || '[]');
+    existingRequests.push(quotationRequest);
+    localStorage.setItem('quotationRequests', JSON.stringify(existingRequests));
+    
+    // Create message thread
+    const messageThread = {
+      id: Date.now() + Math.random(),
+      homeownerId: user.id,
+      providerId: null, // To be determined
+      homeownerName: user.name,
+      providerName: providerName,
+      orderType: formData.serviceType,
+      orderId: quotationRequest.id,
+      lastMessage: `New quotation request for ${formData.serviceType}`,
+      lastMessageTime: new Date().toISOString(),
+      messages: [
+        {
+          id: 1,
+          content: `Hi ${providerName}! I'm interested in your ${formData.serviceType} services. Here are the details: ${formData.description}. My preferred date is ${formData.preferredDate} and budget is ${formData.budget}.`,
+          timestamp: new Date().toISOString(),
+          sender: 'homeowner',
+          read: false
+        }
+      ]
+    };
+    
+    // Store message thread
+    const existingMessages = JSON.parse(localStorage.getItem('messageThreads') || '[]');
+    existingMessages.push(messageThread);
+    localStorage.setItem('messageThreads', JSON.stringify(existingMessages));
+    
     setTimeout(() => {
       setIsSubmitting(false);
       onClose();
-      // Show success message or redirect
       alert('Quotation request sent successfully! The provider will contact you soon.');
     }, 2000);
   };
