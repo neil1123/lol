@@ -282,7 +282,10 @@ const ProviderDashboard = () => {
 
             {/* Quick Actions */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card 
+                className="hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => navigate('/homeservices/orders')}
+              >
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
                     <div className="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center">
@@ -296,7 +299,10 @@ const ProviderDashboard = () => {
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card 
+                className="hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => navigate('/homeservices/messages')}
+              >
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
                     <div className="h-12 w-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -310,7 +316,10 @@ const ProviderDashboard = () => {
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card 
+                className="hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => navigate('/homeservices/customers')}
+              >
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
                     <div className="h-12 w-12 bg-purple-100 rounded-full flex items-center justify-center">
