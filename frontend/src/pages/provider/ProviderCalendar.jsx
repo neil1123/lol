@@ -325,6 +325,125 @@ const ProviderCalendar = () => {
           </div>
         </div>
       </div>
+
+      {/* New Appointment Form Modal */}
+      {showAppointmentForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <Card className="w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span>New Appointment</span>
+                <Button variant="ghost" size="sm" onClick={() => setShowAppointmentForm(false)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Customer Name *
+                  </label>
+                  <Input
+                    value={appointmentForm.customerName}
+                    onChange={(e) => setAppointmentForm({...appointmentForm, customerName: e.target.value})}
+                    placeholder="Enter customer name"
+                    className="w-full"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone Number
+                  </label>
+                  <Input
+                    value={appointmentForm.phoneNumber}
+                    onChange={(e) => setAppointmentForm({...appointmentForm, phoneNumber: e.target.value})}
+                    placeholder="(555) 123-4567"
+                    className="w-full"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Service Type *
+                </label>
+                <Input
+                  value={appointmentForm.serviceType}
+                  onChange={(e) => setAppointmentForm({...appointmentForm, serviceType: e.target.value})}
+                  placeholder="e.g., Home Cleaning, Plumbing, Electrical"
+                  className="w-full"
+                />
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Date *
+                  </label>
+                  <Input
+                    type="date"
+                    value={appointmentForm.date}
+                    onChange={(e) => setAppointmentForm({...appointmentForm, date: e.target.value})}
+                    className="w-full"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Time *
+                  </label>
+                  <Input
+                    type="time"
+                    value={appointmentForm.time}
+                    onChange={(e) => setAppointmentForm({...appointmentForm, time: e.target.value})}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Address
+                </label>
+                <Input
+                  value={appointmentForm.address}
+                  onChange={(e) => setAppointmentForm({...appointmentForm, address: e.target.value})}
+                  placeholder="Service address"
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Notes
+                </label>
+                <Textarea
+                  value={appointmentForm.notes}
+                  onChange={(e) => setAppointmentForm({...appointmentForm, notes: e.target.value})}
+                  placeholder="Any additional notes or requirements..."
+                  rows={3}
+                  className="w-full"
+                />
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <Button 
+                  onClick={handleAddAppointment}
+                  className="flex-1"
+                  disabled={!appointmentForm.customerName || !appointmentForm.date || !appointmentForm.time || !appointmentForm.serviceType}
+                >
+                  Create Appointment
+                </Button>
+                <Button variant="outline" onClick={() => setShowAppointmentForm(false)} className="flex-1">
+                  Cancel
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
