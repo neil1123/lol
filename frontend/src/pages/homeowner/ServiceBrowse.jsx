@@ -345,9 +345,9 @@ const ServiceBrowse = () => {
                         <Button
                           onClick={(e) => {
                             e.stopPropagation();
-                            navigate(`/homeowners/provider/${provider.id}`);
+                            handleGetQuotation(provider.id);
                           }}
-                          className="w-full sm:flex-1"
+                          className="w-full sm:flex-1 bg-blue-600 hover:bg-blue-700 text-white"
                         >
                           Get Quotation
                         </Button>
