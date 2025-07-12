@@ -103,6 +103,16 @@ const HomeownerLanding = () => {
     navigate(`/homeowners/browse?search=${searchTerm}`);
   };
 
+  const handleQuotationRequest = () => {
+    // Check if user is logged in before allowing quotation requests
+    const userType = localStorage.getItem('userType');
+    if (userType !== 'homeowner') {
+      navigate('/homeowners/auth');
+    } else {
+      navigate('/homeowners/browse');
+    }
+  };
+
   const handleGetDeals = () => {
     // Allow users to see dashboard without signing up
     navigate('/homeowners/dashboard');
