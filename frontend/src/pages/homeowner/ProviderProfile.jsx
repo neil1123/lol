@@ -24,13 +24,9 @@ const ProviderProfile = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Get provider from both mock providers and registered providers
+  // Get provider from ONLY registered providers (no mock data for production)
   const getProvider = (providerId) => {
-    // First check mock providers
-    const mockProvider = mockProviders.find(p => p.id === parseInt(providerId));
-    if (mockProvider) return mockProvider;
-    
-    // Then check registered providers
+    // Check registered providers only
     const registeredProviders = JSON.parse(localStorage.getItem('registeredProviders') || '[]');
     const registeredProvider = registeredProviders.find(p => p.id === parseFloat(providerId));
     
