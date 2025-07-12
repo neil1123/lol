@@ -16,8 +16,15 @@ const ServiceBrowse = () => {
   const [sortBy, setSortBy] = useState('rating');
   const [showFilters, setShowFilters] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Check login status
+  useEffect(() => {
+    const userType = localStorage.getItem('userType');
+    setIsLoggedIn(userType === 'homeowner');
+  }, []);
 
   // Scroll to top when component mounts
   useEffect(() => {
