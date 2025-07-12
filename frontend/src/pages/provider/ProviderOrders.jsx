@@ -400,26 +400,32 @@ const ProviderOrders = () => {
 
           {/* Orders Tabs */}
           <Tabs defaultValue="pending" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1 h-auto p-1">
-              <TabsTrigger value="pending" className="text-xs sm:text-sm px-1 sm:px-2 py-2 flex flex-col sm:flex-row sm:items-center">
-                <span className="truncate">Pending</span>
-                <span className="text-xs sm:ml-1">({pendingOrders.length})</span>
+            <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 gap-1 h-auto p-1">
+              <TabsTrigger value="pending" className="text-xs px-1 py-2 min-w-0 flex-col">
+                <span className="truncate w-full text-center">Pending</span>
+                <span className="text-xs mt-0.5">({pendingOrders.length})</span>
               </TabsTrigger>
-              <TabsTrigger value="quoted" className="text-xs sm:text-sm px-1 sm:px-2 py-2 flex flex-col sm:flex-row sm:items-center">
-                <span className="truncate">Quoted</span>
-                <span className="text-xs sm:ml-1">({quotationSentOrders.length})</span>
+              <TabsTrigger value="quoted" className="text-xs px-1 py-2 min-w-0 flex-col">
+                <span className="truncate w-full text-center">Quoted</span>
+                <span className="text-xs mt-0.5">({quotationSentOrders.length})</span>
               </TabsTrigger>
-              <TabsTrigger value="confirmed" className="text-xs sm:text-sm px-1 sm:px-2 py-2 flex flex-col sm:flex-row sm:items-center">
-                <span className="truncate">Confirmed</span>
-                <span className="text-xs sm:ml-1">({confirmedOrders.length})</span>
+              <TabsTrigger value="confirmed" className="text-xs px-1 py-2 min-w-0 flex-col">
+                <span className="truncate w-full text-center">
+                  <span className="hidden sm:inline">Confirmed</span>
+                  <span className="sm:hidden">Conf.</span>
+                </span>
+                <span className="text-xs mt-0.5">({confirmedOrders.length})</span>
               </TabsTrigger>
-              <TabsTrigger value="progress" className="text-xs sm:text-sm px-1 sm:px-2 py-2 flex flex-col sm:flex-row sm:items-center">
-                <span className="truncate">Progress</span>
-                <span className="text-xs sm:ml-1">({inProgressOrders.length})</span>
+              <TabsTrigger value="progress" className="text-xs px-1 py-2 min-w-0 flex-col sm:block">
+                <span className="truncate w-full text-center">
+                  <span className="hidden sm:inline">Progress</span>
+                  <span className="sm:hidden">Prog.</span>
+                </span>
+                <span className="text-xs mt-0.5">({inProgressOrders.length})</span>
               </TabsTrigger>
-              <TabsTrigger value="completed" className="text-xs sm:text-sm px-1 sm:px-2 py-2 flex flex-col sm:flex-row sm:items-center">
-                <span className="truncate">Done</span>
-                <span className="text-xs sm:ml-1">({completedOrders.length})</span>
+              <TabsTrigger value="completed" className="text-xs px-1 py-2 min-w-0 flex-col sm:block">
+                <span className="truncate w-full text-center">Done</span>
+                <span className="text-xs mt-0.5">({completedOrders.length})</span>
               </TabsTrigger>
             </TabsList>
             
