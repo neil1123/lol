@@ -11,7 +11,7 @@ from datetime import datetime
 import sys
 
 # Load environment variables
-BACKEND_URL = "https://d79bbc34-a006-429d-b8bc-e0af09e0e534.preview.emergentagent.com/api"
+BACKEND_URL = "https://c058bacf-440a-40c3-a20e-260ce2a9aecf.preview.emergentagent.com/api"
 
 def test_backend_health():
     """Test if backend server is running and accessible"""
