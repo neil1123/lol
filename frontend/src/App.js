@@ -25,49 +25,6 @@ import ProviderAuth from "./pages/provider/ProviderAuth";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
-
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
-
-  // Redirect to homeowners by default
-  useEffect(() => {
-    window.location.href = '/homeowners';
-  }, []);
-
-  return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-blue-600 mb-4">Welcome to Doord</h1>
-        <p className="text-xl text-gray-600 mb-8">Your Home Services Marketplace</p>
-        <div className="space-x-4">
-          <a 
-            href="/homeowners" 
-            className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            For Homeowners
-          </a>
-          <a 
-            href="/homeservices" 
-            className="inline-block bg-white text-blue-600 border-2 border-blue-600 px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors"
-          >
-            For Service Providers
-          </a>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 function App() {
   return (
     <div className="App">
