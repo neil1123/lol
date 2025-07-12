@@ -118,27 +118,8 @@ export const mockProviders = [
   }
 ];
 
-// Mock orders data (extending from quotations)
-export const mockOrders = [
-  {
-    id: 1,
-    homeownerId: 1,
-    providerId: 1,
-    providerName: 'Elite Home Solutions',
-    homeownerName: 'Sarah Johnson',
-    homeownerEmail: 'sarah.johnson@email.com',
-    homeownerPhone: '(555) 123-4567',
-    serviceType: 'Home Cleaning',
-    description: 'Deep cleaning for 3-bedroom house. Need comprehensive cleaning including bathrooms, kitchen, and living areas.',
-    homeownerAddress: '123 Main Street, Halifax, NS B3H 1A1',
-    quotationAmount: 350,
-    orderDetails: 'Complete deep cleaning package including all rooms, bathrooms, kitchen deep clean, and window washing.',
-    priority: 'medium',
-    status: 'pending_quotation',
-    requestDate: '2024-01-15T10:00:00Z',
-    scheduledDate: '2024-01-20T14:00:00Z',
-    messages: []
-  },
+// Mock orders data - Starting fresh with no orders
+export const mockOrders = [];
   {
     id: 2,
     homeownerId: 2,
