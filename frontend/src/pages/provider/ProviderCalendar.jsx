@@ -329,16 +329,19 @@ const ProviderCalendar = () => {
       {/* New Appointment Form Modal */}
       {showAppointmentForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <Card className="w-full max-w-lg max-h-[90vh] overflow-y-auto">
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <span>New Appointment</span>
-                <Button variant="ghost" size="sm" onClick={() => setShowAppointmentForm(false)}>
-                  <X className="h-4 w-4" />
-                </Button>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between rounded-t-lg">
+              <h2 className="text-lg font-semibold text-gray-900">New Appointment</h2>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setShowAppointmentForm(false)}
+                className="hover:bg-gray-100 rounded-full p-1"
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+            <div className="p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -428,7 +431,7 @@ const ProviderCalendar = () => {
                 />
               </div>
               
-              <div className="flex gap-3 pt-4">
+              <div className="flex gap-3 pt-4 border-t border-gray-200">
                 <Button 
                   onClick={handleAddAppointment}
                   className="flex-1"
@@ -440,8 +443,8 @@ const ProviderCalendar = () => {
                   Cancel
                 </Button>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       )}
     </div>
