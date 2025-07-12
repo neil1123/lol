@@ -19,10 +19,7 @@ const HomeownerLanding = () => {
     const userType = localStorage.getItem('userType');
     setIsLoggedIn(userType === 'homeowner');
     
-    // If user is logged in, redirect to dashboard
-    if (userType === 'homeowner') {
-      navigate('/homeowners/dashboard');
-    }
+    // Remove auto-redirect - allow users to see dashboard without logging in
   }, [navigate]);
 
   // Auto-switch reviews every 4 seconds - REMOVED
