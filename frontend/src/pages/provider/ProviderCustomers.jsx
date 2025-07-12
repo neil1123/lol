@@ -239,7 +239,7 @@ const ProviderCustomers = () => {
                   <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Customers</h2>
                   <p className="text-gray-600">Manage your customer relationships</p>
                 </div>
-                <Button className="w-full sm:w-auto">
+                <Button className="w-full sm:w-auto" onClick={() => setShowCustomerForm(true)}>
                   <Plus className="h-4 w-4 mr-2" />
                   Add Customer
                 </Button>
