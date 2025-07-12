@@ -43,6 +43,16 @@ const ServiceBrowse = () => {
     
     // Load all providers (mock + registered)
     setAllProviders(getAllProviders());
+
+  // Refresh providers when localStorage changes (new provider registers)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setAllProviders(getAllProviders());
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
   }, [location]);
 
   // Refresh providers when localStorage changes (new provider registers)
