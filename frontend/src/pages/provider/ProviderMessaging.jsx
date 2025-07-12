@@ -422,7 +422,7 @@ ${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additi
               {/* Conversations List */}
               <div className="w-80 bg-white border-r">
                 <div className="p-4 border-b">
-                  <h2 className="text-xl font-bold text-gray-900 mb-4">Messages</h2>
+                  <h2 className="text-xl font-bold text-gray-900 mb-4 text-left">Messages</h2>
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
