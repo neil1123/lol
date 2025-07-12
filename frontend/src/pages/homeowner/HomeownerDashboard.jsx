@@ -33,6 +33,7 @@ import { serviceCategories, mockOrders, mockQuotationRequests } from '../../data
 
 const HomeownerDashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState('home');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -45,6 +46,15 @@ const HomeownerDashboard = () => {
     const userType = localStorage.getItem('userType');
     setIsLoggedIn(userType === 'homeowner');
   }, []);
+
+  useEffect(() => {
+    // Check for tab parameter in URL
+    const params = new URLSearchParams(location.search);
+    const tabParam = params.get('tab');
+    if (tabParam) {
+      setActiveTab(tabParam);
+    }
+  }, [location]);
 
   const handleAuthenticatedAction = (action) => {
     if (!isLoggedIn) {
