@@ -344,7 +344,7 @@ const ProviderCalendar = () => {
             <div className="p-6 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                     Customer Name *
                   </label>
                   <Input
@@ -356,7 +356,7 @@ const ProviderCalendar = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                     Phone Number
                   </label>
                   <Input
@@ -369,7 +369,7 @@ const ProviderCalendar = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                   Service Type *
                 </label>
                 <Input
@@ -382,7 +382,7 @@ const ProviderCalendar = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                     Date *
                   </label>
                   <Input
@@ -394,7 +394,7 @@ const ProviderCalendar = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                     Time *
                   </label>
                   <Input
@@ -407,7 +407,7 @@ const ProviderCalendar = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                   Address
                 </label>
                 <Input
@@ -419,7 +419,7 @@ const ProviderCalendar = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                   Notes
                 </label>
                 <Textarea
