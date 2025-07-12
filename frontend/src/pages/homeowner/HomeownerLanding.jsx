@@ -212,27 +212,15 @@ const HomeownerLanding = () => {
                 >
                   For Service Providers
                 </Button>
-                {isLoggedIn && (
-                  <Button 
-                    variant="ghost" 
-                    onClick={() => {
-                      navigate('/homeowners/dashboard');
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="justify-start"
-                  >
-                    Dashboard
-                  </Button>
-                )}
                 <Button 
                   variant="ghost" 
                   onClick={() => {
-                    navigate('/homeowners/quotations');
+                    navigate('/homeowners/dashboard');
                     setIsMobileMenuOpen(false);
                   }}
                   className="justify-start"
                 >
-                  My Quotations
+                  Dashboard
                 </Button>
                 {isLoggedIn ? (
                   <Button 
