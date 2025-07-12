@@ -75,23 +75,54 @@ const ProviderAuth = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Mock registration
-    setTimeout(() => {
-      localStorage.setItem('userType', 'provider');
-      localStorage.setItem('user', JSON.stringify({
-        id: Date.now(),
-        businessName: signUpData.businessName,
-        ownerName: signUpData.ownerName,
-        email: signUpData.email,
-        phone: signUpData.phone,
-        address: signUpData.address,
-        services: signUpData.services,
-        type: 'provider'
-      }));
-      
+    // Validate form
+    if (signUpData.password !== signUpData.confirmPassword) {
+      alert('Passwords do not match');
       setIsLoading(false);
-      navigate('/homeservices/dashboard');
-    }, 1000);
+      return;
+    }
+
+    // Check if user already exists
+    const storedUsers = JSON.parse(localStorage.getItem('registeredProviders') || '[]');
+    const existingUser = storedUsers.find(u => u.email === signUpData.email);
+    
+    if (existingUser) {
+      alert('User with this email already exists');
+      setIsLoading(false);
+      return;
+    }
+    
+    // Create new user
+    const newUser = {
+      id: Date.now() + Math.random(), // Generate unique ID
+      businessName: signUpData.businessName,
+      ownerName: `${signUpData.firstName} ${signUpData.lastName}`,
+      email: signUpData.email,
+      phone: signUpData.phone,
+      services: signUpData.services,
+      license: signUpData.license,
+      password: signUpData.password,
+      registeredAt: new Date().toISOString()
+    };
+    
+    // Store user
+    storedUsers.push(newUser);
+    localStorage.setItem('registeredProviders', JSON.stringify(storedUsers));
+    
+    // Auto login after registration
+    localStorage.setItem('userType', 'provider');
+    localStorage.setItem('user', JSON.stringify({
+      id: newUser.id,
+      businessName: newUser.businessName,
+      ownerName: newUser.ownerName,
+      email: newUser.email,
+      phone: newUser.phone,
+      services: newUser.services,
+      type: 'provider'
+    }));
+    
+    setIsLoading(false);
+    navigate('/homeservices/dashboard');
   };
 
   const handleServiceToggle = (serviceName) => {
