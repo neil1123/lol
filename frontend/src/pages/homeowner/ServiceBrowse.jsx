@@ -183,10 +183,10 @@ const ServiceBrowse = () => {
                       <SelectTrigger className="w-full sm:w-48 bg-white">
                         <SelectValue placeholder="Sort by" />
                       </SelectTrigger>
-                      <SelectContent className="z-50 bg-white border border-gray-200 shadow-lg rounded-md">
-                        <SelectItem value="rating" className="hover:bg-gray-50">Highest Rated</SelectItem>
-                        <SelectItem value="reviews" className="hover:bg-gray-50">Most Reviews</SelectItem>
-                        <SelectItem value="name" className="hover:bg-gray-50">Name A-Z</SelectItem>
+                      <SelectContent className="z-[9999] bg-white border border-gray-200 shadow-2xl rounded-md min-w-[200px] max-h-[200px] overflow-auto">
+                        <SelectItem value="rating" className="hover:bg-gray-50 cursor-pointer px-3 py-2 text-gray-900">Highest Rated</SelectItem>
+                        <SelectItem value="reviews" className="hover:bg-gray-50 cursor-pointer px-3 py-2 text-gray-900">Most Reviews</SelectItem>
+                        <SelectItem value="name" className="hover:bg-gray-50 cursor-pointer px-3 py-2 text-gray-900">Name A-Z</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
