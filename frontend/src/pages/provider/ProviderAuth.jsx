@@ -95,7 +95,7 @@ const ProviderAuth = () => {
         return;
       }
 
-      if (!signUpData.firstName || !signUpData.lastName || !signUpData.email || !signUpData.businessName) {
+      if (!signUpData.ownerName || !signUpData.email || !signUpData.businessName) {
         alert('Please fill in all required fields');
         setIsLoading(false);
         return;
