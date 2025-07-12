@@ -76,18 +76,25 @@ const ServiceBrowse = () => {
   };
 
   const handleRequestQuote = (providerId) => {
-    // Store in localStorage for mock functionality
-    const quoteRequest = {
-      providerId,
-      homeownerId: 1, // Mock homeowner ID
-      timestamp: new Date().toISOString(),
-      services: selectedServices
-    };
+    // Check if user is logged in
+    if (!isLoggedIn) {
+      navigate('/homeowners/auth');
+      return;
+    }
     
-    const existingRequests = JSON.parse(localStorage.getItem('quoteRequests') || '[]');
-    localStorage.setItem('quoteRequests', JSON.stringify([...existingRequests, quoteRequest]));
+    // If logged in, proceed to messages
+    navigate('/homeowners/dashboard?tab=messages');
+  };
+
+  const handleGetQuotation = (providerId) => {
+    // Check if user is logged in
+    if (!isLoggedIn) {
+      navigate('/homeowners/auth');
+      return;
+    }
     
-    navigate('/homeowners/quotations');
+    // If logged in, proceed to messages
+    navigate('/homeowners/dashboard?tab=messages');
   };
 
   return (
