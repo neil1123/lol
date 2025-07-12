@@ -120,85 +120,9 @@ export const mockProviders = [
 
 // Mock orders data - Starting fresh with no orders
 export const mockOrders = [];
-  {
-    id: 2,
-    homeownerId: 2,
-    providerId: 1,
-    providerName: 'Elite Home Solutions',
-    homeownerName: 'Mike Wilson',
-    homeownerEmail: 'mike.wilson@email.com',
-    homeownerPhone: '(555) 987-6543',
-    serviceType: 'Electrical Work',
-    description: 'Need electrical outlet installation in home office and kitchen lighting upgrade.',
-    homeownerAddress: '456 Oak Avenue, Halifax, NS B3H 2B2',
-    quotationAmount: 450,
-    orderDetails: 'Installation of 3 new outlets in home office, kitchen lighting fixture upgrade, and electrical safety inspection.',
-    priority: 'high',
-    status: 'quotation_sent',
-    requestDate: '2024-01-12T09:30:00Z',
-    scheduledDate: '2024-01-18T10:00:00Z',
-    messages: []
-  },
-  {
-    id: 3,
-    homeownerId: 3,
-    providerId: 1,
-    providerName: 'Elite Home Solutions',
-    homeownerName: 'Emily Davis',
-    homeownerEmail: 'emily.davis@email.com',
-    homeownerPhone: '(555) 456-7890',
-    serviceType: 'Plumbing',
-    description: 'Kitchen sink repair and bathroom faucet replacement needed.',
-    homeownerAddress: '789 Pine Street, Halifax, NS B3H 3C3',
-    quotationAmount: 280,
-    orderDetails: 'Kitchen sink pipe repair, bathroom faucet replacement with new fixtures, and water pressure check.',
-    priority: 'medium',
-    status: 'confirmed',
-    requestDate: '2024-01-10T11:15:00Z',
-    scheduledDate: '2024-01-16T13:00:00Z',
-    messages: []
-  },
-  {
-    id: 4,
-    homeownerId: 4,
-    providerId: 1,
-    providerName: 'Elite Home Solutions',
-    homeownerName: 'David Brown',
-    homeownerEmail: 'david.brown@email.com',
-    homeownerPhone: '(555) 321-0987',
-    serviceType: 'Landscaping',
-    description: 'Front yard landscaping and backyard maintenance needed for spring.',
-    homeownerAddress: '321 Elm Street, Halifax, NS B3H 4D4',
-    quotationAmount: 650,
-    orderDetails: 'Front yard garden design and planting, backyard cleanup, lawn fertilization, and hedge trimming.',
-    priority: 'low',
-    status: 'in_progress',
-    requestDate: '2024-01-08T14:20:00Z',
-    scheduledDate: '2024-01-14T09:00:00Z',
-    messages: []
-  },
-  {
-    id: 5,
-    homeownerId: 5,
-    providerId: 1,
-    providerName: 'Elite Home Solutions',
-    homeownerName: 'Lisa Chen',
-    homeownerEmail: 'lisa.chen@email.com',
-    homeownerPhone: '(555) 654-3210',
-    serviceType: 'Painting',
-    description: 'Interior painting for living room and dining room walls.',
-    homeownerAddress: '654 Maple Drive, Halifax, NS B3H 5E5',
-    quotationAmount: 520,
-    orderDetails: 'Interior painting for living room and dining room, primer and two coats of paint, ceiling touch-ups.',
-    priority: 'medium',
-    status: 'completed',
-    requestDate: '2024-01-05T16:45:00Z',
-    scheduledDate: '2024-01-12T08:00:00Z',
-    messages: []
-  }
-];
 
-// Mock messages data for provider messaging
+// Mock messages data for provider messaging - Starting fresh
+export const mockMessages = [];
 export const mockMessages = [
   {
     id: 1,
