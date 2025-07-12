@@ -386,11 +386,11 @@ const ProviderOrders = () => {
                   </div>
                 </div>
                 
-                <div className="flex space-x-3 mt-6">
-                  <Button onClick={handleCreateOrder}>
+                <div className="flex flex-col sm:flex-row gap-2 sm:space-x-3 sm:gap-0 mt-6">
+                  <Button onClick={handleCreateOrder} className="w-full sm:w-auto">
                     Create Order
                   </Button>
-                  <Button variant="outline" onClick={() => setShowNewOrderForm(false)}>
+                  <Button variant="outline" onClick={() => setShowNewOrderForm(false)} className="w-full sm:w-auto">
                     Cancel
                   </Button>
                 </div>
