@@ -326,7 +326,7 @@ const HomeownerLanding = () => {
                   </div>
                   <Button 
                     size="lg" 
-                    onClick={() => navigate('/homeowners/browse')}
+                    onClick={handleQuotationRequest}
                     className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 min-h-[56px] sm:min-h-[auto]"
                   >
                     Find Services
