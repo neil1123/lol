@@ -112,13 +112,6 @@ const ProviderCalendar = () => {
     }
   };
 
-  // Mock appointments
-  const appointments = [
-    { date: 15, title: 'Home Cleaning - Sarah J.', time: '10:00 AM' },
-    { date: 18, title: 'Electrical Work - Mike W.', time: '2:00 PM' },
-    { date: 22, title: 'Plumbing - Emily D.', time: '9:00 AM' }
-  ];
-
   const hasAppointment = (day) => {
     return appointments.some(apt => apt.date === day);
   };
