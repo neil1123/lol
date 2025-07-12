@@ -31,7 +31,7 @@ const ProviderCalendar = () => {
   const [appointments, setAppointments] = useState([]);
 
   // Load appointments from localStorage on component mount
-  React.useEffect(() => {
+  useEffect(() => {
     const storedAppointments = localStorage.getItem('providerAppointments');
     if (storedAppointments) {
       setAppointments(JSON.parse(storedAppointments));
@@ -39,7 +39,7 @@ const ProviderCalendar = () => {
   }, []);
 
   // Save appointments to localStorage whenever appointments change
-  React.useEffect(() => {
+  useEffect(() => {
     if (appointments.length >= 0) {
       localStorage.setItem('providerAppointments', JSON.stringify(appointments));
     }
