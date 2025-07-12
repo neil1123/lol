@@ -32,19 +32,27 @@ const HomeownerAuth = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Mock authentication
-    setTimeout(() => {
+    // Get stored users from localStorage
+    const storedUsers = JSON.parse(localStorage.getItem('registeredHomeowners') || '[]');
+    const user = storedUsers.find(u => u.email === signInData.email && u.password === signInData.password);
+    
+    if (user) {
       localStorage.setItem('userType', 'homeowner');
       localStorage.setItem('user', JSON.stringify({
-        id: 1,
-        name: `${signInData.email.split('@')[0]}`,
-        email: signInData.email,
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
         type: 'homeowner'
       }));
       
       setIsLoading(false);
       navigate('/homeowners/dashboard');
-    }, 1000);
+    } else {
+      setIsLoading(false);
+      alert('Invalid credentials. Please check your email and password.');
+    }
   };
 
   const handleSignUp = async (e) => {
