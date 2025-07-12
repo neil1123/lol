@@ -45,59 +45,22 @@ const ProviderCustomers = () => {
   const sidebarItems = STANDARD_PROVIDER_SIDEBAR;
 
   useEffect(() => {
-    // Mock customer data
-    const mockCustomers = [
-      {
-        id: 1,
-        name: 'John Smith',
-        email: 'john.smith@email.com',
-        phone: '(555) 123-4567',
-        address: '123 Main St, Halifax, NS',
-        totalOrders: 5,
-        totalSpent: 850,
-        rating: 5,
-        lastOrder: '2024-01-10',
-        status: 'active'
-      },
-      {
-        id: 2,
-        name: 'Sarah Johnson',
-        email: 'sarah.johnson@email.com',
-        phone: '(555) 234-5678',
-        address: '456 Oak Ave, Halifax, NS',
-        totalOrders: 3,
-        totalSpent: 620,
-        rating: 4,
-        lastOrder: '2024-01-15',
-        status: 'active'
-      },
-      {
-        id: 3,
-        name: 'Mike Wilson',
-        email: 'mike.wilson@email.com',
-        phone: '(555) 345-6789',
-        address: '789 Pine St, Halifax, NS',
-        totalOrders: 8,
-        totalSpent: 1200,
-        rating: 5,
-        lastOrder: '2024-01-12',
-        status: 'active'
-      },
-      {
-        id: 4,
-        name: 'Emily Davis',
-        email: 'emily.davis@email.com',
-        phone: '(555) 456-7890',
-        address: '321 Elm St, Halifax, NS',
-        totalOrders: 2,
-        totalSpent: 450,
-        rating: 4,
-        lastOrder: '2024-01-08',
-        status: 'inactive'
-      }
-    ];
-    setCustomers(mockCustomers);
+    // Load customers from localStorage for persistence, start with empty for fresh platform
+    const storedCustomers = localStorage.getItem('providerCustomers');
+    if (storedCustomers) {
+      setCustomers(JSON.parse(storedCustomers));
+    } else {
+      // Start with empty array for fresh platform
+      setCustomers([]);
+    }
   }, []);
+
+  // Save customers to localStorage whenever customers change
+  useEffect(() => {
+    if (customers.length >= 0) {
+      localStorage.setItem('providerCustomers', JSON.stringify(customers));
+    }
+  }, [customers]);
 
   const filteredCustomers = customers.filter(customer =>
     customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
