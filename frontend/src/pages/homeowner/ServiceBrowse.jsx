@@ -55,7 +55,7 @@ const ServiceBrowse = () => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // Get all providers: both mock providers and registered providers
+  // Get all providers: ONLY registered providers (no mock data for production)
   const getAllProviders = () => {
     const registeredProviders = JSON.parse(localStorage.getItem('registeredProviders') || '[]');
     
@@ -80,8 +80,8 @@ const ServiceBrowse = () => {
         phone: provider.phone
       }));
     
-    // Combine mock providers with registered providers
-    return [...mockProviders, ...formattedRegisteredProviders];
+    // Return ONLY registered providers (no mock data)
+    return formattedRegisteredProviders;
   };
 
 
