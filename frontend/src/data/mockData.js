@@ -126,156 +126,44 @@ export const mockMessages = [];
 
 // Mock quotation requests - Starting fresh
 export const mockQuotationRequests = [];
-        content: 'Started the landscaping work today. The front yard design is coming along great!',
-        timestamp: '2024-01-14T10:00:00Z',
-        sender: 'provider',
-        read: true
-      },
-      {
-        id: 5,
-        content: 'The front yard looks amazing! Thank you for the excellent work.',
-        timestamp: '2024-01-14T17:30:00Z',
-        sender: 'homeowner',
-        read: false
-      }
-    ]
-  }
-];
 
-// Enhanced quotations with detailed workflow
-export const mockQuotationRequests = [
-  {
-    id: 3,
-    homeownerId: 1,
-    homeownerName: "John Smith",
-    homeownerEmail: "john.smith@example.com",
-    homeownerPhone: "+1 (555) 123-4567",
-    homeownerAddress: "123 Main St, Halifax, NS",
-    serviceType: "House Cleaning",
-    serviceCategory: "Cleaning & Exterior Maintenance",
-    description: "Deep cleaning for 3-bedroom house before family visit. Need kitchen, bathrooms, living areas cleaned thoroughly.",
-    preferredDate: "2024-12-20",
-    urgency: "medium",
-    budget: "200-300",
-    propertySize: "2000-3000 sq ft",
-    additionalRequirements: "Pet-friendly cleaning products preferred",
-    status: "pending_quotes", // pending_quotes, quotes_received, quote_accepted, cancelled
-    requestDate: "2024-12-12T10:00:00Z",
-    quotes: [
-      {
-        id: 1,
-        providerId: 1,
-        providerName: "CleanPro Services",
-        amount: 250,
-        estimatedDuration: "4-5 hours",
-        description: "Complete deep cleaning package including all requested areas. Using eco-friendly, pet-safe products.",
-        availability: "December 20th, 21st, or 22nd",
-        status: "sent",
-        sentDate: "2024-12-12T16:00:00Z"
-      }
-    ]
-  }
-];
+// Mock quotations - Starting fresh
+export const mockQuotations = [];
 
-export const mockQuotations = [
-  {
-    id: 1,
-    homeownerId: 1,
-    providerId: 1,
-    serviceType: "Electrician",
-    description: "Need to install new outlets in kitchen and fix flickering lights",
-    status: "pending",
-    requestDate: "2024-01-15",
-    quotationAmount: null,
-    quotationDetails: null,
-    providerResponse: null,
-    homeownerAddress: "123 Main St, Toronto, ON",
-    homeownerName: "John Smith",
-    providerName: "Elite Home Solutions"
-  },
-  {
-    id: 2,
-    homeownerId: 2,
-    providerId: 2,
-    serviceType: "Home Cleaning",
-    description: "Deep cleaning for 3-bedroom house, move-in cleaning",
-    status: "quoted",
-    requestDate: "2024-01-10",
-    quotationAmount: 280,
-    quotationDetails: "Complete deep cleaning service including all rooms, kitchen appliances, bathrooms, and windows. Estimated 4-5 hours with 2 cleaners.",
-    providerResponse: "We can schedule this for next week. Our team uses eco-friendly products and we're fully insured.",
-    homeownerAddress: "456 Oak Street, Toronto, ON",
-    homeownerName: "Sarah Johnson",
-    providerName: "CleanPro Services"
-  }
-];
-
+// Mock dashboard data - Fresh platform stats
 export const mockDashboardData = {
-  totalSales: 15420,
-  activeJobs: 12,
-  customerSatisfaction: 4.8,
+  totalSales: 0,
+  activeJobs: 0,
+  customerSatisfaction: 5.0,
   weeklyData: [
-    { day: 'Mon', orders: 8, revenue: 1200, thisWeek: 1200, lastMonth: 1100 },
-    { day: 'Tue', orders: 12, revenue: 1800, thisWeek: 1800, lastMonth: 1650 },
-    { day: 'Wed', orders: 15, revenue: 2200, thisWeek: 2200, lastMonth: 1900 },
-    { day: 'Thu', orders: 10, revenue: 1500, thisWeek: 1500, lastMonth: 1700 },
-    { day: 'Fri', orders: 18, revenue: 2800, thisWeek: 2800, lastMonth: 2400 },
-    { day: 'Sat', orders: 22, revenue: 3200, thisWeek: 3200, lastMonth: 2900 },
-    { day: 'Sun', orders: 16, revenue: 2420, thisWeek: 2420, lastMonth: 2200 }
+    { day: 'Mon', orders: 0, revenue: 0, thisWeek: 0, lastMonth: 0 },
+    { day: 'Tue', orders: 0, revenue: 0, thisWeek: 0, lastMonth: 0 },
+    { day: 'Wed', orders: 0, revenue: 0, thisWeek: 0, lastMonth: 0 },
+    { day: 'Thu', orders: 0, revenue: 0, thisWeek: 0, lastMonth: 0 },
+    { day: 'Fri', orders: 0, revenue: 0, thisWeek: 0, lastMonth: 0 },
+    { day: 'Sat', orders: 0, revenue: 0, thisWeek: 0, lastMonth: 0 },
+    { day: 'Sun', orders: 0, revenue: 0, thisWeek: 0, lastMonth: 0 }
   ],
   extendedWeeklyData: [
-    { day: 'Mon', thisWeek: 1200, lastMonth: 1100 },
-    { day: 'Mon-Mid', thisWeek: 1350, lastMonth: 1250 },
-    { day: 'Tue', thisWeek: 1800, lastMonth: 1650 },
-    { day: 'Tue-Mid', thisWeek: 1950, lastMonth: 1750 },
-    { day: 'Wed', thisWeek: 2200, lastMonth: 1900 },
-    { day: 'Wed-Mid', thisWeek: 1900, lastMonth: 1800 },
-    { day: 'Thu', thisWeek: 1500, lastMonth: 1700 },
-    { day: 'Thu-Mid', thisWeek: 1750, lastMonth: 1850 },
-    { day: 'Fri', thisWeek: 2800, lastMonth: 2400 },
-    { day: 'Fri-Mid', thisWeek: 3000, lastMonth: 2650 },
-    { day: 'Sat', thisWeek: 3200, lastMonth: 2900 },
-    { day: 'Sat-Mid', thisWeek: 2900, lastMonth: 2600 },
-    { day: 'Sun', thisWeek: 2420, lastMonth: 2200 }
+    { day: 'Mon', thisWeek: 0, lastMonth: 0 },
+    { day: 'Mon-Mid', thisWeek: 0, lastMonth: 0 },
+    { day: 'Tue', thisWeek: 0, lastMonth: 0 },
+    { day: 'Tue-Mid', thisWeek: 0, lastMonth: 0 },
+    { day: 'Wed', thisWeek: 0, lastMonth: 0 },
+    { day: 'Wed-Mid', thisWeek: 0, lastMonth: 0 },
+    { day: 'Thu', thisWeek: 0, lastMonth: 0 },
+    { day: 'Thu-Mid', thisWeek: 0, lastMonth: 0 },
+    { day: 'Fri', thisWeek: 0, lastMonth: 0 },
+    { day: 'Fri-Mid', thisWeek: 0, lastMonth: 0 },
+    { day: 'Sat', thisWeek: 0, lastMonth: 0 },
+    { day: 'Sat-Mid', thisWeek: 0, lastMonth: 0 },
+    { day: 'Sun', thisWeek: 0, lastMonth: 0 }
   ],
-  recentCustomers: [
-    { name: 'Sarah Johnson', service: 'Home Cleaning', amount: 150 },
-    { name: 'Mike Wilson', service: 'Electrical Work', amount: 320 },
-    { name: 'Emily Davis', service: 'Plumbing', amount: 180 },
-    { name: 'David Brown', service: 'Painting', amount: 450 },
-    { name: 'Lisa Chen', service: 'Landscaping', amount: 280 }
-  ]
+  recentCustomers: []
 };
 
-export const mockCalendarEvents = [
-  {
-    id: 1,
-    title: "Kitchen Electrical Work",
-    date: "2024-01-20",
-    time: "09:00",
-    customer: "John Smith",
-    service: "Electrician",
-    status: "confirmed"
-  },
-  {
-    id: 2,
-    title: "Deep House Cleaning",
-    date: "2024-01-21",
-    time: "10:00",
-    customer: "Sarah Johnson",
-    service: "Home Cleaning",
-    status: "confirmed"
-  },
-  {
-    id: 3,
-    title: "Landscaping Project",
-    date: "2024-01-22",
-    time: "08:00",
-    customer: "Mike Wilson",
-    service: "Landscaping",
-    status: "pending"
-  }
-];
+// Mock calendar events - Starting fresh
+export const mockCalendarEvents = [];
 
 // Helper functions
 export const getServicesByCategory = (categoryId) => {
