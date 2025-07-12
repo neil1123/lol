@@ -227,7 +227,7 @@ const ProviderCalendar = () => {
                   <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Calendar</h2>
                   <p className="text-gray-600">Manage your appointments and schedule</p>
                 </div>
-                <Button className="w-full sm:w-auto">
+                <Button className="w-full sm:w-auto" onClick={() => setShowAppointmentForm(true)}>
                   <Plus className="h-4 w-4 mr-2" />
                   New Appointment
                 </Button>
