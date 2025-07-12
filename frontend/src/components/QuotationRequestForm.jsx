@@ -6,7 +6,7 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
 
-const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName }) => {
+const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, providerId }) => {
   const [formData, setFormData] = useState({
     serviceType: serviceType || '',
     description: '',
