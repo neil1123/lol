@@ -353,7 +353,7 @@ const HomeownerLanding = () => {
                   key={service}
                   variant="outline"
                   size="sm"
-                  onClick={() => navigate('/homeowners/browse')}
+                  onClick={handleQuotationRequest}
                   className="bg-white hover:bg-gray-50 border-gray-200 text-gray-700 hover:text-blue-700 transition-all duration-300 rounded-full px-6 py-2"
                 >
                   {service}
@@ -365,10 +365,10 @@ const HomeownerLanding = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
               <Button 
                 size="lg"
-                onClick={() => navigate('/homeowners/browse')}
+                onClick={handleGetDeals}
                 className="bg-white text-blue-600 hover:bg-gray-50 border-2 border-blue-600 hover:border-blue-700 px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                Browse All Services
+                Get Deals
               </Button>
               <p className="text-gray-600 text-sm">
                 or{' '}
