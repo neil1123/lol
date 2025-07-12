@@ -583,18 +583,20 @@ const ProviderOrders = () => {
                           </p>
                         </div>
                         
-                        <div className="flex space-x-3">
-                          <Button onClick={() => handleUpdateOrderStatus(order.id, 'in_progress')}>
+                        <div className="flex flex-col sm:flex-row gap-2 sm:space-x-3 sm:gap-0">
+                          <Button onClick={() => handleUpdateOrderStatus(order.id, 'in_progress')} className="w-full sm:w-auto">
                             <Clock className="h-4 w-4 mr-2" />
-                            Start Work
+                            <span className="hidden sm:inline">Start Work</span>
+                            <span className="sm:hidden">Start</span>
                           </Button>
-                          <Button variant="outline" onClick={() => navigate('/homeservices/calendar')}>
+                          <Button variant="outline" onClick={() => navigate('/homeservices/calendar')} className="w-full sm:w-auto">
                             <Calendar className="h-4 w-4 mr-2" />
                             Schedule
                           </Button>
-                          <Button variant="outline" onClick={() => navigate('/homeservices/messages')}>
+                          <Button variant="outline" onClick={() => navigate('/homeservices/messages')} className="w-full sm:w-auto">
                             <MessageSquare className="h-4 w-4 mr-2" />
-                            Message Customer
+                            <span className="hidden sm:inline">Message Customer</span>
+                            <span className="sm:hidden">Message</span>
                           </Button>
                         </div>
                       </div>
