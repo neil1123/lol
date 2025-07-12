@@ -51,22 +51,14 @@ const ProviderProfile = () => {
   }
 
   const handleRequestQuote = () => {
-    const quoteRequest = {
-      providerId: provider.id,
-      providerName: provider.name,
-      homeownerId: 1,
-      homeownerName: "John Smith",
-      description: quoteDescription,
-      preferredDate,
-      contactMethod,
-      timestamp: new Date().toISOString(),
-      status: 'pending'
-    };
+    // Check if user is logged in
+    if (!isLoggedIn) {
+      navigate('/homeowners/auth');
+      return;
+    }
     
-    const existingRequests = JSON.parse(localStorage.getItem('quoteRequests') || '[]');
-    localStorage.setItem('quoteRequests', JSON.stringify([...existingRequests, quoteRequest]));
-    
-    navigate('/homeowners/quotations');
+    // If logged in, proceed to messages
+    navigate('/homeowners/dashboard?tab=messages');
   };
 
   const mockReviews = [
