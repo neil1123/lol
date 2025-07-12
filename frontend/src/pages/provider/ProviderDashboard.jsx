@@ -32,36 +32,8 @@ const ProviderDashboard = () => {
 
   const sidebarItems = STANDARD_PROVIDER_SIDEBAR;
 
-  const recentActivity = [
-    {
-      id: 1,
-      type: 'new_order',
-      message: 'New order request from Sarah Johnson',
-      time: '2 hours ago',
-      status: 'pending'
-    },
-    {
-      id: 2,
-      type: 'order_confirmed',
-      message: 'Order confirmed with Mike Wilson',
-      time: '4 hours ago',
-      status: 'confirmed'
-    },
-    {
-      id: 3,
-      type: 'review',
-      message: 'New 5-star review from Emily Davis',
-      time: '1 day ago',
-      status: 'new'
-    },
-    {
-      id: 4,
-      type: 'payment',
-      message: 'Payment received for Order #1234',
-      time: '2 days ago',
-      status: 'completed'
-    }
-  ];
+  // Empty states for fresh platform - no activities for new users
+  const recentActivity = [];
 
   return (
     <div className="min-h-screen bg-gray-50">
