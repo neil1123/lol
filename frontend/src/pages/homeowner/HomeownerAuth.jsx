@@ -59,21 +59,51 @@ const HomeownerAuth = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Mock registration
-    setTimeout(() => {
-      localStorage.setItem('userType', 'homeowner');
-      localStorage.setItem('user', JSON.stringify({
-        id: Date.now(),
-        name: `${signUpData.firstName} ${signUpData.lastName}`,
-        email: signUpData.email,
-        phone: signUpData.phone,
-        address: signUpData.address,
-        type: 'homeowner'
-      }));
-      
+    // Validate form
+    if (signUpData.password !== signUpData.confirmPassword) {
+      alert('Passwords do not match');
       setIsLoading(false);
-      navigate('/homeowners/dashboard');
-    }, 1000);
+      return;
+    }
+
+    // Check if user already exists
+    const storedUsers = JSON.parse(localStorage.getItem('registeredHomeowners') || '[]');
+    const existingUser = storedUsers.find(u => u.email === signUpData.email);
+    
+    if (existingUser) {
+      alert('User with this email already exists');
+      setIsLoading(false);
+      return;
+    }
+    
+    // Create new user
+    const newUser = {
+      id: Date.now() + Math.random(), // Generate unique ID
+      name: `${signUpData.firstName} ${signUpData.lastName}`,
+      email: signUpData.email,
+      phone: signUpData.phone,
+      address: signUpData.address,
+      password: signUpData.password,
+      registeredAt: new Date().toISOString()
+    };
+    
+    // Store user
+    storedUsers.push(newUser);
+    localStorage.setItem('registeredHomeowners', JSON.stringify(storedUsers));
+    
+    // Auto login after registration
+    localStorage.setItem('userType', 'homeowner');
+    localStorage.setItem('user', JSON.stringify({
+      id: newUser.id,
+      name: newUser.name,
+      email: newUser.email,
+      phone: newUser.phone,
+      address: newUser.address,
+      type: 'homeowner'
+    }));
+    
+    setIsLoading(false);
+    navigate('/homeowners/dashboard');
   };
 
   return (
