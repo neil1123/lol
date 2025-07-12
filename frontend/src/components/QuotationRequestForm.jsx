@@ -61,7 +61,7 @@ const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, prov
     const messageThread = {
       id: Date.now() + Math.random(),
       homeownerId: user.id,
-      providerId: null, // To be determined
+      providerId: providerId, // Now we have the actual provider ID
       homeownerName: user.name,
       providerName: providerName,
       orderType: formData.serviceType,
