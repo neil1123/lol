@@ -538,10 +538,11 @@ const ProviderOrders = () => {
                           </p>
                         </div>
                         
-                        <div className="flex space-x-3">
-                          <Button variant="outline" onClick={() => navigate('/homeservices/messages')}>
+                        <div className="flex flex-col sm:flex-row gap-2 sm:space-x-3 sm:gap-0">
+                          <Button variant="outline" onClick={() => navigate('/homeservices/messages')} className="w-full sm:w-auto">
                             <MessageSquare className="h-4 w-4 mr-2" />
-                            Follow Up
+                            <span className="hidden sm:inline">Follow Up</span>
+                            <span className="sm:hidden">Follow Up</span>
                           </Button>
                         </div>
                       </div>
