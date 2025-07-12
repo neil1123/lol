@@ -91,58 +91,8 @@ const ProviderProfile = () => {
       return;
     }
     
-    // Create a quotation request that will appear in provider dashboard
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const quotationRequest = {
-      id: Date.now() + Math.random(),
-      homeownerId: user.id,
-      homeownerName: user.name,
-      homeownerEmail: user.email,
-      homeownerPhone: user.phone || '',
-      homeownerAddress: user.address || '',
-      providerId: provider.id,
-      providerName: provider.name,
-      serviceType: provider.services[0] || 'General Service',
-      description: `Quotation request for ${provider.services.join(', ')} services`,
-      status: 'pending_quote',
-      requestDate: new Date().toISOString(),
-      priority: 'medium'
-    };
-    
-    // Store the request in localStorage for provider to see
-    const existingRequests = JSON.parse(localStorage.getItem('quotationRequests') || '[]');
-    existingRequests.push(quotationRequest);
-    localStorage.setItem('quotationRequests', JSON.stringify(existingRequests));
-    
-    // Also create a message thread
-    const messageThread = {
-      id: Date.now() + Math.random(),
-      homeownerId: user.id,
-      providerId: provider.id,
-      homeownerName: user.name,
-      providerName: provider.name,
-      orderType: quotationRequest.serviceType,
-      orderId: quotationRequest.id,
-      lastMessage: `New quotation request for ${quotationRequest.serviceType}`,
-      lastMessageTime: new Date().toISOString(),
-      messages: [
-        {
-          id: 1,
-          content: `Hi ${provider.name}! I'm interested in your ${quotationRequest.serviceType} services. Could you provide me with a quote?`,
-          timestamp: new Date().toISOString(),
-          sender: 'homeowner',
-          read: false
-        }
-      ]
-    };
-    
-    // Store message thread
-    const existingMessages = JSON.parse(localStorage.getItem('messageThreads') || '[]');
-    existingMessages.push(messageThread);
-    localStorage.setItem('messageThreads', JSON.stringify(existingMessages));
-    
-    // Navigate to messages
-    navigate('/homeowners/dashboard?tab=messages');
+    // Open the quotation form
+    setIsQuotationFormOpen(true);
   };
 
   const mockReviews = [
