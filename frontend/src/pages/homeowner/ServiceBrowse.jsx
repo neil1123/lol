@@ -43,7 +43,6 @@ const ServiceBrowse = () => {
     
     // Load all providers (mock + registered)
     const providers = getAllProviders();
-    console.log('Loading providers:', providers);
     setAllProviders(providers);
   }, [location]);
 
