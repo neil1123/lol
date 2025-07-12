@@ -92,17 +92,28 @@ const ProviderAuth = () => {
       return;
     }
     
-    // Create new user
+    // Create new user with complete provider profile
     const newUser = {
       id: Date.now() + Math.random(), // Generate unique ID
       businessName: signUpData.businessName,
       ownerName: `${signUpData.firstName} ${signUpData.lastName}`,
       email: signUpData.email,
       phone: signUpData.phone,
-      services: signUpData.services,
+      services: Array.isArray(signUpData.services) ? signUpData.services : [signUpData.services],
       license: signUpData.license,
       password: signUpData.password,
-      registeredAt: new Date().toISOString()
+      registeredAt: new Date().toISOString(),
+      // Additional profile data needed for homeowner search
+      description: `Professional ${Array.isArray(signUpData.services) ? signUpData.services.join(' and ') : signUpData.services} services by ${signUpData.businessName}`,
+      rating: 5.0, // New providers start with perfect rating
+      reviews: 0, // New providers start with 0 reviews  
+      completedJobs: 0, // New providers start with 0 jobs
+      location: "Halifax, NS", // Default location - can be made dynamic later
+      responseTime: "Usually responds within 1 hour",
+      yearEstablished: "2024",
+      specialties: ["Professional service", "Quality work", "Customer satisfaction"],
+      priceRange: "$50-$500", // Default range - can be customized later
+      isActive: true
     };
     
     // Store user
