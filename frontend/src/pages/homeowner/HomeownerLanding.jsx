@@ -104,13 +104,8 @@ const HomeownerLanding = () => {
   };
 
   const handleQuotationRequest = () => {
-    // Check if user is logged in before allowing quotation requests
-    const userType = localStorage.getItem('userType');
-    if (userType !== 'homeowner') {
-      navigate('/homeowners/auth');
-    } else {
-      navigate('/homeowners/browse');
-    }
+    // Allow users to browse services without login
+    navigate('/homeowners/browse');
   };
 
   const handleServiceCategoryClick = (service) => {
