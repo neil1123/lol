@@ -68,7 +68,17 @@ const ProviderMessaging = () => {
     checkMobileView();
     window.addEventListener('resize', checkMobileView);
     
-    setMessages(mockMessages);
+    // Load messages from localStorage for persistence, start with empty for fresh platform
+    const storedMessages = localStorage.getItem('messageThreads');
+    if (storedMessages) {
+      setMessages(JSON.parse(storedMessages));
+    } else {
+      // Start with empty array for fresh platform
+      setMessages([]);
+    }
+    
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
     
     return () => window.removeEventListener('resize', checkMobileView);
   }, []);
