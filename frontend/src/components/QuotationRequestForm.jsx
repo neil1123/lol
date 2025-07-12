@@ -37,7 +37,7 @@ const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, prov
       homeownerEmail: user.email,
       homeownerPhone: formData.phone || user.phone || '',
       homeownerAddress: formData.address || user.address || '',
-      providerId: null, // Will be set when provider is determined
+      providerId: providerId, // Now we have the actual provider ID
       providerName: providerName,
       serviceType: formData.serviceType,
       description: formData.description,
