@@ -104,6 +104,34 @@ const ProviderCustomers = () => {
     customer.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleAddCustomer = () => {
+    if (customerForm.name && customerForm.email) {
+      const newCustomer = {
+        id: customers.length + 1,
+        name: customerForm.name,
+        email: customerForm.email,
+        phone: customerForm.phone || 'N/A',
+        address: customerForm.address || 'N/A',
+        totalOrders: 0,
+        totalSpent: 0,
+        rating: 0,
+        lastOrder: null,
+        status: 'active',
+        notes: customerForm.notes
+      };
+      
+      setCustomers([...customers, newCustomer]);
+      setCustomerForm({
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+        notes: ''
+      });
+      setShowCustomerForm(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Header */}
