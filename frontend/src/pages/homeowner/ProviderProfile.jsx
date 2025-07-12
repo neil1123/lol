@@ -302,8 +302,8 @@ const ProviderProfile = () => {
             
             <div className="w-full lg:w-auto lg:max-w-xs flex flex-col space-y-2 sm:space-y-3 px-2 sm:px-0">
               <Button 
-                className="w-full bg-blue-600 hover:bg-blue-700 shadow-sm text-sm sm:text-base" 
-                onClick={() => setIsQuotationFormOpen(true)}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-sm text-sm sm:text-base" 
+                onClick={handleRequestQuote}
               >
                 🎯 Get Quotation
               </Button>
