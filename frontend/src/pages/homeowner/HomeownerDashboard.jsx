@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Home, 
@@ -38,6 +38,21 @@ const HomeownerDashboard = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [newMessage, setNewMessage] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if user is logged in
+    const userType = localStorage.getItem('userType');
+    setIsLoggedIn(userType === 'homeowner');
+  }, []);
+
+  const handleAuthenticatedAction = (action) => {
+    if (!isLoggedIn) {
+      navigate('/homeowners/auth');
+    } else {
+      action();
+    }
+  };
 
   // Get current user's orders (assuming user ID 1 for demo)
   const currentUserId = 1;
