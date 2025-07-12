@@ -196,6 +196,7 @@ const ProviderProfile = () => {
         onClose={() => setIsQuotationFormOpen(false)}
         serviceType={provider?.services?.[0] || ''}
         providerName={provider?.name || ''}
+        providerId={provider?.id}
       />
 
       {/* Chat Interface */}
