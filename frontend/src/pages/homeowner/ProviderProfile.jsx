@@ -413,7 +413,12 @@ const ProviderProfile = () => {
                     </div>
                     <p className="text-sm text-gray-600 mb-4 text-center">Complete premium service with eco-friendly products and post-cleaning maintenance.</p>
                     <button className="text-blue-600 text-sm hover:underline mb-4 block mx-auto">View details →</button>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700">Get Quotation</Button>
+                    <Button 
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                      onClick={handleRequestQuote}
+                    >
+                      Get Quotation
+                    </Button>
                   </div>
                 </div>
               </CardContent>
