@@ -267,8 +267,8 @@ ${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additi
                 /* User List for Mobile */
                 <div className="flex-1 p-4">
                   <div className="mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Messages</h2>
-                    <p className="text-gray-600">Connect with your customers</p>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2 text-left">Messages</h2>
+                    <p className="text-gray-600 text-left">Connect with your customers</p>
                   </div>
 
                   {/* Search */}
