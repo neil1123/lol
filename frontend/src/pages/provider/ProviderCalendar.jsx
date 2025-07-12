@@ -84,6 +84,34 @@ const ProviderCalendar = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
   };
 
+  const handleAddAppointment = () => {
+    if (appointmentForm.customerName && appointmentForm.date && appointmentForm.time && appointmentForm.serviceType) {
+      const newAppointment = {
+        id: appointments.length + 1,
+        date: new Date(appointmentForm.date).getDate(),
+        title: `${appointmentForm.serviceType} - ${appointmentForm.customerName}`,
+        time: appointmentForm.time,
+        customer: appointmentForm.customerName,
+        phone: appointmentForm.phoneNumber,
+        service: appointmentForm.serviceType,
+        address: appointmentForm.address,
+        notes: appointmentForm.notes
+      };
+      
+      setAppointments([...appointments, newAppointment]);
+      setAppointmentForm({
+        customerName: '',
+        phoneNumber: '',
+        serviceType: '',
+        date: '',
+        time: '',
+        address: '',
+        notes: ''
+      });
+      setShowAppointmentForm(false);
+    }
+  };
+
   // Mock appointments
   const appointments = [
     { date: 15, title: 'Home Cleaning - Sarah J.', time: '10:00 AM' },
