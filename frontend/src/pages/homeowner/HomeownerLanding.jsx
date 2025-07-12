@@ -118,6 +118,11 @@ const HomeownerLanding = () => {
     navigate(`/homeowners/browse?service=${service}`);
   };
 
+  const handleGetDeals = () => {
+    // Allow users to see dashboard without signing up
+    navigate('/homeowners/dashboard');
+  };
+
   const handleServiceClick = (service) => {
     navigate(`/homeowners/browse?service=${service.name}`);
   };
