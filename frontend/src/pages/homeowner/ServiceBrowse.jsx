@@ -161,20 +161,49 @@ const ServiceBrowse = () => {
                 <Button 
                   variant="ghost" 
                   onClick={() => {
-                    navigate('/homeowners/quotations');
+                    navigate('/homeowners/dashboard');
                     setIsMobileMenuOpen(false);
                   }}
                   className="justify-start"
                 >
-                  My Quotations
+                  Dashboard
                 </Button>
-                <Button 
-                  variant="outline" 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="justify-start"
-                >
-                  Sign In
-                </Button>
+                {isLoggedIn ? (
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      localStorage.removeItem('userType');
+                      localStorage.removeItem('user');
+                      setIsLoggedIn(false);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="justify-start"
+                  >
+                    Sign Out
+                  </Button>
+                ) : (
+                  <>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => {
+                        navigate('/homeowners/auth');
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="justify-start"
+                    >
+                      Sign In
+                    </Button>
+                    <Button 
+                      onClick={() => {
+                        navigate('/homeowners/auth');
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="justify-start"
+                    >
+                      Sign Up
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           )}
