@@ -116,10 +116,30 @@ const ServiceBrowse = () => {
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-4">
-              <Button variant="ghost" onClick={() => navigate('/homeowners/quotations')}>
-                My Quotations
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate('/homeowners/dashboard')}
+              >
+                Dashboard
               </Button>
-              <Button variant="outline">Sign In</Button>
+              {isLoggedIn ? (
+                <Button variant="outline" onClick={() => {
+                  localStorage.removeItem('userType');
+                  localStorage.removeItem('user');
+                  setIsLoggedIn(false);
+                }}>
+                  Sign Out
+                </Button>
+              ) : (
+                <>
+                  <Button variant="outline" onClick={() => navigate('/homeowners/auth')}>
+                    Sign In
+                  </Button>
+                  <Button onClick={() => navigate('/homeowners/auth')}>
+                    Sign Up
+                  </Button>
+                </>
+              )}
             </div>
             
             {/* Mobile Menu Button */}
