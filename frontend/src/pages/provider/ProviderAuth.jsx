@@ -70,8 +70,6 @@ const ProviderAuth = () => {
     setIsLoading(true);
     
     try {
-      console.log('Sign up attempt:', signUpData);
-      
       // Validate form
       if (signUpData.password !== signUpData.confirmPassword) {
         alert('Passwords do not match');
@@ -125,13 +123,9 @@ const ProviderAuth = () => {
         isActive: true
       };
       
-      console.log('Creating new user:', newUser);
-      
       // Store user
       storedUsers.push(newUser);
       localStorage.setItem('registeredProviders', JSON.stringify(storedUsers));
-      
-      console.log('User stored, auto-logging in');
       
       // Auto login after registration
       localStorage.setItem('userType', 'provider');
@@ -146,13 +140,11 @@ const ProviderAuth = () => {
       }));
       
       setIsLoading(false);
-      console.log('Navigating to dashboard');
       
       // Use window.location for more reliable navigation
       window.location.href = '/homeservices/dashboard';
       
     } catch (error) {
-      console.error('Registration error:', error);
       alert('Registration failed. Please try again.');
       setIsLoading(false);
     }
