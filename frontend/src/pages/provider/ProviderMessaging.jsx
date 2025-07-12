@@ -285,44 +285,44 @@ ${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additi
                   </div>
 
                   {/* User List */}
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {filteredMessages.map((conversation) => (
                       <Card 
                         key={conversation.id} 
                         className="cursor-pointer hover:bg-gray-50 transition-colors"
                         onClick={() => handleConversationSelect(conversation)}
                       >
-                        <CardContent className="p-4">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <Avatar className="h-12 w-12">
-                                <AvatarFallback className="bg-blue-100 text-blue-600">
-                                  {conversation.homeownerName.charAt(0).toUpperCase()}
-                                </AvatarFallback>
-                              </Avatar>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center justify-between">
-                                  <h3 className="font-semibold text-gray-900 truncate">
-                                    {conversation.homeownerName}
-                                  </h3>
-                                  <span className="text-xs text-gray-500">
-                                    {new Date(conversation.lastMessageTime).toLocaleTimeString([], { 
-                                      hour: '2-digit', 
-                                      minute: '2-digit' 
-                                    })}
-                                  </span>
-                                </div>
-                                <p className="text-sm text-gray-600 truncate">
-                                  {conversation.orderType}
-                                </p>
-                                <p className="text-xs text-gray-500 truncate">
-                                  {conversation.lastMessage || 'No messages yet'}
-                                </p>
+                        <CardContent className="p-3">
+                          <div className="flex items-center space-x-3">
+                            <Avatar className="h-10 w-10 flex-shrink-0">
+                              <AvatarFallback className="bg-blue-100 text-blue-600">
+                                {conversation.homeownerName.charAt(0).toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center justify-between mb-1">
+                                <h3 className="font-semibold text-gray-900 text-sm truncate">
+                                  {conversation.homeownerName}
+                                </h3>
+                                <span className="text-xs text-gray-500 flex-shrink-0">
+                                  {new Date(conversation.lastMessageTime).toLocaleTimeString([], { 
+                                    hour: '2-digit', 
+                                    minute: '2-digit' 
+                                  })}
+                                </span>
                               </div>
+                              <p className="text-xs text-gray-600 truncate mb-1">
+                                {conversation.orderType}
+                              </p>
+                              <p className="text-xs text-gray-500 truncate">
+                                {conversation.lastMessage 
+                                  ? conversation.lastMessage.split(' ').slice(0, 6).join(' ') + (conversation.lastMessage.split(' ').length > 6 ? '...' : '')
+                                  : 'No messages yet'}
+                              </p>
                             </div>
-                            <div className="flex items-center space-x-2">
+                            <div className="flex items-center space-x-2 flex-shrink-0">
                               {conversation.unreadCount > 0 && (
-                                <Badge variant="default" className="bg-blue-600">
+                                <Badge variant="default" className="bg-blue-600 text-xs">
                                   {conversation.unreadCount}
                                 </Badge>
                               )}
