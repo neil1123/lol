@@ -113,9 +113,9 @@ const HomeownerLanding = () => {
     }
   };
 
-  const handleGetDeals = () => {
-    // Allow users to see dashboard without signing up
-    navigate('/homeowners/dashboard');
+  const handleServiceCategoryClick = (service) => {
+    // Allow users to browse services without login
+    navigate(`/homeowners/browse?service=${service}`);
   };
 
   const handleServiceClick = (service) => {
