@@ -29,6 +29,14 @@ const ProviderCustomers = () => {
   const [customers, setCustomers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showCustomerForm, setShowCustomerForm] = useState(false);
+  const [customerForm, setCustomerForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    notes: ''
+  });
 
   const handleLogout = () => {
     handleStandardLogout(navigate);
