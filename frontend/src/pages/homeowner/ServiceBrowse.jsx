@@ -27,7 +27,7 @@ const ServiceBrowse = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Get query params
+  // Get query params and load providers
   useEffect(() => {
     // Check if user is logged in
     const userType = localStorage.getItem('userType');
@@ -43,16 +43,6 @@ const ServiceBrowse = () => {
     
     // Load all providers (mock + registered)
     setAllProviders(getAllProviders());
-
-  // Refresh providers when localStorage changes (new provider registers)
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setAllProviders(getAllProviders());
-    };
-    
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
   }, [location]);
 
   // Refresh providers when localStorage changes (new provider registers)
