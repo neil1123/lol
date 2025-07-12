@@ -104,6 +104,43 @@
 
 user_problem_statement: "Fix overlapping filters issue on ServiceBrowse page and enhance landing page to allow browsing services/provider profiles without login, requiring login only for booking actions."
 
+frontend:
+  - task: "Fix overlapping filters dropdown in ServiceBrowse page"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/pages/homeowner/ServiceBrowse.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Starting work on fixing overlapping filter dropdown. Need to improve SelectContent styling with proper z-index, background, and positioning."
+
+  - task: "Update landing page to allow service browsing without login"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/pages/homeowner/HomeownerLanding.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Need to modify 'Find Services' button to allow browsing without login, only require login for actual booking actions."
+
+  - task: "Update ServiceBrowse header navigation for authentication-aware flow"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/pages/homeowner/ServiceBrowse.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Need to update header navigation to properly implement authentication-aware browsing flow."
+
   - task: "Fix compilation error with missing Notifications icon"
     implemented: true
     working: true
