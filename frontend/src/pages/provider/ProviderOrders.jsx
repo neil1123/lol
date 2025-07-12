@@ -95,7 +95,7 @@ const ProviderOrders = () => {
       quotationAmount: parseFloat(newOrder.quotationAmount),
       orderDetails: newOrder.orderDetails,
       priority: newOrder.priority,
-      status: 'pending_quotation',
+      status: 'confirmed', // Manual orders are confirmed directly
       requestDate: new Date().toISOString(),
       scheduledDate: newOrder.scheduledDate || null,
       messages: [],
