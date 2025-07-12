@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/ca
 import { Badge } from '../../components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { Checkbox } from '../../components/ui/checkbox';
-import { serviceCategories, mockProviders } from '../../data/mockData';
+import { serviceCategories } from '../../data/mockData';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const ServiceBrowse = () => {
