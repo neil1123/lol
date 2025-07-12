@@ -684,14 +684,16 @@ const ProviderOrders = () => {
                           </p>
                         </div>
                         
-                        <div className="flex space-x-3">
-                          <Button variant="outline">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:space-x-3 sm:gap-0">
+                          <Button variant="outline" className="w-full sm:w-auto">
                             <Star className="h-4 w-4 mr-2" />
-                            Request Review
+                            <span className="hidden sm:inline">Request Review</span>
+                            <span className="sm:hidden">Review</span>
                           </Button>
-                          <Button variant="outline" onClick={() => navigate('/homeservices/messages')}>
+                          <Button variant="outline" onClick={() => navigate('/homeservices/messages')} className="w-full sm:w-auto">
                             <MessageSquare className="h-4 w-4 mr-2" />
-                            Message Customer
+                            <span className="hidden sm:inline">Message Customer</span>
+                            <span className="sm:hidden">Message</span>
                           </Button>
                         </div>
                       </div>
