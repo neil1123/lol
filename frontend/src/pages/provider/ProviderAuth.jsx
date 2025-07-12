@@ -75,84 +75,93 @@ const ProviderAuth = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    console.log('Sign up attempt:', signUpData);
-    
-    // Validate form
-    if (signUpData.password !== signUpData.confirmPassword) {
-      alert('Passwords do not match');
-      setIsLoading(false);
-      return;
-    }
+    try {
+      console.log('Sign up attempt:', signUpData);
+      
+      // Validate form
+      if (signUpData.password !== signUpData.confirmPassword) {
+        alert('Passwords do not match');
+        setIsLoading(false);
+        return;
+      }
 
-    if (!signUpData.firstName || !signUpData.lastName || !signUpData.email || !signUpData.businessName) {
-      alert('Please fill in all required fields');
-      setIsLoading(false);
-      return;
-    }
+      if (!signUpData.firstName || !signUpData.lastName || !signUpData.email || !signUpData.businessName) {
+        alert('Please fill in all required fields');
+        setIsLoading(false);
+        return;
+      }
 
-    if (signUpData.services.length === 0) {
-      alert('Please select at least one service');
-      setIsLoading(false);
-      return;
-    }
+      if (signUpData.services.length === 0) {
+        alert('Please select at least one service');
+        setIsLoading(false);
+        return;
+      }
 
-    // Check if user already exists
-    const storedUsers = JSON.parse(localStorage.getItem('registeredProviders') || '[]');
-    const existingUser = storedUsers.find(u => u.email === signUpData.email);
-    
-    if (existingUser) {
-      alert('User with this email already exists');
+      // Check if user already exists
+      const storedUsers = JSON.parse(localStorage.getItem('registeredProviders') || '[]');
+      const existingUser = storedUsers.find(u => u.email === signUpData.email);
+      
+      if (existingUser) {
+        alert('User with this email already exists');
+        setIsLoading(false);
+        return;
+      }
+      
+      // Create new user with complete provider profile
+      const newUser = {
+        id: Date.now() + Math.random(), // Generate unique ID
+        businessName: signUpData.businessName,
+        ownerName: `${signUpData.firstName} ${signUpData.lastName}`,
+        email: signUpData.email,
+        phone: signUpData.phone,
+        services: Array.isArray(signUpData.services) ? signUpData.services : [signUpData.services],
+        license: signUpData.license,
+        password: signUpData.password,
+        registeredAt: new Date().toISOString(),
+        // Additional profile data needed for homeowner search
+        description: `Professional ${Array.isArray(signUpData.services) ? signUpData.services.join(' and ') : signUpData.services} services by ${signUpData.businessName}`,
+        rating: 5.0, // New providers start with perfect rating
+        reviews: 0, // New providers start with 0 reviews  
+        completedJobs: 0, // New providers start with 0 jobs
+        location: "Halifax, NS", // Default location - can be made dynamic later
+        responseTime: "Usually responds within 1 hour",
+        yearEstablished: "2024",
+        specialties: ["Professional service", "Quality work", "Customer satisfaction"],
+        priceRange: "$50-$500", // Default range - can be customized later
+        isActive: true
+      };
+      
+      console.log('Creating new user:', newUser);
+      
+      // Store user
+      storedUsers.push(newUser);
+      localStorage.setItem('registeredProviders', JSON.stringify(storedUsers));
+      
+      console.log('User stored, auto-logging in');
+      
+      // Auto login after registration
+      localStorage.setItem('userType', 'provider');
+      localStorage.setItem('user', JSON.stringify({
+        id: newUser.id,
+        businessName: newUser.businessName,
+        ownerName: newUser.ownerName,
+        email: newUser.email,
+        phone: newUser.phone,
+        services: newUser.services,
+        type: 'provider'
+      }));
+      
       setIsLoading(false);
-      return;
+      console.log('Navigating to dashboard');
+      
+      // Use window.location for more reliable navigation
+      window.location.href = '/homeservices/dashboard';
+      
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Registration failed. Please try again.');
+      setIsLoading(false);
     }
-    
-    // Create new user with complete provider profile
-    const newUser = {
-      id: Date.now() + Math.random(), // Generate unique ID
-      businessName: signUpData.businessName,
-      ownerName: `${signUpData.firstName} ${signUpData.lastName}`,
-      email: signUpData.email,
-      phone: signUpData.phone,
-      services: Array.isArray(signUpData.services) ? signUpData.services : [signUpData.services],
-      license: signUpData.license,
-      password: signUpData.password,
-      registeredAt: new Date().toISOString(),
-      // Additional profile data needed for homeowner search
-      description: `Professional ${Array.isArray(signUpData.services) ? signUpData.services.join(' and ') : signUpData.services} services by ${signUpData.businessName}`,
-      rating: 5.0, // New providers start with perfect rating
-      reviews: 0, // New providers start with 0 reviews  
-      completedJobs: 0, // New providers start with 0 jobs
-      location: "Halifax, NS", // Default location - can be made dynamic later
-      responseTime: "Usually responds within 1 hour",
-      yearEstablished: "2024",
-      specialties: ["Professional service", "Quality work", "Customer satisfaction"],
-      priceRange: "$50-$500", // Default range - can be customized later
-      isActive: true
-    };
-    
-    console.log('Creating new user:', newUser);
-    
-    // Store user
-    storedUsers.push(newUser);
-    localStorage.setItem('registeredProviders', JSON.stringify(storedUsers));
-    
-    console.log('User stored, auto-logging in');
-    
-    // Auto login after registration
-    localStorage.setItem('userType', 'provider');
-    localStorage.setItem('user', JSON.stringify({
-      id: newUser.id,
-      businessName: newUser.businessName,
-      ownerName: newUser.ownerName,
-      email: newUser.email,
-      phone: newUser.phone,
-      services: newUser.services,
-      type: 'provider'
-    }));
-    
-    setIsLoading(false);
-    console.log('Navigating to dashboard');
-    navigate('/homeservices/dashboard');
   };
 
   const handleServiceToggle = (serviceName) => {
