@@ -121,7 +121,7 @@ const ProviderAuth = () => {
       const newUser = {
         id: Date.now() + Math.random(), // Generate unique ID
         businessName: signUpData.businessName,
-        ownerName: `${signUpData.firstName} ${signUpData.lastName}`,
+        ownerName: signUpData.ownerName,
         email: signUpData.email,
         phone: signUpData.phone,
         services: Array.isArray(signUpData.services) ? signUpData.services : [signUpData.services],
