@@ -42,17 +42,19 @@ const ServiceBrowse = () => {
     if (serviceParam) setSelectedServices([serviceParam]);
     
     // Load all providers (mock + registered)
-    setAllProviders(getAllProviders());
+    const providers = getAllProviders();
+    console.log('Loading providers:', providers);
+    setAllProviders(providers);
   }, [location]);
 
-  // Refresh providers when localStorage changes (new provider registers)
+  // Refresh providers periodically to catch new registrations
   useEffect(() => {
-    const handleStorageChange = () => {
-      setAllProviders(getAllProviders());
-    };
+    const interval = setInterval(() => {
+      const providers = getAllProviders();
+      setAllProviders(providers);
+    }, 2000); // Check every 2 seconds for new providers
     
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    return () => clearInterval(interval);
   }, []);
 
   // Get all providers: ONLY registered providers (no mock data for production)
