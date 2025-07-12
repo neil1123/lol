@@ -141,6 +141,30 @@ frontend:
         agent: "main"
         comment: "Successfully updated header navigation to be authentication-aware. Added proper login state checking and dynamic navigation (Dashboard, Sign In/Sign Out buttons)."
 
+  - task: "Fix logout button visibility when user is not logged in"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/homeowner/HomeownerDashboard.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Successfully fixed logout button visibility. Added conditional rendering {isLoggedIn && ...} around the logout button in dashboard sidebar. Logout button now only shows when user is actually logged in."
+
+  - task: "Fix dashboard scroll position when accessing via Get Deals"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/homeowner/HomeownerDashboard.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added window.scrollTo(0, 0) in useEffect to ensure dashboard always starts at the top when component mounts. This fixes the issue of dashboard starting from the bottom."
+
   - task: "Fix service filtering logic for URL parameters"
     implemented: true
     working: true
