@@ -423,7 +423,7 @@ const ProviderCustomers = () => {
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                   Customer Name *
                 </label>
                 <Input
@@ -435,7 +435,7 @@ const ProviderCustomers = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                   Email Address *
                 </label>
                 <Input
@@ -448,7 +448,7 @@ const ProviderCustomers = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                   Phone Number
                 </label>
                 <Input
@@ -460,7 +460,7 @@ const ProviderCustomers = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                   Address
                 </label>
                 <Input
@@ -472,7 +472,7 @@ const ProviderCustomers = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                   Notes
                 </label>
                 <Textarea
