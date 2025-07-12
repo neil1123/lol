@@ -513,7 +513,11 @@ const ProviderOrders = () => {
                             <span className="hidden sm:inline">Send Quotation</span>
                             <span className="sm:hidden">Quote</span>
                           </Button>
-                          <Button variant="outline" onClick={() => navigate('/homeservices/messages')} className="w-full sm:w-auto">
+                          <Button variant="outline" 
+                            onClick={() => handleMessageCustomer(order)} 
+                            className="w-full sm:w-auto"
+                            disabled={order.status === 'pending_quotation'}
+                          >
                             <MessageSquare className="h-4 w-4 mr-2" />
                             <span className="hidden sm:inline">Message Customer</span>
                             <span className="sm:hidden">Message</span>
