@@ -638,14 +638,16 @@ const ProviderOrders = () => {
                           </p>
                         </div>
                         
-                        <div className="flex space-x-3">
-                          <Button onClick={() => handleUpdateOrderStatus(order.id, 'completed')}>
+                        <div className="flex flex-col sm:flex-row gap-2 sm:space-x-3 sm:gap-0">
+                          <Button onClick={() => handleUpdateOrderStatus(order.id, 'completed')} className="w-full sm:w-auto">
                             <CheckCircle className="h-4 w-4 mr-2" />
-                            Mark Complete
+                            <span className="hidden sm:inline">Mark Complete</span>
+                            <span className="sm:hidden">Complete</span>
                           </Button>
-                          <Button variant="outline" onClick={() => navigate('/homeservices/messages')}>
+                          <Button variant="outline" onClick={() => navigate('/homeservices/messages')} className="w-full sm:w-auto">
                             <MessageSquare className="h-4 w-4 mr-2" />
-                            Update Customer
+                            <span className="hidden sm:inline">Update Customer</span>
+                            <span className="sm:hidden">Update</span>
                           </Button>
                         </div>
                       </div>
