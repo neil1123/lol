@@ -27,6 +27,21 @@ const ProviderCalendar = () => {
   const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showAppointmentForm, setShowAppointmentForm] = useState(false);
+  const [appointments, setAppointments] = useState([
+    { id: 1, date: 15, title: 'Home Cleaning - Sarah J.', time: '10:00 AM', customer: 'Sarah Johnson', phone: '(555) 123-4567', service: 'Home Cleaning' },
+    { id: 2, date: 18, title: 'Electrical Work - Mike W.', time: '2:00 PM', customer: 'Mike Wilson', phone: '(555) 234-5678', service: 'Electrical Work' },
+    { id: 3, date: 22, title: 'Plumbing - Emily D.', time: '9:00 AM', customer: 'Emily Davis', phone: '(555) 345-6789', service: 'Plumbing' }
+  ]);
+  const [appointmentForm, setAppointmentForm] = useState({
+    customerName: '',
+    phoneNumber: '',
+    serviceType: '',
+    date: '',
+    time: '',
+    address: '',
+    notes: ''
+  });
 
   const handleLogout = () => {
     handleStandardLogout(navigate);
