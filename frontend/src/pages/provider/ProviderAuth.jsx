@@ -442,7 +442,18 @@ const ProviderAuth = () => {
                   <Button 
                     type="submit" 
                     className="w-full"
-                    disabled={isLoading || signUpData.password !== signUpData.confirmPassword || signUpData.services.length === 0}
+                    disabled={
+                      isLoading || 
+                      !signUpData.businessName || 
+                      !signUpData.ownerName || 
+                      !signUpData.email || 
+                      !signUpData.phone || 
+                      !signUpData.address || 
+                      !signUpData.password || 
+                      !signUpData.confirmPassword ||
+                      signUpData.password !== signUpData.confirmPassword || 
+                      signUpData.services.length === 0
+                    }
                   >
                     {isLoading ? 'Creating Account...' : 'Start Your Business'}
                   </Button>
