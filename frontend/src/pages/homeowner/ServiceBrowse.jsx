@@ -34,13 +34,31 @@ const ServiceBrowse = () => {
 
   // Get query params
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const searchParam = params.get('search');
-    const serviceParam = params.get('service');
+    // Check if user is logged in
+    const userType = localStorage.getItem('userType');
+    setIsLoggedIn(userType === 'homeowner');
+    
+    // Get URL parameters
+    const searchParams = new URLSearchParams(location.search);
+    const searchParam = searchParams.get('search');
+    const serviceParam = searchParams.get('service');
     
     if (searchParam) setSearchTerm(searchParam);
     if (serviceParam) setSelectedServices([serviceParam]);
+    
+    // Load all providers (mock + registered)
+    setAllProviders(getAllProviders());
   }, [location]);
+
+  // Refresh providers when localStorage changes (new provider registers)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setAllProviders(getAllProviders());
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   // Get all providers: both mock providers and registered providers
   const getAllProviders = () => {
