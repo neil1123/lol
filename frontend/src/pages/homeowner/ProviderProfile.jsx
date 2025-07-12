@@ -22,8 +22,15 @@ const ProviderProfile = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isQuotationFormOpen, setIsQuotationFormOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const provider = mockProviders.find(p => p.id === parseInt(id));
+
+  // Check login status
+  useEffect(() => {
+    const userType = localStorage.getItem('userType');
+    setIsLoggedIn(userType === 'homeowner');
+  }, []);
 
   // Scroll to top when component mounts
   useEffect(() => {
