@@ -284,7 +284,7 @@ const ProviderDashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <Card 
                 className="hover:shadow-lg transition-shadow cursor-pointer"
-                onClick={() => navigate('/homeservices/orders')}
+                onClick={() => window.location.href = '/homeservices/orders'}
               >
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
@@ -301,7 +301,7 @@ const ProviderDashboard = () => {
 
               <Card 
                 className="hover:shadow-lg transition-shadow cursor-pointer"
-                onClick={() => navigate('/homeservices/messages')}
+                onClick={() => window.location.href = '/homeservices/messages'}
               >
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
@@ -318,7 +318,7 @@ const ProviderDashboard = () => {
 
               <Card 
                 className="hover:shadow-lg transition-shadow cursor-pointer"
-                onClick={() => navigate('/homeservices/customers')}
+                onClick={() => window.location.href = '/homeservices/customers'}
               >
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
