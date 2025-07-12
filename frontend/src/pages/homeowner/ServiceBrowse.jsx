@@ -17,6 +17,7 @@ const ServiceBrowse = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [allProviders, setAllProviders] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
 
