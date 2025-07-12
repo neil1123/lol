@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Transform the service provider workflow to be order-centric instead of quotation-centric. Update the dashboard sidebar to replace 'Quotations' with 'Orders' where quotation is part of the order flow. Add a messaging system for providers to communicate with homeowners. Add enhanced performance graphs to the weekly performance chart showing both orders and revenue. Allow businesses to create and manage orders directly instead of just quotations."
+user_problem_statement: "Fix overlapping filters issue on ServiceBrowse page and enhance landing page to allow browsing services/provider profiles without login, requiring login only for booking actions."
 
   - task: "Fix compilation error with missing Notifications icon"
     implemented: true
