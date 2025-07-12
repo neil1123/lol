@@ -627,7 +627,7 @@ const ProviderOrders = () => {
                             <Calendar className="h-4 w-4 mr-2" />
                             Schedule
                           </Button>
-                          <Button variant="outline" onClick={() => navigate('/homeservices/messages')} className="w-full sm:w-auto">
+                          <Button variant="outline" onClick={() => handleMessageCustomer(order)} className="w-full sm:w-auto">
                             <MessageSquare className="h-4 w-4 mr-2" />
                             <span className="hidden sm:inline">Message Customer</span>
                             <span className="sm:hidden">Message</span>
