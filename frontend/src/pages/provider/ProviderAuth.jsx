@@ -37,15 +37,11 @@ const ProviderAuth = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    console.log('Login attempt:', signInData);
-    
     // Get stored users from localStorage
     const storedUsers = JSON.parse(localStorage.getItem('registeredProviders') || '[]');
     const user = storedUsers.find(u => u.email === signInData.email && u.password === signInData.password);
     
     if (user) {
-      console.log('Login successful - setting user data');
-      
       // Set user authentication data
       localStorage.setItem('userType', 'provider');
       localStorage.setItem('user', JSON.stringify({
@@ -58,14 +54,12 @@ const ProviderAuth = () => {
         type: 'provider'
       }));
       
-      console.log('User data set, navigating to dashboard');
       setIsLoading(false);
       
       // Navigate to dashboard
       window.location.href = '/homeservices/dashboard';
       
     } else {
-      console.log('Login failed: Invalid credentials');
       setIsLoading(false);
       alert('Invalid credentials. Please check your email and password.');
     }
