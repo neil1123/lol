@@ -75,9 +75,23 @@ const ProviderAuth = () => {
     e.preventDefault();
     setIsLoading(true);
     
+    console.log('Sign up attempt:', signUpData);
+    
     // Validate form
     if (signUpData.password !== signUpData.confirmPassword) {
       alert('Passwords do not match');
+      setIsLoading(false);
+      return;
+    }
+
+    if (!signUpData.firstName || !signUpData.lastName || !signUpData.email || !signUpData.businessName) {
+      alert('Please fill in all required fields');
+      setIsLoading(false);
+      return;
+    }
+
+    if (signUpData.services.length === 0) {
+      alert('Please select at least one service');
       setIsLoading(false);
       return;
     }
@@ -116,9 +130,13 @@ const ProviderAuth = () => {
       isActive: true
     };
     
+    console.log('Creating new user:', newUser);
+    
     // Store user
     storedUsers.push(newUser);
     localStorage.setItem('registeredProviders', JSON.stringify(storedUsers));
+    
+    console.log('User stored, auto-logging in');
     
     // Auto login after registration
     localStorage.setItem('userType', 'provider');
@@ -133,6 +151,7 @@ const ProviderAuth = () => {
     }));
     
     setIsLoading(false);
+    console.log('Navigating to dashboard');
     navigate('/homeservices/dashboard');
   };
 
