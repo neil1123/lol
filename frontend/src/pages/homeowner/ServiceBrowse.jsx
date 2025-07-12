@@ -89,7 +89,6 @@ const ServiceBrowse = () => {
     return [...mockProviders, ...formattedRegisteredProviders];
   };
 
-  const allProviders = getAllProviders();
 
   const filteredProviders = allProviders.filter(provider => {
     const matchesSearch = !searchTerm || 
