@@ -1126,59 +1126,204 @@ const HomeownerDashboard = () => {
           {/* Settings Section */}
           {activeTab === 'settings' && (
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Settings</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Account Settings</h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                {/* Personal Information */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>Account Information</CardTitle>
+                    <CardTitle>Personal Information</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium mb-2">Full Name</label>
-                      <Input defaultValue="John Smith" />
+                      <label className="block text-sm font-medium mb-2">Full Name *</label>
+                      <Input defaultValue="John Smith" placeholder="Enter your full name" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Email</label>
-                      <Input defaultValue="john.smith@example.com" />
+                      <label className="block text-sm font-medium mb-2">Email Address *</label>
+                      <Input defaultValue="john.smith@example.com" type="email" placeholder="your.email@example.com" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Phone</label>
-                      <Input defaultValue="+1 (555) 123-4567" />
+                      <label className="block text-sm font-medium mb-2">Phone Number *</label>
+                      <Input defaultValue="+1 (555) 123-4567" placeholder="+1 (555) 123-4567" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Address</label>
-                      <Input defaultValue="123 Main St, City, State 12345" />
+                      <label className="block text-sm font-medium mb-2">Date of Birth</label>
+                      <Input type="date" />
                     </div>
-                    <Button className="w-full">Update Profile</Button>
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                      Update Personal Info
+                    </Button>
                   </CardContent>
                 </Card>
 
+                {/* Property Information */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>Preferences</CardTitle>
+                    <CardTitle>Property Details</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm">Email Notifications</span>
-                      <input type="checkbox" defaultChecked className="rounded" />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm">SMS Notifications</span>
-                      <input type="checkbox" defaultChecked className="rounded" />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm">Marketing Communications</span>
-                      <input type="checkbox" className="rounded" />
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Property Address *</label>
+                      <Input defaultValue="123 Main Street, Halifax, NS B3H 1A1" placeholder="Enter your address" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Preferred Contact Method</label>
-                      <select className="w-full p-2 border rounded-lg">
-                        <option>Email</option>
-                        <option>Phone</option>
-                        <option>SMS</option>
+                      <label className="block text-sm font-medium mb-2">Property Type *</label>
+                      <select className="w-full p-2 border rounded-lg bg-white">
+                        <option value="">Select property type</option>
+                        <option value="apartment">Apartment</option>
+                        <option value="condo">Condominium</option>
+                        <option value="townhouse">Townhouse</option>
+                        <option value="house">Single Family House</option>
+                        <option value="duplex">Duplex</option>
+                        <option value="commercial">Commercial</option>
                       </select>
                     </div>
-                    <Button className="w-full">Save Preferences</Button>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">House Size (sq ft) *</label>
+                      <select className="w-full p-2 border rounded-lg bg-white">
+                        <option value="">Select house size</option>
+                        <option value="under-1000">Under 1,000 sq ft</option>
+                        <option value="1000-1500">1,000 - 1,500 sq ft</option>
+                        <option value="1500-2000">1,500 - 2,000 sq ft</option>
+                        <option value="2000-2500">2,000 - 2,500 sq ft</option>
+                        <option value="2500-3000">2,500 - 3,000 sq ft</option>
+                        <option value="3000-4000">3,000 - 4,000 sq ft</option>
+                        <option value="over-4000">Over 4,000 sq ft</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Number of Bedrooms</label>
+                      <select className="w-full p-2 border rounded-lg bg-white">
+                        <option value="">Select bedrooms</option>
+                        <option value="1">1 Bedroom</option>
+                        <option value="2">2 Bedrooms</option>
+                        <option value="3">3 Bedrooms</option>
+                        <option value="4">4 Bedrooms</option>
+                        <option value="5">5+ Bedrooms</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Number of Bathrooms</label>
+                      <select className="w-full p-2 border rounded-lg bg-white">
+                        <option value="">Select bathrooms</option>
+                        <option value="1">1 Bathroom</option>
+                        <option value="1.5">1.5 Bathrooms</option>
+                        <option value="2">2 Bathrooms</option>
+                        <option value="2.5">2.5 Bathrooms</option>
+                        <option value="3">3 Bathrooms</option>
+                        <option value="3.5">3.5 Bathrooms</option>
+                        <option value="4">4+ Bathrooms</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Year Built</label>
+                      <Input type="number" placeholder="e.g., 1995" min="1800" max="2024" />
+                    </div>
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                      Update Property Info
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Service Preferences */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Service Preferences</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Preferred Budget Range</label>
+                      <select className="w-full p-2 border rounded-lg bg-white">
+                        <option value="">Select budget range</option>
+                        <option value="under-100">Under $100</option>
+                        <option value="100-250">$100 - $250</option>
+                        <option value="250-500">$250 - $500</option>
+                        <option value="500-1000">$500 - $1,000</option>
+                        <option value="1000-2000">$1,000 - $2,000</option>
+                        <option value="over-2000">Over $2,000</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Preferred Service Times</label>
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <input type="checkbox" id="weekdays" className="rounded" />
+                          <label htmlFor="weekdays" className="text-sm">Weekdays (Mon-Fri)</label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <input type="checkbox" id="weekends" className="rounded" />
+                          <label htmlFor="weekends" className="text-sm">Weekends (Sat-Sun)</label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <input type="checkbox" id="mornings" className="rounded" />
+                          <label htmlFor="mornings" className="text-sm">Mornings (8AM-12PM)</label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <input type="checkbox" id="afternoons" className="rounded" />
+                          <label htmlFor="afternoons" className="text-sm">Afternoons (12PM-5PM)</label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <input type="checkbox" id="evenings" className="rounded" />
+                          <label htmlFor="evenings" className="text-sm">Evenings (5PM-8PM)</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Special Requirements</label>
+                      <textarea 
+                        className="w-full p-2 border rounded-lg h-20" 
+                        placeholder="Pet-friendly, eco-friendly products, specific allergies, etc."
+                      ></textarea>
+                    </div>
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                      Save Preferences
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Security & Privacy */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Security & Privacy</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Change Password</label>
+                      <div className="space-y-3">
+                        <Input type="password" placeholder="Current password" />
+                        <Input type="password" placeholder="New password" />
+                        <Input type="password" placeholder="Confirm new password" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Notification Preferences</label>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm">Email notifications</span>
+                          <input type="checkbox" className="rounded" defaultChecked />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm">SMS notifications</span>
+                          <input type="checkbox" className="rounded" />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm">Marketing communications</span>
+                          <input type="checkbox" className="rounded" />
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Emergency Contact</label>
+                      <div className="space-y-3">
+                        <Input placeholder="Emergency contact name" />
+                        <Input placeholder="Emergency contact phone" />
+                        <Input placeholder="Relationship" />
+                      </div>
+                    </div>
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                      Update Security Settings
+                    </Button>
                   </CardContent>
                 </Card>
               </div>
