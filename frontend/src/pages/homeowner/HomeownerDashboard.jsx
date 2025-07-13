@@ -250,27 +250,241 @@ const HomeownerDashboard = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Header */}
-        <header className="bg-white shadow-sm border-b h-16 flex items-center justify-between px-6">
-          <div className="flex items-center">
-            <Button
-              variant="ghost"
-              onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden mr-4"
-            >
-              <Menu className="h-6 w-6" />
-            </Button>
-            <h2 className="text-xl font-semibold text-gray-900">Dashboard</h2>
-          </div>
-          
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm">
-              <Bell className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="sm">
-              <User className="h-5 w-5" />
-            </Button>
-          </div>
-        </header>
+        <header className="bg-white shadow-sm border-b border-gray-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-between items-center py-4">
+                <div className="flex items-center">
+                  <h1 className="text-2xl font-bold text-blue-600">Doord</h1>
+                  <span className="ml-2 text-gray-500">for Homeowners</span>
+                </div>
+                
+                <nav className="hidden md:flex items-center space-x-8">
+                  <button
+                    onClick={() => setActiveTab('home')}
+                    className={`px-3 py-2 rounded-md text-sm font-medium ${
+                      activeTab === 'home' 
+                        ? 'bg-blue-100 text-blue-700' 
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    <Home className="h-4 w-4 inline mr-2" />
+                    Home
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('browse')}
+                    className={`px-3 py-2 rounded-md text-sm font-medium ${
+                      activeTab === 'browse' 
+                        ? 'bg-blue-100 text-blue-700' 
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    <Search className="h-4 w-4 inline mr-2" />
+                    Browse Services
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('quotations')}
+                    className={`px-3 py-2 rounded-md text-sm font-medium ${
+                      activeTab === 'quotations' 
+                        ? 'bg-blue-100 text-blue-700' 
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    <FileText className="h-4 w-4 inline mr-2" />
+                    My Requests
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('reports')}
+                    className={`px-3 py-2 rounded-md text-sm font-medium ${
+                      activeTab === 'reports' 
+                        ? 'bg-blue-100 text-blue-700' 
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    <BarChart3 className="h-4 w-4 inline mr-2" />
+                    Reports
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('settings')}
+                    className={`px-3 py-2 rounded-md text-sm font-medium ${
+                      activeTab === 'settings' 
+                        ? 'bg-blue-100 text-blue-700' 
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    <Settings className="h-4 w-4 inline mr-2" />
+                    Settings
+                  </button>
+                </nav>
+
+                {/* Right side - Auth aware */}
+                <div className="flex items-center space-x-4">
+                  {!isLoggedIn ? (
+                    // Not logged in - show auth buttons
+                    <div className="flex items-center space-x-3">
+                      <Button
+                        variant="outline"
+                        onClick={() => navigate('/homeowners/auth')}
+                        className="hidden sm:flex"
+                      >
+                        Sign In
+                      </Button>
+                      <Button
+                        onClick={() => navigate('/homeowners/auth')}
+                        className="bg-blue-600 hover:bg-blue-700"
+                      >
+                        Sign Up
+                      </Button>
+                    </div>
+                  ) : (
+                    // Logged in - show user menu
+                    <div className="flex items-center space-x-4">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setActiveTab('settings')}
+                        className="hidden sm:flex"
+                      >
+                        <User className="h-4 w-4 mr-2" />
+                        Profile
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setActiveTab('quotations')}
+                        className="hidden sm:flex"
+                      >
+                        <Bell className="h-4 w-4 mr-2" />
+                        Notifications
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={handleLogout}
+                        className="text-red-600 border-red-200 hover:bg-red-50"
+                      >
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Log Out
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* Mobile menu button */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    className="md:hidden"
+                  >
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Mobile menu */}
+              {isMobileMenuOpen && (
+                <div className="md:hidden border-t border-gray-200 py-4">
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => {
+                        setActiveTab('home');
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className={`flex items-center w-full px-3 py-2 rounded-md text-sm font-medium ${
+                        activeTab === 'home' 
+                          ? 'bg-blue-100 text-blue-700' 
+                          : 'text-gray-500'
+                      }`}
+                    >
+                      <Home className="h-4 w-4 mr-2" />
+                      Home
+                    </button>
+                    <button
+                      onClick={() => {
+                        setActiveTab('browse');
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className={`flex items-center w-full px-3 py-2 rounded-md text-sm font-medium ${
+                        activeTab === 'browse' 
+                          ? 'bg-blue-100 text-blue-700' 
+                          : 'text-gray-500'
+                      }`}
+                    >
+                      <Search className="h-4 w-4 mr-2" />
+                      Browse Services
+                    </button>
+                    {isLoggedIn && (
+                      <>
+                        <button
+                          onClick={() => {
+                            setActiveTab('quotations');
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className={`flex items-center w-full px-3 py-2 rounded-md text-sm font-medium ${
+                            activeTab === 'quotations' 
+                              ? 'bg-blue-100 text-blue-700' 
+                              : 'text-gray-500'
+                          }`}
+                        >
+                          <FileText className="h-4 w-4 mr-2" />
+                          My Requests
+                        </button>
+                        <button
+                          onClick={() => {
+                            setActiveTab('reports');
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className={`flex items-center w-full px-3 py-2 rounded-md text-sm font-medium ${
+                            activeTab === 'reports' 
+                              ? 'bg-blue-100 text-blue-700' 
+                              : 'text-gray-500'
+                          }`}
+                        >
+                          <BarChart3 className="h-4 w-4 mr-2" />
+                          Reports
+                        </button>
+                        <button
+                          onClick={() => {
+                            setActiveTab('settings');
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className={`flex items-center w-full px-3 py-2 rounded-md text-sm font-medium ${
+                            activeTab === 'settings' 
+                              ? 'bg-blue-100 text-blue-700' 
+                              : 'text-gray-500'
+                          }`}
+                        >
+                          <Settings className="h-4 w-4 mr-2" />
+                          Settings
+                        </button>
+                        <hr className="my-2" />
+                        <button
+                          onClick={handleLogout}
+                          className="flex items-center w-full px-3 py-2 rounded-md text-sm font-medium text-red-600"
+                        >
+                          <LogOut className="h-4 w-4 mr-2" />
+                          Log Out
+                        </button>
+                      </>
+                    )}
+                    {!isLoggedIn && (
+                      <>
+                        <hr className="my-2" />
+                        <button
+                          onClick={() => {
+                            navigate('/homeowners/auth');
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="flex items-center w-full px-3 py-2 rounded-md text-sm font-medium text-blue-600"
+                        >
+                          <User className="h-4 w-4 mr-2" />
+                          Sign In / Sign Up
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </header>
 
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto p-6">
