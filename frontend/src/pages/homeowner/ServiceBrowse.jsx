@@ -36,7 +36,7 @@ const ServiceBrowse = () => {
     const userType = localStorage.getItem('userType');
     setIsLoggedIn(userType === 'homeowner');
     
-    // Get URL parameters
+      // Get URL parameters
     const searchParams = new URLSearchParams(location.search);
     const searchParam = searchParams.get('search');
     const serviceParam = searchParams.get('service');
@@ -44,9 +44,8 @@ const ServiceBrowse = () => {
     if (searchParam) setSearchTerm(searchParam);
     if (serviceParam) setSelectedServices([serviceParam]);
     
-    // Load all providers (mock + registered)
-    const providers = getAllProviders();
-    setAllProviders(providers);
+    // Load providers from API
+    loadProviders();
   }, [location]);
 
   // Refresh providers periodically to catch new registrations
