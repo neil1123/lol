@@ -129,6 +129,28 @@ const ProviderOrders = () => {
     };
 
     setOrders([...orders, order]);
+    
+    // If there's a scheduled date, add it to calendar appointments
+    if (newOrder.scheduledDate) {
+      const appointment = {
+        id: Date.now() + Math.random() + 500,
+        customerName: newOrder.customerName,
+        phoneNumber: newOrder.customerPhone,
+        serviceType: newOrder.serviceType,
+        date: newOrder.scheduledDate,
+        time: '09:00', // Default time if not specified
+        address: newOrder.address,
+        notes: `Order #${orderId} - ${newOrder.description}`,
+        orderId: orderId,
+        source: 'order' // Flag to identify appointments created from orders
+      };
+      
+      // Save to calendar appointments
+      const existingAppointments = JSON.parse(localStorage.getItem('providerAppointments') || '[]');
+      existingAppointments.push(appointment);
+      localStorage.setItem('providerAppointments', JSON.stringify(existingAppointments));
+    }
+    
     setNewOrder({
       customerName: '',
       customerEmail: '',
