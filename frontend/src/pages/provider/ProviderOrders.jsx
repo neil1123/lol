@@ -467,8 +467,31 @@ const ProviderOrders = () => {
             </Card>
           )}
 
-          {/* Orders Tabs */}
-          <Tabs defaultValue="pending" className="w-full">
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+              <p className="text-red-600">{error}</p>
+              <Button 
+                variant="outline" 
+                onClick={loadOrders}
+                className="mt-2"
+              >
+                Try Again
+              </Button>
+            </div>
+          )}
+
+          {/* Loading State */}
+          {loading && (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="text-gray-600 mt-4">Loading orders...</p>
+            </div>
+          )}
+
+          {/* Orders Content */}
+          {!loading && (
+            <Tabs defaultValue="pending" className="w-full">
             <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 gap-1 h-auto p-1">
               <TabsTrigger value="pending" className="text-xs px-1 py-2 min-w-0 flex-col">
                 <span className="truncate w-full text-center">Pending</span>
