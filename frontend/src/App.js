@@ -10,7 +10,6 @@ import ProviderProfile from "./pages/homeowner/ProviderProfile";
 import HomeownerQuotations from "./pages/homeowner/HomeownerQuotations";
 import HomeownerAuth from "./pages/homeowner/HomeownerAuth";
 import HomeownerDashboard from "./pages/homeowner/HomeownerDashboard";
-import HomeownerExplore from "./pages/homeowner/HomeownerExplore";
 
 // Service Provider Pages
 import ServiceProviderLanding from "./pages/provider/ServiceProviderLanding";
