@@ -365,7 +365,7 @@ const HomeownerLanding = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
               <Button 
                 size="lg"
-                onClick={() => navigate('/homeowners/explore')}
+                onClick={() => navigate('/homeowners/dashboard')}
                 className="bg-white text-blue-600 hover:bg-gray-50 border-2 border-blue-600 hover:border-blue-700 px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
                 Get Deals
