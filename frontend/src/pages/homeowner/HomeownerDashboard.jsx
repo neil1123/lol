@@ -1110,15 +1110,12 @@ const HomeownerDashboard = () => {
                     <CardTitle>Recent Reports</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-3">
-                      <div className="p-3 border rounded-lg">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-semibold text-sm">Service Quality Issue</h4>
-                          <Badge className="bg-yellow-100 text-yellow-800">In Progress</Badge>
-                        </div>
-                        <p className="text-xs text-gray-600">Cleaning service was not completed as agreed</p>
-                        <p className="text-xs text-gray-400 mt-1">Submitted 3 days ago</p>
-                      </div>
+                    <div className="text-center py-8">
+                      <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                      <h4 className="font-semibold text-gray-600 mb-2">No Reports Yet</h4>
+                      <p className="text-sm text-gray-500">
+                        You haven't submitted any reports or issues yet.
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
