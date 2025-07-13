@@ -174,7 +174,7 @@ const HomeownerLanding = () => {
                 For Service Providers
               </Button>
               <Button variant="ghost" onClick={() => navigate('/homeowners/dashboard')}>
-                Dashboard
+                Explore
               </Button>
               {isLoggedIn ? (
                 <Button variant="outline" onClick={() => {
