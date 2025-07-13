@@ -32,11 +32,13 @@ import { Label } from '../../components/ui/label';
 import { Textarea } from '../../components/ui/textarea';
 import { STANDARD_PROVIDER_SIDEBAR, handleStandardLogout } from '../../constants/providerSidebarConfig';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
-import { mockOrders } from '../../data/mockData';
+import apiService from '../../services/api';
 
 const ProviderOrders = () => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [showNewOrderForm, setShowNewOrderForm] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [newOrder, setNewOrder] = useState({
@@ -59,111 +61,100 @@ const ProviderOrders = () => {
   const sidebarItems = STANDARD_PROVIDER_SIDEBAR;
 
   useEffect(() => {
-    // Get orders from localStorage for persistence, or start with empty array for fresh platform
-    const storedOrders = localStorage.getItem('providerOrders');
-    const storedQuotationRequests = localStorage.getItem('quotationRequests');
-    
-    let allOrders = [];
-    
-    // Load existing provider orders
-    if (storedOrders) {
-      allOrders = [...JSON.parse(storedOrders)];
-    }
-    
-    // Load quotation requests and convert them to orders if they don't already exist
-    if (storedQuotationRequests) {
-      const quotationRequests = JSON.parse(storedQuotationRequests);
-      const existingOrderIds = allOrders.map(order => order.id);
-      
-      // Convert quotation requests to orders format
-      const quotationOrders = quotationRequests
-        .filter(req => !existingOrderIds.includes(req.id)) // Avoid duplicates
-        .map(req => ({
-          ...req,
-          // Ensure all required order fields are present
-          providerId: req.providerId || 1,
-          providerName: req.providerName || 'Elite Home Solutions',
-          quotationAmount: req.budget ? (req.budget === 'get-quote' ? 0 : parseFloat(req.budget.replace(/[^0-9.-]/g, '')) || 0) : 0,
-          orderDetails: req.additionalRequirements || '',
-          messages: [],
-          isQuotationRequest: true // Flag to identify quotation requests
-        }));
-      
-      allOrders = [...allOrders, ...quotationOrders];
-    }
-    
-    setOrders(allOrders);
+    loadOrders();
   }, []);
 
-  // Save orders to localStorage whenever orders change
-  useEffect(() => {
-    if (orders.length > 0) {
-      localStorage.setItem('providerOrders', JSON.stringify(orders));
-    }
-  }, [orders]);
-
-  const handleCreateOrder = () => {
-    // Generate a proper ID for the order
-    const orderId = Date.now() + Math.random();
-    const homeownerId = Date.now() + Math.random() + 1000;
-    
-    const order = {
-      id: orderId,
-      homeownerId: homeownerId,
-      providerId: 1,
-      providerName: 'Elite Home Solutions',
-      homeownerName: newOrder.customerName,
-      homeownerEmail: newOrder.customerEmail,
-      homeownerPhone: newOrder.customerPhone,
-      serviceType: newOrder.serviceType,
-      description: newOrder.description,
-      homeownerAddress: newOrder.address,
-      quotationAmount: parseFloat(newOrder.quotationAmount),
-      orderDetails: newOrder.orderDetails,
-      priority: newOrder.priority,
-      status: 'confirmed', // Manual orders are confirmed directly
-      requestDate: new Date().toISOString(),
-      scheduledDate: newOrder.scheduledDate || null,
-      messages: [],
-      isLocalOrder: true // Flag to identify locally created orders
-    };
-
-    setOrders([...orders, order]);
-    
-    // If there's a scheduled date, add it to calendar appointments
-    if (newOrder.scheduledDate) {
-      const appointment = {
-        id: Date.now() + Math.random() + 500,
-        customerName: newOrder.customerName,
-        phoneNumber: newOrder.customerPhone,
-        serviceType: newOrder.serviceType,
-        date: newOrder.scheduledDate,
-        time: '09:00', // Default time if not specified
-        address: newOrder.address,
-        notes: `Order #${orderId} - ${newOrder.description}`,
-        orderId: orderId,
-        source: 'order' // Flag to identify appointments created from orders
-      };
+  const loadOrders = async () => {
+    try {
+      setLoading(true);
+      setError('');
       
-      // Save to calendar appointments
-      const existingAppointments = JSON.parse(localStorage.getItem('providerAppointments') || '[]');
-      existingAppointments.push(appointment);
-      localStorage.setItem('providerAppointments', JSON.stringify(existingAppointments));
+      const ordersData = await apiService.getOrders();
+      setOrders(ordersData);
+    } catch (error) {
+      console.error('Failed to load orders:', error);
+      setError('Failed to load orders. Please try again.');
+      setOrders([]);
+    } finally {
+      setLoading(false);
     }
-    
-    setNewOrder({
-      customerName: '',
-      customerEmail: '',
-      customerPhone: '',
-      serviceType: '',
-      description: '',
-      address: '',
-      quotationAmount: '',
-      orderDetails: '',
-      priority: 'medium',
-      scheduledDate: ''
-    });
-    setShowNewOrderForm(false);
+  };
+
+  const handleCreateOrder = async () => {
+    try {
+      setError('');
+      
+      // Get current user
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      if (!user.id) {
+        throw new Error('Please log in to create orders');
+      }
+
+      // Generate homeowner ID for manual order
+      const homeownerId = `manual_${Date.now()}`;
+      
+      const orderData = {
+        homeowner_id: homeownerId,
+        provider_id: user.id,
+        homeowner_name: newOrder.customerName,
+        homeowner_email: newOrder.customerEmail,
+        homeowner_phone: newOrder.customerPhone,
+        homeowner_address: newOrder.address,
+        provider_name: user.business_name || user.name,
+        service_type: newOrder.serviceType,
+        description: newOrder.description,
+        preferred_date: newOrder.scheduledDate,
+        preferred_time: '09:00',
+        urgency: newOrder.priority,
+        budget: newOrder.quotationAmount ? `$${newOrder.quotationAmount}` : '',
+        additional_requirements: newOrder.orderDetails
+      };
+
+      const createdOrder = await apiService.createOrder(orderData);
+      
+      // If there's a scheduled date, create appointment
+      if (newOrder.scheduledDate) {
+        const appointmentData = {
+          customer_name: newOrder.customerName,
+          phone_number: newOrder.customerPhone,
+          service_type: newOrder.serviceType,
+          date: newOrder.scheduledDate,
+          time: '09:00',
+          address: newOrder.address,
+          notes: `Order #${createdOrder.id} - ${newOrder.description}`,
+          order_id: createdOrder.id,
+          source: 'order'
+        };
+        
+        try {
+          await apiService.createAppointment(appointmentData);
+        } catch (appointmentError) {
+          console.error('Failed to create appointment:', appointmentError);
+          // Don't fail the order creation if appointment fails
+        }
+      }
+      
+      // Reset form and reload orders
+      setNewOrder({
+        customerName: '',
+        customerEmail: '',
+        customerPhone: '',
+        serviceType: '',
+        description: '',
+        address: '',
+        quotationAmount: '',
+        orderDetails: '',
+        priority: 'medium',
+        scheduledDate: ''
+      });
+      setShowNewOrderForm(false);
+      loadOrders(); // Reload orders from API
+      
+    } catch (error) {
+      console.error('Failed to create order:', error);
+      setError(error.message || 'Failed to create order. Please try again.');
+    }
   };
 
   // Function to handle messaging with proper validation
@@ -176,11 +167,14 @@ const ProviderOrders = () => {
     navigate('/homeservices/messages');
   };
 
-  const handleUpdateOrderStatus = (orderId, newStatus) => {
-    const updatedOrders = orders.map(order =>
-      order.id === orderId ? { ...order, status: newStatus } : order
-    );
-    setOrders(updatedOrders);
+  const handleUpdateOrderStatus = async (orderId, newStatus) => {
+    try {
+      await apiService.updateOrderStatus(orderId, newStatus);
+      loadOrders(); // Reload orders after status update
+    } catch (error) {
+      console.error('Failed to update order status:', error);
+      alert('Failed to update order status. Please try again.');
+    }
   };
 
   const getStatusColor = (status) => {
