@@ -47,7 +47,7 @@ const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, prov
       budget: formData.budget,
       propertySize: formData.propertySize,
       additionalRequirements: formData.additionalRequirements,
-      status: 'pending_quote',
+      status: 'pending_quotation',
       requestDate: new Date().toISOString(),
       priority: formData.urgency
     };
