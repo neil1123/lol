@@ -202,7 +202,7 @@ const ProviderAuth = () => {
                   
                   <Button 
                     type="submit" 
-                    className="w-full"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                     disabled={isLoading}
                   >
                     {isLoading ? 'Signing in...' : 'Sign In'}
