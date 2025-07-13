@@ -61,12 +61,38 @@ const ProviderOrders = () => {
   useEffect(() => {
     // Get orders from localStorage for persistence, or start with empty array for fresh platform
     const storedOrders = localStorage.getItem('providerOrders');
+    const storedQuotationRequests = localStorage.getItem('quotationRequests');
+    
+    let allOrders = [];
+    
+    // Load existing provider orders
     if (storedOrders) {
-      setOrders(JSON.parse(storedOrders));
-    } else {
-      // Start with empty array for fresh platform
-      setOrders([]);
+      allOrders = [...JSON.parse(storedOrders)];
     }
+    
+    // Load quotation requests and convert them to orders if they don't already exist
+    if (storedQuotationRequests) {
+      const quotationRequests = JSON.parse(storedQuotationRequests);
+      const existingOrderIds = allOrders.map(order => order.id);
+      
+      // Convert quotation requests to orders format
+      const quotationOrders = quotationRequests
+        .filter(req => !existingOrderIds.includes(req.id)) // Avoid duplicates
+        .map(req => ({
+          ...req,
+          // Ensure all required order fields are present
+          providerId: req.providerId || 1,
+          providerName: req.providerName || 'Elite Home Solutions',
+          quotationAmount: req.budget ? (req.budget === 'get-quote' ? 0 : parseFloat(req.budget.replace(/[^0-9.-]/g, '')) || 0) : 0,
+          orderDetails: req.additionalRequirements || '',
+          messages: [],
+          isQuotationRequest: true // Flag to identify quotation requests
+        }));
+      
+      allOrders = [...allOrders, ...quotationOrders];
+    }
+    
+    setOrders(allOrders);
   }, []);
 
   // Save orders to localStorage whenever orders change
