@@ -36,7 +36,6 @@ function App() {
           <Route path="/homeowners" element={<HomeownerLanding />} />
           <Route path="/homeowners/auth" element={<HomeownerAuth />} />
           <Route path="/homeowners/dashboard" element={<HomeownerDashboard />} />
-          <Route path="/homeowners/explore" element={<HomeownerExplore />} />
           <Route path="/homeowners/browse" element={<ServiceBrowse />} />
           <Route path="/homeowners/provider/:id" element={<ProviderProfile />} />
           <Route path="/homeowners/quotations" element={<HomeownerQuotations />} />
