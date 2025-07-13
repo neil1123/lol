@@ -279,24 +279,28 @@ async def get_current_user_info(current_user: User = Depends(get_current_user)):
 
 # ====== PROVIDER ENDPOINTS ======
 
-@api_router.get("/providers", response_model=List[User])
+@api_router.get("/providers", response_model=List[Dict[str, Any]])
 async def get_all_providers():
     providers = await db.users.find({"user_type": "provider", "is_active": True}).to_list(1000)
-    # Remove password hash from response
+    # Remove MongoDB _id and password_hash from response
     for provider in providers:
+        if "_id" in provider:
+            del provider["_id"]
         if "password_hash" in provider:
             del provider["password_hash"]
-    return [User(**provider) for provider in providers]
+    return providers
 
-@api_router.get("/providers/{provider_id}", response_model=User)
+@api_router.get("/providers/{provider_id}", response_model=Dict[str, Any])
 async def get_provider(provider_id: str):
     provider = await db.users.find_one({"id": provider_id, "user_type": "provider"})
     if not provider:
         raise HTTPException(status_code=404, detail="Provider not found")
     
+    if "_id" in provider:
+        del provider["_id"]
     if "password_hash" in provider:
         del provider["password_hash"]
-    return User(**provider)
+    return provider
 
 # ====== ORDER ENDPOINTS ======
 
