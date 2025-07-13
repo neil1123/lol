@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Checkbox } from '../../components/ui/checkbox';
 import { serviceCategories } from '../../data/mockData';
 import { useNavigate, useLocation } from 'react-router-dom';
+import apiService from '../../services/api';
 
 const ServiceBrowse = () => {
   const [searchTerm, setSearchTerm] = useState('');
