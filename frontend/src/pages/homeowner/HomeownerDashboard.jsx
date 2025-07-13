@@ -53,8 +53,34 @@ const HomeownerDashboard = () => {
 
   useEffect(() => {
     // Check if user is logged in
+    const user = localStorage.getItem('user');
     const userType = localStorage.getItem('userType');
-    setIsLoggedIn(userType === 'homeowner');
+    setIsLoggedIn(user && userType === 'homeowner');
+    
+    // Handle back button behavior for logged in users
+    if (user && userType === 'homeowner') {
+      const handlePopState = (event) => {
+        // If user is logged in and tries to navigate back to landing, redirect to home tab
+        if (window.location.pathname === '/homeowners' || window.location.pathname === '/') {
+          event.preventDefault();
+          setActiveTab('home');
+          window.history.pushState(null, '', '/homeowners/dashboard');
+        }
+      };
+      
+      window.addEventListener('popstate', handlePopState);
+      
+      return () => {
+        window.removeEventListener('popstate', handlePopState);
+      };
+    }
+    
+    // Handle URL parameters for tab switching
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    if (tab) {
+      setActiveTab(tab);
+    }
     
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
