@@ -48,43 +48,41 @@ const ServiceBrowse = () => {
     loadProviders();
   }, [location]);
 
-  // Refresh providers periodically to catch new registrations
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const providers = getAllProviders();
-      setAllProviders(providers);
-    }, 2000); // Check every 2 seconds for new providers
-    
-    return () => clearInterval(interval);
-  }, []);
-
-  // Get all providers: ONLY registered providers (no mock data for production)
-  const getAllProviders = () => {
-    const registeredProviders = JSON.parse(localStorage.getItem('registeredProviders') || '[]');
-    
-    // Filter only active providers and use their complete profile data
-    const formattedRegisteredProviders = registeredProviders
-      .filter(provider => provider.isActive !== false) // Only show active providers
-      .map(provider => ({
+  // Load providers from API
+  const loadProviders = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      
+      const providers = await apiService.getAllProviders();
+      
+      // Format providers for display
+      const formattedProviders = providers.map(provider => ({
         id: provider.id,
-        name: provider.businessName,
+        name: provider.business_name || provider.name,
         description: provider.description || `Professional ${Array.isArray(provider.services) ? provider.services.join(' and ') : provider.services} services`,
         services: Array.isArray(provider.services) ? provider.services : [provider.services],
         rating: provider.rating || 5.0,
         reviews: provider.reviews || 0,
-        completedJobs: provider.completedJobs || 0,
+        completedJobs: provider.completed_jobs || 0,
         location: provider.location || "Halifax, NS",
-        responseTime: provider.responseTime || "Usually responds within 1 hour",
-        yearEstablished: provider.yearEstablished || "2024",
+        responseTime: provider.response_time || "Usually responds within 1 hour",
+        yearEstablished: provider.year_established || "2024",
         specialties: provider.specialties || ["Professional service", "Quality work", "Customer satisfaction"],
-        priceRange: provider.priceRange || "$50-$500",
-        ownerName: provider.ownerName,
+        priceRange: provider.price_range || "$50-$500",
+        ownerName: provider.name,
         email: provider.email,
         phone: provider.phone
       }));
-    
-    // Return ONLY registered providers (no mock data)
-    return formattedRegisteredProviders;
+      
+      setAllProviders(formattedProviders);
+    } catch (error) {
+      console.error('Failed to load providers:', error);
+      setError('Failed to load service providers. Please try again.');
+      setAllProviders([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
 
