@@ -436,13 +436,15 @@ def test_send_message():
     """Test sending messages"""
     print("\n🔍 Testing Send Message...")
     
-    if not provider_token or not test_thread_id:
+    if not provider_token or not test_thread_id or not provider_id:
         print("❌ Missing required data for send message test")
         return False
     
     try:
         message_data = {
             "thread_id": test_thread_id,
+            "sender_id": provider_id,  # Will be overridden by backend
+            "sender_type": "provider",  # Will be overridden by backend
             "content": "Hello, I can help you with your plumbing needs!"
         }
         
@@ -474,12 +476,13 @@ def test_appointment_creation():
     """Test appointment creation"""
     print("\n🔍 Testing Appointment Creation...")
     
-    if not provider_token:
+    if not provider_token or not provider_id:
         print("❌ No provider token available for appointment creation test")
         return False
     
     try:
         appointment_data = {
+            "provider_id": provider_id,  # Will be overridden by backend
             "customer_name": "Test Customer",
             "phone_number": "+1-902-555-0999",
             "service_type": "Plumbing",
