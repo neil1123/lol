@@ -806,11 +806,12 @@ const ProviderOrders = () => {
               )}
             </TabsContent>
           </Tabs>
-          </div>
+          )}
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default ProviderOrders;
