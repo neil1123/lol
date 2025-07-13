@@ -42,6 +42,15 @@ const HomeownerDashboard = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('userType');
+    localStorage.removeItem('authToken');
+    setIsLoggedIn(false);
+    setActiveTab('home');
+    navigate('/homeowners');
+  };
+
   useEffect(() => {
     // Check if user is logged in
     const userType = localStorage.getItem('userType');
