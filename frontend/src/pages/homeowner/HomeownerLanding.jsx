@@ -483,8 +483,7 @@ const HomeownerLanding = () => {
             {topProviders.map(provider => (
               <Card 
                 key={provider.id} 
-                className="hover:shadow-lg transition-shadow cursor-pointer"
-                onClick={() => navigate(`/homeowners/provider/${provider.id}`)}
+                className="hover:shadow-lg transition-shadow"
               >
                 <CardContent className="p-4">
                   {/* Image Gallery */}
