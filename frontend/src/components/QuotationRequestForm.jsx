@@ -95,6 +95,12 @@ const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, prov
             </Button>
           </div>
 
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+              <p className="text-red-600 text-sm">{error}</p>
+            </div>
+          )}
+
           {providerName && (
             <div className="mb-6 p-4 bg-blue-50 rounded-lg">
               <h3 className="font-semibold text-blue-900">Requesting quote from:</h3>
