@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
+import apiService from '../services/api';
 
 const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, providerId }) => {
   const [formData, setFormData] = useState({
@@ -21,74 +22,53 @@ const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, prov
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError('');
     
-    // Get user data
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    
-    // Create quotation request
-    const quotationRequest = {
-      id: Date.now() + Math.random(),
-      homeownerId: user.id,
-      homeownerName: user.name,
-      homeownerEmail: user.email,
-      homeownerPhone: formData.phone || user.phone || '',
-      homeownerAddress: formData.address || user.address || '',
-      providerId: providerId, // Now we have the actual provider ID
-      providerName: providerName,
-      serviceType: formData.serviceType,
-      description: formData.description,
-      preferredDate: formData.preferredDate,
-      preferredTime: formData.preferredTime,
-      urgency: formData.urgency,
-      budget: formData.budget,
-      propertySize: formData.propertySize,
-      additionalRequirements: formData.additionalRequirements,
-      status: 'pending_quotation',
-      requestDate: new Date().toISOString(),
-      priority: formData.urgency
-    };
-    
-    // Store the request
-    const existingRequests = JSON.parse(localStorage.getItem('quotationRequests') || '[]');
-    existingRequests.push(quotationRequest);
-    localStorage.setItem('quotationRequests', JSON.stringify(existingRequests));
-    
-    // Create message thread
-    const messageThread = {
-      id: Date.now() + Math.random(),
-      homeownerId: user.id,
-      providerId: providerId, // Now we have the actual provider ID
-      homeownerName: user.name,
-      providerName: providerName,
-      orderType: formData.serviceType,
-      orderId: quotationRequest.id,
-      lastMessage: `New quotation request for ${formData.serviceType}`,
-      lastMessageTime: new Date().toISOString(),
-      messages: [
-        {
-          id: 1,
-          content: `Hi ${providerName}! I'm interested in your ${formData.serviceType} services. Here are the details: ${formData.description}. My preferred date is ${formData.preferredDate} and budget is ${formData.budget}.`,
-          timestamp: new Date().toISOString(),
-          sender: 'homeowner',
-          read: false
-        }
-      ]
-    };
-    
-    // Store message thread
-    const existingMessages = JSON.parse(localStorage.getItem('messageThreads') || '[]');
-    existingMessages.push(messageThread);
-    localStorage.setItem('messageThreads', JSON.stringify(existingMessages));
-    
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      // Get user data
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      if (!user.id) {
+        throw new Error('Please log in to request a quotation');
+      }
+
+      // Create quotation request data
+      const quotationData = {
+        homeowner_id: user.id,
+        provider_id: providerId,
+        homeowner_name: user.name,
+        homeowner_email: user.email,
+        homeowner_phone: formData.phone || user.phone || '',
+        homeowner_address: formData.address || user.address || '',
+        provider_name: providerName,
+        service_type: formData.serviceType,
+        description: formData.description,
+        preferred_date: formData.preferredDate,
+        preferred_time: formData.preferredTime,
+        urgency: formData.urgency,
+        budget: formData.budget,
+        property_size: formData.propertySize,
+        additional_requirements: formData.additionalRequirements
+      };
+      
+      // Send quotation request to API
+      const response = await apiService.createQuotationRequest(quotationData);
+      
+      // Success
       onClose();
       alert('Quotation request sent successfully! The provider will contact you soon.');
-    }, 2000);
+      
+    } catch (error) {
+      console.error('Failed to send quotation request:', error);
+      setError(error.message || 'Failed to send quotation request. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (field, value) => {
