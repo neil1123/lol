@@ -8,10 +8,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/ca
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import { Checkbox } from '../../components/ui/checkbox';
 import { serviceCategories } from '../../data/mockData';
+import apiService from '../../services/api';
 
 const ProviderAuth = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   
   // Sign In Form
   const [signInData, setSignInData] = useState({
@@ -36,134 +38,69 @@ const ProviderAuth = () => {
   const handleSignIn = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
     
-    // TEMPORARY: Add hardcoded test account for immediate login
-    if (signInData.email === 'test@provider.com' && signInData.password === 'password123') {
-      localStorage.setItem('userType', 'provider');
-      localStorage.setItem('user', JSON.stringify({
-        id: 1,
-        businessName: 'Test Provider Business',
-        ownerName: 'Test Provider',
-        email: 'test@provider.com',
-        phone: '555-123-4567',
-        services: ['Home Cleaning'],
-        type: 'provider'
-      }));
+    try {
+      const response = await apiService.login({
+        email: signInData.email,
+        password: signInData.password
+      });
       
+      // Check if user is a provider
+      if (response.user.user_type !== 'provider') {
+        throw new Error('This account is not registered as a service provider');
+      }
+      
+      // Redirect to dashboard
+      navigate('/homeservices/dashboard');
+      
+    } catch (error) {
+      setError(error.message || 'Login failed. Please try again.');
+    } finally {
       setIsLoading(false);
-      window.location.href = '/homeservices/dashboard';
-      return;
-    }
-    
-    // Get stored users from localStorage
-    const storedUsers = JSON.parse(localStorage.getItem('registeredProviders') || '[]');
-    const user = storedUsers.find(u => u.email === signInData.email && u.password === signInData.password);
-    
-    if (user) {
-      // Set user authentication data
-      localStorage.setItem('userType', 'provider');
-      localStorage.setItem('user', JSON.stringify({
-        id: user.id,
-        businessName: user.businessName,
-        ownerName: user.ownerName,
-        email: user.email,
-        phone: user.phone,
-        services: user.services,
-        type: 'provider'
-      }));
-      
-      setIsLoading(false);
-      
-      // Navigate to dashboard
-      window.location.href = '/homeservices/dashboard';
-      
-    } else {
-      setIsLoading(false);
-      alert('Invalid credentials. Please check your email and password.');
     }
   };
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
     
     try {
       // Validate form
       if (signUpData.password !== signUpData.confirmPassword) {
-        alert('Passwords do not match');
-        setIsLoading(false);
-        return;
+        throw new Error('Passwords do not match');
       }
 
       if (!signUpData.ownerName || !signUpData.email || !signUpData.businessName) {
-        alert('Please fill in all required fields');
-        setIsLoading(false);
-        return;
+        throw new Error('Please fill in all required fields');
       }
 
       if (signUpData.services.length === 0) {
-        alert('Please select at least one service');
-        setIsLoading(false);
-        return;
+        throw new Error('Please select at least one service');
       }
 
-      // Check if user already exists
-      const storedUsers = JSON.parse(localStorage.getItem('registeredProviders') || '[]');
-      const existingUser = storedUsers.find(u => u.email === signUpData.email);
-      
-      if (existingUser) {
-        alert('User with this email already exists');
-        setIsLoading(false);
-        return;
-      }
-      
-      // Create new user with complete provider profile
-      const newUser = {
-        id: Date.now() + Math.random(), // Generate unique ID
-        businessName: signUpData.businessName,
-        ownerName: signUpData.ownerName,
+      // Prepare registration data
+      const registrationData = {
         email: signUpData.email,
-        phone: signUpData.phone,
-        services: Array.isArray(signUpData.services) ? signUpData.services : [signUpData.services],
-        license: signUpData.license,
         password: signUpData.password,
-        registeredAt: new Date().toISOString(),
-        // Additional profile data needed for homeowner search
-        description: `Professional ${Array.isArray(signUpData.services) ? signUpData.services.join(' and ') : signUpData.services} services by ${signUpData.businessName}`,
-        rating: 5.0, // New providers start with perfect rating
-        reviews: 0, // New providers start with 0 reviews  
-        completedJobs: 0, // New providers start with 0 jobs
-        location: "Halifax, NS", // Default location - can be made dynamic later
-        responseTime: "Usually responds within 1 hour",
-        yearEstablished: "2024",
-        specialties: ["Professional service", "Quality work", "Customer satisfaction"],
-        priceRange: "$50-$500", // Default range - can be customized later
-        isActive: true
+        user_type: 'provider',
+        name: signUpData.ownerName,
+        phone: signUpData.phone,
+        address: signUpData.address,
+        business_name: signUpData.businessName,
+        services: signUpData.services,
+        license: signUpData.license
       };
+
+      const response = await apiService.register(registrationData);
       
-      // Store user
-      storedUsers.push(newUser);
-      localStorage.setItem('registeredProviders', JSON.stringify(storedUsers));
-      
-      // Auto login after registration
-      localStorage.setItem('userType', 'provider');
-      localStorage.setItem('user', JSON.stringify({
-        id: newUser.id,
-        businessName: newUser.businessName,
-        ownerName: newUser.ownerName,
-        email: newUser.email,
-        phone: newUser.phone,
-        services: newUser.services,
-        type: 'provider'
-      }));
-      
-      setIsLoading(false);
-      
-      // Use window.location for more reliable navigation
-      window.location.href = '/homeservices/dashboard';
+      // Redirect to dashboard
+      navigate('/homeservices/dashboard');
       
     } catch (error) {
-      alert('Registration failed. Please try again.');
+      setError(error.message || 'Registration failed. Please try again.');
+    } finally {
       setIsLoading(false);
     }
   };
