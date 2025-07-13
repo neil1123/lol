@@ -537,16 +537,9 @@ const HomeownerLanding = () => {
                     <span className="text-sm text-gray-500">
                       📍 {provider.location}
                     </span>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/homeowners/provider/${provider.id}`);
-                      }}
-                    >
-                      View Profile
-                    </Button>
+                    <span className="text-sm text-blue-600 font-medium">
+                      Top Rated ⭐
+                    </span>
                   </div>
                 </CardContent>
               </Card>
