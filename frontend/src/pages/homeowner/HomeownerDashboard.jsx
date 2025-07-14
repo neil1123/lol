@@ -611,13 +611,13 @@ const HomeownerDashboard = () => {
         )}
 
         {/* Mobile Notifications Overlay */}
-        {isMobileMenuOpen && showNotifications && isLoggedIn && (
+        {showNotifications && isLoggedIn && (
           <div className="fixed inset-0 z-60 md:hidden">
             <div 
               className="absolute inset-0 bg-black bg-opacity-50"
               onClick={() => setShowNotifications(false)}
             ></div>
-            <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-xl">
+            <div className="absolute right-0 top-0 h-full w-full max-w-sm bg-white shadow-xl">
               <div className="flex flex-col h-full">
                 <div className="flex items-center justify-between p-4 border-b border-gray-200">
                   <h3 className="text-lg font-semibold">Notifications</h3>
