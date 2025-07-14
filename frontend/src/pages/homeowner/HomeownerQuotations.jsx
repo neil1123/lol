@@ -62,14 +62,6 @@ const HomeownerQuotations = () => {
       alert('Failed to decline quote. Please try again.');
     }
   };
-  };
-
-  const handleRejectQuote = (quoteId) => {
-    const updatedQuotes = quotations.map(quote => 
-      quote.id === quoteId ? { ...quote, status: 'rejected' } : quote
-    );
-    setQuotations(updatedQuotes);
-  };
 
   const getStatusIcon = (status) => {
     switch (status) {
