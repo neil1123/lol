@@ -334,14 +334,38 @@ async def get_order(order_id: str, current_user: User = Depends(get_current_user
 
 @api_router.put("/orders/{order_id}/status")
 async def update_order_status(order_id: str, status: str, current_user: User = Depends(get_current_user)):
-    # Only providers can update order status
-    if current_user.user_type != "provider":
-        raise HTTPException(status_code=403, detail="Only providers can update order status")
+    # Get the order first to check ownership
+    order = await db.orders.find_one({"id": order_id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
     
-    result = await db.orders.update_one(
-        {"id": order_id, "provider_id": current_user.id},
-        {"$set": {"status": status}}
-    )
+    # Check permissions based on user type
+    if current_user.user_type == "provider":
+        # Providers can update orders assigned to them with any valid status
+        if order["provider_id"] != current_user.id:
+            raise HTTPException(status_code=403, detail="Access denied")
+        
+        # Update the order status
+        result = await db.orders.update_one(
+            {"id": order_id, "provider_id": current_user.id},
+            {"$set": {"status": status}}
+        )
+    elif current_user.user_type == "homeowner":
+        # Homeowners can only update their own orders and only to accept/decline
+        if order["homeowner_id"] != current_user.id:
+            raise HTTPException(status_code=403, detail="Access denied")
+        
+        # Homeowners can only accept or decline quotes
+        if status not in ["accepted", "declined"]:
+            raise HTTPException(status_code=400, detail="Homeowners can only accept or decline quotes")
+        
+        # Update the order status
+        result = await db.orders.update_one(
+            {"id": order_id, "homeowner_id": current_user.id},
+            {"$set": {"status": status}}
+        )
+    else:
+        raise HTTPException(status_code=403, detail="Access denied")
     
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Order not found")
