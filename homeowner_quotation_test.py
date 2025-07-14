@@ -366,13 +366,16 @@ def run_homeowner_quotation_tests():
     # Test 3: Homeowner Order Filtering
     test_results.append(("Homeowner Order Filtering", test_homeowner_order_filtering()))
     
-    # Test 4: Order Data Structure
+    # Test 4: Homeowner Individual Order Retrieval
+    test_results.append(("Homeowner Individual Order", test_homeowner_individual_order()))
+    
+    # Test 5: Order Data Structure
     test_results.append(("Order Data Structure", test_order_data_structure()))
     
-    # Test 5: Provider Quote Workflow
+    # Test 6: Provider Quote Workflow
     test_results.append(("Provider Quote Workflow", test_provider_quote_workflow()))
     
-    # Test 6: Homeowner Status Update (Critical Test)
+    # Test 7: Homeowner Status Update (Critical Test)
     test_results.append(("Homeowner Status Update", test_homeowner_status_update()))
     
     # Summary
