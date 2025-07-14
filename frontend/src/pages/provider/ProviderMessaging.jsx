@@ -33,6 +33,7 @@ import { Input } from '../../components/ui/input';
 import { Textarea } from '../../components/ui/textarea';
 import { mockMessages } from '../../data/mockData';
 import { STANDARD_PROVIDER_SIDEBAR, handleStandardLogout } from '../../constants/providerSidebarConfig';
+import apiService from '../../services/apiService';
 
 const ProviderMessaging = () => {
   const navigate = useNavigate();
