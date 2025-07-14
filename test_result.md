@@ -467,7 +467,7 @@ frontend:
     file: "/app/frontend/src/pages/homeowner/HomeownerQuotations.jsx"
     stuck_count: 1
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: false
         agent: "main"
@@ -481,6 +481,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "CRITICAL AUTHENTICATION ISSUE: Frontend UI works perfectly but database API integration fails due to authentication. Testing shows: ✅ Page loads correctly ✅ All tabs display with proper counts ✅ Empty state shows correctly ✅ Header navigation works ✅ Mobile responsiveness works ✅ Error handling graceful ❌ API calls to /api/orders return 403 'Not authenticated' errors. The HomeownerQuotations component correctly calls apiService.getOrders() but no valid JWT token is being sent. Authentication flow needs to be fixed for database integration to work."
+      - working: false
+        agent: "main"
+        comment: "AUTHENTICATION FIXES APPLIED: 1) Fixed apiService.updateOrderStatus() to send status as query parameter instead of JSON body 2) Updated HomeownerAuth.jsx to use database authentication with apiService.login() and apiService.register() instead of localStorage-based auth 3) Added proper JWT token handling. Frontend and backend services restarted successfully."
 
 metadata:
   created_by: "main_agent"
