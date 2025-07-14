@@ -44,6 +44,7 @@ const ProviderMessaging = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [proposalData, setProposalData] = useState({
     serviceType: '',
     description: '',
