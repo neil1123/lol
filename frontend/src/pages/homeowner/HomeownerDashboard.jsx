@@ -120,6 +120,9 @@ const HomeownerDashboard = () => {
     const userType = localStorage.getItem('userType');
     setIsLoggedIn(user && userType === 'homeowner');
     
+    // Load notifications
+    loadNotifications();
+    
     // Handle back button behavior for logged in users
     if (user && userType === 'homeowner') {
       const handlePopState = (event) => {
