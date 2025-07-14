@@ -360,15 +360,14 @@ const HomeownerDashboard = () => {
                 <span className="ml-2 text-gray-500">Explore</span>
               </div>
 
-              {/* Right side - Auth aware */}
-              <div className="flex items-center space-x-4">
+              {/* Right side - Desktop auth buttons */}
+              <div className="hidden md:flex items-center space-x-4">
                 {!isLoggedIn ? (
                   // Not logged in - show auth buttons
                   <div className="flex items-center space-x-3">
                     <Button
                       variant="outline"
                       onClick={() => navigate('/homeowners/auth')}
-                      className="hidden sm:flex"
                     >
                       Sign In
                     </Button>
@@ -386,20 +385,77 @@ const HomeownerDashboard = () => {
                       variant="ghost"
                       size="sm"
                       onClick={() => setActiveTab('settings')}
-                      className="hidden sm:flex"
                     >
                       <User className="h-4 w-4 mr-2" />
                       Profile
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setActiveTab('quotations')}
-                      className="hidden sm:flex"
-                    >
-                      <Bell className="h-4 w-4 mr-2" />
-                      Notifications
-                    </Button>
+                    <div className="relative">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowNotifications(!showNotifications)}
+                      >
+                        <Bell className="h-4 w-4 mr-2" />
+                        Notifications
+                        {unreadCount > 0 && (
+                          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                            {unreadCount}
+                          </span>
+                        )}
+                      </Button>
+                      
+                      {/* Notifications Dropdown */}
+                      {showNotifications && (
+                        <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg z-50 border border-gray-200">
+                          <div className="p-4 border-b border-gray-200">
+                            <div className="flex items-center justify-between">
+                              <h3 className="text-lg font-semibold">Notifications</h3>
+                              {unreadCount > 0 && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={markAllAsRead}
+                                  className="text-blue-600"
+                                >
+                                  Mark all read
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                          <div className="max-h-96 overflow-y-auto">
+                            {notifications.length === 0 ? (
+                              <div className="p-6 text-center text-gray-500">
+                                <Bell className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                                <p>You don't have any new notifications</p>
+                              </div>
+                            ) : (
+                              notifications.map(notification => (
+                                <div
+                                  key={notification.id}
+                                  className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 ${
+                                    !notification.read ? 'bg-blue-50' : ''
+                                  }`}
+                                  onClick={() => markNotificationAsRead(notification.id)}
+                                >
+                                  <div className="flex items-start justify-between">
+                                    <div className="flex-1">
+                                      <h4 className="font-semibold text-sm">{notification.title}</h4>
+                                      <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
+                                      <p className="text-xs text-gray-400 mt-2">
+                                        {new Date(notification.timestamp).toLocaleString()}
+                                      </p>
+                                    </div>
+                                    {!notification.read && (
+                                      <div className="w-2 h-2 bg-blue-500 rounded-full ml-2 mt-2"></div>
+                                    )}
+                                  </div>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                     <Button
                       variant="outline"
                       onClick={handleLogout}
@@ -411,6 +467,16 @@ const HomeownerDashboard = () => {
                   </div>
                 )}
               </div>
+
+              {/* Mobile hamburger menu button */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="md:hidden"
+              >
+                <Menu className="h-6 w-6" />
+              </Button>
             </div>
           </div>
         </header>
