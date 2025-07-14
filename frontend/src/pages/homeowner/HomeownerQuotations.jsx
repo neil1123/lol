@@ -35,6 +35,11 @@ const HomeownerQuotations = () => {
       );
       
       setQuotations(userQuotations);
+      
+      // Load any local quotes that haven't been synced yet
+      const localQuoteRequests = JSON.parse(localStorage.getItem('quoteRequests') || '[]');
+      setLocalQuotes(localQuoteRequests);
+      
     } catch (error) {
       console.error('Failed to load quotations:', error);
       setError('Failed to load quotations. Please try again.');
