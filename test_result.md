@@ -481,6 +481,7 @@ metadata:
 
 test_plan:
   current_focus:
+    - "Migrate HomeownerQuotations from localStorage to database API"
     - "Update Provider Dashboard sidebar to replace 'Quotations' with 'Orders' and add 'Messages'"
     - "Create comprehensive Provider Orders management system"
     - "Create Provider Messaging system"
