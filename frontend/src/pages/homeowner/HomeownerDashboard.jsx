@@ -310,7 +310,7 @@ const HomeownerDashboard = () => {
                     </Button>
                     <Button
                       onClick={() => navigate('/homeowners/auth')}
-                      className="bg-blue-600 hover:bg-blue-700"
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
                     >
                       Sign Up
                     </Button>
