@@ -22,9 +22,23 @@ load_dotenv(ROOT_DIR / '.env')
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
 
-# MongoDB connection
+# MongoDB connection with SSL context configuration for OpenSSL 3.0 compatibility
 mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
+
+# Create SSL context to work around OpenSSL 3.0 compatibility issues
+ssl_context = ssl.create_default_context()
+ssl_context.check_hostname = False
+ssl_context.verify_mode = ssl.CERT_NONE
+
+# Configure client with SSL context
+client = AsyncIOMotorClient(
+    mongo_url,
+    ssl_context=ssl_context,
+    serverSelectionTimeoutMS=10000,
+    connectTimeoutMS=10000,
+    maxPoolSize=50,
+    minPoolSize=10
+)
 db = client[os.environ['DB_NAME']]
 
 # JWT settings
