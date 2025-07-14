@@ -461,6 +461,18 @@ frontend:
         agent: "main"
         comment: "Updated mock data structure to support order-centric workflow with comprehensive order details, priority levels, customer information, and realistic messaging conversations between providers and homeowners."
 
+  - task: "Migrate HomeownerQuotations from localStorage to database API"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/pages/homeowner/HomeownerQuotations.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Fixed syntax errors in HomeownerQuotations.jsx: 1) Added missing localQuotes state variable 2) Fixed undefined handleRejectQuote function to use handleDeclineQuote 3) Added localStorage integration for pending quote requests migration. File now compiles successfully."
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
