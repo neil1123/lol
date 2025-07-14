@@ -217,7 +217,7 @@ const ServiceBrowse = () => {
                   }}
                   className="justify-start"
                 >
-                  Dashboard
+                  Explore
                 </Button>
                 {isLoggedIn ? (
                   <Button 
