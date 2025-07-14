@@ -33,11 +33,23 @@ const ProviderCalendar = () => {
 
   // Load appointments from localStorage on component mount
   useEffect(() => {
-    const storedAppointments = localStorage.getItem('providerAppointments');
-    if (storedAppointments) {
-      setAppointments(JSON.parse(storedAppointments));
-    }
+    loadAppointments();
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
   }, []);
+
+  const loadAppointments = async () => {
+    try {
+      setLoading(true);
+      const appointmentsData = await apiService.getAppointments();
+      setAppointments(appointmentsData);
+    } catch (error) {
+      console.error('Failed to load appointments:', error);
+      setAppointments([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Save appointments to localStorage whenever appointments change
   useEffect(() => {
