@@ -149,17 +149,8 @@ const HomeownerDashboard = () => {
     const hasValidAuth = user && userType === 'homeowner';
     setIsLoggedIn(hasValidAuth);
     
-    console.log('Auth check:', { user: !!user, userType, hasValidAuth }); // Debug log
-    
     // Load notifications
     loadNotifications();
-    
-    // Create sample notifications for testing (only if logged in)
-    if (hasValidAuth) {
-      setTimeout(() => {
-        createSampleNotifications();
-      }, 1000);
-    }
     
     // Handle back button behavior for logged in users
     if (hasValidAuth) {
