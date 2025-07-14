@@ -60,44 +60,27 @@ const HomeownerAuth = () => {
       return;
     }
 
-    // Check if user already exists
-    const storedUsers = JSON.parse(localStorage.getItem('registeredHomeowners') || '[]');
-    const existingUser = storedUsers.find(u => u.email === signUpData.email);
-    
-    if (existingUser) {
-      alert('User with this email already exists');
+    try {
+      const response = await apiService.register({
+        email: signUpData.email,
+        password: signUpData.password,
+        user_type: 'homeowner',
+        name: `${signUpData.firstName} ${signUpData.lastName}`,
+        phone: signUpData.phone,
+        address: signUpData.address
+      });
+      
       setIsLoading(false);
-      return;
+      navigate('/homeowners/dashboard');
+    } catch (error) {
+      setIsLoading(false);
+      if (error.message.includes('already exists')) {
+        alert('User with this email already exists');
+      } else {
+        alert('Registration failed. Please try again.');
+      }
+      console.error('Registration error:', error);
     }
-    
-    // Create new user
-    const newUser = {
-      id: Date.now() + Math.random(), // Generate unique ID
-      name: `${signUpData.firstName} ${signUpData.lastName}`,
-      email: signUpData.email,
-      phone: signUpData.phone,
-      address: signUpData.address,
-      password: signUpData.password,
-      registeredAt: new Date().toISOString()
-    };
-    
-    // Store user
-    storedUsers.push(newUser);
-    localStorage.setItem('registeredHomeowners', JSON.stringify(storedUsers));
-    
-    // Auto login after registration
-    localStorage.setItem('userType', 'homeowner');
-    localStorage.setItem('user', JSON.stringify({
-      id: newUser.id,
-      name: newUser.name,
-      email: newUser.email,
-      phone: newUser.phone,
-      address: newUser.address,
-      type: 'homeowner'
-    }));
-    
-    setIsLoading(false);
-    navigate('/homeowners/dashboard');
   };
 
   return (
