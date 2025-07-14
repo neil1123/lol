@@ -56,6 +56,64 @@ const HomeownerDashboard = () => {
     navigate('/homeowners');
   };
 
+  // Notification functions
+  const loadNotifications = () => {
+    const storedNotifications = JSON.parse(localStorage.getItem('homeowner_notifications') || '[]');
+    setNotifications(storedNotifications);
+    
+    // Count unread notifications
+    const unreadCount = storedNotifications.filter(notif => !notif.read).length;
+    setUnreadCount(unreadCount);
+  };
+
+  const markNotificationAsRead = (notificationId) => {
+    const updatedNotifications = notifications.map(notif => 
+      notif.id === notificationId ? { ...notif, read: true } : notif
+    );
+    setNotifications(updatedNotifications);
+    localStorage.setItem('homeowner_notifications', JSON.stringify(updatedNotifications));
+    
+    // Update unread count
+    const newUnreadCount = updatedNotifications.filter(notif => !notif.read).length;
+    setUnreadCount(newUnreadCount);
+  };
+
+  const markAllAsRead = () => {
+    const updatedNotifications = notifications.map(notif => ({ ...notif, read: true }));
+    setNotifications(updatedNotifications);
+    localStorage.setItem('homeowner_notifications', JSON.stringify(updatedNotifications));
+    setUnreadCount(0);
+  };
+
+  const createNotification = (type, title, message, data = {}) => {
+    const newNotification = {
+      id: Date.now() + Math.random(),
+      type, // 'quotation', 'proposal', 'message'
+      title,
+      message,
+      data,
+      read: false,
+      timestamp: new Date().toISOString()
+    };
+    
+    const updatedNotifications = [newNotification, ...notifications.slice(0, 49)]; // Keep last 50
+    setNotifications(updatedNotifications);
+    localStorage.setItem('homeowner_notifications', JSON.stringify(updatedNotifications));
+    setUnreadCount(prev => prev + 1);
+  };
+
+  // Check for new data and create notifications
+  const checkForNewNotifications = () => {
+    // Check for new quotation responses
+    const quotationRequests = JSON.parse(localStorage.getItem('quotationRequests') || '[]');
+    
+    // Check for new messages
+    const messageThreads = JSON.parse(localStorage.getItem('messageThreads') || '[]');
+    
+    // Create notifications for any new activity (simplified for demo)
+    // In real app, you'd track what was last seen and compare
+  };
+
   useEffect(() => {
     // Check if user is logged in
     const user = localStorage.getItem('user');
