@@ -104,7 +104,7 @@ const ProviderCalendar = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
   };
 
-  const handleAddAppointment = async () => {
+  const handleCreateAppointment = async () => {
     if (appointmentForm.customerName && appointmentForm.date && appointmentForm.time && appointmentForm.serviceType) {
       try {
         const appointmentData = {
@@ -130,7 +130,7 @@ const ProviderCalendar = () => {
           address: '',
           notes: ''
         });
-        setShowAppointmentForm(false);
+        setShowNewAppointmentModal(false);
         loadAppointments(); // Reload from database
         
       } catch (error) {
