@@ -465,13 +465,16 @@ frontend:
     implemented: true
     working: false
     file: "/app/frontend/src/pages/homeowner/HomeownerQuotations.jsx"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "main"
         comment: "Fixed syntax errors in HomeownerQuotations.jsx: 1) Added missing localQuotes state variable 2) Fixed undefined handleRejectQuote function to use handleDeclineQuote 3) Added localStorage integration for pending quote requests migration. File now compiles successfully."
+      - working: false
+        agent: "testing"
+        comment: "CRITICAL BACKEND ISSUE FOUND: Homeowner quotation system testing revealed that homeowners cannot accept/decline quotes. The PUT /api/orders/{order_id}/status endpoint only allows providers to update order status (line 338-339 in server.py), but homeowners need this functionality to accept/decline quotes. All other functionality works: quotation requests create orders properly, homeowners can retrieve their orders with proper access control, order data structure matches frontend expectations. 6/7 tests passed. REQUIRES BACKEND API MODIFICATION to allow homeowners to update order status for quote acceptance/decline."
 
 metadata:
   created_by: "main_agent"
