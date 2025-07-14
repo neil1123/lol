@@ -214,8 +214,7 @@ def test_homeowner_status_update():
         
         # Try to update status to "accepted"
         response = requests.put(
-            f"{BACKEND_URL}/orders/{test_order_id}/status",
-            json={"status": "accepted"},
+            f"{BACKEND_URL}/orders/{test_order_id}/status?status=accepted",
             headers=headers,
             timeout=30
         )
