@@ -130,7 +130,7 @@ const ProviderCalendar = () => {
           address: '',
           notes: ''
         });
-        setShowNewAppointmentModal(false);
+        setShowAppointmentForm(false);
         loadAppointments(); // Reload from database
         
       } catch (error) {
