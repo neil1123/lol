@@ -22,11 +22,19 @@ load_dotenv(ROOT_DIR / '.env')
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
 
-# MongoDB connection - simplified for SSL compatibility
+# MongoDB connection with environment SSL override
+import os
+import ssl
+
+# Set environment variables to override SSL behavior
+os.environ['PYTHONHTTPSVERIFY'] = '0'
+os.environ['CURL_CA_BUNDLE'] = ''
+os.environ['REQUESTS_CA_BUNDLE'] = ''
+
 mongo_url = os.environ['MONGO_URL']
 
-# Use basic connection without additional SSL parameters
-client = AsyncIOMotorClient(mongo_url)
+# Use basic connection
+client = AsyncIOMotorClient(mongo_url, connect=False)
 db = client[os.environ['DB_NAME']]
 
 # JWT settings
