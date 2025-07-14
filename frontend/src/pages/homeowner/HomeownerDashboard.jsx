@@ -151,6 +151,13 @@ const HomeownerDashboard = () => {
     // Load notifications
     loadNotifications();
     
+    // Create sample notifications for testing (only if logged in)
+    if (user && userType === 'homeowner') {
+      setTimeout(() => {
+        createSampleNotifications();
+      }, 1000);
+    }
+    
     // Handle back button behavior for logged in users
     if (user && userType === 'homeowner') {
       const handlePopState = (event) => {
