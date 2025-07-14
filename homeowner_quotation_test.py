@@ -296,8 +296,7 @@ def test_provider_quote_workflow():
         headers = {"Authorization": f"Bearer {provider_token}"}
         
         response = requests.put(
-            f"{BACKEND_URL}/orders/{test_order_id}/status",
-            json={"status": "quoted"},
+            f"{BACKEND_URL}/orders/{test_order_id}/status?status=quoted",
             headers=headers,
             timeout=30
         )
