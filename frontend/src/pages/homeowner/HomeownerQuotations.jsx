@@ -289,7 +289,7 @@ const HomeownerQuotations = () => {
                           </Button>
                           <Button 
                             variant="outline"
-                            onClick={() => handleRejectQuote(quote.id)}
+                            onClick={() => handleDeclineQuote(quote.id)}
                             className="flex-1"
                           >
                             <XCircle className="h-4 w-4 mr-2" />
