@@ -14,6 +14,7 @@ const HomeownerQuotations = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [localQuotes, setLocalQuotes] = useState([]);
 
   useEffect(() => {
     loadQuotations();
