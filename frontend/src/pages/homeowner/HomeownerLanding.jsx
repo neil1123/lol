@@ -230,7 +230,7 @@ const HomeownerLanding = () => {
                   }}
                   className="justify-start"
                 >
-                  Dashboard
+                  Explore
                 </Button>
                 {isLoggedIn ? (
                   <Button 
