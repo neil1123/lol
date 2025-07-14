@@ -156,7 +156,7 @@ const ProviderOrders = () => {
         scheduledDate: ''
       });
       setShowNewOrderForm(false);
-      loadOrders(); // Reload orders from API
+      loadOrders(); // Reload orders from database
       
     } catch (error) {
       console.error('Failed to create order:', error);
