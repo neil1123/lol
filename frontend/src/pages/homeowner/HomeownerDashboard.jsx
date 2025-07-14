@@ -143,23 +143,26 @@ const HomeownerDashboard = () => {
   };
 
   useEffect(() => {
-    // Check if user is logged in
+    // Check if user is logged in - simplified check
     const user = localStorage.getItem('user');
     const userType = localStorage.getItem('userType');
-    setIsLoggedIn(user && userType === 'homeowner');
+    const hasValidAuth = user && userType === 'homeowner';
+    setIsLoggedIn(hasValidAuth);
+    
+    console.log('Auth check:', { user: !!user, userType, hasValidAuth }); // Debug log
     
     // Load notifications
     loadNotifications();
     
     // Create sample notifications for testing (only if logged in)
-    if (user && userType === 'homeowner') {
+    if (hasValidAuth) {
       setTimeout(() => {
         createSampleNotifications();
       }, 1000);
     }
     
     // Handle back button behavior for logged in users
-    if (user && userType === 'homeowner') {
+    if (hasValidAuth) {
       const handlePopState = (event) => {
         // If user is logged in and tries to navigate back to landing, redirect to home tab
         if (window.location.pathname === '/homeowners' || window.location.pathname === '/') {
