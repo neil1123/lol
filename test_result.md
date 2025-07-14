@@ -497,7 +497,8 @@ test_plan:
     - "Enhance weekly performance chart with orders and revenue data"
     - "Add new routes for Orders and Messages"
     - "Update mock data for orders and messages"
-  stuck_tasks: []
+  stuck_tasks: 
+    - "Migrate HomeownerQuotations from localStorage to database API"
   test_all: false
   test_priority: "high_first"
   backend_testing_complete: true
