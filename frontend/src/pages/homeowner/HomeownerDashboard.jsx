@@ -579,6 +579,7 @@ const HomeownerDashboard = () => {
                         variant="ghost"
                         onClick={() => {
                           setShowNotifications(!showNotifications);
+                          setIsMobileMenuOpen(false); // Close sidebar when opening notifications
                         }}
                         className="w-full justify-start relative"
                       >
