@@ -52,12 +52,7 @@ const ProviderCalendar = () => {
     }
   };
 
-  // Save appointments to localStorage whenever appointments change
-  useEffect(() => {
-    if (appointments.length >= 0) {
-      localStorage.setItem('providerAppointments', JSON.stringify(appointments));
-    }
-  }, [appointments]);
+
   const [appointmentForm, setAppointmentForm] = useState({
     customerName: '',
     phoneNumber: '',
