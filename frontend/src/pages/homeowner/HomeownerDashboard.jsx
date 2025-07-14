@@ -293,7 +293,7 @@ const HomeownerDashboard = () => {
             <div className="flex justify-between items-center py-4">
               <div className="flex items-center">
                 <h1 className="text-2xl font-bold text-blue-600">Doord</h1>
-                <span className="ml-2 text-gray-500">for Homeowners</span>
+                <span className="ml-2 text-gray-500">Explore</span>
               </div>
 
               {/* Right side - Auth aware */}
