@@ -507,4 +507,8 @@ agent_communication:
   - agent: "main"
     message: "FIXED: HomeownerQuotations localStorage migration syntax errors. Resolved: 1) Missing localQuotes state variable 2) Undefined handleRejectQuote function reference 3) Added localStorage integration for pending quote requests. File now compiles successfully and ready for testing. Next step: Backend testing to verify quotation APIs work correctly for homeowner access."
   - agent: "testing"
+    message: "CRITICAL BACKEND ISSUE IDENTIFIED: Homeowner quotation testing found that homeowners cannot accept/decline quotes due to PUT /api/orders/{order_id}/status endpoint restricting updates to providers only. All other functionality works (order retrieval, access control, data structure). 6/7 tests passed. Requires API modification to allow homeowner status updates."
+  - agent: "main"
+    message: "BACKEND ISSUE RESOLVED: Modified PUT /api/orders/{order_id}/status endpoint to allow both providers and homeowners to update order status with proper permissions. Providers can update to any status, homeowners can only update to 'accepted' or 'declined'. Backend successfully restarted. Ready for re-testing."
+  - agent: "testing"
     message: "HOMEOWNER QUOTATION TESTING COMPLETED: Found CRITICAL BACKEND ISSUE - homeowners cannot accept/decline quotes due to API restriction in PUT /api/orders/{order_id}/status endpoint (only allows providers). 6/7 tests passed: ✅ Quotation workflow ✅ Order retrieval with proper access control ✅ Order filtering ✅ Individual order access ✅ Data structure compatibility ✅ Provider quote workflow ❌ Homeowner status updates (403 Forbidden). Backend API needs modification to allow homeowners to update order status for quote acceptance/decline functionality."
