@@ -463,9 +463,9 @@ frontend:
 
   - task: "Migrate HomeownerQuotations from localStorage to database API"
     implemented: true
-    working: true
+    working: false
     file: "/app/frontend/src/pages/homeowner/HomeownerQuotations.jsx"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -478,6 +478,9 @@ frontend:
       - working: true
         agent: "testing"
         comment: "CRITICAL ISSUE RESOLVED: Backend testing confirms homeowner quotation system fully functional. Fixed Query parameter handling. All tests pass: 1) Homeowner can accept quotes 2) Homeowner can decline quotes 3) Provider status updates work 4) Access control properly implemented 5) Invalid status updates rejected. Migration from localStorage to database API complete."
+      - working: false
+        agent: "testing"
+        comment: "CRITICAL AUTHENTICATION ISSUE: Frontend UI works perfectly but database API integration fails due to authentication. Testing shows: ✅ Page loads correctly ✅ All tabs display with proper counts ✅ Empty state shows correctly ✅ Header navigation works ✅ Mobile responsiveness works ✅ Error handling graceful ❌ API calls to /api/orders return 403 'Not authenticated' errors. The HomeownerQuotations component correctly calls apiService.getOrders() but no valid JWT token is being sent. Authentication flow needs to be fixed for database integration to work."
 
 metadata:
   created_by: "main_agent"
