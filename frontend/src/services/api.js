@@ -115,9 +115,8 @@ class ApiService {
   }
 
   async updateOrderStatus(orderId, status) {
-    return await this.request(`/orders/${orderId}/status`, {
+    return await this.request(`/orders/${orderId}/status?status=${encodeURIComponent(status)}`, {
       method: 'PUT',
-      body: JSON.stringify({ status }),
     });
   }
 
