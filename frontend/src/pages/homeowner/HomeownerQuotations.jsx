@@ -6,28 +6,62 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/ca
 import { Badge } from '../../components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import { Avatar, AvatarFallback } from '../../components/ui/avatar';
-import { mockQuotations } from '../../data/mockData';
+import apiService from '../../services/api';
 
 const HomeownerQuotations = () => {
   const navigate = useNavigate();
   const [quotations, setQuotations] = useState([]);
-  const [localQuotes, setLocalQuotes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Load mock quotations
-    setQuotations(mockQuotations);
-    
-    // Load local quote requests
-    const localRequests = JSON.parse(localStorage.getItem('quoteRequests') || '[]');
-    setLocalQuotes(localRequests);
+    loadQuotations();
   }, []);
 
-  const handleAcceptQuote = (quoteId) => {
-    const updatedQuotes = quotations.map(quote => 
-      quote.id === quoteId ? { ...quote, status: 'accepted' } : quote
-    );
-    setQuotations(updatedQuotes);
+  const loadQuotations = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      
+      // Load orders (which include quotation requests)
+      const ordersData = await apiService.getOrders();
+      
+      // Filter for quotations/orders for this homeowner
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const userQuotations = ordersData.filter(order => 
+        order.homeowner_id === user.id || order.homeowner_email === user.email
+      );
+      
+      setQuotations(userQuotations);
+    } catch (error) {
+      console.error('Failed to load quotations:', error);
+      setError('Failed to load quotations. Please try again.');
+      setQuotations([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAcceptQuote = async (quoteId) => {
+    try {
+      await apiService.updateOrderStatus(quoteId, 'confirmed');
+      loadQuotations(); // Reload data
+    } catch (error) {
+      console.error('Failed to accept quote:', error);
+      alert('Failed to accept quote. Please try again.');
+    }
+  };
+
+  const handleDeclineQuote = async (quoteId) => {
+    try {
+      await apiService.updateOrderStatus(quoteId, 'declined');
+      loadQuotations(); // Reload data  
+    } catch (error) {
+      console.error('Failed to decline quote:', error);
+      alert('Failed to decline quote. Please try again.');
+    }
+  };
     
     // Create order
     const acceptedQuote = quotations.find(q => q.id === quoteId);
