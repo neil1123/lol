@@ -114,34 +114,6 @@ const HomeownerDashboard = () => {
     // In real app, you'd track what was last seen and compare
   };
 
-  // Demo function to create sample notifications (for testing)
-  const createSampleNotifications = () => {
-    if (notifications.length === 0) {
-      const sampleNotifications = [
-        {
-          id: 1,
-          type: 'quotation',
-          title: 'New Quotation Response',
-          message: 'Elite Home Services responded to your cleaning request with a quote of $150',
-          read: false,
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
-        },
-        {
-          id: 2,
-          type: 'message',
-          title: 'New Message',
-          message: 'John from Plumbing Pro sent you a message about your appointment',
-          read: false,
-          timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString() // 30 minutes ago
-        }
-      ];
-      
-      setNotifications(sampleNotifications);
-      localStorage.setItem('homeowner_notifications', JSON.stringify(sampleNotifications));
-      setUnreadCount(2);
-    }
-  };
-
   useEffect(() => {
     // Check if user is logged in - simplified check
     const user = localStorage.getItem('user');
