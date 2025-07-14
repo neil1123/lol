@@ -80,6 +80,13 @@ const ProviderOrders = () => {
     }
   };
 
+  // Remove the localStorage save effect since we're using database
+  // useEffect(() => {
+  //   if (orders.length > 0) {
+  //     localStorage.setItem('providerOrders', JSON.stringify(orders));
+  //   }
+  // }, [orders]);
+
   const handleCreateOrder = async () => {
     try {
       setError('');
