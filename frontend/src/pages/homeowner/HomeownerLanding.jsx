@@ -734,7 +734,7 @@ const HomeownerLanding = () => {
               <h5 className="font-semibold mb-4">For Providers</h5>
               <ul className="space-y-2 text-gray-400">
                 <li>Join as Provider</li>
-                <li>Dashboard</li>
+                <li>Explore</li>
                 <li>Resources</li>
                 <li>Community</li>
               </ul>
