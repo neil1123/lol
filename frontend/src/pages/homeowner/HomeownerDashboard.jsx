@@ -613,64 +613,54 @@ const HomeownerDashboard = () => {
 
         {/* Mobile Notifications Overlay */}
         {showNotifications && isLoggedIn && (
-          <div className="fixed inset-0 z-60 md:hidden">
+          <div className="fixed inset-0 z-[9999] md:hidden">
             <div 
               className="absolute inset-0 bg-black bg-opacity-50"
               onClick={() => setShowNotifications(false)}
             ></div>
             <div className="absolute right-0 top-0 h-full w-full max-w-sm bg-white shadow-xl">
-              <div className="flex flex-col h-full">
-                <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <div className="flex flex-col h-full bg-white">
+                <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
                   <h3 className="text-lg font-semibold">Notifications</h3>
-                  <div className="flex space-x-2">
-                    {unreadCount > 0 && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={markAllAsRead}
-                        className="text-blue-600"
-                      >
-                        Mark all read
-                      </Button>
-                    )}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowNotifications(false)}
-                    >
-                      <X className="h-5 w-5" />
-                    </Button>
-                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowNotifications(false)}
+                  >
+                    <X className="h-5 w-5" />
+                  </Button>
                 </div>
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto bg-white">
                   {notifications.length === 0 ? (
-                    <div className="p-6 text-center text-gray-500">
+                    <div className="p-6 text-center text-gray-500 bg-white h-full flex flex-col justify-center">
                       <Bell className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                       <p>You don't have any new notifications</p>
                     </div>
                   ) : (
-                    notifications.map(notification => (
-                      <div
-                        key={notification.id}
-                        className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 ${
-                          !notification.read ? 'bg-blue-50' : ''
-                        }`}
-                        onClick={() => markNotificationAsRead(notification.id)}
-                      >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <h4 className="font-semibold text-sm">{notification.title}</h4>
-                            <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
-                            <p className="text-xs text-gray-400 mt-2">
-                              {new Date(notification.timestamp).toLocaleString()}
-                            </p>
+                    <div className="bg-white">
+                      {notifications.map(notification => (
+                        <div
+                          key={notification.id}
+                          className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 ${
+                            !notification.read ? 'bg-blue-50' : 'bg-white'
+                          }`}
+                          onClick={() => markNotificationAsRead(notification.id)}
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <h4 className="font-semibold text-sm">{notification.title}</h4>
+                              <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
+                              <p className="text-xs text-gray-400 mt-2">
+                                {new Date(notification.timestamp).toLocaleString()}
+                              </p>
+                            </div>
+                            {!notification.read && (
+                              <div className="w-2 h-2 bg-blue-500 rounded-full ml-2 mt-2"></div>
+                            )}
                           </div>
-                          {!notification.read && (
-                            <div className="w-2 h-2 bg-blue-500 rounded-full ml-2 mt-2"></div>
-                          )}
                         </div>
-                      </div>
-                    ))
+                      ))}
+                    </div>
                   )}
                 </div>
               </div>
