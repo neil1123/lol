@@ -33,26 +33,19 @@ const HomeownerAuth = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Get stored users from localStorage
-    const storedUsers = JSON.parse(localStorage.getItem('registeredHomeowners') || '[]');
-    const user = storedUsers.find(u => u.email === signInData.email && u.password === signInData.password);
-    
-    if (user) {
-      localStorage.setItem('userType', 'homeowner');
-      localStorage.setItem('user', JSON.stringify({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        address: user.address,
-        type: 'homeowner'
-      }));
+    try {
+      const response = await apiService.login({
+        email: signInData.email,
+        password: signInData.password
+      });
       
+      // Navigation is handled by apiService.login, but let's make sure
       setIsLoading(false);
       navigate('/homeowners/dashboard');
-    } else {
+    } catch (error) {
       setIsLoading(false);
       alert('Invalid credentials. Please check your email and password.');
+      console.error('Login error:', error);
     }
   };
 
