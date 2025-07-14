@@ -679,7 +679,72 @@ const HomeownerDashboard = () => {
         )}
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto">
+          {/* Navigation Bar */}
+          <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+            <div className="px-6 py-4">
+              <nav className="flex space-x-8">
+                <button
+                  onClick={() => setActiveTab('home')}
+                  className={`pb-3 border-b-2 transition-colors ${
+                    activeTab === 'home' 
+                      ? 'border-blue-500 text-blue-600 font-semibold' 
+                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <Home className="h-4 w-4 inline mr-2" />
+                  Home
+                </button>
+                <button
+                  onClick={() => setActiveTab('browse')}
+                  className={`pb-3 border-b-2 transition-colors ${
+                    activeTab === 'browse' 
+                      ? 'border-blue-500 text-blue-600 font-semibold' 
+                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <Search className="h-4 w-4 inline mr-2" />
+                  Browse Services
+                </button>
+                <button
+                  onClick={() => setActiveTab('quotations')}
+                  className={`pb-3 border-b-2 transition-colors ${
+                    activeTab === 'quotations' 
+                      ? 'border-blue-500 text-blue-600 font-semibold' 
+                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <FileText className="h-4 w-4 inline mr-2" />
+                  My Requests
+                </button>
+                <button
+                  onClick={() => setActiveTab('reports')}
+                  className={`pb-3 border-b-2 transition-colors ${
+                    activeTab === 'reports' 
+                      ? 'border-blue-500 text-blue-600 font-semibold' 
+                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <BarChart3 className="h-4 w-4 inline mr-2" />
+                  Reports
+                </button>
+                <button
+                  onClick={() => setActiveTab('settings')}
+                  className={`pb-3 border-b-2 transition-colors ${
+                    activeTab === 'settings' 
+                      ? 'border-blue-500 text-blue-600 font-semibold' 
+                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <Settings className="h-4 w-4 inline mr-2" />
+                  Settings
+                </button>
+              </nav>
+            </div>
+          </div>
+
+          {/* Content Area */}
+          <div className="p-6">
           {/* Home Dashboard Content */}
           {activeTab === 'home' && (
             <>
