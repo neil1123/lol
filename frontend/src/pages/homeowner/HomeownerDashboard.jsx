@@ -58,12 +58,12 @@ const HomeownerDashboard = () => {
 
   // Notification functions
   const loadNotifications = () => {
-    const storedNotifications = JSON.parse(localStorage.getItem('homeowner_notifications') || '[]');
-    setNotifications(storedNotifications);
+    // Always start with empty notifications for new/fresh users
+    setNotifications([]);
+    setUnreadCount(0);
     
-    // Count unread notifications
-    const unreadCount = storedNotifications.filter(notif => !notif.read).length;
-    setUnreadCount(unreadCount);
+    // Clear any existing mock data
+    localStorage.removeItem('homeowner_notifications');
   };
 
   const markNotificationAsRead = (notificationId) => {
