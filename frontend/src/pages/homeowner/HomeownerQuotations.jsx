@@ -62,19 +62,6 @@ const HomeownerQuotations = () => {
       alert('Failed to decline quote. Please try again.');
     }
   };
-    
-    // Create order
-    const acceptedQuote = quotations.find(q => q.id === quoteId);
-    const order = {
-      id: Date.now(),
-      quotationId: quoteId,
-      ...acceptedQuote,
-      status: 'scheduled',
-      acceptedDate: new Date().toISOString()
-    };
-    
-    const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-    localStorage.setItem('orders', JSON.stringify([...existingOrders, order]));
   };
 
   const handleRejectQuote = (quoteId) => {
