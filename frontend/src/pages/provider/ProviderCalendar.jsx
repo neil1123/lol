@@ -461,7 +461,7 @@ const ProviderCalendar = () => {
               
               <div className="flex gap-3 pt-4 border-t border-gray-200">
                 <Button 
-                  onClick={handleAddAppointment}
+                  onClick={handleCreateAppointment}
                   className="flex-1"
                   disabled={!appointmentForm.customerName || !appointmentForm.date || !appointmentForm.time || !appointmentForm.serviceType}
                 >
