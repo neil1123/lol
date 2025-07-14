@@ -171,7 +171,7 @@ const ServiceBrowse = () => {
                 variant="ghost" 
                 onClick={() => navigate('/homeowners/dashboard')}
               >
-                Dashboard
+                Explore
               </Button>
               {isLoggedIn ? (
                 <Button variant="outline" onClick={() => {
