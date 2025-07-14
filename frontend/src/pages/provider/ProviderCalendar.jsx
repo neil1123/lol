@@ -32,7 +32,7 @@ const ProviderCalendar = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Load appointments from localStorage on component mount
+  // Load appointments from API on component mount
   useEffect(() => {
     loadAppointments();
     // Scroll to top when component mounts
