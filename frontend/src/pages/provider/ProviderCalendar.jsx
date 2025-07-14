@@ -104,31 +104,39 @@ const ProviderCalendar = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
   };
 
-  const handleAddAppointment = () => {
+  const handleAddAppointment = async () => {
     if (appointmentForm.customerName && appointmentForm.date && appointmentForm.time && appointmentForm.serviceType) {
-      const newAppointment = {
-        id: appointments.length + 1,
-        date: new Date(appointmentForm.date).getDate(),
-        title: `${appointmentForm.serviceType} - ${appointmentForm.customerName}`,
-        time: appointmentForm.time,
-        customer: appointmentForm.customerName,
-        phone: appointmentForm.phoneNumber,
-        service: appointmentForm.serviceType,
-        address: appointmentForm.address,
-        notes: appointmentForm.notes
-      };
-      
-      setAppointments([...appointments, newAppointment]);
-      setAppointmentForm({
-        customerName: '',
-        phoneNumber: '',
-        serviceType: '',
-        date: '',
-        time: '',
-        address: '',
-        notes: ''
-      });
-      setShowAppointmentForm(false);
+      try {
+        const appointmentData = {
+          customer_name: appointmentForm.customerName,
+          phone_number: appointmentForm.phoneNumber,
+          service_type: appointmentForm.serviceType,
+          date: appointmentForm.date,
+          time: appointmentForm.time,
+          address: appointmentForm.address,
+          notes: appointmentForm.notes,
+          source: 'manual'
+        };
+        
+        await apiService.createAppointment(appointmentData);
+        
+        // Reset form and reload appointments
+        setAppointmentForm({
+          customerName: '',
+          phoneNumber: '',
+          serviceType: '',
+          date: '',
+          time: '',
+          address: '',
+          notes: ''
+        });
+        setShowAppointmentForm(false);
+        loadAppointments(); // Reload from database
+        
+      } catch (error) {
+        console.error('Failed to create appointment:', error);
+        alert('Failed to create appointment. Please try again.');
+      }
     }
   };
 
