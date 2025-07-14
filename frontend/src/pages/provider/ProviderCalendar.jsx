@@ -30,6 +30,7 @@ const ProviderCalendar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // Load appointments from localStorage on component mount
   useEffect(() => {
