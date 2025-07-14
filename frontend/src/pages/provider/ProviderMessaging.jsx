@@ -60,35 +60,60 @@ const ProviderMessaging = () => {
   const sidebarItems = STANDARD_PROVIDER_SIDEBAR;
 
   useEffect(() => {
-    // Check if mobile view
+    loadMessages();
+    
     const checkMobileView = () => {
       setIsMobileView(window.innerWidth < 768);
     };
     
     checkMobileView();
     window.addEventListener('resize', checkMobileView);
-    
-    // Load messages from localStorage for persistence, start with empty for fresh platform
-    const storedMessages = localStorage.getItem('messageThreads');
-    if (storedMessages) {
-      setMessages(JSON.parse(storedMessages));
-    } else {
-      // Start with empty array for fresh platform
-      setMessages([]);
-    }
-    
-    // Scroll to top when component mounts
     window.scrollTo(0, 0);
     
     return () => window.removeEventListener('resize', checkMobileView);
   }, []);
 
-  // Save messages to localStorage whenever messages change
-  useEffect(() => {
-    if (messages.length >= 0) {
-      localStorage.setItem('messageThreads', JSON.stringify(messages));
+  const loadMessages = async () => {
+    try {
+      setLoading(true);
+      const messageThreads = await apiService.getMessageThreads();
+      setMessages(messageThreads);
+    } catch (error) {
+      console.error('Failed to load messages:', error);
+      setMessages([]);
+    } finally {
+      setLoading(false);
     }
-  }, [messages]);
+  };
+
+  // Remove localStorage save effect since we're using database
+  const sendMessage = async (messageContent) => {
+    if (!messageContent.trim() || !selectedConversation) return;
+    
+    try {
+      const newMessage = {
+        thread_id: selectedConversation.id,
+        content: messageContent,
+        sender_type: 'provider'
+      };
+      
+      await apiService.sendMessage(newMessage);
+      
+      // Reload messages to get updated thread
+      await loadMessages();
+      
+      // Update selected conversation with new message
+      const updatedThread = messages.find(m => m.id === selectedConversation.id);
+      if (updatedThread) {
+        setSelectedConversation(updatedThread);
+      }
+      
+      setNewMessage('');
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      alert('Failed to send message. Please try again.');
+    }
+  };
 
   const handleConversationSelect = (conversation) => {
     setSelectedConversation(conversation);
