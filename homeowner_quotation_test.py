@@ -234,6 +234,38 @@ def test_homeowner_status_update():
         print(f"❌ Status update failed: {e}")
         return False
 
+def test_homeowner_individual_order():
+    """Test homeowner can retrieve individual order details"""
+    print("\n🔍 Testing Homeowner Individual Order Retrieval...")
+    
+    if not homeowner_token or not test_order_id:
+        print("❌ Missing homeowner token or test order ID")
+        return False
+    
+    try:
+        headers = {"Authorization": f"Bearer {homeowner_token}"}
+        response = requests.get(
+            f"{BACKEND_URL}/orders/{test_order_id}",
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            order = response.json()
+            if "id" in order and order["id"] == test_order_id:
+                print("✅ Homeowner can retrieve individual order details")
+                return True
+            else:
+                print(f"❌ Invalid order data: {order}")
+                return False
+        else:
+            print(f"❌ Individual order retrieval failed with status {response.status_code}")
+            print(f"Response: {response.text}")
+            return False
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Individual order retrieval failed: {e}")
+        return False
+
 def test_order_data_structure():
     """Test order data structure matches frontend expectations"""
     print("\n🔍 Testing Order Data Structure...")
