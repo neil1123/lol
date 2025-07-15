@@ -39,6 +39,7 @@ const ProviderMessaging = () => {
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
+  const [conversationMessages, setConversationMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [showProposalForm, setShowProposalForm] = useState(false);
