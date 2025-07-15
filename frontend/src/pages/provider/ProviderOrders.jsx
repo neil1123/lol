@@ -184,6 +184,59 @@ const ProviderOrders = () => {
     }
   };
 
+  const handleSendQuotation = async (orderId, quotationAmount) => {
+    try {
+      if (!quotationAmount || quotationAmount <= 0) {
+        alert('Please enter a valid quotation amount');
+        return;
+      }
+
+      // Update order status to quotation_sent
+      await apiService.updateOrderStatus(orderId, 'quotation_sent');
+      
+      // Create a message thread for this quotation
+      const order = orders.find(o => o.id === orderId);
+      if (order) {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        
+        // Create message thread
+        const threadData = {
+          order_id: orderId,
+          homeowner_id: order.homeowner_id,
+          provider_id: user.id,
+          homeowner_name: order.homeowner_name,
+          provider_name: user.business_name || user.name,
+          service_type: order.service_type,
+          last_message: `Quotation sent: $${quotationAmount}`,
+          last_message_time: new Date().toISOString()
+        };
+        
+        const messageThread = await apiService.createMessageThread(threadData);
+        
+        // Send quotation message
+        const quotationMessage = {
+          thread_id: messageThread.id,
+          sender_id: user.id,
+          sender_type: 'provider',
+          message_type: 'quotation',
+          content: `I've prepared a quotation for your ${order.service_type} request.`,
+          quotation_amount: quotationAmount,
+          order_id: orderId,
+          timestamp: new Date().toISOString()
+        };
+        
+        await apiService.sendMessage(quotationMessage);
+      }
+      
+      loadOrders(); // Reload orders
+      alert('Quotation sent successfully!');
+      
+    } catch (error) {
+      console.error('Failed to send quotation:', error);
+      alert('Failed to send quotation. Please try again.');
+    }
+  };
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'pending_quotation':
