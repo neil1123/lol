@@ -633,11 +633,21 @@ const ProviderOrders = () => {
                         </div>
                         
                         <div className="flex flex-col sm:flex-row gap-2 sm:space-x-3 sm:gap-0">
-                          <Button onClick={() => handleUpdateOrderStatus(order.id, 'quotation_sent')} className="w-full sm:w-auto">
-                            <FileText className="h-4 w-4 mr-2" />
-                            <span className="hidden sm:inline">Send Quotation</span>
-                            <span className="sm:hidden">Quote</span>
-                          </Button>
+                          <div className="flex items-center space-x-2 w-full sm:w-auto">
+                            <Input
+                              type="number"
+                              placeholder="Enter amount"
+                              className="flex-1"
+                              id={`quotation-${order.id}`}
+                            />
+                            <Button onClick={() => {
+                              const amount = document.getElementById(`quotation-${order.id}`).value;
+                              handleSendQuotation(order.id, amount);
+                            }} className="w-auto">
+                              <DollarSign className="h-4 w-4 mr-1" />
+                              Send Quote
+                            </Button>
+                          </div>
                           <Button variant="outline" 
                             onClick={() => handleMessageCustomer(order)} 
                             className="w-full sm:w-auto"
