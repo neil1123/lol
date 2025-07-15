@@ -79,6 +79,9 @@ const ProviderAuth = () => {
     setError('');
     
     try {
+      console.log('Sign up data:', signUpData);
+      console.log('Services selected:', signUpData.services);
+      
       // Validate form
       if (signUpData.password !== signUpData.confirmPassword) {
         throw new Error('Passwords do not match');
@@ -102,15 +105,28 @@ const ProviderAuth = () => {
         address: signUpData.address,
         business_name: signUpData.businessName,
         services: signUpData.services,
-        license: signUpData.license
+        license: signUpData.license,
+        experience: signUpData.experience
       };
 
+      console.log('Sending registration data:', registrationData);
+
       const response = await apiService.register(registrationData);
+      
+      console.log('Registration response:', response);
+      
+      // Store user data
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('userType', 'provider');
+      localStorage.setItem('user', JSON.stringify(response.user));
+      
+      console.log('Redirecting to provider dashboard...');
       
       // Redirect to dashboard
       navigate('/homeservices/dashboard');
       
     } catch (error) {
+      console.error('Sign up error:', error);
       setError(error.message || 'Registration failed. Please try again.');
     } finally {
       setIsLoading(false);
