@@ -139,8 +139,9 @@ const ProviderMessaging = () => {
     }
   };
 
-  const handleConversationSelect = (conversation) => {
+  const handleConversationSelect = async (conversation) => {
     setSelectedConversation(conversation);
+    await loadConversationMessages(conversation.id);
     if (isMobileView) {
       setShowChat(true);
     }
