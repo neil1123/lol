@@ -592,12 +592,12 @@ const ProviderOrders = () => {
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <div>
-                          <CardTitle className="text-lg">{order.homeownerName}</CardTitle>
-                          <p className="text-sm text-gray-600">{order.serviceType}</p>
+                          <CardTitle className="text-lg">{order.homeowner_name}</CardTitle>
+                          <p className="text-sm text-gray-600">{order.service_type}</p>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <Badge className={getPriorityColor(order.priority)}>
-                            {order.priority}
+                          <Badge className={getPriorityColor(order.urgency || order.priority)}>
+                            {order.urgency || order.priority}
                           </Badge>
                           <Badge className={getStatusColor(order.status)}>
                             <Clock className="h-3 w-3 mr-1" />
