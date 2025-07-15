@@ -616,19 +616,19 @@ const ProviderOrders = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                           <div className="flex items-center space-x-2">
                             <MapPin className="h-4 w-4 text-gray-500" />
-                            <span>{order.homeownerAddress}</span>
+                            <span>{order.homeowner_address || 'Address not provided'}</span>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Mail className="h-4 w-4 text-gray-500" />
-                            <span>{order.homeownerEmail}</span>
+                            <span>{order.homeowner_email || 'Email not provided'}</span>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Phone className="h-4 w-4 text-gray-500" />
-                            <span>{order.homeownerPhone}</span>
+                            <span>{order.homeowner_phone || 'Phone not provided'}</span>
                           </div>
                           <div className="flex items-center space-x-2">
                             <Calendar className="h-4 w-4 text-gray-500" />
-                            <span>{formatDate(order.requestDate)}</span>
+                            <span>{formatDate(order.created_at || order.request_date)}</span>
                           </div>
                         </div>
                         
