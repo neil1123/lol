@@ -130,8 +130,8 @@ const ProviderMessaging = () => {
 
       await apiService.sendMessage(newMessage);
       
-      // Reload messages to get updated conversation
-      await loadMessages();
+      // Reload conversation messages to get updated messages
+      await loadConversationMessages(selectedConversation.id);
       setNewMessage('');
       
     } catch (error) {
