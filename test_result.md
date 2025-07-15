@@ -502,6 +502,7 @@ metadata:
 
 test_plan:
   current_focus:
+    - "Fix provider authentication form validation issues"
     - "Migrate HomeownerQuotations from localStorage to database API"
     - "Update Provider Dashboard sidebar to replace 'Quotations' with 'Orders' and add 'Messages'"
     - "Create comprehensive Provider Orders management system"
@@ -510,6 +511,7 @@ test_plan:
     - "Add new routes for Orders and Messages"
     - "Update mock data for orders and messages"
   stuck_tasks: 
+    - "Fix provider authentication form validation issues"
     - "Migrate HomeownerQuotations from localStorage to database API"
   test_all: false
   test_priority: "high_first"
