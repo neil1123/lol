@@ -367,8 +367,8 @@ const ProviderOrders = () => {
       )}
 
       <div className="flex">
-        {/* Desktop Sidebar - Hidden on mobile */}
-        <div className="w-64 bg-white shadow-sm min-h-screen" style={{ display: 'none' }}>
+        {/* Desktop Sidebar - Always visible on desktop */}
+        <div className="hidden md:block w-64 bg-white shadow-sm min-h-screen">
           <div className="p-4">
             <nav className="space-y-2">
               {sidebarItems.map((item) => (
@@ -380,8 +380,20 @@ const ProviderOrders = () => {
                 >
                   <item.icon className="h-4 w-4 mr-2" />
                   {item.label}
+                  {item.notificationKey && notifications[item.notificationKey] > 0 && (
+                    <NotificationBadge count={notifications[item.notificationKey]} className="ml-auto" />
+                  )}
                 </Button>
               ))}
+              <hr className="my-4" />
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                onClick={handleLogout}
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
             </nav>
           </div>
         </div>
