@@ -371,11 +371,22 @@ const ProviderAuth = () => {
                             <Checkbox
                               id={service.name}
                               checked={signUpData.services.includes(service.name)}
-                              onCheckedChange={() => handleServiceToggle(service.name)}
+                              onCheckedChange={(checked) => {
+                                console.log('Checkbox changed:', service.name, 'checked:', checked);
+                                if (checked) {
+                                  handleServiceToggle(service.name);
+                                } else {
+                                  handleServiceToggle(service.name);
+                                }
+                              }}
                             />
                             <label
                               htmlFor={service.name}
                               className="text-sm cursor-pointer"
+                              onClick={() => {
+                                console.log('Label clicked for:', service.name);
+                                handleServiceToggle(service.name);
+                              }}
                             >
                               {service.name}
                             </label>
