@@ -516,6 +516,269 @@ def test_appointment_creation():
         print(f"❌ Appointment creation failed: {e}")
         return False
 
+def test_update_order_quotation():
+    """Test updating order quotation (PUT /api/orders/{order_id}/quotation)"""
+    print("\n🔍 Testing Update Order Quotation...")
+    
+    if not provider_token or not test_order_id:
+        print("❌ Missing required data for quotation update test")
+        return False
+    
+    try:
+        # Test updating quotation with amount and details
+        headers = {"Authorization": f"Bearer {provider_token}"}
+        params = {
+            "quotation_amount": 150.00,
+            "quotation_details": "Complete plumbing repair including parts and labor"
+        }
+        
+        response = requests.put(
+            f"{BACKEND_URL}/orders/{test_order_id}/quotation",
+            params=params,
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            data = response.json()
+            if "message" in data and "quotation updated" in data["message"].lower():
+                print("✅ Order quotation update successful")
+                return True
+            else:
+                print(f"❌ Invalid quotation update response: {data}")
+                return False
+        else:
+            print(f"❌ Order quotation update failed with status {response.status_code}")
+            print(f"Response: {response.text}")
+            return False
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Order quotation update failed: {e}")
+        return False
+
+def test_provider_order_status_update():
+    """Test provider updating order status"""
+    print("\n🔍 Testing Provider Order Status Update...")
+    
+    if not provider_token or not test_order_id:
+        print("❌ Missing required data for provider status update test")
+        return False
+    
+    try:
+        headers = {"Authorization": f"Bearer {provider_token}"}
+        params = {"status": "quoted"}
+        
+        response = requests.put(
+            f"{BACKEND_URL}/orders/{test_order_id}/status",
+            params=params,
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            data = response.json()
+            if "message" in data and "status updated" in data["message"].lower():
+                print("✅ Provider order status update successful")
+                return True
+            else:
+                print(f"❌ Invalid status update response: {data}")
+                return False
+        else:
+            print(f"❌ Provider order status update failed with status {response.status_code}")
+            print(f"Response: {response.text}")
+            return False
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Provider order status update failed: {e}")
+        return False
+
+def test_homeowner_order_status_update():
+    """Test homeowner updating order status (accept/decline)"""
+    print("\n🔍 Testing Homeowner Order Status Update...")
+    
+    if not homeowner_token or not test_order_id:
+        print("❌ Missing required data for homeowner status update test")
+        return False
+    
+    try:
+        # Test homeowner accepting quote
+        headers = {"Authorization": f"Bearer {homeowner_token}"}
+        params = {"status": "accepted"}
+        
+        response = requests.put(
+            f"{BACKEND_URL}/orders/{test_order_id}/status",
+            params=params,
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            data = response.json()
+            if "message" in data and "status updated" in data["message"].lower():
+                print("✅ Homeowner order status update (accept) successful")
+                
+                # Test homeowner declining quote
+                params = {"status": "declined"}
+                response = requests.put(
+                    f"{BACKEND_URL}/orders/{test_order_id}/status",
+                    params=params,
+                    headers=headers,
+                    timeout=30
+                )
+                
+                if response.status_code == 200:
+                    print("✅ Homeowner order status update (decline) successful")
+                    return True
+                else:
+                    print(f"❌ Homeowner decline failed with status {response.status_code}")
+                    return False
+            else:
+                print(f"❌ Invalid homeowner status update response: {data}")
+                return False
+        else:
+            print(f"❌ Homeowner order status update failed with status {response.status_code}")
+            print(f"Response: {response.text}")
+            return False
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Homeowner order status update failed: {e}")
+        return False
+
+def test_get_message_threads():
+    """Test getting message threads"""
+    print("\n🔍 Testing Get Message Threads...")
+    
+    if not provider_token:
+        print("❌ No provider token available for message threads test")
+        return False
+    
+    try:
+        headers = {"Authorization": f"Bearer {provider_token}"}
+        response = requests.get(
+            f"{BACKEND_URL}/messages/threads",
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            data = response.json()
+            if isinstance(data, list):
+                print(f"✅ Message threads retrieved successfully ({len(data)} threads)")
+                return True
+            else:
+                print(f"❌ Expected list, got: {type(data)}")
+                return False
+        else:
+            print(f"❌ Get message threads failed with status {response.status_code}")
+            return False
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Get message threads failed: {e}")
+        return False
+
+def test_get_messages_for_thread():
+    """Test getting messages for a specific thread"""
+    print("\n🔍 Testing Get Messages for Thread...")
+    
+    if not provider_token or not test_thread_id:
+        print("❌ Missing required data for get messages test")
+        return False
+    
+    try:
+        headers = {"Authorization": f"Bearer {provider_token}"}
+        response = requests.get(
+            f"{BACKEND_URL}/messages/{test_thread_id}",
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            data = response.json()
+            if isinstance(data, list):
+                print(f"✅ Messages for thread retrieved successfully ({len(data)} messages)")
+                return True
+            else:
+                print(f"❌ Expected list, got: {type(data)}")
+                return False
+        else:
+            print(f"❌ Get messages for thread failed with status {response.status_code}")
+            return False
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Get messages for thread failed: {e}")
+        return False
+
+def test_error_handling():
+    """Test error handling scenarios"""
+    print("\n🔍 Testing Error Handling...")
+    
+    if not provider_token:
+        print("❌ No provider token available for error handling test")
+        return False
+    
+    try:
+        headers = {"Authorization": f"Bearer {provider_token}"}
+        
+        # Test 1: Invalid order ID for quotation update
+        invalid_order_id = "invalid-order-id"
+        params = {"quotation_amount": 100.00}
+        
+        response = requests.put(
+            f"{BACKEND_URL}/orders/{invalid_order_id}/quotation",
+            params=params,
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code == 404:
+            print("✅ Invalid order ID properly handled (404)")
+        else:
+            print(f"❌ Expected 404 for invalid order ID, got {response.status_code}")
+            return False
+        
+        # Test 2: Unauthorized access (no token)
+        response = requests.get(f"{BACKEND_URL}/orders", timeout=30)
+        
+        if response.status_code == 403:
+            print("✅ Unauthorized access properly handled (403)")
+        else:
+            print(f"❌ Expected 403 for unauthorized access, got {response.status_code}")
+            return False
+        
+        # Test 3: Invalid JWT token
+        invalid_headers = {"Authorization": "Bearer invalid-token"}
+        response = requests.get(
+            f"{BACKEND_URL}/orders",
+            headers=invalid_headers,
+            timeout=30
+        )
+        
+        if response.status_code == 401:
+            print("✅ Invalid JWT token properly handled (401)")
+        else:
+            print(f"❌ Expected 401 for invalid token, got {response.status_code}")
+            return False
+        
+        # Test 4: Homeowner trying invalid status update
+        if homeowner_token:
+            homeowner_headers = {"Authorization": f"Bearer {homeowner_token}"}
+            params = {"status": "in_progress"}  # Invalid status for homeowner
+            
+            response = requests.put(
+                f"{BACKEND_URL}/orders/{test_order_id}/status",
+                params=params,
+                headers=homeowner_headers,
+                timeout=30
+            )
+            
+            if response.status_code == 400:
+                print("✅ Invalid homeowner status update properly handled (400)")
+            else:
+                print(f"❌ Expected 400 for invalid homeowner status, got {response.status_code}")
+                return False
+        
+        print("✅ All error handling tests passed")
+        return True
+        
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Error handling test failed: {e}")
+        return False
+
 def test_mongodb_persistence():
     """Test MongoDB data persistence"""
     print("\n🔍 Testing MongoDB Data Persistence...")
