@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import axios from "axios";
+import { NotificationProvider } from "./context/NotificationContext";
 
 // Homeowner Pages
 import HomeownerLanding from "./pages/homeowner/HomeownerLanding";
@@ -45,9 +46,10 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/homeowners" replace />} />
+      <NotificationProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Navigate to="/homeowners" replace />} />
           
           {/* Homeowner Routes */}
           <Route path="/homeowners" element={<HomeownerLanding />} />
