@@ -54,7 +54,9 @@ const ServiceBrowse = () => {
       setLoading(true);
       setError('');
       
+      // Add cache-busting parameter
       const providers = await apiService.getAllProviders();
+      console.log('Loaded providers from API:', providers);
       
       // Format providers for display
       const formattedProviders = providers.map(provider => ({
@@ -75,6 +77,7 @@ const ServiceBrowse = () => {
         phone: provider.phone
       }));
       
+      console.log('Formatted providers:', formattedProviders);
       setAllProviders(formattedProviders);
     } catch (error) {
       console.error('Failed to load providers:', error);
