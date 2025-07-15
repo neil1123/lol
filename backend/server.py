@@ -386,6 +386,46 @@ async def update_order_status(order_id: str, status: str = Query(...), current_u
     
     return {"message": "Order status updated"}
 
+# Update order quotation amount
+@api_router.put("/orders/{order_id}/quotation", response_model=Dict[str, str])
+async def update_order_quotation(
+    order_id: str, 
+    quotation_amount: float = Query(..., description="Quotation amount"), 
+    quotation_details: Optional[str] = Query(None, description="Quotation details"),
+    current_user: User = Depends(get_current_user)
+):
+    # Get the order
+    order = await db.orders.find_one({"id": order_id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Only providers can update quotation details
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can update quotation details")
+    
+    # Check if provider owns this order
+    if order["provider_id"] != current_user.id:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Update the order with quotation details
+    update_data = {
+        "quotation_amount": quotation_amount,
+        "status": "quoted"
+    }
+    
+    if quotation_details:
+        update_data["quotation_details"] = quotation_details
+    
+    result = await db.orders.update_one(
+        {"id": order_id, "provider_id": current_user.id},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    return {"message": "Order quotation updated"}
+
 # ====== MESSAGE ENDPOINTS ======
 
 @api_router.post("/messages/threads", response_model=MessageThread)
