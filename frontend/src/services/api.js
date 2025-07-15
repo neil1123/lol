@@ -124,6 +124,16 @@ class ApiService {
     });
   }
 
+  async updateOrderQuotation(orderId, quotationAmount, quotationDetails = null) {
+    const params = new URLSearchParams({ quotation_amount: quotationAmount });
+    if (quotationDetails) {
+      params.append('quotation_details', quotationDetails);
+    }
+    return await this.request(`/orders/${orderId}/quotation?${params}`, {
+      method: 'PUT',
+    });
+  }
+
   // ====== QUOTATIONS ======
   async createQuotationRequest(quotationData) {
     return await this.request('/quotations', {
