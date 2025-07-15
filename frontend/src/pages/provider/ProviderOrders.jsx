@@ -349,6 +349,9 @@ const ProviderOrders = () => {
                   >
                     <item.icon className="h-4 w-4 mr-3" />
                     {item.label}
+                    {item.notificationKey && notifications[item.notificationKey] > 0 && (
+                      <NotificationBadge count={notifications[item.notificationKey]} className="ml-auto" />
+                    )}
                   </Button>
                 ))}
                 <hr className="my-4" />
