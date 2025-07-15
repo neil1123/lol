@@ -85,7 +85,9 @@ const ProviderMessaging = () => {
       const formattedThreads = messageThreads.map(thread => ({
         id: thread.id,
         customerName: thread.homeowner_name,
+        homeownerName: thread.homeowner_name,
         serviceType: thread.service_type,
+        orderType: thread.order_type,
         lastMessage: thread.last_message,
         lastMessageTime: thread.last_message_time,
         unreadCount: thread.unread_count || 0,
@@ -99,6 +101,16 @@ const ProviderMessaging = () => {
       setMessages([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadConversationMessages = async (threadId) => {
+    try {
+      const messages = await apiService.getMessages(threadId);
+      setConversationMessages(messages);
+    } catch (error) {
+      console.error('Failed to load conversation messages:', error);
+      setConversationMessages([]);
     }
   };
 
