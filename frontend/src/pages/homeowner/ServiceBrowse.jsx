@@ -88,16 +88,22 @@ const ServiceBrowse = () => {
   };
 
 
-  const filteredProviders = allProviders.filter(provider => {
-    const matchesSearch = !searchTerm || 
-      provider.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      provider.services.some(service => 
-        service.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    
-    const matchesServices = selectedServices.length === 0 ||
-      selectedServices.some(service => {
-        // Handle partial matching for service categories (e.g., "Cleaning" matches "Home Cleaning")
+  const filteredProviders = allProviders
+    .filter(provider => {
+      // Hide Wilson Home Services entries
+      if (provider.name && provider.name.toLowerCase().includes('wilson')) {
+        return false;
+      }
+      
+      const matchesSearch = !searchTerm || 
+        provider.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        provider.services.some(service => 
+          service.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      
+      const matchesServices = selectedServices.length === 0 ||
+        selectedServices.some(service => {
+          // Handle partial matching for service categories (e.g., "Cleaning" matches "Home Cleaning")
         return provider.services.some(providerService => 
           providerService.toLowerCase().includes(service.toLowerCase()) ||
           service.toLowerCase().includes(providerService.toLowerCase())
