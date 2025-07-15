@@ -16,8 +16,8 @@ import {
 
 export const STANDARD_PROVIDER_SIDEBAR = [
   { id: 'home', label: 'Dashboard', icon: Home, path: '/homeservices/dashboard' },
-  { id: 'orders', label: 'Orders', icon: Package, path: '/homeservices/orders' },
-  { id: 'messages', label: 'Messages', icon: MessageSquare, path: '/homeservices/messages' },
+  { id: 'orders', label: 'Orders', icon: Package, path: '/homeservices/orders', notificationKey: 'orders' },
+  { id: 'messages', label: 'Messages', icon: MessageSquare, path: '/homeservices/messages', notificationKey: 'messages' },
   { id: 'calendar', label: 'Calendar', icon: Calendar, path: '/homeservices/calendar' },
   { id: 'customers', label: 'Customers', icon: Users, path: '/homeservices/customers' },
   { id: 'settings', label: 'Settings', icon: Settings, path: '/homeservices/settings' }
