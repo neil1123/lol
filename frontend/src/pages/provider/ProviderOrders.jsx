@@ -38,6 +38,7 @@ import NotificationBadge from '../../components/NotificationBadge';
 
 const ProviderOrders = () => {
   const navigate = useNavigate();
+  const { notifications, updateNotifications } = useNotifications();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
