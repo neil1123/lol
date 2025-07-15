@@ -163,43 +163,62 @@ const ProviderMessaging = () => {
     (msg.orderType && msg.orderType.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  const handleSendProposal = () => {
-    if (selectedConversation) {
-      const proposalMessage = {
-        id: Date.now(),
-        sender: 'provider',
-        content: `Service Proposal:
+  const handleSendProposal = async () => {
+    if (selectedConversation && selectedConversation.orderId) {
+      try {
+        // Create proposal message content
+        const proposalContent = `Service Proposal:
 📋 Service: ${proposalData.serviceType}
 💰 Price: $${proposalData.price}
 ⏱️ Estimated Time: ${proposalData.estimatedTime}
 📅 Start Date: ${proposalData.startDate}
 📝 Description: ${proposalData.description}
-${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additionalNotes}` : ''}`,
-        timestamp: new Date().toISOString(),
-        read: true,
-        isProposal: true
-      };
+${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additionalNotes}` : ''}`;
 
-      const updatedMessages = messages.map(msg => {
-        if (msg.id === selectedConversation.id) {
-          return {
-            ...msg,
-            messages: [...msg.messages, proposalMessage]
-          };
-        }
-        return msg;
-      });
+        // Send the proposal message
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const proposalMessage = {
+          thread_id: selectedConversation.id,
+          sender_id: user.id,
+          sender_type: 'provider',
+          content: proposalContent,
+          timestamp: new Date().toISOString()
+        };
 
-      setMessages(updatedMessages);
-      setShowProposalForm(false);
-      setProposalData({
-        serviceType: '',
-        description: '',
-        price: '',
-        estimatedTime: '',
-        startDate: '',
-        additionalNotes: ''
-      });
+        await apiService.sendMessage(proposalMessage);
+        
+        // Update the order status to "quoted" and add quotation amount
+        await apiService.updateOrderStatus(selectedConversation.orderId, 'quoted');
+        
+        // Update order with quotation amount (we'll need to add this API method)
+        // For now, send the quote amount as a separate message
+        const quoteAmountMessage = {
+          thread_id: selectedConversation.id,
+          sender_id: user.id,
+          sender_type: 'provider',
+          content: `Quote Amount: $${proposalData.price}`,
+          timestamp: new Date().toISOString()
+        };
+        
+        await apiService.sendMessage(quoteAmountMessage);
+        
+        // Refresh the conversation
+        await loadConversationMessages(selectedConversation.id);
+        
+        setShowProposalForm(false);
+        setProposalData({
+          serviceType: '',
+          description: '',
+          price: '',
+          estimatedTime: '',
+          startDate: '',
+          additionalNotes: ''
+        });
+        
+      } catch (error) {
+        console.error('Failed to send proposal:', error);
+        alert('Failed to send proposal. Please try again.');
+      }
     }
   };
 
