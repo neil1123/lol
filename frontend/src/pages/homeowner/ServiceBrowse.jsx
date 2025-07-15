@@ -521,6 +521,17 @@ const ServiceBrowse = () => {
           </div>
         )}
       </div>
+      
+      {/* Quotation Request Form */}
+      {showQuotationForm && selectedProvider && (
+        <QuotationRequestForm
+          isOpen={showQuotationForm}
+          onClose={handleQuotationFormClose}
+          serviceType={selectedProvider.services[0]}
+          providerName={selectedProvider.name}
+          providerId={selectedProvider.id}
+        />
+      )}
     </div>
   );
 };
