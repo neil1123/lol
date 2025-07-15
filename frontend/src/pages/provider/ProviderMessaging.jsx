@@ -187,20 +187,12 @@ ${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additi
 
         await apiService.sendMessage(proposalMessage);
         
-        // Update the order status to "quoted" and add quotation amount
-        await apiService.updateOrderStatus(selectedConversation.orderId, 'quoted');
-        
-        // Update order with quotation amount (we'll need to add this API method)
-        // For now, send the quote amount as a separate message
-        const quoteAmountMessage = {
-          thread_id: selectedConversation.id,
-          sender_id: user.id,
-          sender_type: 'provider',
-          content: `Quote Amount: $${proposalData.price}`,
-          timestamp: new Date().toISOString()
-        };
-        
-        await apiService.sendMessage(quoteAmountMessage);
+        // Update the order with quotation amount and status
+        await apiService.updateOrderQuotation(
+          selectedConversation.orderId, 
+          parseFloat(proposalData.price),
+          proposalData.description
+        );
         
         // Refresh the conversation
         await loadConversationMessages(selectedConversation.id);
@@ -214,6 +206,8 @@ ${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additi
           startDate: '',
           additionalNotes: ''
         });
+        
+        alert('Proposal sent successfully!');
         
       } catch (error) {
         console.error('Failed to send proposal:', error);
