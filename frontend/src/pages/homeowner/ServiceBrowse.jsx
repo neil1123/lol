@@ -90,8 +90,17 @@ const ServiceBrowse = () => {
 
   const filteredProviders = allProviders
     .filter(provider => {
-      // Hide Wilson Home Services entries
-      if (provider.name && provider.name.toLowerCase().includes('wilson')) {
+      // Hide Wilson Home Services entries - comprehensive filtering
+      const providerName = (provider.name || '').toLowerCase();
+      const businessName = (provider.business_name || '').toLowerCase();
+      const companyName = (provider.companyName || '').toLowerCase();
+      
+      if (providerName.includes('wilson') || 
+          businessName.includes('wilson') || 
+          companyName.includes('wilson') ||
+          providerName.includes('wilson home services') ||
+          businessName.includes('wilson home services') ||
+          companyName.includes('wilson home services')) {
         return false;
       }
       
