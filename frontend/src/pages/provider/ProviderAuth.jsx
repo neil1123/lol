@@ -434,6 +434,21 @@ const ProviderAuth = () => {
                       signUpData.password !== signUpData.confirmPassword || 
                       signUpData.services.length === 0
                     }
+                    onClick={() => {
+                      console.log('Submit button clicked');
+                      console.log('Form validation state:', {
+                        businessName: !!signUpData.businessName,
+                        ownerName: !!signUpData.ownerName,
+                        email: !!signUpData.email,
+                        phone: !!signUpData.phone,
+                        address: !!signUpData.address,
+                        password: !!signUpData.password,
+                        confirmPassword: !!signUpData.confirmPassword,
+                        passwordsMatch: signUpData.password === signUpData.confirmPassword,
+                        servicesSelected: signUpData.services.length > 0,
+                        services: signUpData.services
+                      });
+                    }}
                   >
                     {isLoading ? 'Creating Account...' : 'Start Your Business'}
                   </Button>
