@@ -11,6 +11,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import apiService from '../../services/api';
 
 const ServiceBrowse = () => {
+  console.log('ServiceBrowse component rendering');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedServices, setSelectedServices] = useState([]);
@@ -23,6 +24,8 @@ const ServiceBrowse = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
+
+  console.log('ServiceBrowse state:', { allProviders, loading, error });
 
 
   // Scroll to top when component mounts
