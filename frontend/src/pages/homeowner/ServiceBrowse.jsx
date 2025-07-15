@@ -148,17 +148,6 @@ const ServiceBrowse = () => {
     );
   };
 
-  const handleRequestQuote = (providerId) => {
-    // Check if user is logged in
-    if (!isLoggedIn) {
-      navigate('/homeowners/auth');
-      return;
-    }
-    
-    // If logged in, proceed to messages
-    navigate('/homeowners/dashboard?tab=messages');
-  };
-
   const handleGetQuotation = (providerId) => {
     // Check if user is logged in
     if (!isLoggedIn) {
@@ -166,8 +155,37 @@ const ServiceBrowse = () => {
       return;
     }
     
-    // If logged in, proceed to messages
-    navigate('/homeowners/dashboard?tab=messages');
+    // Find the provider and show quotation form
+    const provider = allProviders.find(p => p.id === providerId);
+    if (provider) {
+      setSelectedProvider(provider);
+      setShowQuotationForm(true);
+    }
+  };
+
+  const handleRequestQuote = (providerId) => {
+    // Same as get quotation - show the form
+    handleGetQuotation(providerId);
+  };
+
+  const handleGetBestDeal = (providerId) => {
+    // Check if user is logged in
+    if (!isLoggedIn) {
+      navigate('/homeowners/auth');
+      return;
+    }
+    
+    // Find the provider and show quotation form
+    const provider = allProviders.find(p => p.id === providerId);
+    if (provider) {
+      setSelectedProvider(provider);
+      setShowQuotationForm(true);
+    }
+  };
+
+  const handleQuotationFormClose = () => {
+    setShowQuotationForm(false);
+    setSelectedProvider(null);
   };
 
   return (
