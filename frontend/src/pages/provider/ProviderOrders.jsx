@@ -235,6 +235,7 @@ const ProviderOrders = () => {
       }
       
       loadOrders(); // Reload orders
+      updateNotifications(); // Update notification counts
       alert('Quotation sent successfully!');
       
     } catch (error) {
