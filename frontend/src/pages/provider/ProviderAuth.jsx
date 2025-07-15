@@ -134,12 +134,21 @@ const ProviderAuth = () => {
   };
 
   const handleServiceToggle = (serviceName) => {
-    setSignUpData(prev => ({
-      ...prev,
-      services: prev.services.includes(serviceName)
+    console.log('Toggling service:', serviceName);
+    console.log('Current services:', signUpData.services);
+    
+    setSignUpData(prev => {
+      const newServices = prev.services.includes(serviceName)
         ? prev.services.filter(s => s !== serviceName)
-        : [...prev.services, serviceName]
-    }));
+        : [...prev.services, serviceName];
+      
+      console.log('New services:', newServices);
+      
+      return {
+        ...prev,
+        services: newServices
+      };
+    });
   };
 
   return (
