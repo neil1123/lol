@@ -98,6 +98,10 @@ class ApiService {
     return await this.request(`/providers/${providerId}`);
   }
 
+  async getProviderById(providerId) {
+    return await this.request(`/providers/${providerId}`);
+  }
+
   // ====== ORDERS ======
   async createOrder(orderData) {
     return await this.request('/orders', {
