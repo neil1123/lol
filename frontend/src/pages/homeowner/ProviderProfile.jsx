@@ -10,6 +10,7 @@ import { Textarea } from '../../components/ui/textarea';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
 import QuotationRequestForm from '../../components/QuotationRequestForm';
+import apiService from '../../services/api';
 
 const ProviderProfile = () => {
   const { id } = useParams();
@@ -22,38 +23,53 @@ const ProviderProfile = () => {
   const [isQuotationFormOpen, setIsQuotationFormOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [provider, setProvider] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Get provider from ONLY registered providers (no mock data for production)
-  const getProvider = (providerId) => {
-    // Check registered providers only
-    const registeredProviders = JSON.parse(localStorage.getItem('registeredProviders') || '[]');
-    const registeredProvider = registeredProviders.find(p => p.id === parseFloat(providerId));
+  // Load provider from API
+  useEffect(() => {
+    const loadProvider = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        
+        const providerData = await apiService.getProviderById(id);
+        
+        if (providerData) {
+          // Format provider data for display
+          const formattedProvider = {
+            id: providerData.id,
+            name: providerData.business_name || providerData.name,
+            description: providerData.description || `Professional ${Array.isArray(providerData.services) ? providerData.services.join(' and ') : providerData.services} services`,
+            services: Array.isArray(providerData.services) ? providerData.services : [providerData.services],
+            rating: providerData.rating || 5.0,
+            reviews: providerData.reviews || 0,
+            completedJobs: providerData.completed_jobs || 0,
+            location: providerData.location || "Halifax, NS",
+            responseTime: providerData.response_time || "Usually responds within 1 hour",
+            yearEstablished: providerData.year_established || "2024",
+            specialties: providerData.specialties || ["Professional service", "Quality work", "Customer satisfaction"],
+            priceRange: providerData.price_range || "$50-$500",
+            ownerName: providerData.name,
+            email: providerData.email,
+            phone: providerData.phone
+          };
+          
+          setProvider(formattedProvider);
+        } else {
+          setError('Provider not found');
+        }
+      } catch (error) {
+        console.error('Failed to load provider:', error);
+        setError('Failed to load provider details');
+      } finally {
+        setLoading(false);
+      }
+    };
     
-    if (registeredProvider) {
-      // Convert registered provider to display format
-      return {
-        id: registeredProvider.id,
-        name: registeredProvider.businessName,
-        description: registeredProvider.description || `Professional ${Array.isArray(registeredProvider.services) ? registeredProvider.services.join(' and ') : registeredProvider.services} services`,
-        services: Array.isArray(registeredProvider.services) ? registeredProvider.services : [registeredProvider.services],
-        rating: registeredProvider.rating || 5.0,
-        reviews: registeredProvider.reviews || 0,
-        completedJobs: registeredProvider.completedJobs || 0,
-        location: registeredProvider.location || "Halifax, NS",
-        responseTime: registeredProvider.responseTime || "Usually responds within 1 hour",
-        yearEstablished: registeredProvider.yearEstablished || "2024",
-        specialties: registeredProvider.specialties || ["Professional service", "Quality work", "Customer satisfaction"],
-        priceRange: registeredProvider.priceRange || "$50-$500",
-        ownerName: registeredProvider.ownerName,
-        email: registeredProvider.email,
-        phone: registeredProvider.phone
-      };
-    }
-    
-    return null;
-  };
-
-  const provider = getProvider(id);
+    loadProvider();
+  }, [id]);
 
   // Check login status
   useEffect(() => {
@@ -66,7 +82,18 @@ const ProviderProfile = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  if (!provider) {
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading provider details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !provider) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
