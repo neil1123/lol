@@ -79,7 +79,20 @@ const ProviderMessaging = () => {
     try {
       setLoading(true);
       const messageThreads = await apiService.getMessageThreads();
-      setMessages(messageThreads);
+      
+      // Format message threads for display
+      const formattedThreads = messageThreads.map(thread => ({
+        id: thread.id,
+        customerName: thread.homeowner_name,
+        serviceType: thread.service_type,
+        lastMessage: thread.last_message,
+        lastMessageTime: thread.last_message_time,
+        unreadCount: thread.unread_count || 0,
+        status: thread.status || 'active',
+        orderId: thread.order_id
+      }));
+      
+      setMessages(formattedThreads);
     } catch (error) {
       console.error('Failed to load messages:', error);
       setMessages([]);
@@ -88,16 +101,30 @@ const ProviderMessaging = () => {
     }
   };
 
-  // Remove localStorage save effect since we're using database
   const sendMessage = async (messageContent) => {
     if (!messageContent.trim() || !selectedConversation) return;
     
     try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
       const newMessage = {
         thread_id: selectedConversation.id,
+        sender_id: user.id,
+        sender_type: 'provider',
         content: messageContent,
-        sender_type: 'provider'
+        timestamp: new Date().toISOString()
       };
+
+      await apiService.sendMessage(newMessage);
+      
+      // Reload messages to get updated conversation
+      loadMessages();
+      setNewMessage('');
+      
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    }
+  };
       
       await apiService.sendMessage(newMessage);
       
