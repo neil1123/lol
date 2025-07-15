@@ -107,6 +107,8 @@ const ServiceBrowse = () => {
     return matchesSearch && matchesServices;
   });
 
+  console.log('Filtered providers:', filteredProviders);
+
   const sortedProviders = [...filteredProviders].sort((a, b) => {
     switch (sortBy) {
       case 'rating':
