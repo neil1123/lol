@@ -504,10 +504,9 @@ const ServiceBrowse = () => {
                           Starts from $199.00
                         </Button>
                         <Button
-                          variant="outline"
                           onClick={(e) => {
                             e.stopPropagation();
-                            // Handle messaging
+                            handleGetBestDeal(provider.id);
                           }}
                           className="w-full sm:w-auto"
                         >
