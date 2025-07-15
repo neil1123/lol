@@ -694,7 +694,7 @@ const ProviderOrders = () => {
                       <div className="space-y-4">
                         <div>
                           <h4 className="font-semibold mb-2">Order Details</h4>
-                          <p className="text-gray-700">{order.orderDetails}</p>
+                          <p className="text-gray-700">{order.description || order.additional_requirements}</p>
                         </div>
                         
                         <div className="bg-blue-50 p-4 rounded-lg">
