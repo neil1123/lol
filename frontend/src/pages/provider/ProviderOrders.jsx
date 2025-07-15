@@ -33,6 +33,8 @@ import { Textarea } from '../../components/ui/textarea';
 import { STANDARD_PROVIDER_SIDEBAR, handleStandardLogout } from '../../constants/providerSidebarConfig';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import apiService from '../../services/api';
+import { useNotifications } from '../../context/NotificationContext';
+import NotificationBadge from '../../components/NotificationBadge';
 
 const ProviderOrders = () => {
   const navigate = useNavigate();
