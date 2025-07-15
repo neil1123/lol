@@ -9,6 +9,7 @@ import { Checkbox } from '../../components/ui/checkbox';
 import { serviceCategories } from '../../data/mockData';
 import { useNavigate, useLocation } from 'react-router-dom';
 import apiService from '../../services/api';
+import QuotationRequestForm from '../../components/QuotationRequestForm';
 
 const ServiceBrowse = () => {
   console.log('ServiceBrowse component rendering');
