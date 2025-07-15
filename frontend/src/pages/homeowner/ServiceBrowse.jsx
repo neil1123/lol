@@ -30,24 +30,20 @@ const ServiceBrowse = () => {
 
   // Scroll to top when component mounts
   useEffect(() => {
+    console.log('ServiceBrowse useEffect triggered');
     window.scrollTo(0, 0);
-  }, []);
-
-  // Get query params and load providers
-  useEffect(() => {
+    
     // Check if user is logged in
     const userType = localStorage.getItem('userType');
     setIsLoggedIn(userType === 'homeowner');
     
-      // Get URL parameters
+    // Get selected service from URL params
     const searchParams = new URLSearchParams(location.search);
-    const searchParam = searchParams.get('search');
     const serviceParam = searchParams.get('service');
-    
-    if (searchParam) setSearchTerm(searchParam);
     if (serviceParam) setSelectedServices([serviceParam]);
     
     // Load providers from API
+    console.log('About to call loadProviders');
     loadProviders();
   }, [location]);
 
