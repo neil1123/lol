@@ -23,6 +23,8 @@ const ServiceBrowse = () => {
   const [allProviders, setAllProviders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showQuotationForm, setShowQuotationForm] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
