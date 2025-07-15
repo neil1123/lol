@@ -118,29 +118,11 @@ const ProviderMessaging = () => {
       await apiService.sendMessage(newMessage);
       
       // Reload messages to get updated conversation
-      loadMessages();
-      setNewMessage('');
-      
-    } catch (error) {
-      console.error('Failed to send message:', error);
-    }
-  };
-      
-      await apiService.sendMessage(newMessage);
-      
-      // Reload messages to get updated thread
       await loadMessages();
-      
-      // Update selected conversation with new message
-      const updatedThread = messages.find(m => m.id === selectedConversation.id);
-      if (updatedThread) {
-        setSelectedConversation(updatedThread);
-      }
-      
       setNewMessage('');
+      
     } catch (error) {
       console.error('Failed to send message:', error);
-      alert('Failed to send message. Please try again.');
     }
   };
 
@@ -158,23 +140,7 @@ const ProviderMessaging = () => {
 
   const handleSendMessage = () => {
     if (newMessage.trim() && selectedConversation) {
-      const updatedMessages = messages.map(msg => {
-        if (msg.id === selectedConversation.id) {
-          return {
-            ...msg,
-            messages: [...msg.messages, {
-              id: Date.now(),
-              sender: 'provider',
-              content: newMessage,
-              timestamp: new Date().toISOString(),
-              read: true
-            }]
-          };
-        }
-        return msg;
-      });
-      setMessages(updatedMessages);
-      setNewMessage('');
+      sendMessage(newMessage);
     }
   };
 
