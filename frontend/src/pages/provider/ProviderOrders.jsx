@@ -74,6 +74,9 @@ const ProviderOrders = () => {
       
       const ordersData = await apiService.getOrders();
       setOrders(ordersData);
+      
+      // Update notifications after loading orders
+      updateNotifications();
     } catch (error) {
       console.error('Failed to load orders:', error);
       setError('Failed to load orders. Please try again.');
