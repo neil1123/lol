@@ -71,8 +71,9 @@ function App() {
           <Route path="/homeservices/settings" element={<ProviderSettings />} />
         </Routes>
       </BrowserRouter>
-    </div>
-  );
+    </NotificationProvider>
+  </div>
+);
 }
 
 export default App;
