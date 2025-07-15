@@ -41,20 +41,32 @@ const ProviderAuth = () => {
     setError('');
     
     try {
+      console.log('Attempting sign in with:', signInData.email);
+      
       const response = await apiService.login({
         email: signInData.email,
         password: signInData.password
       });
+      
+      console.log('Login response:', response);
       
       // Check if user is a provider
       if (response.user.user_type !== 'provider') {
         throw new Error('This account is not registered as a service provider');
       }
       
-      // Redirect to dashboard
+      // Store user data
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('userType', 'provider');
+      localStorage.setItem('user', JSON.stringify(response.user));
+      
+      console.log('Redirecting to provider dashboard...');
+      
+      // Redirect to provider dashboard
       navigate('/homeservices/dashboard');
       
     } catch (error) {
+      console.error('Sign in error:', error);
       setError(error.message || 'Login failed. Please try again.');
     } finally {
       setIsLoading(false);
