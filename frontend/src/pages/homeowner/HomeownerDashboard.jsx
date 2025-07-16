@@ -53,6 +53,8 @@ const HomeownerDashboard = () => {
   });
   const [messageThreads, setMessageThreads] = useState([]);
   const [conversationMessages, setConversationMessages] = useState([]);
+  const [showMobileChat, setShowMobileChat] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('user');
