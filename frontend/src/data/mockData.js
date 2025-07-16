@@ -59,64 +59,8 @@ export const serviceCategories = [
   }
 ];
 
-export const mockProviders = [
-  {
-    id: 1,
-    name: "CleanPro Services",
-    description: "Professional cleaning services with eco-friendly products",
-    services: ["Home Cleaning", "Office Cleaning", "Window Cleaning"],
-    rating: 5.0,
-    reviews: 2,
-    completedJobs: 3,
-    location: "Halifax, NS",
-    responseTime: "Usually responds within 1 hour",
-    yearEstablished: "2024",
-    specialties: ["Deep cleaning", "Move-in/out cleaning", "Post-construction cleanup"],
-    priceRange: "$150-$400"
-  },
-  {
-    id: 2,
-    name: "Elite Electrical",
-    description: "Licensed electricians for residential and commercial work",
-    services: ["Electrician", "Home Renovations"],
-    rating: 5.0,
-    reviews: 1,
-    completedJobs: 2,
-    location: "Halifax, NS",
-    responseTime: "Usually responds within 2 hours",
-    yearEstablished: "2024",
-    specialties: ["Panel upgrades", "Smart home wiring", "Emergency repairs"],
-    priceRange: "$100-$800"
-  },
-  {
-    id: 3,
-    name: "GreenThumb Landscaping",
-    description: "Complete outdoor maintenance and landscaping solutions",
-    services: ["Landscaping", "Lawn Mowing & Maintenance", "Snow Removal"],
-    rating: 5.0,
-    reviews: 1,
-    completedJobs: 1,
-    location: "Halifax, NS",
-    responseTime: "Usually responds within 3 hours",
-    yearEstablished: "2024",
-    specialties: ["Garden design", "Seasonal cleanup", "Irrigation systems"],
-    priceRange: "$80-$500"
-  },
-  {
-    id: 4,
-    name: "HandyMax Solutions",
-    description: "Reliable handyman services for all your home repair needs",
-    services: ["Handyman Services", "Painter", "Carpenter"],
-    rating: 5.0,
-    reviews: 1,
-    completedJobs: 1,
-    location: "Halifax, NS",
-    responseTime: "Usually responds within 4 hours",
-    yearEstablished: "2024",
-    specialties: ["Furniture assembly", "Drywall repair", "Kitchen installations"],
-    priceRange: "$60-$300"
-  }
-];
+// Mock providers removed for production - now loading from API only
+export const mockProviders = [];
 
 // Mock orders data - Starting fresh with no orders
 export const mockOrders = [];
