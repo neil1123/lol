@@ -469,9 +469,9 @@ const HomeownerDashboard = () => {
                       >
                         <Bell className="h-4 w-4 mr-2" />
                         Notifications
-                        {unreadCount > 0 && (
+                        {notifications.total > 0 && (
                           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
-                            {unreadCount > 99 ? '99+' : unreadCount}
+                            {notifications.total > 99 ? '99+' : notifications.total}
                           </span>
                         )}
                       </Button>
