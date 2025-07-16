@@ -161,20 +161,9 @@ const HomeownerDashboard = () => {
   };
 
   const createNotification = (type, title, message, data = {}) => {
-    const newNotification = {
-      id: Date.now() + Math.random(),
-      type, // 'quotation', 'proposal', 'message'
-      title,
-      message,
-      data,
-      read: false,
-      timestamp: new Date().toISOString()
-    };
-    
-    const updatedNotifications = [newNotification, ...notifications.slice(0, 49)]; // Keep last 50
-    setNotifications(updatedNotifications);
-    localStorage.setItem('homeowner_notifications', JSON.stringify(updatedNotifications));
-    setUnreadCount(prev => prev + 1);
+    // This is now handled by the updateNotifications function
+    // No need for manual notification creation
+    updateNotifications();
   };
 
   // Check for new data and create notifications
