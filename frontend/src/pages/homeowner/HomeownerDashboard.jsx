@@ -65,6 +65,56 @@ const HomeownerDashboard = () => {
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [ordersError, setOrdersError] = useState('');
 
+  const loadOrders = async () => {
+    try {
+      setOrdersLoading(true);
+      setOrdersError('');
+      
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (!user.id) {
+        setOrders([]);
+        return;
+      }
+
+      const ordersData = await apiService.getOrders();
+      
+      // Filter orders for this homeowner
+      const userOrders = ordersData.filter(order => 
+        order.homeowner_id === user.id || order.homeowner_email === user.email
+      );
+      
+      setOrders(userOrders);
+    } catch (error) {
+      console.error('Failed to load orders:', error);
+      setOrdersError('Failed to load orders. Please try again.');
+      setOrders([]);
+    } finally {
+      setOrdersLoading(false);
+    }
+  };
+
+  const handleAcceptOrder = async (orderId) => {
+    try {
+      await apiService.updateOrderStatus(orderId, 'accepted');
+      await loadOrders(); // Reload orders
+      await updateNotifications(); // Update notification counts
+    } catch (error) {
+      console.error('Failed to accept order:', error);
+      alert('Failed to accept order. Please try again.');
+    }
+  };
+
+  const handleDeclineOrder = async (orderId) => {
+    try {
+      await apiService.updateOrderStatus(orderId, 'declined');
+      await loadOrders(); // Reload orders
+      await updateNotifications(); // Update notification counts
+    } catch (error) {
+      console.error('Failed to decline order:', error);
+      alert('Failed to decline order. Please try again.');
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('userType');
