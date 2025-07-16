@@ -190,7 +190,7 @@ const HomeownerDashboard = () => {
 
       // Add message to UI immediately for better UX
       const optimisticMessage = {
-        id: Date.now(), // Temporary ID
+        id: `temp_${Date.now()}`, // Temporary ID
         thread_id: selectedConversation.id,
         sender_id: user.id,
         sender_type: 'homeowner',
@@ -213,8 +213,8 @@ const HomeownerDashboard = () => {
       
     } catch (error) {
       console.error('Failed to send message:', error);
-      // Remove optimistic message on error
-      setConversationMessages(prev => prev.filter(msg => msg.id !== optimisticMessage.id));
+      // Remove optimistic message on error by filtering out temp messages
+      setConversationMessages(prev => prev.filter(msg => !msg.id.toString().startsWith('temp_')));
       alert('Failed to send message. Please try again.');
     }
   };
