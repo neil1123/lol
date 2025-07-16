@@ -158,14 +158,21 @@ const HomeownerDashboard = () => {
 
       // Get unread messages count
       const messageThreads = await apiService.getMessageThreads();
-      const unreadMessages = messageThreads.reduce((count, thread) => 
-        count + (thread.unread_count || 0), 0
-      );
+      console.log('Message threads response:', messageThreads);
+      
+      let unreadMessages = 0;
+      if (Array.isArray(messageThreads)) {
+        unreadMessages = messageThreads.reduce((count, thread) => {
+          const threadUnreadCount = thread.unread_count || 0;
+          console.log(`Thread ${thread.id}: unread_count = ${threadUnreadCount}`);
+          return count + threadUnreadCount;
+        }, 0);
+      }
 
       const newNotifications = {
-        orders: quotedOrders || 0,
-        messages: unreadMessages || 0,
-        total: (quotedOrders || 0) + (unreadMessages || 0)
+        orders: Number(quotedOrders) || 0,
+        messages: Number(unreadMessages) || 0,
+        total: (Number(quotedOrders) || 0) + (Number(unreadMessages) || 0)
       };
 
       console.log('Updating notifications:', newNotifications);
