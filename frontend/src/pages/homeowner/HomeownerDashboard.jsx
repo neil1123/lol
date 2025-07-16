@@ -1279,15 +1279,13 @@ const HomeownerDashboard = () => {
                             onChange={(e) => setNewMessage(e.target.value)}
                             onKeyPress={(e) => {
                               if (e.key === 'Enter') {
-                                // Handle send message
-                                setNewMessage('');
+                                sendMessage(newMessage);
                               }
                             }}
                           />
                           <Button 
                             onClick={() => {
-                              // Handle send message
-                              setNewMessage('');
+                              sendMessage(newMessage);
                             }}
                           >
                             <Send className="h-4 w-4" />
