@@ -163,14 +163,21 @@ const HomeownerDashboard = () => {
       );
 
       const newNotifications = {
-        orders: quotedOrders,
-        messages: unreadMessages,
-        total: quotedOrders + unreadMessages
+        orders: quotedOrders || 0,
+        messages: unreadMessages || 0,
+        total: (quotedOrders || 0) + (unreadMessages || 0)
       };
 
+      console.log('Updating notifications:', newNotifications);
       setNotifications(newNotifications);
     } catch (error) {
       console.error('Failed to update notifications:', error);
+      // Set default empty notifications on error
+      setNotifications({
+        orders: 0,
+        messages: 0,
+        total: 0
+      });
     }
   };
 
