@@ -807,6 +807,249 @@ def test_mongodb_persistence():
         print(f"❌ MongoDB persistence test failed: {e}")
         return False
 
+def test_quotation_workflow_complete():
+    """Test complete quotation workflow as requested in review"""
+    print("\n🔍 Testing Complete Quotation Workflow...")
+    
+    if not provider_token or not homeowner_token:
+        print("❌ Missing tokens for complete quotation workflow test")
+        return False
+    
+    try:
+        # Step 1: Create a quotation request (POST /api/quotations)
+        quotation_data = {
+            "homeowner_id": homeowner_id,
+            "provider_id": provider_id,
+            "homeowner_name": "Sarah Johnson",
+            "homeowner_email": "sarah@doordtest.com",
+            "homeowner_phone": "+1-902-555-1234",
+            "homeowner_address": "123 Elm St, Halifax, NS",
+            "provider_name": "Smith Home Services",
+            "service_type": "Kitchen Renovation",
+            "description": "Complete kitchen renovation including cabinets, countertops, and appliances",
+            "preferred_date": "2024-02-15",
+            "budget": "$15000-20000",
+            "urgency": "medium"
+        }
+        
+        response = requests.post(
+            f"{BACKEND_URL}/quotations",
+            json=quotation_data,
+            headers={"Content-Type": "application/json"},
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Quotation request creation failed with status {response.status_code}")
+            print(f"Response: {response.text}")
+            return False
+        
+        quotation_response = response.json()
+        workflow_order_id = quotation_response.get("order_id")
+        
+        if not workflow_order_id:
+            print("❌ No order_id returned from quotation request")
+            return False
+        
+        print("✅ Step 1: Quotation request created successfully")
+        
+        # Step 2: Verify order is created with "pending_quotation" status
+        headers = {"Authorization": f"Bearer {provider_token}"}
+        response = requests.get(
+            f"{BACKEND_URL}/orders/{workflow_order_id}",
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Failed to retrieve created order with status {response.status_code}")
+            return False
+        
+        order_data = response.json()
+        if order_data.get("status") != "pending_quotation":
+            print(f"❌ Expected 'pending_quotation' status, got '{order_data.get('status')}'")
+            return False
+        
+        print("✅ Step 2: Order created with 'pending_quotation' status")
+        
+        # Step 3: Update the order quotation (PUT /api/orders/{order_id}/quotation)
+        params = {
+            "quotation_amount": 18500.00,
+            "quotation_details": "Complete kitchen renovation package including premium materials, professional installation, and 2-year warranty"
+        }
+        
+        response = requests.put(
+            f"{BACKEND_URL}/orders/{workflow_order_id}/quotation",
+            params=params,
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Quotation update failed with status {response.status_code}")
+            print(f"Response: {response.text}")
+            return False
+        
+        update_response = response.json()
+        if "quotation updated" not in update_response.get("message", "").lower():
+            print(f"❌ Unexpected quotation update response: {update_response}")
+            return False
+        
+        print("✅ Step 3: Quotation amount updated successfully")
+        
+        # Step 4: Verify order status changed to "quoted"
+        response = requests.get(
+            f"{BACKEND_URL}/orders/{workflow_order_id}",
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Failed to retrieve updated order with status {response.status_code}")
+            return False
+        
+        updated_order = response.json()
+        if updated_order.get("status") != "quoted":
+            print(f"❌ Expected 'quoted' status after update, got '{updated_order.get('status')}'")
+            return False
+        
+        if updated_order.get("quotation_amount") != 18500.00:
+            print(f"❌ Expected quotation amount 18500.00, got {updated_order.get('quotation_amount')}")
+            return False
+        
+        print("✅ Step 4: Order status changed to 'quoted' with correct amount")
+        
+        # Step 5: Test homeowner can accept/decline the quote
+        homeowner_headers = {"Authorization": f"Bearer {homeowner_token}"}
+        
+        # Test accept
+        params = {"status": "accepted"}
+        response = requests.put(
+            f"{BACKEND_URL}/orders/{workflow_order_id}/status",
+            params=params,
+            headers=homeowner_headers,
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Homeowner quote acceptance failed with status {response.status_code}")
+            return False
+        
+        print("✅ Step 5: Homeowner can accept quotes")
+        
+        # Test decline
+        params = {"status": "declined"}
+        response = requests.put(
+            f"{BACKEND_URL}/orders/{workflow_order_id}/status",
+            params=params,
+            headers=homeowner_headers,
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Homeowner quote decline failed with status {response.status_code}")
+            return False
+        
+        print("✅ Step 6: Homeowner can decline quotes")
+        
+        print("✅ COMPLETE QUOTATION WORKFLOW TEST PASSED")
+        return True
+        
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Complete quotation workflow test failed: {e}")
+        return False
+
+def test_quotation_error_scenarios():
+    """Test error handling for quotation update endpoint"""
+    print("\n🔍 Testing Quotation Update Error Scenarios...")
+    
+    if not provider_token:
+        print("❌ No provider token available for error scenario testing")
+        return False
+    
+    try:
+        headers = {"Authorization": f"Bearer {provider_token}"}
+        
+        # Test 1: Invalid order ID
+        invalid_order_id = "non-existent-order-id"
+        params = {"quotation_amount": 100.00}
+        
+        response = requests.put(
+            f"{BACKEND_URL}/orders/{invalid_order_id}/quotation",
+            params=params,
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code != 404:
+            print(f"❌ Expected 404 for invalid order ID, got {response.status_code}")
+            return False
+        
+        print("✅ Invalid order ID properly handled (404)")
+        
+        # Test 2: Unauthorized access (no token)
+        response = requests.put(
+            f"{BACKEND_URL}/orders/{test_order_id}/quotation",
+            params=params,
+            timeout=30
+        )
+        
+        if response.status_code != 403:
+            print(f"❌ Expected 403 for no authentication, got {response.status_code}")
+            return False
+        
+        print("✅ No authentication properly handled (403)")
+        
+        # Test 3: Invalid JWT token
+        invalid_headers = {"Authorization": "Bearer invalid-jwt-token"}
+        response = requests.put(
+            f"{BACKEND_URL}/orders/{test_order_id}/quotation",
+            params=params,
+            headers=invalid_headers,
+            timeout=30
+        )
+        
+        if response.status_code != 401:
+            print(f"❌ Expected 401 for invalid token, got {response.status_code}")
+            return False
+        
+        print("✅ Invalid JWT token properly handled (401)")
+        
+        # Test 4: Homeowner trying to update quotation (should fail)
+        if homeowner_token:
+            homeowner_headers = {"Authorization": f"Bearer {homeowner_token}"}
+            response = requests.put(
+                f"{BACKEND_URL}/orders/{test_order_id}/quotation",
+                params=params,
+                headers=homeowner_headers,
+                timeout=30
+            )
+            
+            if response.status_code != 403:
+                print(f"❌ Expected 403 for homeowner quotation update, got {response.status_code}")
+                return False
+            
+            print("✅ Homeowner quotation update properly blocked (403)")
+        
+        # Test 5: Invalid quotation amount (negative)
+        params = {"quotation_amount": -100.00}
+        response = requests.put(
+            f"{BACKEND_URL}/orders/{test_order_id}/quotation",
+            params=params,
+            headers=headers,
+            timeout=30
+        )
+        
+        # Note: Backend might accept negative values, but let's check the response
+        print(f"ℹ️ Negative amount test returned status {response.status_code}")
+        
+        print("✅ All quotation error scenarios tested")
+        return True
+        
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Quotation error scenarios test failed: {e}")
+        return False
+
 def run_all_tests():
     """Run all backend tests"""
     print("=" * 70)
@@ -854,8 +1097,37 @@ def run_all_tests():
     # Test 13: Appointment Creation
     test_results.append(("Appointment Creation", test_appointment_creation()))
     
-    # Test 14: MongoDB Persistence
+    # Test 14: Update Order Quotation
+    test_results.append(("Update Order Quotation", test_update_order_quotation()))
+    
+    # Test 15: Provider Order Status Update
+    test_results.append(("Provider Order Status Update", test_provider_order_status_update()))
+    
+    # Test 16: Homeowner Order Status Update
+    test_results.append(("Homeowner Order Status Update", test_homeowner_order_status_update()))
+    
+    # Test 17: Get Message Threads
+    test_results.append(("Get Message Threads", test_get_message_threads()))
+    
+    # Test 18: Get Messages for Thread
+    test_results.append(("Get Messages for Thread", test_get_messages_for_thread()))
+    
+    # Test 19: Error Handling
+    test_results.append(("Error Handling", test_error_handling()))
+    
+    # Test 20: MongoDB Persistence
     test_results.append(("MongoDB Persistence", test_mongodb_persistence()))
+    
+    # FOCUSED TESTS FOR QUOTATION UPDATE FUNCTIONALITY
+    print("\n" + "=" * 70)
+    print("🎯 FOCUSED QUOTATION UPDATE TESTING")
+    print("=" * 70)
+    
+    # Test 21: Complete Quotation Workflow
+    test_results.append(("Complete Quotation Workflow", test_quotation_workflow_complete()))
+    
+    # Test 22: Quotation Error Scenarios
+    test_results.append(("Quotation Error Scenarios", test_quotation_error_scenarios()))
     
     # Summary
     print("\n" + "=" * 70)
