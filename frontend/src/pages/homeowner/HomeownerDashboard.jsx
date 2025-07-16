@@ -318,11 +318,11 @@ const HomeownerDashboard = () => {
       const action = location.state?.action;
       
       if (hasValidAuth && (providerId || threadId)) {
-        // Load message threads first
-        await loadMessageThreads();
-        
         const initializeConversation = async () => {
           try {
+            // Load message threads first
+            await loadMessageThreads();
+            
             const user = JSON.parse(localStorage.getItem('user') || '{}');
             const threads = await apiService.getMessageThreads();
             
