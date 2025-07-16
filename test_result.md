@@ -216,20 +216,20 @@ backend:
         agent: "main"
         comment: "FIXED SERVICE FILTERING: Enhanced the service filtering logic with precise matching and service name variations mapping. Added mappings for common service variations (electrician/electrical, plumber/plumbing, etc.) to ensure proper filtering when clicking on service categories from explore page."
 
-  - task: "Complete homeowner messaging system overhaul"
+  - task: "Restructure messaging and orders system separation"
     implemented: true
     working: true
-    file: "/app/frontend/src/pages/homeowner/HomeownerDashboard.jsx"
+    file: "/app/frontend/src/pages/homeowner/ServiceBrowse.jsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
     status_history:
       - working: false
         agent: "user"
-        comment: "COMPREHENSIVE HOMEOWNER SIDE ISSUES: 1) Notifications not working (showing blank) 2) Proposals not showing in Orders & Quotations 3) Unseen message numbers needed in sidebar 4) Mobile view for messages needs messenger-style interface 5) Unseen message popouts and counts in chats 6) Allow homeowner to accept proposals from both Orders and Messages 7) Remove call provider feature 8) Add reschedule functionality via chat form 9) Order details should redirect to orders page"
+        comment: "MAJOR SYSTEM RESTRUCTURE NEEDED: 1) Remove quotations and proposals from messages 2) Make messages pure communication only 3) Quotations should go to orders when sent 4) Provider quotes should appear in homeowner's Orders section 5) Messages should only open when clicking 'Get best deals' 6) Fix notification badge styling and chat overflow issues"
       - working: true
         agent: "main"
-        comment: "COMPLETED HOMEOWNER MESSAGING OVERHAUL: 1) FIXED NOTIFICATIONS: Cleaned up notification system, removed old localStorage approach, now shows proper counts for orders/messages 2) FIXED PROPOSALS: HomeownerQuotations.jsx now uses apiService.getOrders() and accept/decline uses 'accepted'/'declined' status 3) ADDED MOBILE MESSENGER: Full mobile-responsive chat interface with contact selection → conversation page flow 4) IMPLEMENTED RESCHEDULE FORM: Modal form with date/time/reason fields that sends formatted message to provider 5) REMOVED CALL PROVIDER: Eliminated non-functional call feature 6) ADDED ORDER DETAILS REDIRECT: Button now redirects to orders tab 7) ENHANCED UX: Mobile chat has proper header with back button, message timestamps, and responsive design"
+        comment: "COMPLETED MESSAGING AND ORDERS SEPARATION: 1) UPDATED BUTTON ACTIONS: 'Get Quotation' → Shows quotation form (goes to orders), 'Get best deals' → Opens messages tab for communication 2) FIXED QUOTATION FLOW: QuotationRequestForm creates order requests without message threads, proposals/quotes appear in Orders section 3) FIXED CHAT OVERFLOW: Updated message containers with max-width constraints (70% desktop, 85% mobile), added break-words and proper padding 4) IMPROVED NOTIFICATION BADGES: Changed to red color, absolute positioning, better sizing (18px height, min-width) 5) ENHANCED MOBILE CHAT: Better responsive design with proper width constraints and message alignment 6) PURE MESSAGING SYSTEM: Messages now only for communication, business transactions handled in Orders"
 
 frontend:
   - task: "Fix provider authentication form validation issues"
