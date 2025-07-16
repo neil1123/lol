@@ -1342,16 +1342,16 @@ const HomeownerDashboard = () => {
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="flex flex-col h-full">
-                        <div className="flex-1 space-y-3 mb-4 overflow-y-auto">
+                        <div className="flex-1 space-y-3 mb-4 overflow-y-auto px-2">
                           {conversationMessages && conversationMessages.length > 0 ? (
                             conversationMessages.map(message => (
-                              <div key={message.id} className={`flex ${message.sender_type === 'homeowner' ? 'justify-end' : ''}`}>
-                                <div className={`max-w-xs lg:max-w-md rounded-lg p-3 ${
+                              <div key={message.id} className={`flex ${message.sender_type === 'homeowner' ? 'justify-end' : 'justify-start'}`}>
+                                <div className={`max-w-[70%] rounded-lg p-3 ${
                                   message.sender_type === 'homeowner' 
-                                    ? 'bg-blue-600 text-white ml-auto' 
+                                    ? 'bg-blue-600 text-white' 
                                     : 'bg-gray-100 text-gray-900'
                                 }`}>
-                                  <p className="text-sm">{message.content}</p>
+                                  <p className="text-sm break-words">{message.content}</p>
                                   <p className={`text-xs mt-1 ${
                                     message.sender_type === 'homeowner' ? 'text-blue-200' : 'text-gray-500'
                                   }`}>
