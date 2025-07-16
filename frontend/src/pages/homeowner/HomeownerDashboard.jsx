@@ -251,8 +251,8 @@ const HomeownerDashboard = () => {
     
     // Handle provider context from "Get best deals" button
     const urlParams = new URLSearchParams(window.location.search);
-    const tab = urlParams.get('tab');
-    if (tab === 'messages') {
+    const urlTab = urlParams.get('tab');
+    if (urlTab === 'messages') {
       setActiveTab('messages');
     }
     
