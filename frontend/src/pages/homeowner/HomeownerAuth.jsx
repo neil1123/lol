@@ -39,9 +39,20 @@ const HomeownerAuth = () => {
         password: signInData.password
       });
       
-      // Navigation is handled by apiService.login, but let's make sure
+      // Check user type and navigate accordingly
+      const userType = response.user.user_type;
+      
+      if (userType === 'homeowner') {
+        navigate('/homeowners/dashboard');
+      } else if (userType === 'provider') {
+        // If a provider tries to login through homeowner auth, redirect to provider dashboard
+        navigate('/homeservices/dashboard');
+      } else {
+        // Default to homeowner dashboard if userType is unclear
+        navigate('/homeowners/dashboard');
+      }
+      
       setIsLoading(false);
-      navigate('/homeowners/dashboard');
     } catch (error) {
       setIsLoading(false);
       alert('Invalid credentials. Please check your email and password.');
