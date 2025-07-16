@@ -376,7 +376,7 @@ const ProviderProfile = () => {
                 onClick={() => setIsChatOpen(true)}
               >
                 <MessageCircle className="h-4 w-4 mr-2 flex-shrink-0" />
-                <span className="truncate">💬 Get best deal</span>
+                <span className="truncate">💬 Text Us</span>
                 <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full hidden sm:inline">1 hr</span>
               </Button>
               <p className="text-center text-sm text-gray-600">
