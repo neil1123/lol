@@ -64,7 +64,7 @@ const HomeownerDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [ordersError, setOrdersError] = useState('');
-  const [activeOrdersTab, setActiveOrdersTab] = useState('all');
+  const [activeOrdersTab, setActiveOrdersTab] = useState('quotes'); // Start with quotes tab
 
   const loadOrders = async () => {
     try {
