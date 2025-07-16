@@ -489,7 +489,13 @@ const HomeownerDashboard = () => {
   ];
 
   const handleServiceClick = (serviceId) => {
-    navigate('/homeowners/browse');
+    // Navigate to browse page with service filter
+    const service = mostBookedServices[serviceId];
+    if (service) {
+      navigate(`/homeowners/browse?service=${encodeURIComponent(service.name)}`);
+    } else {
+      navigate('/homeowners/browse');
+    }
   };
 
   const handleSidebarItemClick = (itemId) => {
