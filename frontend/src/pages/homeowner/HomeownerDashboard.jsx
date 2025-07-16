@@ -61,6 +61,9 @@ const HomeownerDashboard = () => {
     time: '',
     reason: ''
   });
+  const [orders, setOrders] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [ordersError, setOrdersError] = useState('');
 
   const handleLogout = () => {
     localStorage.removeItem('user');
