@@ -127,6 +127,7 @@ const ServiceBrowse = () => {
       
       const matchesServices = selectedServices.length === 0 ||
         selectedServices.some(service => {
+          console.log(`Filtering by service: ${service}`);
           // More precise matching for service categories
           return provider.services.some(providerService => {
             const providerServiceLower = providerService.toLowerCase();
@@ -147,14 +148,32 @@ const ServiceBrowse = () => {
               'plumber': ['plumbing', 'plumber', 'plumbing services'],
               'plumbing': ['plumbing', 'plumber', 'plumbing services'],
               'cleaning': ['cleaning', 'home cleaning', 'office cleaning', 'house cleaning'],
+              'home cleaning': ['cleaning', 'home cleaning', 'office cleaning', 'house cleaning'],
+              'office cleaning': ['cleaning', 'home cleaning', 'office cleaning', 'house cleaning'],
               'handyman': ['handyman', 'handyman services', 'general repairs'],
-              'landscaping': ['landscaping', 'lawn care', 'garden services', 'yard work']
+              'handyman services': ['handyman', 'handyman services', 'general repairs'],
+              'landscaping': ['landscaping', 'lawn care', 'garden services', 'yard work'],
+              'lawn mowing & maintenance': ['landscaping', 'lawn care', 'garden services', 'yard work', 'lawn mowing'],
+              'painter': ['painting', 'painter', 'paint services'],
+              'hvac services': ['hvac', 'heating', 'cooling', 'air conditioning'],
+              'carpenter': ['carpentry', 'carpenter', 'woodwork'],
+              'window cleaning': ['window cleaning', 'cleaning', 'window wash'],
+              'pressure washing': ['pressure washing', 'power washing', 'cleaning'],
+              'gutter cleaning': ['gutter cleaning', 'gutter services', 'cleaning'],
+              'roofing': ['roofing', 'roof repair', 'roof services'],
+              'pest control': ['pest control', 'extermination', 'pest services'],
+              'appliance repair': ['appliance repair', 'appliance services', 'repair'],
+              'junk removal': ['junk removal', 'waste removal', 'cleanup'],
+              'car detailing': ['car detailing', 'auto detailing', 'car wash'],
+              'snow removal': ['snow removal', 'snow services', 'winter services'],
+              'fence & deck services': ['fence', 'deck', 'fencing', 'deck services'],
+              'siding installation & repair': ['siding', 'siding installation', 'siding repair']
             };
             
             // Check if service matches any mapped services
             const mappedServices = serviceMapping[serviceLower] || [serviceLower];
             const matches = mappedServices.some(mapped => 
-              providerServiceLower.includes(mapped) || mapped.includes(providerServiceLower)
+              providerServiceLower.includes(mapped.toLowerCase()) || mapped.toLowerCase().includes(providerServiceLower)
             );
             
             if (matches) {
