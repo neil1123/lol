@@ -1138,16 +1138,96 @@ const HomeownerDashboard = () => {
           {activeTab === 'messages' && (
             <div>
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Messages</h2>
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Conversation List */}
-                <div className="lg:col-span-1">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Conversations</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        {messageThreads.map(thread => (
+              
+              {/* Mobile Chat View */}
+              {showMobileChat && isMobileView && (
+                <div className="fixed inset-0 bg-white z-50 flex flex-col">
+                  {/* Chat Header */}
+                  <div className="bg-blue-600 text-white p-4 flex items-center">
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => setShowMobileChat(false)}
+                      className="text-white mr-3"
+                    >
+                      <ArrowLeft className="h-5 w-5" />
+                    </Button>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                        {selectedConversation?.provider_name ? selectedConversation.provider_name.split(' ').map(n => n[0]).join('') : 'P'}
+                      </div>
+                      <div>
+                        <h3 className="font-semibold">{selectedConversation?.provider_name}</h3>
+                        <p className="text-xs text-blue-100">{selectedConversation?.service_type}</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Chat Messages */}
+                  <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                    {conversationMessages && conversationMessages.length > 0 ? (
+                      conversationMessages.map(message => (
+                        <div key={message.id} className={`flex ${message.sender_type === 'homeowner' ? 'justify-end' : ''}`}>
+                          <div className={`max-w-xs rounded-lg p-3 ${
+                            message.sender_type === 'homeowner' 
+                              ? 'bg-blue-600 text-white ml-auto' 
+                              : 'bg-gray-100 text-gray-900'
+                          }`}>
+                            <p className="text-sm">{message.content}</p>
+                            <p className={`text-xs mt-1 ${
+                              message.sender_type === 'homeowner' ? 'text-blue-200' : 'text-gray-500'
+                            }`}>
+                              {new Date(message.timestamp).toLocaleTimeString()}
+                            </p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center text-gray-500 py-8">
+                        <MessageCircle className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                        <p>No messages yet. Start a conversation!</p>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Message Input */}
+                  <div className="p-4 border-t bg-white">
+                    <div className="flex space-x-2">
+                      <Input 
+                        placeholder="Type your message..." 
+                        className="flex-1"
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter') {
+                            sendMessage(newMessage);
+                          }
+                        }}
+                      />
+                      <Button 
+                        onClick={() => {
+                          sendMessage(newMessage);
+                        }}
+                      >
+                        <Send className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Desktop/Tablet View */}
+              {(!isMobileView || !showMobileChat) && (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Conversation List */}
+                  <div className="lg:col-span-1">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Conversations</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          {messageThreads.map(thread => (
                           <div 
                             key={thread.id}
                             className={`p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors ${
