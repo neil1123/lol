@@ -469,6 +469,9 @@ const HomeownerDashboard = () => {
   // Debug notifications
   console.log('Current notifications:', notifications);
   console.log('Messages badge:', notifications.messages);
+  console.log('Messages badge type:', typeof notifications.messages);
+  console.log('Orders badge:', notifications.orders);
+  console.log('Orders badge type:', typeof notifications.orders);
 
   const featuredServices = [
     {
