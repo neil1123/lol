@@ -199,7 +199,10 @@ def test_message_thread_creation_for_text_us():
             # Test sending initial message
             message_data = {
                 "thread_id": thread_id,
-                "content": "Hello! I saw your services and I'm interested in getting a quote for electrical work."
+                "sender_id": homeowner_id,  # Will be overridden by backend
+                "sender_type": "homeowner",  # Will be overridden by backend
+                "content": "Hello! I saw your services and I'm interested in getting a quote for electrical work.",
+                "read": False
             }
             
             response = requests.post(f"{BACKEND_URL}/messages", json=message_data, headers=headers, timeout=30)
