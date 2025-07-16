@@ -107,7 +107,6 @@ const HomeownerDashboard = () => {
       };
 
       setNotifications(newNotifications);
-      setUnreadCount(newNotifications.total);
     } catch (error) {
       console.error('Failed to update notifications:', error);
     }
