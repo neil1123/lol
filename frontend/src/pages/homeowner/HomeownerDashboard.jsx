@@ -689,35 +689,22 @@ const HomeownerDashboard = () => {
                   </Button>
                 </div>
                 <div className="flex-1 overflow-y-auto bg-white">
-                  {notifications.length === 0 ? (
+                  {notifications.total === 0 ? (
                     <div className="p-6 text-center text-gray-500 bg-white h-full flex flex-col justify-center">
                       <Bell className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                       <p>You don't have any new notifications</p>
                     </div>
                   ) : (
                     <div className="bg-white">
-                      {notifications.map(notification => (
-                        <div
-                          key={notification.id}
-                          className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 ${
-                            !notification.read ? 'bg-blue-50' : 'bg-white'
-                          }`}
-                          onClick={() => markNotificationAsRead(notification.id)}
-                        >
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <h4 className="font-semibold text-sm">{notification.title}</h4>
-                              <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
-                              <p className="text-xs text-gray-400 mt-2">
-                                {new Date(notification.timestamp).toLocaleString()}
-                              </p>
-                            </div>
-                            {!notification.read && (
-                              <div className="w-2 h-2 bg-blue-500 rounded-full ml-2 mt-2"></div>
-                            )}
-                          </div>
-                        </div>
-                      ))}
+                      <div className="p-6 text-center text-gray-500 bg-white">
+                        <Bell className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                        <p>You have {notifications.total} unread notification{notifications.total !== 1 ? 's' : ''}</p>
+                        <p className="text-sm mt-2">
+                          {notifications.orders > 0 && `${notifications.orders} order update${notifications.orders !== 1 ? 's' : ''}`}
+                          {notifications.orders > 0 && notifications.messages > 0 && ', '}
+                          {notifications.messages > 0 && `${notifications.messages} message${notifications.messages !== 1 ? 's' : ''}`}
+                        </p>
+                      </div>
                     </div>
                   )}
                 </div>
