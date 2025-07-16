@@ -1075,7 +1075,10 @@ const HomeownerDashboard = () => {
               {/* Orders Overview */}
               {!ordersLoading && !ordersError && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                  <Card>
+                  <Card 
+                    className={`cursor-pointer transition-all duration-200 ${activeOrdersTab === 'active' ? 'ring-2 ring-blue-500' : 'hover:shadow-lg'}`}
+                    onClick={() => setActiveOrdersTab('active')}
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-center space-x-4">
                         <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
@@ -1083,13 +1086,16 @@ const HomeownerDashboard = () => {
                         </div>
                         <div>
                           <p className="text-sm font-medium text-gray-600">Active Orders</p>
-                          <p className="text-2xl font-bold text-gray-900">{orders.filter(o => o.status !== 'completed').length}</p>
+                          <p className="text-2xl font-bold text-gray-900">{orders.filter(o => o.status === 'accepted' || o.status === 'in_progress').length}</p>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
                   
-                  <Card>
+                  <Card 
+                    className={`cursor-pointer transition-all duration-200 ${activeOrdersTab === 'completed' ? 'ring-2 ring-blue-500' : 'hover:shadow-lg'}`}
+                    onClick={() => setActiveOrdersTab('completed')}
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-center space-x-4">
                         <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -1103,14 +1109,17 @@ const HomeownerDashboard = () => {
                     </CardContent>
                   </Card>
                   
-                  <Card>
+                  <Card 
+                    className={`cursor-pointer transition-all duration-200 ${activeOrdersTab === 'quotes' ? 'ring-2 ring-blue-500' : 'hover:shadow-lg'}`}
+                    onClick={() => setActiveOrdersTab('quotes')}
+                  >
                     <CardContent className="p-6">
                       <div className="flex items-center space-x-4">
                         <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
                           <Clock className="h-6 w-6 text-yellow-600" />
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-gray-600">Pending Quotes</p>
+                          <p className="text-sm font-medium text-gray-600">Quotes</p>
                           <p className="text-2xl font-bold text-gray-900">{orders.filter(q => q.status === 'quoted').length}</p>
                         </div>
                       </div>
