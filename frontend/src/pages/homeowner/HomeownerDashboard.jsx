@@ -145,6 +145,45 @@ const HomeownerDashboard = () => {
     }
   };
 
+  const handleReschedule = async () => {
+    if (!selectedConversation || !rescheduleData.date || !rescheduleData.time) {
+      alert('Please fill in all required fields');
+      return;
+    }
+    
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      const rescheduleMessage = {
+        thread_id: selectedConversation.id,
+        sender_id: user.id,
+        sender_type: 'homeowner',
+        content: `🗓️ Reschedule Request:\n\nNew Date: ${rescheduleData.date}\nNew Time: ${rescheduleData.time}\n${rescheduleData.reason ? `Reason: ${rescheduleData.reason}` : ''}\n\nPlease confirm if this new schedule works for you.`,
+        timestamp: new Date().toISOString()
+      };
+
+      await apiService.sendMessage(rescheduleMessage);
+      
+      // Reload conversation messages
+      await loadConversationMessages(selectedConversation.id);
+      
+      setShowRescheduleForm(false);
+      setRescheduleData({
+        date: '',
+        time: '',
+        reason: ''
+      });
+      
+    } catch (error) {
+      console.error('Failed to send reschedule request:', error);
+      alert('Failed to send reschedule request. Please try again.');
+    }
+  };
+
+  const handleViewOrderDetails = () => {
+    setActiveTab('orders');
+  };
+
   // Notification functions
   const loadNotifications = () => {
     // Always start with empty notifications for new/fresh users
