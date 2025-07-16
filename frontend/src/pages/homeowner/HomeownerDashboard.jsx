@@ -254,6 +254,52 @@ const HomeownerDashboard = () => {
     const urlTab = urlParams.get('tab');
     if (urlTab === 'messages') {
       setActiveTab('messages');
+      
+      // Handle provider ID from state or URL
+      const providerId = location.state?.providerId;
+      if (providerId && hasValidAuth) {
+        // Create or find a message thread with this provider
+        const initializeConversation = async () => {
+          try {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            const threads = await apiService.getMessageThreads();
+            
+            // Find existing thread with this provider
+            const existingThread = threads.find(thread => 
+              thread.provider_id === providerId || thread.homeowner_id === user.id
+            );
+            
+            if (existingThread) {
+              setSelectedConversation(existingThread);
+              await loadConversationMessages(existingThread.id);
+            } else {
+              // Create a new thread if none exists
+              const providers = await apiService.getAllProviders();
+              const provider = providers.find(p => p.id === providerId);
+              
+              if (provider) {
+                const threadData = {
+                  homeowner_id: user.id,
+                  provider_id: providerId,
+                  homeowner_name: user.name,
+                  provider_name: provider.business_name || provider.name,
+                  service_type: 'General Inquiry',
+                  last_message: 'New conversation started',
+                  last_message_time: new Date().toISOString()
+                };
+                
+                const newThread = await apiService.createMessageThread(threadData);
+                setSelectedConversation(newThread);
+                await loadConversationMessages(newThread.id);
+              }
+            }
+          } catch (error) {
+            console.error('Failed to initialize conversation:', error);
+          }
+        };
+        
+        initializeConversation();
+      }
     }
     
     // Handle back button behavior for logged in users
