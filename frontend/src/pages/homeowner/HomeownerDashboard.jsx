@@ -402,11 +402,6 @@ const HomeownerDashboard = () => {
     }
   };
 
-  // Get current user's orders (assuming user ID 1 for demo)
-  const currentUserId = 1;
-  const userOrders = mockOrders.filter(order => order.homeownerId === currentUserId);
-  const userQuotationRequests = mockQuotationRequests.filter(req => req.homeownerId === currentUserId);
-
   const sidebarItems = [
     { id: 'home', label: 'Home', icon: Home, active: true },
     { id: 'orders', label: 'Orders', icon: ShoppingCart, active: false, badge: notifications.orders },
