@@ -1156,6 +1156,9 @@ const HomeownerDashboard = () => {
                             onClick={() => {
                               setSelectedConversation(thread);
                               loadConversationMessages(thread.id);
+                              if (isMobileView) {
+                                setShowMobileChat(true);
+                              }
                             }}
                           >
                             <div className="flex items-center space-x-3">
