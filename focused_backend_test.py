@@ -356,6 +356,8 @@ def test_complete_workflow():
         # Step 2: Send initial message
         message_data = {
             "thread_id": workflow_thread_id,
+            "sender_id": homeowner_id,
+            "sender_type": "homeowner",
             "content": "I'm interested in a complete kitchen renovation. Can you provide a quote?"
         }
         
