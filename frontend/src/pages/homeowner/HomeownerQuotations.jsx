@@ -51,7 +51,7 @@ const HomeownerQuotations = () => {
 
   const handleAcceptQuote = async (quoteId) => {
     try {
-      await apiService.updateOrderStatus(quoteId, 'confirmed');
+      await apiService.updateOrderStatus(quoteId, 'accepted');
       loadQuotations(); // Reload data
     } catch (error) {
       console.error('Failed to accept quote:', error);
