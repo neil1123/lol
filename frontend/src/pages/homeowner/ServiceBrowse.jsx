@@ -51,7 +51,11 @@ const ServiceBrowse = () => {
     // Get selected service from URL params
     const searchParams = new URLSearchParams(location.search);
     const serviceParam = searchParams.get('service');
-    if (serviceParam) setSelectedServices([serviceParam]);
+    console.log('Service parameter from URL:', serviceParam);
+    if (serviceParam) {
+      setSelectedServices([serviceParam]);
+      console.log('Set selected services to:', [serviceParam]);
+    }
     
     // Load providers from API
     console.log('About to call loadProviders');
