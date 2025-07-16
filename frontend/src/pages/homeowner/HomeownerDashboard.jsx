@@ -53,7 +53,6 @@ const HomeownerDashboard = () => {
   });
   const [messageThreads, setMessageThreads] = useState([]);
   const [conversationMessages, setConversationMessages] = useState([]);
-  const [unreadCount, setUnreadCount] = useState(0);
 
   const handleLogout = () => {
     localStorage.removeItem('user');
