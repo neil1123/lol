@@ -198,12 +198,22 @@ const ServiceBrowse = () => {
 
   const handleGetBestDeal = (providerId) => {
     // Check if user is logged in
-    if (!isLoggedIn) {
+    const authToken = localStorage.getItem('authToken');
+    const user = localStorage.getItem('user');
+    const userType = localStorage.getItem('userType');
+    
+    if (!authToken || !user) {
       navigate('/homeowners/auth');
       return;
     }
     
-    // Navigate to messages with the provider context
+    // If user is a provider, redirect to provider dashboard
+    if (userType === 'provider') {
+      navigate('/homeservices/dashboard');
+      return;
+    }
+    
+    // For homeowners, navigate to messages with the provider context
     navigate('/homeowners/dashboard?tab=messages', { 
       state: { providerId, action: 'startConversation' }
     });
