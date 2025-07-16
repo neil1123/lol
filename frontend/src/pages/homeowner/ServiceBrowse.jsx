@@ -128,8 +128,13 @@ const ServiceBrowse = () => {
             const providerServiceLower = providerService.toLowerCase();
             const serviceLower = service.toLowerCase();
             
+            console.log(`Checking provider service "${providerServiceLower}" against filter "${serviceLower}"`);
+            
             // Direct match
-            if (providerServiceLower === serviceLower) return true;
+            if (providerServiceLower === serviceLower) {
+              console.log('Direct match found');
+              return true;
+            }
             
             // Handle common service name variations
             const serviceMapping = {
@@ -144,14 +149,22 @@ const ServiceBrowse = () => {
             
             // Check if service matches any mapped services
             const mappedServices = serviceMapping[serviceLower] || [serviceLower];
-            return mappedServices.some(mapped => 
+            const matches = mappedServices.some(mapped => 
               providerServiceLower.includes(mapped) || mapped.includes(providerServiceLower)
             );
+            
+            if (matches) {
+              console.log(`Mapped match found: ${providerServiceLower} matches ${serviceLower}`);
+            }
+            
+            return matches;
           });
         });
+      
+      console.log(`Provider ${provider.name}: matchesSearch=${matchesSearch}, matchesServices=${matchesServices}, selectedServices=${selectedServices.join(', ')}`);
     
-    return matchesSearch && matchesServices;
-  });
+      return matchesSearch && matchesServices;
+    });
 
   console.log('Filtered providers:', filteredProviders);
 
