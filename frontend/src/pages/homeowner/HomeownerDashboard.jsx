@@ -1131,18 +1131,46 @@ const HomeownerDashboard = () => {
               {/* Order List */}
               {!ordersLoading && !ordersError && (
                 <div className="space-y-6">
-                  {orders.length === 0 ? (
-                    <div className="text-center py-12">
-                      <p className="text-gray-500 text-lg">No orders yet.</p>
-                      <Button 
-                        onClick={() => navigate('/homeowners/browse')}
-                        className="mt-4"
-                      >
-                        Browse Services
-                      </Button>
-                    </div>
-                  ) : (
-                    orders.map(order => (
+                  {(() => {
+                    let filteredOrders = orders;
+                    
+                    // Filter orders based on active tab
+                    switch (activeOrdersTab) {
+                      case 'active':
+                        filteredOrders = orders.filter(o => o.status === 'accepted' || o.status === 'in_progress');
+                        break;
+                      case 'completed':
+                        filteredOrders = orders.filter(o => o.status === 'completed');
+                        break;
+                      case 'quotes':
+                        filteredOrders = orders.filter(o => o.status === 'quoted');
+                        break;
+                      default:
+                        filteredOrders = orders;
+                    }
+                    
+                    if (filteredOrders.length === 0) {
+                      return (
+                        <div className="text-center py-12">
+                          <p className="text-gray-500 text-lg">
+                            {activeOrdersTab === 'active' ? 'No active orders.' :
+                             activeOrdersTab === 'completed' ? 'No completed orders.' :
+                             activeOrdersTab === 'quotes' ? 'No quotes yet.' :
+                             'No orders yet.'}
+                          </p>
+                          {activeOrdersTab === 'quotes' && (
+                            <Button 
+                              onClick={() => navigate('/homeowners/browse')}
+                              className="mt-4"
+                            >
+                              Browse Services
+                            </Button>
+                          )}
+                        </div>
+                      );
+                    }
+                    
+                    return filteredOrders.map(order => (
                       <Card key={order.id} className="border-l-4 border-l-blue-500">
                         <CardHeader>
                           <div className="flex items-center justify-between">
@@ -1209,8 +1237,8 @@ const HomeownerDashboard = () => {
                           </div>
                         </CardContent>
                       </Card>
-                    ))
-                  )}
+                    ));
+                  })()}
                 </div>
               )}
             </div>
