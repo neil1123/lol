@@ -32,6 +32,8 @@ import { Input } from '../../components/ui/input';
 import { Textarea } from '../../components/ui/textarea';
 import { Label } from '../../components/ui/label';
 import { serviceCategories, mockOrders, mockQuotationRequests } from '../../data/mockData';
+import apiService from '../../services/api';
+import NotificationBadge from '../../components/NotificationBadge';
 
 const HomeownerDashboard = () => {
   const navigate = useNavigate();
