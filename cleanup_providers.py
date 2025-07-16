@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 # Load environment variables
-ROOT_DIR = Path(__file__).parent
+ROOT_DIR = Path(__file__).parent / "backend"
 load_dotenv(ROOT_DIR / '.env')
 
 async def cleanup_providers():
