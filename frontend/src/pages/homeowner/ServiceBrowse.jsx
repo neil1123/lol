@@ -195,12 +195,10 @@ const ServiceBrowse = () => {
       return;
     }
     
-    // Find the provider and show quotation form
-    const provider = allProviders.find(p => p.id === providerId);
-    if (provider) {
-      setSelectedProvider(provider);
-      setShowQuotationForm(true);
-    }
+    // Navigate to messages with the provider context
+    navigate('/homeowners/dashboard?tab=messages', { 
+      state: { providerId, action: 'startConversation' }
+    });
   };
 
   const handleQuotationFormClose = () => {
