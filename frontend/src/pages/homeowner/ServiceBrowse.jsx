@@ -219,7 +219,7 @@ const ServiceBrowse = () => {
     handleGetQuotation(providerId);
   };
 
-  const handleGetBestDeal = (providerId) => {
+  const handleGetBestDeal = async (providerId) => {
     // Check if user is logged in
     const authToken = localStorage.getItem('authToken');
     const user = localStorage.getItem('user');
@@ -236,10 +236,52 @@ const ServiceBrowse = () => {
       return;
     }
     
-    // For homeowners, navigate to messages with the provider context
-    navigate('/homeowners/dashboard?tab=messages', { 
-      state: { providerId, action: 'startConversation' }
-    });
+    try {
+      // Create a conversation thread automatically
+      const userData = JSON.parse(user);
+      const provider = allProviders.find(p => p.id === providerId);
+      
+      if (provider) {
+        // Create message thread
+        const threadData = {
+          homeowner_id: userData.id,
+          provider_id: providerId,
+          homeowner_name: userData.name,
+          provider_name: provider.business_name || provider.name,
+          service_type: 'General Inquiry',
+          last_message: 'Hi! I\'m interested in your services. Can we discuss?',
+          last_message_time: new Date().toISOString()
+        };
+        
+        const messageThread = await apiService.createMessageThread(threadData);
+        
+        // Send initial message
+        const initialMessage = {
+          thread_id: messageThread.id,
+          sender_id: userData.id,
+          sender_type: 'homeowner',
+          content: 'Hi! I\'m interested in your services. Can we discuss?',
+          timestamp: new Date().toISOString()
+        };
+        
+        await apiService.sendMessage(initialMessage);
+        
+        // Navigate to messages with the thread selected
+        navigate('/homeowners/dashboard?tab=messages', { 
+          state: { 
+            providerId, 
+            threadId: messageThread.id, 
+            action: 'openConversation' 
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Failed to create conversation:', error);
+      // Fallback to the original behavior
+      navigate('/homeowners/dashboard?tab=messages', { 
+        state: { providerId, action: 'startConversation' }
+      });
+    }
   };
 
   const handleQuotationFormClose = () => {
