@@ -201,23 +201,35 @@ backend:
         agent: "testing"
         comment: "Comprehensive error handling working. Invalid credentials properly rejected (401). Duplicate email registration blocked (400). Invalid JWT tokens rejected (401). Non-existent resources return 404. CORS properly configured."
 
-  - task: "Fix broken quotation and messaging workflow"
+  - task: "Fix service filtering on explore page"
     implemented: true
     working: true
     file: "/app/frontend/src/pages/homeowner/ServiceBrowse.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: false
         agent: "user"
-        comment: "CRITICAL WORKFLOW BREAKDOWN: Multiple issues reported: 1) 'Get best deals' opens chat with 2 pre-existing messages, no message sending ability 2) User names not showing in messages 3) 'Get quotation' leads to messages instead of quotation form 4) Quotation flow broken - should show form first, then pending, then message creation 5) When provider gives quote, should message homeowner AND add to 'quoted' section 6) Missing cancel/accept functionality for proposals"
+        comment: "User reported that clicking on services in explore page shows all services instead of filtering by specific service tags (e.g., clicking 'Electrician' should not show Window cleaning companies)"
       - working: true
         agent: "main"
-        comment: "FIXED QUOTATION AND MESSAGING WORKFLOW: 1) Added QuotationRequestForm component to ServiceBrowse.jsx 2) Fixed button handlers to show quotation form instead of redirecting to messages 3) Updated ProviderMessaging.jsx to properly load conversation messages using API 4) Added backend endpoint PUT /api/orders/{order_id}/quotation for quotation updates 5) Fixed message display to use real conversation data instead of mock data 6) Updated proposal form to send actual messages via API and update order status to 'quoted' 7) All buttons now properly show quotation form for logged-in users and redirect to auth for non-logged users"
+        comment: "FIXED SERVICE FILTERING: Enhanced the service filtering logic with precise matching and service name variations mapping. Added mappings for common service variations (electrician/electrical, plumber/plumbing, etc.) to ensure proper filtering when clicking on service categories from explore page."
+
+  - task: "Fix homeowner messaging system and add notifications"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/homeowner/HomeownerDashboard.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "Multiple messaging issues: 1) Messages from providers not showing up in homeowner messages 2) Quotations going as text but not being logged in homeowner messages 3) Missing notification badges on homeowner sidebar for orders and messages"
       - working: true
-        agent: "testing"
-        comment: "QUOTATION UPDATE FUNCTIONALITY FULLY TESTED AND WORKING: Comprehensive testing confirms all quotation update features are working perfectly: ✅ PUT /api/orders/{order_id}/quotation endpoint working with quotation_amount parameter ✅ Order status workflow: quotation request → pending_quotation → quotation update → quoted status ✅ Message thread creation (POST /api/messages/threads) working ✅ Complete quotation workflow tested: homeowner creates request, provider updates quotation, homeowner can accept/decline ✅ Error handling working: invalid order ID (404), no authentication (403), invalid JWT (401), homeowner blocked from updating quotations (403) ✅ All 22 backend tests passed including focused quotation update testing. The 'try again later' errors reported by users are NOT occurring in backend API - the quotation update system is fully functional."
+        agent: "main"
+        comment: "FIXED HOMEOWNER MESSAGING SYSTEM: 1) Migrated from localStorage to API integration using apiService.getMessageThreads() and apiService.getMessages() 2) Added proper notification system with badges for orders and messages 3) Added loadMessageThreads(), loadConversationMessages(), updateNotifications(), and sendMessage() functions 4) Updated useEffect to load messages and set up 30-second notification intervals 5) Added NotificationBadge components to sidebar for orders and messages 6) Fixed conversation list and message display to use real API data"
 
 frontend:
   - task: "Fix provider authentication form validation issues"
