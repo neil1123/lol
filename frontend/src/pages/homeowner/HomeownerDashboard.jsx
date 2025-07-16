@@ -619,6 +619,8 @@ const HomeownerDashboard = () => {
                     {item.badge && item.badge > 0 && (
                       <NotificationBadge count={item.badge} />
                     )}
+                    {/* Debug: Show badge value */}
+                    {console.log(`Badge for ${item.label}:`, item.badge)}
                   </Button>
                 </li>
               );
