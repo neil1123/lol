@@ -440,7 +440,7 @@ const ProviderProfile = () => {
               <Button
                 variant="outline"
                 className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white shadow-sm text-sm sm:text-base"
-                onClick={() => setIsChatOpen(true)}
+                onClick={handleTextUs}
               >
                 <MessageCircle className="h-4 w-4 mr-2 flex-shrink-0" />
                 <span className="truncate">💬 Text Us</span>
