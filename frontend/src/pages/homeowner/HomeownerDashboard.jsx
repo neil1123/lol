@@ -273,10 +273,11 @@ const HomeownerDashboard = () => {
   };
 
   useEffect(() => {
-    // Check if user is logged in - simplified check
+    // Check if user is logged in - improved check
     const user = localStorage.getItem('user');
     const userType = localStorage.getItem('userType');
-    const hasValidAuth = user && userType === 'homeowner';
+    const authToken = localStorage.getItem('authToken');
+    const hasValidAuth = user && authToken && userType === 'homeowner';
     setIsLoggedIn(hasValidAuth);
     
     // Check for mobile view
