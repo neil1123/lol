@@ -140,8 +140,11 @@ const HomeownerDashboard = () => {
   // Notification functions
   const loadNotifications = () => {
     // Always start with empty notifications for new/fresh users
-    setNotifications([]);
-    setUnreadCount(0);
+    setNotifications({
+      orders: 0,
+      messages: 0,
+      total: 0
+    });
     
     // Clear any existing mock data
     localStorage.removeItem('homeowner_notifications');
