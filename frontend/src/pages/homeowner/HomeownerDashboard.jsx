@@ -168,14 +168,8 @@ const HomeownerDashboard = () => {
 
   // Check for new data and create notifications
   const checkForNewNotifications = () => {
-    // Check for new quotation responses
-    const quotationRequests = JSON.parse(localStorage.getItem('quotationRequests') || '[]');
-    
-    // Check for new messages
-    const messageThreads = JSON.parse(localStorage.getItem('messageThreads') || '[]');
-    
-    // Create notifications for any new activity (simplified for demo)
-    // In real app, you'd track what was last seen and compare
+    // This is now handled by the updateNotifications function
+    updateNotifications();
   };
 
   useEffect(() => {
