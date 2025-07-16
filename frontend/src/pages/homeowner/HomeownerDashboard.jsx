@@ -64,6 +64,81 @@ const HomeownerDashboard = () => {
     navigate('/homeowners');
   };
 
+  const loadMessageThreads = async () => {
+    try {
+      const threads = await apiService.getMessageThreads();
+      setMessageThreads(threads);
+    } catch (error) {
+      console.error('Failed to load message threads:', error);
+      setMessageThreads([]);
+    }
+  };
+
+  const loadConversationMessages = async (threadId) => {
+    try {
+      const messages = await apiService.getMessages(threadId);
+      setConversationMessages(messages);
+    } catch (error) {
+      console.error('Failed to load conversation messages:', error);
+      setConversationMessages([]);
+    }
+  };
+
+  const updateNotifications = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (!user.id) return;
+
+      // Get unread orders count (quoted orders waiting for homeowner response)
+      const orders = await apiService.getOrders();
+      const quotedOrders = orders.filter(order => 
+        order.status === 'quoted' && order.homeowner_id === user.id
+      ).length;
+
+      // Get unread messages count
+      const messageThreads = await apiService.getMessageThreads();
+      const unreadMessages = messageThreads.reduce((count, thread) => 
+        count + (thread.unread_count || 0), 0
+      );
+
+      const newNotifications = {
+        orders: quotedOrders,
+        messages: unreadMessages,
+        total: quotedOrders + unreadMessages
+      };
+
+      setNotifications(newNotifications);
+      setUnreadCount(newNotifications.total);
+    } catch (error) {
+      console.error('Failed to update notifications:', error);
+    }
+  };
+
+  const sendMessage = async (messageContent) => {
+    if (!messageContent.trim() || !selectedConversation) return;
+    
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      const newMessage = {
+        thread_id: selectedConversation.id,
+        sender_id: user.id,
+        sender_type: 'homeowner',
+        content: messageContent,
+        timestamp: new Date().toISOString()
+      };
+
+      await apiService.sendMessage(newMessage);
+      
+      // Reload conversation messages
+      await loadConversationMessages(selectedConversation.id);
+      setNewMessage('');
+      
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    }
+  };
+
   // Notification functions
   const loadNotifications = () => {
     // Always start with empty notifications for new/fresh users
