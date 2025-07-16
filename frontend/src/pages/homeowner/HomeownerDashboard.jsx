@@ -314,9 +314,13 @@ const HomeownerDashboard = () => {
       // Handle provider ID and thread ID from state or URL
       const providerId = location.state?.providerId;
       const threadId = location.state?.threadId;
+      const providerName = location.state?.providerName;
+      const action = location.state?.action;
       
       if (hasValidAuth && (providerId || threadId)) {
-        // Create or find a message thread with this provider
+        // Load message threads first
+        await loadMessageThreads();
+        
         const initializeConversation = async () => {
           try {
             const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -328,6 +332,11 @@ const HomeownerDashboard = () => {
               if (specificThread) {
                 setSelectedConversation(specificThread);
                 await loadConversationMessages(specificThread.id);
+                
+                // If this is a new conversation, show it immediately
+                if (action === 'newConversation') {
+                  setShowMobileChat(true);
+                }
                 return;
               }
             }
@@ -340,6 +349,7 @@ const HomeownerDashboard = () => {
             if (existingThread) {
               setSelectedConversation(existingThread);
               await loadConversationMessages(existingThread.id);
+              setShowMobileChat(true);
             } else if (providerId) {
               // Create a new thread if none exists
               const providers = await apiService.getAllProviders();
@@ -352,13 +362,17 @@ const HomeownerDashboard = () => {
                   homeowner_name: user.name,
                   provider_name: provider.business_name || provider.name,
                   service_type: 'General Inquiry',
-                  last_message: 'New conversation started',
+                  last_message: 'Conversation started',
                   last_message_time: new Date().toISOString()
                 };
                 
                 const newThread = await apiService.createMessageThread(threadData);
                 setSelectedConversation(newThread);
                 await loadConversationMessages(newThread.id);
+                setShowMobileChat(true);
+                
+                // Reload message threads to update the list
+                await loadMessageThreads();
               }
             }
           } catch (error) {
