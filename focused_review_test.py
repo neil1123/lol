@@ -224,7 +224,10 @@ def test_message_thread_creation_for_text_us():
                         # Test provider can reply
                         reply_data = {
                             "thread_id": thread_id,
-                            "content": "Thank you for your interest! I'd be happy to help with your electrical needs. What specific work do you need done?"
+                            "sender_id": provider_id,  # Will be overridden by backend
+                            "sender_type": "provider",  # Will be overridden by backend
+                            "content": "Thank you for your interest! I'd be happy to help with your electrical needs. What specific work do you need done?",
+                            "read": False
                         }
                         
                         response = requests.post(f"{BACKEND_URL}/messages", json=reply_data, headers=provider_headers, timeout=30)
