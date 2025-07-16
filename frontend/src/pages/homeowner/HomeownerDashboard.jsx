@@ -1186,36 +1186,45 @@ const HomeownerDashboard = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
-                        {userOrders.map(order => (
+                        {messageThreads.map(thread => (
                           <div 
-                            key={order.id}
+                            key={thread.id}
                             className={`p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors ${
-                              selectedConversation?.id === order.id ? 'border-blue-500 bg-blue-50' : ''
+                              selectedConversation?.id === thread.id ? 'border-blue-500 bg-blue-50' : ''
                             }`}
-                            onClick={() => setSelectedConversation(order)}
+                            onClick={() => {
+                              setSelectedConversation(thread);
+                              loadConversationMessages(thread.id);
+                            }}
                           >
                             <div className="flex items-center space-x-3">
                               <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                                {order.providerName.split(' ').map(n => n[0]).join('')}
+                                {thread.provider_name ? thread.provider_name.split(' ').map(n => n[0]).join('') : 'P'}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <h4 className="font-semibold text-sm truncate">{order.providerName}</h4>
-                                <p className="text-xs text-gray-600 truncate">{order.serviceType}</p>
+                                <h4 className="font-semibold text-sm truncate">{thread.provider_name}</h4>
+                                <p className="text-xs text-gray-600 truncate">{thread.service_type}</p>
                                 <p className="text-xs text-gray-400">
-                                  Order #{order.id} - {order.status}
+                                  Order #{thread.order_id}
                                 </p>
-                                {order.messages && order.messages.length > 0 && (
+                                {thread.last_message && (
                                   <p className="text-xs text-gray-500 truncate mt-1">
-                                    {order.messages[order.messages.length - 1].message}
+                                    {thread.last_message}
                                   </p>
                                 )}
                               </div>
-                              {order.messages && order.messages.some(m => !m.read && m.senderType === 'provider') && (
+                              {thread.unread_count && thread.unread_count > 0 && (
                                 <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
                               )}
                             </div>
                           </div>
                         ))}
+                        {messageThreads.length === 0 && (
+                          <div className="text-center py-8 text-gray-500">
+                            <MessageCircle className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                            <p>No conversations yet</p>
+                          </div>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
