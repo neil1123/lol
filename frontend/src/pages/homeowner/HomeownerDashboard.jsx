@@ -55,6 +55,12 @@ const HomeownerDashboard = () => {
   const [conversationMessages, setConversationMessages] = useState([]);
   const [showMobileChat, setShowMobileChat] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
+  const [showRescheduleForm, setShowRescheduleForm] = useState(false);
+  const [rescheduleData, setRescheduleData] = useState({
+    date: '',
+    time: '',
+    reason: ''
+  });
 
   const handleLogout = () => {
     localStorage.removeItem('user');
