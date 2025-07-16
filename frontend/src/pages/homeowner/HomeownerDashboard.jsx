@@ -188,14 +188,34 @@ const HomeownerDashboard = () => {
         timestamp: new Date().toISOString()
       };
 
+      // Add message to UI immediately for better UX
+      const optimisticMessage = {
+        id: Date.now(), // Temporary ID
+        thread_id: selectedConversation.id,
+        sender_id: user.id,
+        sender_type: 'homeowner',
+        content: messageContent,
+        timestamp: new Date().toISOString(),
+        sender_name: user.name
+      };
+      
+      setConversationMessages(prev => [...prev, optimisticMessage]);
+      setNewMessage('');
+
+      // Send message to API
       await apiService.sendMessage(newMessage);
       
-      // Reload conversation messages
+      // Reload conversation messages to get the actual message with proper ID
       await loadConversationMessages(selectedConversation.id);
-      setNewMessage('');
+      
+      // Update message threads to reflect new last message
+      await loadMessageThreads();
       
     } catch (error) {
       console.error('Failed to send message:', error);
+      // Remove optimistic message on error
+      setConversationMessages(prev => prev.filter(msg => msg.id !== optimisticMessage.id));
+      alert('Failed to send message. Please try again.');
     }
   };
 
