@@ -197,8 +197,8 @@ const ProviderOrders = () => {
         return;
       }
 
-      // Update order status to quotation_sent
-      await apiService.updateOrderStatus(orderId, 'quotation_sent');
+      // Update order with quotation amount and status
+      await apiService.updateOrderQuotation(orderId, parseFloat(quotationAmount), 'Quotation provided');
       
       // Create a message thread for this quotation
       const order = orders.find(o => o.id === orderId);
@@ -224,10 +224,7 @@ const ProviderOrders = () => {
           thread_id: messageThread.id,
           sender_id: user.id,
           sender_type: 'provider',
-          message_type: 'quotation',
-          content: `I've prepared a quotation for your ${order.service_type} request.`,
-          quotation_amount: quotationAmount,
-          order_id: orderId,
+          content: `I've prepared a quotation for your ${order.service_type} request.\n\n💰 Quotation Amount: $${quotationAmount}\n\nPlease let me know if you have any questions or if you'd like to proceed with this quote.`,
           timestamp: new Date().toISOString()
         };
         
