@@ -46,7 +46,13 @@ const HomeownerDashboard = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState({
+    orders: 0,
+    messages: 0,
+    total: 0
+  });
+  const [messageThreads, setMessageThreads] = useState([]);
+  const [conversationMessages, setConversationMessages] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
   const handleLogout = () => {
