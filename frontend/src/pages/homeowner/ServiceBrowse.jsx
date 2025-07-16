@@ -115,12 +115,32 @@ const ServiceBrowse = () => {
       
       const matchesServices = selectedServices.length === 0 ||
         selectedServices.some(service => {
-          // Handle partial matching for service categories (e.g., "Cleaning" matches "Home Cleaning")
-        return provider.services.some(providerService => 
-          providerService.toLowerCase().includes(service.toLowerCase()) ||
-          service.toLowerCase().includes(providerService.toLowerCase())
-        );
-      });
+          // More precise matching for service categories
+          return provider.services.some(providerService => {
+            const providerServiceLower = providerService.toLowerCase();
+            const serviceLower = service.toLowerCase();
+            
+            // Direct match
+            if (providerServiceLower === serviceLower) return true;
+            
+            // Handle common service name variations
+            const serviceMapping = {
+              'electrician': ['electrical', 'electrician', 'electrical work', 'electrical services'],
+              'electrical': ['electrical', 'electrician', 'electrical work', 'electrical services'],
+              'plumber': ['plumbing', 'plumber', 'plumbing services'],
+              'plumbing': ['plumbing', 'plumber', 'plumbing services'],
+              'cleaning': ['cleaning', 'home cleaning', 'office cleaning', 'house cleaning'],
+              'handyman': ['handyman', 'handyman services', 'general repairs'],
+              'landscaping': ['landscaping', 'lawn care', 'garden services', 'yard work']
+            };
+            
+            // Check if service matches any mapped services
+            const mappedServices = serviceMapping[serviceLower] || [serviceLower];
+            return mappedServices.some(mapped => 
+              providerServiceLower.includes(mapped) || mapped.includes(providerServiceLower)
+            );
+          });
+        });
     
     return matchesSearch && matchesServices;
   });
