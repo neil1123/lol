@@ -310,24 +310,36 @@ const HomeownerDashboard = () => {
     if (urlTab === 'messages') {
       setActiveTab('messages');
       
-      // Handle provider ID from state or URL
+      // Handle provider ID and thread ID from state or URL
       const providerId = location.state?.providerId;
-      if (providerId && hasValidAuth) {
+      const threadId = location.state?.threadId;
+      
+      if (hasValidAuth && (providerId || threadId)) {
         // Create or find a message thread with this provider
         const initializeConversation = async () => {
           try {
             const user = JSON.parse(localStorage.getItem('user') || '{}');
             const threads = await apiService.getMessageThreads();
             
+            // If threadId is provided, find and select that specific thread
+            if (threadId) {
+              const specificThread = threads.find(thread => thread.id === threadId);
+              if (specificThread) {
+                setSelectedConversation(specificThread);
+                await loadConversationMessages(specificThread.id);
+                return;
+              }
+            }
+            
             // Find existing thread with this provider
             const existingThread = threads.find(thread => 
-              thread.provider_id === providerId || thread.homeowner_id === user.id
+              thread.provider_id === providerId && thread.homeowner_id === user.id
             );
             
             if (existingThread) {
               setSelectedConversation(existingThread);
               await loadConversationMessages(existingThread.id);
-            } else {
+            } else if (providerId) {
               // Create a new thread if none exists
               const providers = await apiService.getAllProviders();
               const provider = providers.find(p => p.id === providerId);
