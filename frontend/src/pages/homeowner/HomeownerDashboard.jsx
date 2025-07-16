@@ -409,7 +409,7 @@ const HomeownerDashboard = () => {
                   <Button
                     variant={activeTab === item.id ? "default" : "ghost"}
                     onClick={() => handleSidebarItemClick(item.id)}
-                    className={`w-full justify-start h-12 ${
+                    className={`w-full justify-start h-12 relative ${
                       activeTab === item.id 
                         ? 'bg-blue-600 text-white' 
                         : 'text-gray-700 hover:bg-blue-50'
@@ -417,6 +417,9 @@ const HomeownerDashboard = () => {
                   >
                     <Icon className="h-5 w-5 mr-3" />
                     {item.label}
+                    {item.badge && item.badge > 0 && (
+                      <NotificationBadge count={item.badge} />
+                    )}
                   </Button>
                 </li>
               );
