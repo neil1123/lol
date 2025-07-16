@@ -644,8 +644,8 @@ ${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additi
       {/* Proposal Form Modal */}
       {showProposalForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <Card className="w-full max-w-md">
-            <CardHeader>
+          <Card className="w-full max-w-md bg-white border border-gray-200 shadow-lg">
+            <CardHeader className="bg-white">
               <CardTitle className="flex items-center justify-between">
                 <span>Send Proposal</span>
                 <Button variant="ghost" size="sm" onClick={() => setShowProposalForm(false)}>
@@ -653,7 +653,7 @@ ${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additi
                 </Button>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 bg-white">{/* ... rest of form ... */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Service Type</label>
                 <Input
