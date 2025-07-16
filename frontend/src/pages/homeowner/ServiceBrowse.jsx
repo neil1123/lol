@@ -38,7 +38,15 @@ const ServiceBrowse = () => {
     
     // Check if user is logged in
     const userType = localStorage.getItem('userType');
-    setIsLoggedIn(userType === 'homeowner');
+    const authToken = localStorage.getItem('authToken');
+    const user = localStorage.getItem('user');
+    
+    // User is logged in if they have a token and user data
+    const userIsLoggedIn = !!(authToken && user);
+    setIsLoggedIn(userIsLoggedIn);
+    
+    // If user is logged in but not a homeowner, they can still browse but buttons will redirect appropriately
+    console.log('User logged in:', userIsLoggedIn, 'User type:', userType);
     
     // Get selected service from URL params
     const searchParams = new URLSearchParams(location.search);
