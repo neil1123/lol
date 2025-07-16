@@ -178,8 +178,18 @@ const ServiceBrowse = () => {
 
   const handleGetQuotation = (providerId) => {
     // Check if user is logged in
-    if (!isLoggedIn) {
+    const authToken = localStorage.getItem('authToken');
+    const user = localStorage.getItem('user');
+    const userType = localStorage.getItem('userType');
+    
+    if (!authToken || !user) {
       navigate('/homeowners/auth');
+      return;
+    }
+    
+    // If user is a provider, redirect to provider dashboard
+    if (userType === 'provider') {
+      navigate('/homeservices/dashboard');
       return;
     }
     
