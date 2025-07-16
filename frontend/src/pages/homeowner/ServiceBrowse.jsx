@@ -237,50 +237,59 @@ const ServiceBrowse = () => {
     }
     
     try {
-      // Create a conversation thread automatically
-      const userData = JSON.parse(user);
+      // Get provider details
       const provider = allProviders.find(p => p.id === providerId);
+      if (!provider) {
+        console.error('Provider not found');
+        return;
+      }
       
-      if (provider) {
-        // Create message thread
-        const threadData = {
-          homeowner_id: userData.id,
-          provider_id: providerId,
-          homeowner_name: userData.name,
-          provider_name: provider.business_name || provider.name,
-          service_type: 'General Inquiry',
-          last_message: 'Hi! I\'m interested in your services. Can we discuss?',
-          last_message_time: new Date().toISOString()
-        };
-        
-        const messageThread = await apiService.createMessageThread(threadData);
-        
-        // Send initial message
-        const initialMessage = {
-          thread_id: messageThread.id,
-          sender_id: userData.id,
-          sender_type: 'homeowner',
-          content: 'Hi! I\'m interested in your services. Can we discuss?',
-          timestamp: new Date().toISOString()
-        };
-        
-        await apiService.sendMessage(initialMessage);
-        
-        // Navigate to messages with the thread selected
+      const userData = JSON.parse(user);
+      
+      // Check if conversation already exists
+      const existingThreads = await apiService.getMessageThreads();
+      const existingThread = existingThreads.find(thread => 
+        thread.provider_id === providerId && thread.homeowner_id === userData.id
+      );
+      
+      if (existingThread) {
+        // Navigate to existing conversation
         navigate('/homeowners/dashboard?tab=messages', { 
           state: { 
-            providerId, 
-            threadId: messageThread.id, 
-            action: 'openConversation' 
+            threadId: existingThread.id,
+            providerId: providerId,
+            action: 'openExistingConversation'
           }
         });
+        return;
       }
-    } catch (error) {
-      console.error('Failed to create conversation:', error);
-      // Fallback to the original behavior
+      
+      // Create new conversation thread
+      const threadData = {
+        homeowner_id: userData.id,
+        provider_id: providerId,
+        homeowner_name: userData.name,
+        provider_name: provider.business_name || provider.name,
+        service_type: 'General Inquiry',
+        last_message: 'Conversation started',
+        last_message_time: new Date().toISOString()
+      };
+      
+      const newThread = await apiService.createMessageThread(threadData);
+      
+      // Navigate to messages with the new thread
       navigate('/homeowners/dashboard?tab=messages', { 
-        state: { providerId, action: 'startConversation' }
+        state: { 
+          threadId: newThread.id,
+          providerId: providerId,
+          providerName: provider.business_name || provider.name,
+          action: 'newConversation'
+        }
       });
+      
+    } catch (error) {
+      console.error('Failed to start conversation:', error);
+      alert('Failed to start conversation. Please try again.');
     }
   };
 
