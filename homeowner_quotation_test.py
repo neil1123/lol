@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Load environment variables
-BACKEND_URL = "https://f8de8b7e-7f8a-4b5b-856c-0c16cfac9f21.preview.emergentagent.com/api"
+BACKEND_URL = "https://e4506f66-f216-46d7-a62e-19651b5a050f.preview.emergentagent.com/api"
 
 # Global variables to store test data
 homeowner_token = None
