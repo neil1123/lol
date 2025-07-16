@@ -1237,27 +1237,27 @@ const HomeownerDashboard = () => {
                       <CardHeader>
                         <CardTitle className="flex items-center space-x-3">
                           <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                            {selectedConversation.providerName.split(' ').map(n => n[0]).join('')}
+                            {selectedConversation.provider_name ? selectedConversation.provider_name.split(' ').map(n => n[0]).join('') : 'P'}
                           </div>
                           <div>
-                            <span>{selectedConversation.providerName}</span>
-                            <p className="text-sm font-normal text-gray-600">{selectedConversation.serviceType} - Order #{selectedConversation.id}</p>
+                            <span>{selectedConversation.provider_name}</span>
+                            <p className="text-sm font-normal text-gray-600">{selectedConversation.service_type} - Order #{selectedConversation.order_id}</p>
                           </div>
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="flex flex-col h-full">
                         <div className="flex-1 space-y-3 mb-4 overflow-y-auto">
-                          {selectedConversation.messages && selectedConversation.messages.length > 0 ? (
-                            selectedConversation.messages.map(message => (
-                              <div key={message.id} className={`flex ${message.senderType === 'homeowner' ? 'justify-end' : ''}`}>
+                          {conversationMessages && conversationMessages.length > 0 ? (
+                            conversationMessages.map(message => (
+                              <div key={message.id} className={`flex ${message.sender_type === 'homeowner' ? 'justify-end' : ''}`}>
                                 <div className={`max-w-xs lg:max-w-md rounded-lg p-3 ${
-                                  message.senderType === 'homeowner' 
+                                  message.sender_type === 'homeowner' 
                                     ? 'bg-blue-600 text-white ml-auto' 
                                     : 'bg-gray-100 text-gray-900'
                                 }`}>
-                                  <p className="text-sm">{message.message}</p>
+                                  <p className="text-sm">{message.content}</p>
                                   <p className={`text-xs mt-1 ${
-                                    message.senderType === 'homeowner' ? 'text-blue-200' : 'text-gray-500'
+                                    message.sender_type === 'homeowner' ? 'text-blue-200' : 'text-gray-500'
                                   }`}>
                                     {new Date(message.timestamp).toLocaleTimeString()}
                                   </p>
