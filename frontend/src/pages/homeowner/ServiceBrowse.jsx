@@ -569,7 +569,7 @@ const ServiceBrowse = () => {
                           }}
                           className="w-full sm:w-auto"
                         >
-                          Get best deal
+                          Text Us
                         </Button>
                       </div>
                     </div>
