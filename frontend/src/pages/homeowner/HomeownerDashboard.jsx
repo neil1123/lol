@@ -1039,65 +1039,158 @@ const HomeownerDashboard = () => {
             <div>
               <h2 className="text-3xl font-bold text-gray-900 mb-6">My Orders & Quotations</h2>
               
+              {/* Loading State */}
+              {ordersLoading && (
+                <div className="text-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                  <p className="text-gray-600 mt-4">Loading orders...</p>
+                </div>
+              )}
+              
+              {/* Error State */}
+              {ordersError && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+                  <p className="text-red-600">{ordersError}</p>
+                  <Button variant="outline" onClick={loadOrders} className="mt-2">
+                    Try Again
+                  </Button>
+                </div>
+              )}
+              
               {/* Orders Overview */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                        <ShoppingCart className="h-6 w-6 text-blue-600" />
+              {!ordersLoading && !ordersError && (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <Card>
+                    <CardContent className="p-6">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                          <ShoppingCart className="h-6 w-6 text-blue-600" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-600">Active Orders</p>
+                          <p className="text-2xl font-bold text-gray-900">{orders.filter(o => o.status !== 'completed').length}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-600">Active Orders</p>
-                        <p className="text-2xl font-bold text-gray-900">{userOrders.filter(o => o.status !== 'completed').length}</p>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardContent className="p-6">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                          <CheckCircle className="h-6 w-6 text-green-600" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-600">Completed</p>
+                          <p className="text-2xl font-bold text-gray-900">{orders.filter(o => o.status === 'completed').length}</p>
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                        <CheckCircle className="h-6 w-6 text-green-600" />
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardContent className="p-6">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                          <Clock className="h-6 w-6 text-yellow-600" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-600">Pending Quotes</p>
+                          <p className="text-2xl font-bold text-gray-900">{orders.filter(q => q.status === 'quoted').length}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-600">Completed</p>
-                        <p className="text-2xl font-bold text-gray-900">{userOrders.filter(o => o.status === 'completed').length}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-                        <Clock className="h-6 w-6 text-yellow-600" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-600">Pending Quotes</p>
-                        <p className="text-2xl font-bold text-gray-900">{userQuotationRequests.filter(q => q.status === 'pending_quotes').length}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
 
               {/* Order List */}
-              <div className="space-y-6">
-                {userOrders.map(order => (
-                  <Card key={order.id} className="border-l-4 border-l-blue-500">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <CardTitle className="text-lg">{order.serviceType}</CardTitle>
-                          <p className="text-sm text-gray-600">{order.providerName}</p>
-                          <p className="text-xs text-gray-500">Order #{order.id} - {new Date(order.orderDate).toLocaleDateString()}</p>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-2xl font-bold text-blue-600">
-                            ${order.quotationAmount}
+              {!ordersLoading && !ordersError && (
+                <div className="space-y-6">
+                  {orders.length === 0 ? (
+                    <div className="text-center py-12">
+                      <p className="text-gray-500 text-lg">No orders yet.</p>
+                      <Button 
+                        onClick={() => navigate('/homeowners/browse')}
+                        className="mt-4"
+                      >
+                        Browse Services
+                      </Button>
+                    </div>
+                  ) : (
+                    orders.map(order => (
+                      <Card key={order.id} className="border-l-4 border-l-blue-500">
+                        <CardHeader>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <CardTitle className="text-lg">{order.service_type}</CardTitle>
+                              <p className="text-sm text-gray-600">{order.provider_name}</p>
+                              <p className="text-xs text-gray-500">Order #{order.id} - {new Date(order.created_at).toLocaleDateString()}</p>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-2xl font-bold text-blue-600">
+                                {order.quotation_amount ? `$${order.quotation_amount}` : 'Pending Quote'}
+                              </div>
+                              <Badge className={`mt-2 ${
+                                order.status === 'quoted' ? 'bg-blue-100 text-blue-800' :
+                                order.status === 'accepted' ? 'bg-green-100 text-green-800' :
+                                order.status === 'declined' ? 'bg-red-100 text-red-800' :
+                                order.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                'bg-yellow-100 text-yellow-800'
+                              }`}>
+                                {order.status === 'quoted' ? 'Quote Received' :
+                                 order.status === 'accepted' ? 'Accepted' :
+                                 order.status === 'declined' ? 'Declined' :
+                                 order.status === 'completed' ? 'Completed' :
+                                 'Pending Quote'}
+                              </Badge>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-4">
+                            <div>
+                              <h4 className="font-semibold mb-2">Service Description</h4>
+                              <p className="text-gray-700">{order.description}</p>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                              <div className="flex items-center space-x-2">
+                                <MapPin className="h-4 w-4 text-gray-500" />
+                                <span>{order.homeowner_address || 'Address not provided'}</span>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Calendar className="h-4 w-4 text-gray-500" />
+                                <span>{order.preferred_date ? new Date(order.preferred_date).toLocaleDateString() : 'Date TBD'}</span>
+                              </div>
+                            </div>
+                            
+                            {order.status === 'quoted' && (
+                              <div className="flex gap-2">
+                                <Button 
+                                  onClick={() => handleAcceptOrder(order.id)}
+                                  className="bg-green-600 hover:bg-green-700"
+                                >
+                                  Accept Quote
+                                </Button>
+                                <Button 
+                                  variant="outline"
+                                  onClick={() => handleDeclineOrder(order.id)}
+                                  className="text-red-600 border-red-200 hover:bg-red-50"
+                                >
+                                  Decline Quote
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+          )}
                           </div>
                           <Badge className={`${
                             order.status === 'completed' ? 'bg-green-100 text-green-800' :
