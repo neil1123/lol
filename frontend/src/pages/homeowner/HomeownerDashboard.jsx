@@ -475,9 +475,9 @@ const HomeownerDashboard = () => {
 
   const sidebarItems = [
     { id: 'home', label: 'Home', icon: Home, active: true },
-    { id: 'orders', label: 'Orders', icon: ShoppingCart, active: false, badge: notifications.orders },
+    { id: 'orders', label: 'Orders', icon: ShoppingCart, active: false, badge: notifications.orders > 0 ? notifications.orders : null },
     { id: 'book-service', label: 'Book service', icon: Calendar, active: false },
-    { id: 'messages', label: 'Messages', icon: MessageCircle, active: false, badge: notifications.messages },
+    { id: 'messages', label: 'Messages', icon: MessageCircle, active: false, badge: notifications.messages > 0 ? notifications.messages : null },
     { id: 'reports', label: 'Reports & Issues', icon: AlertTriangle, active: false },
     { id: 'settings', label: 'Settings', icon: Settings, active: false },
   ];
