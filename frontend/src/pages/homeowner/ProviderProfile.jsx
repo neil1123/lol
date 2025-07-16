@@ -117,6 +117,73 @@ const ProviderProfile = () => {
     setIsQuotationFormOpen(true);
   };
 
+  const handleTextUs = async () => {
+    // Check if user is logged in
+    const authToken = localStorage.getItem('authToken');
+    const user = localStorage.getItem('user');
+    const userType = localStorage.getItem('userType');
+    
+    if (!authToken || !user) {
+      navigate('/homeowners/auth');
+      return;
+    }
+    
+    // If user is a provider, redirect to provider dashboard
+    if (userType === 'provider') {
+      navigate('/homeservices/dashboard');
+      return;
+    }
+    
+    try {
+      const userData = JSON.parse(user);
+      
+      // Check if conversation already exists
+      const existingThreads = await apiService.getMessageThreads();
+      const existingThread = existingThreads.find(thread => 
+        thread.provider_id === provider.id && thread.homeowner_id === userData.id
+      );
+      
+      if (existingThread) {
+        // Navigate to existing conversation
+        navigate('/homeowners/dashboard?tab=messages', { 
+          state: { 
+            threadId: existingThread.id,
+            providerId: provider.id,
+            action: 'openExistingConversation'
+          }
+        });
+        return;
+      }
+      
+      // Create new conversation thread
+      const threadData = {
+        homeowner_id: userData.id,
+        provider_id: provider.id,
+        homeowner_name: userData.name,
+        provider_name: provider.name,
+        service_type: 'General Inquiry',
+        last_message: 'Conversation started',
+        last_message_time: new Date().toISOString()
+      };
+      
+      const newThread = await apiService.createMessageThread(threadData);
+      
+      // Navigate to messages with the new thread
+      navigate('/homeowners/dashboard?tab=messages', { 
+        state: { 
+          threadId: newThread.id,
+          providerId: provider.id,
+          providerName: provider.name,
+          action: 'newConversation'
+        }
+      });
+      
+    } catch (error) {
+      console.error('Failed to start conversation:', error);
+      alert('Failed to start conversation. Please try again.');
+    }
+  };
+
   const mockReviews = [
     {
       id: 1,
