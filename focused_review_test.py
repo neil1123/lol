@@ -371,7 +371,10 @@ def test_notification_count_calculation():
                 # Send message from homeowner (should create notification for provider)
                 message_data = {
                     "thread_id": thread_id,
-                    "content": "This is an unread message for notification testing"
+                    "sender_id": homeowner_id,  # Will be overridden by backend
+                    "sender_type": "homeowner",  # Will be overridden by backend
+                    "content": "This is an unread message for notification testing",
+                    "read": False
                 }
                 
                 response = requests.post(f"{BACKEND_URL}/messages", json=message_data, headers=headers, timeout=30)
