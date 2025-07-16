@@ -290,6 +290,7 @@ const HomeownerDashboard = () => {
     if (hasValidAuth) {
       loadNotifications();
       loadMessageThreads();
+      loadOrders();
       updateNotifications();
       
       // Set up interval to update notifications every 30 seconds
