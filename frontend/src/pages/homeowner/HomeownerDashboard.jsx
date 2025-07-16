@@ -466,6 +466,10 @@ const HomeownerDashboard = () => {
     { id: 'settings', label: 'Settings', icon: Settings, active: false },
   ];
 
+  // Debug notifications
+  console.log('Current notifications:', notifications);
+  console.log('Messages badge:', notifications.messages);
+
   const featuredServices = [
     {
       id: 1,
