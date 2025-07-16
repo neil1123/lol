@@ -151,22 +151,13 @@ const HomeownerDashboard = () => {
   };
 
   const markNotificationAsRead = (notificationId) => {
-    const updatedNotifications = notifications.map(notif => 
-      notif.id === notificationId ? { ...notif, read: true } : notif
-    );
-    setNotifications(updatedNotifications);
-    localStorage.setItem('homeowner_notifications', JSON.stringify(updatedNotifications));
-    
-    // Update unread count
-    const newUnreadCount = updatedNotifications.filter(notif => !notif.read).length;
-    setUnreadCount(newUnreadCount);
+    // Updated to work with new notification system
+    updateNotifications();
   };
 
   const markAllAsRead = () => {
-    const updatedNotifications = notifications.map(notif => ({ ...notif, read: true }));
-    setNotifications(updatedNotifications);
-    localStorage.setItem('homeowner_notifications', JSON.stringify(updatedNotifications));
-    setUnreadCount(0);
+    // Updated to work with new notification system
+    updateNotifications();
   };
 
   const createNotification = (type, title, message, data = {}) => {
