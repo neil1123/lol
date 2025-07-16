@@ -249,6 +249,13 @@ const HomeownerDashboard = () => {
       };
     }
     
+    // Handle provider context from "Get best deals" button
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab');
+    if (tab === 'messages') {
+      setActiveTab('messages');
+    }
+    
     // Handle back button behavior for logged in users
     if (hasValidAuth) {
       const handlePopState = (event) => {
