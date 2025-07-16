@@ -1383,15 +1383,19 @@ const HomeownerDashboard = () => {
                         
                         {/* Quick Actions */}
                         <div className="mt-4 flex flex-wrap gap-2">
-                          <Button variant="outline" size="sm">
-                            <Phone className="h-4 w-4 mr-2" />
-                            Call Provider
-                          </Button>
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => setShowRescheduleForm(true)}
+                          >
                             <Calendar className="h-4 w-4 mr-2" />
                             Reschedule
                           </Button>
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={handleViewOrderDetails}
+                          >
                             <FileText className="h-4 w-4 mr-2" />
                             View Order Details
                           </Button>
@@ -1409,6 +1413,72 @@ const HomeownerDashboard = () => {
                   )}
                 </div>
               </div>
+              )}
+              
+              {/* Reschedule Form Modal */}
+              {showRescheduleForm && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                  <Card className="w-full max-w-md bg-white">
+                    <CardHeader>
+                      <CardTitle className="flex items-center justify-between">
+                        <span>Reschedule Service</span>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          onClick={() => setShowRescheduleForm(false)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div>
+                        <Label htmlFor="reschedule-date">New Date</Label>
+                        <Input
+                          id="reschedule-date"
+                          type="date"
+                          value={rescheduleData.date}
+                          onChange={(e) => setRescheduleData({...rescheduleData, date: e.target.value})}
+                          min={new Date().toISOString().split('T')[0]}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="reschedule-time">New Time</Label>
+                        <Input
+                          id="reschedule-time"
+                          type="time"
+                          value={rescheduleData.time}
+                          onChange={(e) => setRescheduleData({...rescheduleData, time: e.target.value})}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="reschedule-reason">Reason (Optional)</Label>
+                        <Textarea
+                          id="reschedule-reason"
+                          placeholder="Please explain why you need to reschedule..."
+                          value={rescheduleData.reason}
+                          onChange={(e) => setRescheduleData({...rescheduleData, reason: e.target.value})}
+                          rows={3}
+                        />
+                      </div>
+                      <div className="flex space-x-2">
+                        <Button 
+                          variant="outline" 
+                          onClick={() => setShowRescheduleForm(false)}
+                          className="flex-1"
+                        >
+                          Cancel
+                        </Button>
+                        <Button 
+                          onClick={handleReschedule}
+                          className="flex-1"
+                        >
+                          Send Request
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
               )}
             </div>
           )}
