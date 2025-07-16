@@ -204,8 +204,18 @@ const HomeownerDashboard = () => {
     const hasValidAuth = user && userType === 'homeowner';
     setIsLoggedIn(hasValidAuth);
     
-    // Load notifications
-    loadNotifications();
+    // Load notifications and messages if authenticated
+    if (hasValidAuth) {
+      loadNotifications();
+      loadMessageThreads();
+      updateNotifications();
+      
+      // Set up interval to update notifications every 30 seconds
+      const interval = setInterval(updateNotifications, 30000);
+      
+      // Cleanup interval on unmount
+      return () => clearInterval(interval);
+    }
     
     // Handle back button behavior for logged in users
     if (hasValidAuth) {
