@@ -215,6 +215,9 @@ backend:
       - working: true
         agent: "main"
         comment: "FIXED QUOTATION AND MESSAGING WORKFLOW: 1) Added QuotationRequestForm component to ServiceBrowse.jsx 2) Fixed button handlers to show quotation form instead of redirecting to messages 3) Updated ProviderMessaging.jsx to properly load conversation messages using API 4) Added backend endpoint PUT /api/orders/{order_id}/quotation for quotation updates 5) Fixed message display to use real conversation data instead of mock data 6) Updated proposal form to send actual messages via API and update order status to 'quoted' 7) All buttons now properly show quotation form for logged-in users and redirect to auth for non-logged users"
+      - working: true
+        agent: "testing"
+        comment: "QUOTATION UPDATE FUNCTIONALITY FULLY TESTED AND WORKING: Comprehensive testing confirms all quotation update features are working perfectly: ✅ PUT /api/orders/{order_id}/quotation endpoint working with quotation_amount parameter ✅ Order status workflow: quotation request → pending_quotation → quotation update → quoted status ✅ Message thread creation (POST /api/messages/threads) working ✅ Complete quotation workflow tested: homeowner creates request, provider updates quotation, homeowner can accept/decline ✅ Error handling working: invalid order ID (404), no authentication (403), invalid JWT (401), homeowner blocked from updating quotations (403) ✅ All 22 backend tests passed including focused quotation update testing. The 'try again later' errors reported by users are NOT occurring in backend API - the quotation update system is fully functional."
 
 frontend:
   - task: "Fix provider authentication form validation issues"
