@@ -181,6 +181,13 @@ const HomeownerDashboard = () => {
     const hasValidAuth = user && userType === 'homeowner';
     setIsLoggedIn(hasValidAuth);
     
+    // Check for mobile view
+    const checkMobile = () => {
+      setIsMobileView(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
     // Load notifications and messages if authenticated
     if (hasValidAuth) {
       loadNotifications();
@@ -191,7 +198,10 @@ const HomeownerDashboard = () => {
       const interval = setInterval(updateNotifications, 30000);
       
       // Cleanup interval on unmount
-      return () => clearInterval(interval);
+      return () => {
+        clearInterval(interval);
+        window.removeEventListener('resize', checkMobile);
+      };
     }
     
     // Handle back button behavior for logged in users
