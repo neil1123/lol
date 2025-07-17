@@ -1087,7 +1087,7 @@ const HomeownerDashboard = () => {
                     <Card 
                       key={index} 
                       className="cursor-pointer hover:shadow-lg transition-shadow duration-200"
-                      onClick={() => handleServiceClick(index)}
+                      onClick={() => navigate(`/homeowners/browse?service=${encodeURIComponent(service.name)}`)}
                     >
                       <CardContent className="p-6">
                         <div className="flex items-center mb-4">
