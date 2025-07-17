@@ -9,7 +9,7 @@ import asyncio
 from dotenv import load_dotenv
 
 # Load environment variables
-load_dotenv()
+load_dotenv('/app/backend/.env')
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
