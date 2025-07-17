@@ -354,68 +354,89 @@ const HomeownerDashboard = () => {
       if (hasValidAuth && (providerId || threadId)) {
         const initializeConversation = async () => {
           try {
+            console.log('Initializing conversation with providerId:', providerId, 'threadId:', threadId);
+            
             // Load message threads first
             await loadMessageThreads();
             
             // Add a small delay to ensure threads are loaded
             setTimeout(async () => {
-              const user = JSON.parse(localStorage.getItem('user') || '{}');
-              const threads = await apiService.getMessageThreads();
-              
-              // If threadId is provided, find and select that specific thread
-              if (threadId) {
-                const specificThread = threads.find(thread => thread.id === threadId);
-                if (specificThread) {
-                  setSelectedConversation(specificThread);
-                  await loadConversationMessages(specificThread.id);
-                  
-                  // Show mobile chat if on mobile, otherwise it will show in desktop view
-                  if (isMobileView) {
-                    setShowMobileChat(true);
-                  }
-                  return;
-                }
-              }
-              
-              // Find existing thread with this provider
-              const existingThread = threads.find(thread => 
-                thread.provider_id === providerId && thread.homeowner_id === user.id
-              );
-              
-              if (existingThread) {
-                setSelectedConversation(existingThread);
-                await loadConversationMessages(existingThread.id);
-                // Show mobile chat if on mobile, otherwise it will show in desktop view
-                if (isMobileView) {
-                  setShowMobileChat(true);
-                }
-              } else if (providerId) {
-                // Create a new thread if none exists
-                const providers = await apiService.getAllProviders();
-                const provider = providers.find(p => p.id === providerId);
+              try {
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                console.log('User data:', user);
                 
-                if (provider) {
-                  const threadData = {
-                    homeowner_id: user.id,
-                    provider_id: providerId,
-                    homeowner_name: user.name,
-                    provider_name: provider.business_name || provider.name,
-                    service_type: 'General Inquiry',
-                    last_message: 'Conversation started',
-                    last_message_time: new Date().toISOString()
-                  };
-                  
-                  const newThread = await apiService.createMessageThread(threadData);
-                  setSelectedConversation(newThread);
-                  await loadConversationMessages(newThread.id);
+                const threads = await apiService.getMessageThreads();
+                console.log('Available threads:', threads);
+                
+                // If threadId is provided, find and select that specific thread
+                if (threadId) {
+                  const specificThread = threads.find(thread => thread.id === threadId);
+                  console.log('Found specific thread:', specificThread);
+                  if (specificThread) {
+                    setSelectedConversation(specificThread);
+                    await loadConversationMessages(specificThread.id);
+                    
+                    // Show mobile chat if on mobile, otherwise it will show in desktop view
+                    if (isMobileView) {
+                      setShowMobileChat(true);
+                    }
+                    console.log('Conversation initialized with existing thread');
+                    return;
+                  }
+                }
+                
+                // Find existing thread with this provider
+                const existingThread = threads.find(thread => 
+                  thread.provider_id === providerId && thread.homeowner_id === user.id
+                );
+                console.log('Found existing thread:', existingThread);
+                
+                if (existingThread) {
+                  setSelectedConversation(existingThread);
+                  await loadConversationMessages(existingThread.id);
                   // Show mobile chat if on mobile, otherwise it will show in desktop view
                   if (isMobileView) {
                     setShowMobileChat(true);
                   }
+                  console.log('Conversation initialized with existing thread');
+                } else if (providerId) {
+                  // Create a new thread if none exists
+                  console.log('Creating new thread for provider:', providerId);
+                  const providers = await apiService.getAllProviders();
+                  const provider = providers.find(p => p.id === providerId);
+                  console.log('Found provider:', provider);
                   
-                  // Reload message threads to update the list
-                  await loadMessageThreads();
+                  if (provider) {
+                    const threadData = {
+                      homeowner_id: user.id,
+                      provider_id: providerId,
+                      homeowner_name: user.name,
+                      provider_name: provider.business_name || provider.name,
+                      service_type: 'General Inquiry',
+                      last_message: 'Conversation started',
+                      last_message_time: new Date().toISOString()
+                    };
+                    
+                    console.log('Creating thread with data:', threadData);
+                    const newThread = await apiService.createMessageThread(threadData);
+                    console.log('Created new thread:', newThread);
+                    
+                    setSelectedConversation(newThread);
+                    await loadConversationMessages(newThread.id);
+                    // Show mobile chat if on mobile, otherwise it will show in desktop view
+                    if (isMobileView) {
+                      setShowMobileChat(true);
+                    }
+                    
+                    // Reload message threads to update the list
+                    await loadMessageThreads();
+                    console.log('Conversation initialized with new thread');
+                  } else {
+                    console.error('Provider not found for providerId:', providerId);
+                  }
                 }
+              } catch (innerError) {
+                console.error('Error in conversation initialization timeout:', innerError);
               }
             }, 500); // 500ms delay to ensure everything is loaded
           } catch (error) {
