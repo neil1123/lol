@@ -190,23 +190,17 @@ const HomeownerDashboard = () => {
 
   const sendMessage = async (messageContent) => {
     if (!messageContent.trim() || !selectedConversation) {
-      console.log('Cannot send message: empty content or no selected conversation');
-      console.log('Message content:', messageContent);
-      console.log('Selected conversation:', selectedConversation);
       return;
     }
     
     try {
       const user = JSON.parse(localStorage.getItem('user') || '{}');
-      console.log('Sending message with user:', user);
       
       const newMessage = {
         thread_id: selectedConversation.id,
         content: messageContent,
         timestamp: new Date().toISOString()
       };
-      
-      console.log('Sending message:', newMessage);
 
       // Add message to UI immediately for better UX
       const optimisticMessage = {
@@ -223,8 +217,7 @@ const HomeownerDashboard = () => {
       setNewMessage('');
 
       // Send message to API
-      const response = await apiService.sendMessage(newMessage);
-      console.log('Message sent successfully:', response);
+      await apiService.sendMessage(newMessage);
       
       // Reload conversation messages to get the actual message with proper ID
       await loadConversationMessages(selectedConversation.id);
