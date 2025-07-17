@@ -448,11 +448,17 @@ async def get_message_threads(current_user: User = Depends(get_current_user)):
     return [MessageThread(**thread) for thread in threads]
 
 @api_router.post("/messages", response_model=Message)
-async def send_message(message_data: Message, current_user: User = Depends(get_current_user)):
-    message_data.sender_id = current_user.id
-    message_data.sender_type = current_user.user_type
+async def send_message(message_data: MessageCreate, current_user: User = Depends(get_current_user)):
+    # Create the actual message with sender information from the authenticated user
+    message = Message(
+        thread_id=message_data.thread_id,
+        sender_id=current_user.id,
+        sender_type=current_user.user_type,
+        content=message_data.content,
+        timestamp=message_data.timestamp
+    )
     
-    await db.messages.insert_one(message_data.dict())
+    await db.messages.insert_one(message.dict())
     
     # Update thread's last message
     await db.message_threads.update_one(
@@ -463,7 +469,7 @@ async def send_message(message_data: Message, current_user: User = Depends(get_c
         }}
     )
     
-    return message_data
+    return message
 
 @api_router.get("/messages/{thread_id}", response_model=List[Message])
 async def get_messages(thread_id: str, current_user: User = Depends(get_current_user)):
