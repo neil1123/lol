@@ -128,61 +128,69 @@ const ServiceBrowse = () => {
       const matchesServices = selectedServices.length === 0 ||
         selectedServices.some(service => {
           console.log(`Filtering by service: ${service}`);
-          // More precise matching for service categories
+          // Strict matching for service categories - no cross-contamination
           return provider.services.some(providerService => {
-            const providerServiceLower = providerService.toLowerCase();
-            const serviceLower = service.toLowerCase();
+            const providerServiceLower = providerService.toLowerCase().trim();
+            const serviceLower = service.toLowerCase().trim();
             
             console.log(`Checking provider service "${providerServiceLower}" against filter "${serviceLower}"`);
             
-            // Direct match
+            // Direct exact match first
             if (providerServiceLower === serviceLower) {
-              console.log('Direct match found');
+              console.log('Direct exact match found');
               return true;
             }
             
-            // Handle common service name variations
+            // Handle specific service name variations with strict mapping
             const serviceMapping = {
-              'electrician': ['electrical', 'electrician', 'electrical work', 'electrical services'],
-              'electrical': ['electrical', 'electrician', 'electrical work', 'electrical services'],
-              'electrical services': ['electrical', 'electrician', 'electrical work', 'electrical services'],
-              'plumber': ['plumbing', 'plumber', 'plumbing services'],
-              'plumbing': ['plumbing', 'plumber', 'plumbing services'],
-              'cleaning': ['cleaning', 'home cleaning', 'office cleaning', 'house cleaning'],
-              'home cleaning': ['cleaning', 'home cleaning', 'office cleaning', 'house cleaning'],
-              'office cleaning': ['cleaning', 'home cleaning', 'office cleaning', 'house cleaning'],
-              'handyman': ['handyman', 'handyman services', 'general repairs'],
-              'handyman services': ['handyman', 'handyman services', 'general repairs'],
-              'landscaping': ['landscaping', 'lawn care', 'garden services', 'yard work'],
+              // Electrical services - ONLY electrical related
+              'electrician': ['electrical', 'electrician', 'electrical work', 'electrical services', 'electrical repair'],
+              'electrical': ['electrical', 'electrician', 'electrical work', 'electrical services', 'electrical repair'],
+              'electrical services': ['electrical', 'electrician', 'electrical work', 'electrical services', 'electrical repair'],
+              
+              // Plumbing services - ONLY plumbing related
+              'plumber': ['plumbing', 'plumber', 'plumbing services', 'plumbing repair', 'pipe repair'],
+              'plumbing': ['plumbing', 'plumber', 'plumbing services', 'plumbing repair', 'pipe repair'],
+              'plumbing services': ['plumbing', 'plumber', 'plumbing services', 'plumbing repair', 'pipe repair'],
+              
+              // Cleaning services - separated by type
+              'home cleaning': ['home cleaning', 'house cleaning', 'residential cleaning'],
+              'office cleaning': ['office cleaning', 'commercial cleaning', 'business cleaning'],
+              'window cleaning': ['window cleaning', 'window wash', 'window washing'],
+              'pressure washing': ['pressure washing', 'power washing', 'exterior cleaning'],
+              'gutter cleaning': ['gutter cleaning', 'gutter services', 'gutter maintenance'],
+              
+              // Other services - specific only
+              'handyman': ['handyman', 'handyman services', 'general repairs', 'home repairs'],
+              'handyman services': ['handyman', 'handyman services', 'general repairs', 'home repairs'],
+              'landscaping': ['landscaping', 'lawn care', 'garden services', 'yard work', 'outdoor maintenance'],
               'lawn mowing & maintenance': ['landscaping', 'lawn care', 'garden services', 'yard work', 'lawn mowing'],
-              'painter': ['painting', 'painter', 'paint services'],
-              'hvac services': ['hvac', 'heating', 'cooling', 'air conditioning'],
-              'carpenter': ['carpentry', 'carpenter', 'woodwork'],
-              'window cleaning': ['window cleaning', 'cleaning', 'window wash'],
-              'pressure washing': ['pressure washing', 'power washing', 'cleaning'],
-              'gutter cleaning': ['gutter cleaning', 'gutter services', 'cleaning'],
-              'roofing': ['roofing', 'roof repair', 'roof services'],
-              'pest control': ['pest control', 'extermination', 'pest services'],
-              'appliance repair': ['appliance repair', 'appliance services', 'repair'],
-              'junk removal': ['junk removal', 'waste removal', 'cleanup'],
-              'car detailing': ['car detailing', 'auto detailing', 'car wash'],
-              'snow removal': ['snow removal', 'snow services', 'winter services'],
-              'fence & deck services': ['fence', 'deck', 'fencing', 'deck services'],
-              'siding installation & repair': ['siding', 'siding installation', 'siding repair']
+              'painter': ['painting', 'painter', 'paint services', 'interior painting', 'exterior painting'],
+              'hvac services': ['hvac', 'heating', 'cooling', 'air conditioning', 'hvac services'],
+              'carpenter': ['carpentry', 'carpenter', 'woodwork', 'wood services'],
+              'roofing': ['roofing', 'roof repair', 'roof services', 'roof installation'],
+              'pest control': ['pest control', 'extermination', 'pest services', 'pest removal'],
+              'appliance repair': ['appliance repair', 'appliance services', 'appliance fix'],
+              'junk removal': ['junk removal', 'waste removal', 'cleanup', 'debris removal'],
+              'car detailing': ['car detailing', 'auto detailing', 'car wash', 'vehicle cleaning'],
+              'snow removal': ['snow removal', 'snow services', 'winter services', 'snow clearing'],
+              'fence & deck services': ['fence', 'deck', 'fencing', 'deck services', 'fence installation'],
+              'siding installation & repair': ['siding', 'siding installation', 'siding repair', 'exterior siding']
             };
             
-            // Check if service matches any mapped services
+            // Get the mapped services for the filter
             const mappedServices = serviceMapping[serviceLower] || [serviceLower];
+            
+            // Check if provider service matches any of the mapped services
             const matches = mappedServices.some(mapped => {
-              const mappedLower = mapped.toLowerCase();
-              // More precise matching - check if either contains the other or they are exact matches
+              const mappedLower = mapped.toLowerCase().trim();
+              // Strict matching - either exact match or provider service contains the mapped service
               return providerServiceLower === mappedLower || 
-                     providerServiceLower.includes(mappedLower) || 
-                     mappedLower.includes(providerServiceLower);
+                     providerServiceLower.includes(mappedLower);
             });
             
             if (matches) {
-              console.log(`Mapped match found: ${providerServiceLower} matches ${serviceLower}`);
+              console.log(`Strict match found: ${providerServiceLower} matches ${serviceLower}`);
             }
             
             return matches;
