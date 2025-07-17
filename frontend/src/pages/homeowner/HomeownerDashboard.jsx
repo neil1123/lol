@@ -1352,7 +1352,7 @@ const HomeownerDashboard = () => {
                     <Card 
                       key={service.id} 
                       className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
-                      onClick={() => navigate('/homeowners/browse')}
+                      onClick={() => navigate(`/homeowners/browse?service=${encodeURIComponent(service.name)}`)}
                     >
                       <CardContent className="p-4 text-center">
                         <div className="text-3xl mb-3">{service.icon}</div>
