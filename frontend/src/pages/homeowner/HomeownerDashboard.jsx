@@ -566,12 +566,9 @@ const HomeownerDashboard = () => {
   ];
 
   const handleServiceClick = (serviceId) => {
-    console.log('Service clicked with ID:', serviceId);
-    
     // Check if this is from featured services (colorful cards)
     const featuredService = featuredServices.find(s => s.id === serviceId);
     if (featuredService) {
-      console.log('Found featured service:', featuredService);
       // Map featured service titles to correct service names for filtering
       const featuredServiceMap = {
         'WINDOW CLEANING': 'Window Cleaning',
@@ -582,7 +579,6 @@ const HomeownerDashboard = () => {
       };
       
       const serviceName = featuredServiceMap[featuredService.title] || featuredService.title;
-      console.log('Navigating to featured service:', serviceName);
       navigate(`/homeowners/browse?service=${encodeURIComponent(serviceName)}`);
       return;
     }
@@ -590,13 +586,11 @@ const HomeownerDashboard = () => {
     // Check if this is from most booked services (service index)
     const mostBookedService = mostBookedServices[serviceId];
     if (mostBookedService) {
-      console.log('Found most booked service:', mostBookedService);
       navigate(`/homeowners/browse?service=${encodeURIComponent(mostBookedService.name)}`);
       return;
     }
     
     // Fallback to browse all services
-    console.log('No matching service found, navigating to browse all');
     navigate('/homeowners/browse');
   };
 
