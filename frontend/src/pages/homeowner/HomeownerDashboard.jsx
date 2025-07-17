@@ -202,8 +202,6 @@ const HomeownerDashboard = () => {
       
       const newMessage = {
         thread_id: selectedConversation.id,
-        sender_id: user.id,
-        sender_type: 'homeowner',
         content: messageContent,
         timestamp: new Date().toISOString()
       };
