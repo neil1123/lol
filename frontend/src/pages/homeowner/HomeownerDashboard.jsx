@@ -1055,7 +1055,7 @@ const HomeownerDashboard = () => {
                       <Card 
                         key={service.id} 
                         className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
-                        onClick={() => handleServiceClick(service.id)}
+                        onClick={() => handleCategoryServiceClick(service)}
                       >
                         <CardContent className="p-4 text-center">
                           <div className="text-2xl mb-2">{service.icon}</div>
