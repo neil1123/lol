@@ -147,7 +147,9 @@ const HomeownerLanding = () => {
   };
 
   const handleServiceClick = (service) => {
-    navigate(`/homeowners/browse?service=${service.name}`);
+    console.log('Service clicked:', service);
+    console.log('Service name:', service.name);
+    navigate(`/homeowners/browse?service=${encodeURIComponent(service.name)}`);
   };
 
   // How it works steps for homeowners
