@@ -566,10 +566,20 @@ const HomeownerDashboard = () => {
   ];
 
   const handleServiceClick = (serviceId) => {
-    // Navigate to browse page with service filter
-    const service = mostBookedServices[serviceId];
+    // Get the correct service from featuredServices array
+    const service = featuredServices.find(s => s.id === serviceId);
     if (service) {
-      navigate(`/homeowners/browse?service=${encodeURIComponent(service.name)}`);
+      // Map service titles to correct service names for filtering
+      const serviceMap = {
+        'WINDOW CLEANING': 'Window Cleaning',
+        'PRESSURE WASHING': 'Pressure Washing',
+        'GUTTER CLEANING': 'Gutter Cleaning',
+        'LANDSCAPING': 'Landscaping',
+        'CAR DETAILING': 'Car Detailing'
+      };
+      
+      const serviceName = serviceMap[service.title] || service.title;
+      navigate(`/homeowners/browse?service=${encodeURIComponent(serviceName)}`);
     } else {
       navigate('/homeowners/browse');
     }
