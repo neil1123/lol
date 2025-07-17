@@ -145,6 +145,8 @@ def test_send_message_to_thread():
     try:
         message_data = {
             "thread_id": test_thread_id,
+            "sender_id": homeowner_id,  # Will be overridden by backend
+            "sender_type": "homeowner",  # Will be overridden by backend
             "content": "Hi! I'm interested in your services. I clicked 'Text Us' to get in touch with you directly."
         }
         
