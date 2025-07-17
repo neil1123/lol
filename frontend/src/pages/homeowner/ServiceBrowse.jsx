@@ -145,6 +145,7 @@ const ServiceBrowse = () => {
             const serviceMapping = {
               'electrician': ['electrical', 'electrician', 'electrical work', 'electrical services'],
               'electrical': ['electrical', 'electrician', 'electrical work', 'electrical services'],
+              'electrical services': ['electrical', 'electrician', 'electrical work', 'electrical services'],
               'plumber': ['plumbing', 'plumber', 'plumbing services'],
               'plumbing': ['plumbing', 'plumber', 'plumbing services'],
               'cleaning': ['cleaning', 'home cleaning', 'office cleaning', 'house cleaning'],
@@ -172,9 +173,13 @@ const ServiceBrowse = () => {
             
             // Check if service matches any mapped services
             const mappedServices = serviceMapping[serviceLower] || [serviceLower];
-            const matches = mappedServices.some(mapped => 
-              providerServiceLower.includes(mapped.toLowerCase()) || mapped.toLowerCase().includes(providerServiceLower)
-            );
+            const matches = mappedServices.some(mapped => {
+              const mappedLower = mapped.toLowerCase();
+              // More precise matching - check if either contains the other or they are exact matches
+              return providerServiceLower === mappedLower || 
+                     providerServiceLower.includes(mappedLower) || 
+                     mappedLower.includes(providerServiceLower);
+            });
             
             if (matches) {
               console.log(`Mapped match found: ${providerServiceLower} matches ${serviceLower}`);
