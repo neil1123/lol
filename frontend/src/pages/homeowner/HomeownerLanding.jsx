@@ -103,21 +103,18 @@ const HomeownerLanding = () => {
     // Load top providers from API for display only
     const loadTopProviders = async () => {
       try {
-        const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL || process.env.REACT_APP_BACKEND_URL}/api/providers`);
-        if (response.ok) {
-          const providers = await response.json();
-          // Take first 3 providers and format for display
-          const formatted = providers.slice(0, 3).map(provider => ({
-            id: provider.id,
-            name: provider.business_name || provider.name,
-            description: provider.description || `Professional ${Array.isArray(provider.services) ? provider.services.join(' and ') : provider.services} services`,
-            services: Array.isArray(provider.services) ? provider.services : [provider.services],
-            rating: provider.rating || 5.0,
-            reviews: provider.reviews || 0,
-            location: provider.location || "Halifax, NS"
-          }));
-          setTopProviders(formatted);
-        }
+        const providers = await apiService.getAllProviders();
+        // Take first 3 providers and format for display
+        const formatted = providers.slice(0, 3).map(provider => ({
+          id: provider.id,
+          name: provider.business_name || provider.name,
+          description: provider.description || `Professional ${Array.isArray(provider.services) ? provider.services.join(' and ') : provider.services} services`,
+          services: Array.isArray(provider.services) ? provider.services : [provider.services],
+          rating: provider.rating || 5.0,
+          reviews: provider.reviews || 0,
+          location: provider.location || "Halifax, NS"
+        }));
+        setTopProviders(formatted);
       } catch (error) {
         console.error('Failed to load top providers:', error);
         setTopProviders([]);
