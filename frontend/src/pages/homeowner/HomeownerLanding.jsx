@@ -505,70 +505,78 @@ const HomeownerLanding = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {topProviders.map(provider => (
-              <Card 
-                key={provider.id} 
-                className="hover:shadow-lg transition-shadow"
-              >
-                <CardContent className="p-4">
-                  {/* Image Gallery */}
-                  <div className="grid grid-cols-4 gap-1 h-32 mb-4">
-                    <div className="col-span-2 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="text-2xl mb-1">
-                          {provider.services.includes('Home Cleaning') || provider.services.includes('Office Cleaning') ? '🧹' :
-                           provider.services.includes('Plumber') ? '🔧' :
-                           provider.services.includes('Electrician') ? '⚡' :
-                           provider.services.includes('Landscaping') ? '🌱' : '🏠'}
+            {topProviders.length > 0 ? (
+              topProviders.map(provider => (
+                <Card 
+                  key={provider.id} 
+                  className="hover:shadow-lg transition-shadow"
+                >
+                  <CardContent className="p-4">
+                    {/* Image Gallery */}
+                    <div className="grid grid-cols-4 gap-1 h-32 mb-4">
+                      <div className="col-span-2 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="text-2xl mb-1">
+                            {provider.services.includes('Home Cleaning') || provider.services.includes('Office Cleaning') ? '🧹' :
+                             provider.services.includes('Plumber') ? '🔧' :
+                             provider.services.includes('Electrician') ? '⚡' :
+                             provider.services.includes('Landscaping') ? '🌱' : '🏠'}
+                          </div>
+                          <p className="text-xs text-gray-600">Professional</p>
                         </div>
-                        <p className="text-xs text-gray-600">Professional</p>
+                      </div>
+                      <div className="grid grid-rows-2 gap-1">
+                        <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-lg flex items-center justify-center">
+                          <div className="text-lg">✨</div>
+                        </div>
+                        <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center">
+                          <div className="text-lg">🏠</div>
+                        </div>
+                      </div>
+                      <div className="grid grid-rows-2 gap-1">
+                        <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg flex items-center justify-center">
+                          <div className="text-lg">💯</div>
+                        </div>
+                        <div className="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-lg flex items-center justify-center">
+                          <div className="text-lg">⭐</div>
+                        </div>
                       </div>
                     </div>
-                    <div className="grid grid-rows-2 gap-1">
-                      <div className="bg-gradient-to-br from-green-100 to-green-200 rounded-lg flex items-center justify-center">
-                        <div className="text-lg">✨</div>
-                      </div>
-                      <div className="bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center">
-                        <div className="text-lg">🏠</div>
-                      </div>
-                    </div>
-                    <div className="grid grid-rows-2 gap-1">
-                      <div className="bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg flex items-center justify-center">
-                        <div className="text-lg">💯</div>
-                      </div>
-                      <div className="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-lg flex items-center justify-center">
-                        <div className="text-lg">⭐</div>
+                    
+                    <div className="flex items-center justify-between mb-2">
+                      <CardTitle className="text-lg">{provider.name}</CardTitle>
+                      <div className="flex items-center space-x-1">
+                        <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-semibold">
+                          {provider.rating} ★
+                        </div>
+                        <span className="text-gray-500 text-xs">({provider.reviews})</span>
                       </div>
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between mb-2">
-                    <CardTitle className="text-lg">{provider.name}</CardTitle>
-                    <div className="flex items-center space-x-1">
-                      <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-semibold">
-                        {provider.rating} ★
-                      </div>
-                      <span className="text-gray-500 text-xs">({provider.reviews})</span>
+                    
+                    <p className="text-gray-600 mb-3 text-sm">{provider.description}</p>
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {provider.services.slice(0, 3).map(service => (
+                        <Badge key={service} variant="secondary" className="text-xs">{service}</Badge>
+                      ))}
                     </div>
-                  </div>
-                  
-                  <p className="text-gray-600 mb-3 text-sm">{provider.description}</p>
-                  <div className="flex flex-wrap gap-1 mb-4">
-                    {provider.services.slice(0, 3).map(service => (
-                      <Badge key={service} variant="secondary" className="text-xs">{service}</Badge>
-                    ))}
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">
-                      📍 {provider.location}
-                    </span>
-                    <span className="text-sm text-blue-600 font-medium">
-                      Top Rated ⭐
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500">
+                        📍 {provider.location}
+                      </span>
+                      <span className="text-sm text-blue-600 font-medium">
+                        Top Rated ⭐
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <div className="text-gray-400 text-4xl mb-4">👷‍♂️</div>
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">No Providers Yet</h3>
+                <p className="text-gray-600">Service providers will appear here once they join our platform.</p>
+              </div>
+            )}
           </div>
         </div>
       </section>
