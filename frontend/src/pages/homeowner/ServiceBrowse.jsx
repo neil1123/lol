@@ -531,13 +531,25 @@ const ServiceBrowse = () => {
             }
           </h2>
           <p className="text-gray-600">
-            {sortedProviders.length} providers found
+            {sortedProviders.length} provider{sortedProviders.length !== 1 ? 's' : ''} found
           </p>
         </div>
 
         {sortedProviders.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No providers found matching your criteria.</p>
+            <div className="text-gray-400 text-4xl mb-4">🔍</div>
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">
+              {selectedServices.length > 0 
+                ? `No ${selectedServices.join(', ')} providers found` 
+                : 'No providers found matching your criteria'
+              }
+            </h3>
+            <p className="text-gray-600 mb-4">
+              {selectedServices.length > 0 
+                ? `We couldn't find any providers offering ${selectedServices.join(', ')} services in your area.`
+                : 'Try adjusting your search criteria or browse all services.'
+              }
+            </p>
             <Button 
               variant="outline" 
               onClick={() => {
