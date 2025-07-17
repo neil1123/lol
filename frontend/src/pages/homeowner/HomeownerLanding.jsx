@@ -97,32 +97,36 @@ const HomeownerLanding = () => {
     }
   ];
 
-  const [topProviders, setTopProviders] = useState([]);
-  
-  useEffect(() => {
-    // Load top providers from API for display only
-    const loadTopProviders = async () => {
-      try {
-        const providers = await apiService.getAllProviders();
-        // Take first 3 providers and format for display
-        const formatted = providers.slice(0, 3).map(provider => ({
-          id: provider.id,
-          name: provider.business_name || provider.name,
-          description: provider.description || `Professional ${Array.isArray(provider.services) ? provider.services.join(' and ') : provider.services} services`,
-          services: Array.isArray(provider.services) ? provider.services : [provider.services],
-          rating: provider.rating || 5.0,
-          reviews: provider.reviews || 0,
-          location: provider.location || "Halifax, NS"
-        }));
-        setTopProviders(formatted);
-      } catch (error) {
-        console.error('Failed to load top providers:', error);
-        setTopProviders([]);
-      }
-    };
-    
-    loadTopProviders();
-  }, []);
+  // Mock data for top rated providers - display only
+  const topProviders = [
+    {
+      id: 1,
+      name: "Halifax Pro Services",
+      description: "Professional electrical and plumbing services with over 10 years of experience",
+      services: ["Electrical", "Plumbing", "HVAC"],
+      rating: 4.9,
+      reviews: 127,
+      location: "Halifax, NS"
+    },
+    {
+      id: 2,
+      name: "Elite Home Solutions",
+      description: "Comprehensive home maintenance and cleaning services for residential properties",
+      services: ["Home Cleaning", "Landscaping", "Handyman"],
+      rating: 4.8,
+      reviews: 93,
+      location: "Halifax, NS"
+    },
+    {
+      id: 3,
+      name: "Quality Care Services",
+      description: "Reliable window cleaning and pressure washing services with excellent customer reviews",
+      services: ["Window Cleaning", "Pressure Washing", "Gutter Cleaning"],
+      rating: 4.7,
+      reviews: 156,
+      location: "Halifax, NS"
+    }
+  ];
 
   const handleSearch = () => {
     navigate(`/homeowners/browse?search=${searchTerm}`);
