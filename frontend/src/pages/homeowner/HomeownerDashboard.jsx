@@ -583,13 +583,6 @@ const HomeownerDashboard = () => {
       return;
     }
     
-    // Check if this is from serviceCategories (Home services at your door step)
-    const categoryService = serviceCategories.flatMap(category => category.services).find(s => s.id === serviceId);
-    if (categoryService) {
-      navigate(`/homeowners/browse?service=${encodeURIComponent(categoryService.name)}`);
-      return;
-    }
-    
     // Check if this is from most booked services (service index) - these use indices 0-5
     const mostBookedService = mostBookedServices[serviceId];
     if (mostBookedService) {
@@ -599,6 +592,11 @@ const HomeownerDashboard = () => {
     
     // Fallback to browse all services
     navigate('/homeowners/browse');
+  };
+
+  const handleCategoryServiceClick = (service) => {
+    // This handles clicks from "Home services at your door step" section
+    navigate(`/homeowners/browse?service=${encodeURIComponent(service.name)}`);
   };
 
   const handleSidebarItemClick = (itemId) => {
