@@ -793,7 +793,24 @@ test_plan:
         agent: "main"
         comment: "MOST BOOKED SERVICES HEADINGS FIXED: Fixed ID conflict between mostBookedServices indices and featuredServices IDs. Problem: mostBookedServices[1] = 'Electrician' but featuredServices[id: 1] = 'WINDOW CLEANING', causing wrong headings. Solution: Changed from 'onClick={() => handleServiceClick(index)}' to 'onClick={() => navigate(`/homeowners/browse?service=${encodeURIComponent(service.name)}`)}' to directly use service names. Now all services show correct headings: Electrician shows Electrician Services, Handyman shows Handyman Services, etc."
 
+  - task: "Fix Text Us button to establish direct chat connection"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/pages/homeowner/HomeownerDashboard.jsx"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "User reported that clicking 'Text Us' navigates to messages but doesn't actually establish chat connection with provider. User cannot send messages to the provider - the chat interface loads but messaging functionality is broken."
+      - working: false
+        agent: "main"
+        comment: "INVESTIGATING TEXT US FUNCTIONALITY: Text Us button navigation is working and creates/finds message threads correctly. The issue appears to be that while the messaging interface loads, the conversation is not properly initialized or the user authentication is failing silently. The selectedConversation state may not be set properly after navigation, preventing message sending."
+
 agent_communication:
+  - agent: "main"
+    message: "CRITICAL TEXT US FUNCTIONALITY ISSUE IDENTIFIED: User reports that clicking 'Text Us' navigates to messages but doesn't establish working chat connection. The user cannot send messages to the provider. Investigation shows that while navigation and thread creation logic exists, the conversation initialization after navigation may be failing. The selectedConversation state might not be properly set, or authentication tokens may be missing. This is a critical user experience issue that needs immediate attention."
   - agent: "main"
     message: "MOST BOOKED SERVICES HEADINGS FIXED: Resolved the final service heading issue in 'Most booked services' section. Root cause: ID conflict between mostBookedServices array indices (0,1,2,3,4,5) and featuredServices IDs (1,2,3,4,5) causing wrong headings. Electrician (index 1) was showing 'Window Cleaning' (ID 1), Handyman (index 2) showing 'Pressure Washing' (ID 2), etc. Solution: Bypassed handleServiceClick function and used direct navigation with service names. All service sections in Doord Explore now work correctly: ✅ Featured Services (colorful cards) ✅ Home Services at Your Door Step (small cards) ✅ Book a Service (sidebar section) ✅ Most Booked Services (service list) All headings and filtering now work precisely as intended!"
   - agent: "testing"
