@@ -128,6 +128,7 @@ const ServiceBrowse = () => {
       const matchesServices = selectedServices.length === 0 ||
         selectedServices.some(service => {
           console.log(`Filtering by service: ${service}`);
+          console.log(`Total providers before filtering: ${provider.services}`);
           // Strict matching for service categories - no cross-contamination
           return provider.services.some(providerService => {
             const providerServiceLower = providerService.toLowerCase().trim();
