@@ -566,13 +566,13 @@ const HomeownerDashboard = () => {
   ];
 
   const handleServiceClick = (serviceId) => {
-    // Check if this is from featured services (colorful cards)
+    // Check if this is from featured services (colorful cards) - these use IDs 1-5
     const featuredService = featuredServices.find(s => s.id === serviceId);
     if (featuredService) {
       // Map featured service titles to correct service names for filtering
       const featuredServiceMap = {
         'WINDOW CLEANING': 'Window Cleaning',
-        'PRESSURE WASHING': 'Pressure Washing',
+        'PRESSURE WASHING': 'Pressure Washing', 
         'GUTTER CLEANING': 'Gutter Cleaning',
         'LANDSCAPING': 'Landscaping',
         'CAR DETAILING': 'Car Detailing'
@@ -583,7 +583,14 @@ const HomeownerDashboard = () => {
       return;
     }
     
-    // Check if this is from most booked services (service index)
+    // Check if this is from serviceCategories (Home services at your door step)
+    const categoryService = serviceCategories.flatMap(category => category.services).find(s => s.id === serviceId);
+    if (categoryService) {
+      navigate(`/homeowners/browse?service=${encodeURIComponent(categoryService.name)}`);
+      return;
+    }
+    
+    // Check if this is from most booked services (service index) - these use indices 0-5
     const mostBookedService = mostBookedServices[serviceId];
     if (mostBookedService) {
       navigate(`/homeowners/browse?service=${encodeURIComponent(mostBookedService.name)}`);
