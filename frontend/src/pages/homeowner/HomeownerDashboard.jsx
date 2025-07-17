@@ -401,7 +401,7 @@ const HomeownerDashboard = () => {
                       provider_id: providerId,
                       homeowner_name: user.name,
                       provider_name: provider.business_name || provider.name,
-                      service_type: 'General Inquiry',
+                      order_type: 'Text Us Inquiry',
                       last_message: 'Conversation started',
                       last_message_time: new Date().toISOString()
                     };
