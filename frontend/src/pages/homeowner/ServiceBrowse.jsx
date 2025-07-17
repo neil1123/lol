@@ -261,22 +261,17 @@ const ServiceBrowse = () => {
     const user = localStorage.getItem('user');
     const userType = localStorage.getItem('userType');
     
-    if (!authToken || !user) {
+    if (!authToken || !user || userType !== 'homeowner') {
       navigate('/homeowners/auth');
       return;
     }
     
-    // If user is a provider, redirect to provider dashboard
-    if (userType === 'provider') {
-      navigate('/homeservices/dashboard');
-      return;
-    }
-    
     try {
-      // Get provider details
-      const provider = allProviders.find(p => p.id === providerId);
+      // Get fresh provider details from API
+      const provider = await apiService.getProviderById(providerId);
       if (!provider) {
         console.error('Provider not found');
+        alert('Provider not found. Please try again.');
         return;
       }
       
@@ -294,6 +289,7 @@ const ServiceBrowse = () => {
           state: { 
             threadId: existingThread.id,
             providerId: providerId,
+            providerName: provider.business_name || provider.name,
             action: 'openExistingConversation'
           }
         });
@@ -306,7 +302,7 @@ const ServiceBrowse = () => {
         provider_id: providerId,
         homeowner_name: userData.name,
         provider_name: provider.business_name || provider.name,
-        service_type: 'General Inquiry',
+        order_type: 'Text Us Inquiry',
         last_message: 'Conversation started',
         last_message_time: new Date().toISOString()
       };
