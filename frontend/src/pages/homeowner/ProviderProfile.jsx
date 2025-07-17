@@ -161,7 +161,7 @@ const ProviderProfile = () => {
         provider_id: provider.id,
         homeowner_name: userData.name,
         provider_name: provider.name,
-        service_type: 'General Inquiry',
+        order_type: 'Text Us Inquiry',
         last_message: 'Conversation started',
         last_message_time: new Date().toISOString()
       };
