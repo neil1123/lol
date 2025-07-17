@@ -139,6 +139,11 @@ class OrderCreate(BaseModel):
     property_size: Optional[str] = None
     additional_requirements: Optional[str] = None
 
+class MessageCreate(BaseModel):
+    thread_id: str
+    content: str
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+
 class Message(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     thread_id: str
