@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/ca
 import { Badge } from '../../components/ui/badge';
 import { serviceCategories } from '../../data/mockData';
 import { useNavigate } from 'react-router-dom';
-import apiService from '../../services/api';
 
 const HomeownerLanding = () => {
   const [searchTerm, setSearchTerm] = useState('');
