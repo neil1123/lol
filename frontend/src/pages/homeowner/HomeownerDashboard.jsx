@@ -1513,24 +1513,24 @@ const HomeownerDashboard = () => {
                 {/* Message View */}
                 <div className="lg:col-span-2">
                   {selectedConversation ? (
-                    <Card className="h-96">
-                      <CardHeader>
+                    <Card className="h-96 flex flex-col">
+                      <CardHeader className="flex-shrink-0">
                         <CardTitle className="flex items-center space-x-3">
                           <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
                             {selectedConversation.provider_name ? selectedConversation.provider_name.split(' ').map(n => n[0]).join('') : 'P'}
                           </div>
                           <div>
                             <span>{selectedConversation.provider_name}</span>
-                            <p className="text-sm font-normal text-gray-600">{selectedConversation.service_type} - Order #{selectedConversation.order_id}</p>
+                            <p className="text-sm font-normal text-gray-600">{selectedConversation.order_type} - Order #{selectedConversation.order_id}</p>
                           </div>
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className="flex flex-col h-full">
-                        <div className="flex-1 space-y-3 mb-4 overflow-y-auto px-2">
+                      <CardContent className="flex flex-col flex-1 p-4 min-h-0">
+                        <div className="flex-1 space-y-3 mb-4 overflow-y-auto pr-2 min-h-0">
                           {conversationMessages && conversationMessages.length > 0 ? (
                             conversationMessages.map(message => (
                               <div key={message.id} className={`flex ${message.sender_type === 'homeowner' ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`max-w-[70%] rounded-lg p-3 ${
+                                <div className={`max-w-[70%] rounded-lg p-3 break-words ${
                                   message.sender_type === 'homeowner' 
                                     ? 'bg-blue-600 text-white' 
                                     : 'bg-gray-100 text-gray-900'
@@ -1551,7 +1551,7 @@ const HomeownerDashboard = () => {
                             </div>
                           )}
                         </div>
-                        <div className="flex space-x-2">
+                        <div className="flex space-x-2 flex-shrink-0">
                           <Input 
                             placeholder="Type your message..." 
                             className="flex-1"
@@ -1573,7 +1573,7 @@ const HomeownerDashboard = () => {
                         </div>
                         
                         {/* Quick Actions */}
-                        <div className="mt-4 flex flex-wrap gap-2">
+                        <div className="mt-4 flex flex-wrap gap-2 flex-shrink-0">
                           <Button 
                             variant="outline" 
                             size="sm"
