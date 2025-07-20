@@ -269,25 +269,33 @@ const ProviderDashboard = () => {
                 </CardContent>
               </Card>
 
-              {/* Recent Activity */}
+              {/* Upcoming Activity */}
               <Card className="mt-6 lg:mt-0">
                 <CardHeader>
-                  <CardTitle>Recent Activity</CardTitle>
+                  <CardTitle>Upcoming Activity</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {recentActivity.map((activity) => (
-                      <div key={activity.id} className="flex items-start space-x-3">
-                        <div className="h-2 w-2 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900">{activity.message}</p>
-                          <p className="text-xs text-gray-500">{activity.time}</p>
-                        </div>
-                        <Badge variant={activity.status === 'pending' ? 'secondary' : 'default'}>
-                          {activity.status}
-                        </Badge>
+                    {recentActivity.length === 0 ? (
+                      <div className="text-center py-8 text-gray-500">
+                        <Calendar className="h-8 w-8 mx-auto mb-2 text-gray-400" />
+                        <p>No upcoming appointments or orders</p>
+                        <p className="text-sm">Schedule new work to see your upcoming activities</p>
                       </div>
-                    ))}
+                    ) : (
+                      recentActivity.map((activity) => (
+                        <div key={activity.id} className="flex items-start space-x-3">
+                          <div className="h-2 w-2 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-900">{activity.message}</p>
+                            <p className="text-xs text-gray-500">{activity.time}</p>
+                          </div>
+                          <Badge variant={activity.status === 'pending' ? 'secondary' : 'default'}>
+                            {activity.status}
+                          </Badge>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </CardContent>
               </Card>
