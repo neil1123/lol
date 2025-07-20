@@ -37,11 +37,16 @@ const ProviderCalendar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [appointments, setAppointments] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [calendarView, setCalendarView] = useState(Views.MONTH);
+  const [selectedDate, setSelectedDate] = useState(null);
 
-  // Load appointments from API on component mount
+  // Load appointments and orders from API on component mount
   useEffect(() => {
     loadAppointments();
+    loadOrders();
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
   }, []);
@@ -58,6 +63,41 @@ const ProviderCalendar = () => {
       setLoading(false);
     }
   };
+
+  const loadOrders = async () => {
+    try {
+      const ordersData = await apiService.getOrders();
+      setOrders(ordersData);
+    } catch (error) {
+      console.error('Failed to load orders:', error);
+      setOrders([]);
+    }
+  };
+
+  // Convert appointments and orders to calendar events
+  useEffect(() => {
+    const appointmentEvents = appointments.map(apt => ({
+      id: `apt-${apt.id}`,
+      title: `${apt.customer_name} - ${apt.service_type}`,
+      start: new Date(`${apt.date} ${apt.time || '09:00'}`),
+      end: moment(`${apt.date} ${apt.time || '09:00'}`).add(1, 'hour').toDate(),
+      type: 'appointment',
+      data: apt
+    }));
+
+    const orderEvents = orders
+      .filter(order => order.preferred_date)
+      .map(order => ({
+        id: `order-${order.id}`,
+        title: `Order: ${order.homeowner_name} - ${order.service_type}`,
+        start: new Date(`${order.preferred_date} ${order.preferred_time || '09:00'}`),
+        end: moment(`${order.preferred_date} ${order.preferred_time || '09:00'}`).add(2, 'hours').toDate(),
+        type: 'order',
+        data: order
+      }));
+
+    setEvents([...appointmentEvents, ...orderEvents]);
+  }, [appointments, orders]);
 
 
   const [appointmentForm, setAppointmentForm] = useState({
