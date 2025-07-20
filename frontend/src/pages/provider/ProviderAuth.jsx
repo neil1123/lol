@@ -14,6 +14,9 @@ const ProviderAuth = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [availableServices, setAvailableServices] = useState([]);
+  const [newService, setNewService] = useState('');
+  const [showAddService, setShowAddService] = useState(false);
   
   // Sign In Form
   const [signInData, setSignInData] = useState({
@@ -34,6 +37,25 @@ const ProviderAuth = () => {
     experience: '',
     license: ''
   });
+
+  // Load available services on component mount
+  useEffect(() => {
+    loadAvailableServices();
+  }, []);
+
+  const loadAvailableServices = async () => {
+    try {
+      const services = await apiService.getAllServices();
+      setAvailableServices(services);
+    } catch (error) {
+      console.error('Failed to load services:', error);
+      // Fall back to default services if API fails
+      const defaultServices = serviceCategories.flatMap(category => 
+        category.services.map(service => service.name)
+      );
+      setAvailableServices(defaultServices);
+    }
+  };
 
   const handleSignIn = async (e) => {
     e.preventDefault();
