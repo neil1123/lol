@@ -173,6 +173,35 @@ const ProviderAuth = () => {
     });
   };
 
+  const handleAddNewService = () => {
+    if (newService.trim() && !availableServices.includes(newService.trim())) {
+      const trimmedService = newService.trim();
+      setAvailableServices(prev => [...prev, trimmedService].sort());
+      setSignUpData(prev => ({
+        ...prev,
+        services: [...prev.services, trimmedService]
+      }));
+      setNewService('');
+      setShowAddService(false);
+    }
+  };
+
+  const removeCustomService = (serviceName) => {
+    // Remove from selected services
+    setSignUpData(prev => ({
+      ...prev,
+      services: prev.services.filter(s => s !== serviceName)
+    }));
+    // Remove from available services (only if it's a custom added service)
+    const isDefaultService = serviceCategories.flatMap(category => 
+      category.services.map(service => service.name)
+    ).includes(serviceName);
+    
+    if (!isDefaultService) {
+      setAvailableServices(prev => prev.filter(s => s !== serviceName));
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
