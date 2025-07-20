@@ -511,8 +511,14 @@ async def create_appointment(appointment_data: AppointmentCreate, current_user: 
     if current_user.user_type != "provider":
         raise HTTPException(status_code=403, detail="Only providers can create appointments")
     
+    appointment_dict = appointment_data.dict()
+    
+    # Handle services array - if services is provided, join them into service_type for compatibility
+    if appointment_data.services:
+        appointment_dict["service_type"] = ", ".join(appointment_data.services)
+    
     # Create appointment with provider_id set from current user
-    appointment = Appointment(**appointment_data.dict(), provider_id=current_user.id)
+    appointment = Appointment(**appointment_dict, provider_id=current_user.id)
     await db.appointments.insert_one(appointment.dict())
     return appointment
 
