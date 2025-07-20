@@ -303,9 +303,13 @@ ${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additi
       )}
 
       <div className="flex h-screen">
-        {/* Desktop Sidebar - Hidden on mobile */}
-        <div className="hidden md:block w-64 bg-white shadow-sm">
+        {/* Desktop Sidebar - Always show on desktop like homeowner explore */}
+        <div className="hidden xl:block w-64 bg-white shadow-sm">
           <div className="p-4">
+            <div className="mb-6">
+              <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
+              <span className="text-sm text-gray-600">for Merchants</span>
+            </div>
             <nav className="space-y-2">
               {sidebarItems.map((item) => (
                 <Button
@@ -318,6 +322,15 @@ ${proposalData.additionalNotes ? `\n📄 Additional Notes: ${proposalData.additi
                   {item.label}
                 </Button>
               ))}
+              <hr className="my-4" />
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                onClick={handleLogout}
+              >
+                <LogOut className="h-4 w-4 mr-3" />
+                Logout
+              </Button>
             </nav>
           </div>
         </div>
