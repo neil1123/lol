@@ -289,6 +289,7 @@ const ProviderCalendar = () => {
           customerName: '',
           phoneNumber: '',
           serviceType: '',
+          services: [], // Reset services array
           date: '',
           time: '',
           address: '',
