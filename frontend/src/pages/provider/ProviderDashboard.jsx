@@ -118,7 +118,7 @@ const ProviderDashboard = () => {
                     </AvatarFallback>
                   </Avatar>
                 </Button>
-                <span className="text-sm font-medium">{user.business_name || user.name || 'User'}</span>
+                <span className="text-sm font-medium">{userProfile?.business_name || userProfile?.name || 'User'}</span>
               </div>
               <Button variant="ghost" size="sm" onClick={handleLogout} title="Logout">
                 <LogOut className="h-4 w-4" />
