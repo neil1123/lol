@@ -138,7 +138,6 @@ const ProviderDashboard = () => {
           <div className="p-4">
             <div className="mb-6">
               <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
-              <span className="text-sm text-gray-600">for Merchants</span>
             </div>
             <nav className="space-y-2">
               {sidebarItems.map((item) => (
