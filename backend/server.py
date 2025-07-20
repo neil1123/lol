@@ -132,7 +132,8 @@ class OrderCreate(BaseModel):
     homeowner_phone: str
     homeowner_address: str
     provider_name: str
-    service_type: str
+    service_type: str  # This will be comma-separated string for multiple services
+    services: Optional[List[str]] = None  # Array for multiple services
     description: str
     preferred_date: Optional[str] = None
     preferred_time: Optional[str] = None
@@ -170,7 +171,8 @@ class MessageThread(BaseModel):
 class AppointmentCreate(BaseModel):
     customer_name: str
     phone_number: str
-    service_type: str
+    service_type: str  # This will be comma-separated string for multiple services  
+    services: Optional[List[str]] = None  # Array for multiple services
     date: str
     time: str
     address: str
@@ -184,6 +186,7 @@ class Appointment(BaseModel):
     customer_name: str
     phone_number: str
     service_type: str
+    services: Optional[List[str]] = None  # Array for multiple services
     date: str
     time: str
     address: str
