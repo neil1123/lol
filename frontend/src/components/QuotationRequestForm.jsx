@@ -11,6 +11,7 @@ import apiService from '../services/api';
 const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, providerId }) => {
   const [formData, setFormData] = useState({
     serviceType: serviceType || '',
+    services: [], // Array for multiple services
     description: '',
     preferredDate: '',
     preferredTime: '',
@@ -24,6 +25,37 @@ const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, prov
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [providerServices, setProviderServices] = useState([]);
+  const [loadingServices, setLoadingServices] = useState(false);
+
+  // Load provider services when component opens
+  useEffect(() => {
+    if (isOpen && providerId) {
+      loadProviderServices();
+    }
+  }, [isOpen, providerId]);
+
+  const loadProviderServices = async () => {
+    try {
+      setLoadingServices(true);
+      const provider = await apiService.getProvider(providerId);
+      setProviderServices(provider.services || []);
+      
+      // If serviceType is provided, pre-select it
+      if (serviceType) {
+        setFormData(prev => ({
+          ...prev,
+          services: [serviceType],
+          serviceType: serviceType
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to load provider services:', error);
+      setProviderServices([]);
+    } finally {
+      setLoadingServices(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
