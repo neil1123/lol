@@ -20,7 +20,7 @@ import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Avatar, AvatarFallback } from '../../components/ui/avatar';
-import { NotificationBadge } from '../../components/NotificationBadge';
+import NotificationBadge from '../../components/NotificationBadge';
 import { mockDashboardData } from '../../data/mockData';
 import { STANDARD_PROVIDER_SIDEBAR, handleStandardLogout } from '../../constants/providerSidebarConfig';
 
