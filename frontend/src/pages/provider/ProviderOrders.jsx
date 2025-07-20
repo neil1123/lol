@@ -285,6 +285,8 @@ const ProviderOrders = () => {
       }));
     }
   };
+
+  const handleCreateOrder = async () => {
     try {
       setError('');
       
