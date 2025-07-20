@@ -346,66 +346,104 @@ const ProviderCalendar = () => {
               </div>
             </div>
 
-            {/* Calendar */}
+            {/* Enhanced Calendar with Day/Week/Month Views */}
             <Card>
               <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg md:text-xl">{monthYear}</CardTitle>
-                  <div className="flex items-center space-x-2">
-                    <Button variant="outline" size="sm" onClick={previousMonth}>
-                      <ChevronLeft className="h-4 w-4" />
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <CardTitle className="text-lg md:text-xl">Calendar</CardTitle>
+                  <div className="flex flex-wrap gap-2">
+                    <Button 
+                      variant={calendarView === Views.MONTH ? "default" : "outline"} 
+                      size="sm"
+                      onClick={() => setCalendarView(Views.MONTH)}
+                    >
+                      Month
                     </Button>
-                    <Button variant="outline" size="sm" onClick={nextMonth}>
-                      <ChevronRight className="h-4 w-4" />
+                    <Button 
+                      variant={calendarView === Views.WEEK ? "default" : "outline"} 
+                      size="sm"
+                      onClick={() => setCalendarView(Views.WEEK)}
+                    >
+                      Week
+                    </Button>
+                    <Button 
+                      variant={calendarView === Views.DAY ? "default" : "outline"} 
+                      size="sm"
+                      onClick={() => setCalendarView(Views.DAY)}
+                    >
+                      Day
                     </Button>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                {/* Calendar Grid */}
-                <div className="grid grid-cols-7 gap-1 mb-4">
-                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                    <div key={day} className="p-2 text-center text-sm font-medium text-gray-500">
-                      {day}
-                    </div>
-                  ))}
+                <div className="h-96 md:h-[600px]">
+                  <BigCalendar
+                    localizer={localizer}
+                    events={events}
+                    startAccessor="start"
+                    endAccessor="end"
+                    view={calendarView}
+                    onView={handleViewChange}
+                    onSelectSlot={handleSelectSlot}
+                    onSelectEvent={handleSelectEvent}
+                    selectable
+                    step={30}
+                    showMultiDayTimes
+                    defaultDate={currentDate}
+                    eventPropGetter={(event) => {
+                      let backgroundColor = '#3174ad';
+                      if (event.type === 'appointment') {
+                        backgroundColor = '#10b981'; // Green for appointments
+                      } else if (event.type === 'order') {
+                        backgroundColor = '#f59e0b'; // Amber for orders
+                      }
+                      
+                      return {
+                        style: {
+                          backgroundColor,
+                          borderRadius: '4px',
+                          opacity: 0.8,
+                          color: 'white',
+                          border: '0px',
+                          display: 'block'
+                        }
+                      };
+                    }}
+                    components={{
+                      toolbar: (props) => (
+                        <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                          <div className="flex items-center gap-2">
+                            <Button variant="outline" size="sm" onClick={() => props.onNavigate('PREV')}>
+                              <ChevronLeft className="h-4 w-4" />
+                            </Button>
+                            <Button variant="outline" size="sm" onClick={() => props.onNavigate('TODAY')}>
+                              Today
+                            </Button>
+                            <Button variant="outline" size="sm" onClick={() => props.onNavigate('NEXT')}>
+                              <ChevronRight className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <h3 className="text-lg font-semibold">{props.label}</h3>
+                        </div>
+                      )
+                    }}
+                  />
                 </div>
                 
-                <div className="grid grid-cols-7 gap-1">
-                  {days.map((day, index) => (
-                    <div
-                      key={index}
-                      className={`
-                        relative p-2 h-12 sm:h-16 md:h-20 border border-gray-100 rounded cursor-pointer transition-colors
-                        ${day ? 'hover:bg-gray-50' : ''}
-                        ${day === new Date().getDate() && 
-                          currentDate.getMonth() === new Date().getMonth() && 
-                          currentDate.getFullYear() === new Date().getFullYear() 
-                          ? 'bg-blue-50 border-blue-200' : ''}
-                      `}
-                    >
-                      {day && (
-                        <>
-                          <span className={`text-sm ${
-                            day === new Date().getDate() && 
-                            currentDate.getMonth() === new Date().getMonth() && 
-                            currentDate.getFullYear() === new Date().getFullYear()
-                              ? 'font-semibold text-blue-600' 
-                              : 'text-gray-900'
-                          }`}>
-                            {day}
-                          </span>
-                          {hasAppointment(day) && (
-                            <div className="absolute bottom-1 left-1 right-1">
-                              <div className="bg-blue-600 text-white text-xs rounded px-1 py-0.5 truncate">
-                                {getAppointment(day)?.title.split(' - ')[0]}
-                              </div>
-                            </div>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  ))}
+                {/* Legend */}
+                <div className="mt-4 flex flex-wrap gap-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-green-500 rounded"></div>
+                    <span>Appointments</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-amber-500 rounded"></div>
+                    <span>Scheduled Orders</span>
+                  </div>
+                  <p className="text-gray-600 text-xs">
+                    Click on any empty slot to create a new appointment
+                  </p>
                 </div>
               </CardContent>
             </Card>
