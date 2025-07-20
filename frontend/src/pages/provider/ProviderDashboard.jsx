@@ -44,11 +44,37 @@ const ProviderDashboard = () => {
   // Empty states for fresh platform - no activities for new users
   const recentActivity = [];
 
-  // Get user data for profile
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  const userInitials = user.name 
-    ? user.name.split(' ').map(name => name[0]).join('').toUpperCase() 
-    : 'U';
+  // User profile state - fetch from database
+  const [userProfile, setUserProfile] = useState(null);
+  const [userInitials, setUserInitials] = useState('U');
+
+  // Load user profile on component mount
+  useEffect(() => {
+    loadUserProfile();
+  }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      const profile = await apiService.getUserProfile();
+      setUserProfile(profile);
+      
+      // Set user initials from actual database data
+      const initials = profile.name 
+        ? profile.name.split(' ').map(name => name[0]).join('').toUpperCase() 
+        : 'U';
+      setUserInitials(initials);
+      
+      console.log('User profile loaded:', profile);
+    } catch (error) {
+      console.error('Failed to load user profile:', error);
+      // Fallback to localStorage if API fails
+      const fallbackUser = JSON.parse(localStorage.getItem('user') || '{}');
+      if (fallbackUser.name) {
+        const initials = fallbackUser.name.split(' ').map(name => name[0]).join('').toUpperCase();
+        setUserInitials(initials);
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
