@@ -83,6 +83,32 @@ const ProviderCalendar = () => {
     }
   };
 
+  const loadUserProfile = async () => {
+    try {
+      const profile = await apiService.getUserProfile();
+      setUserProfile(profile);
+      setProviderServices(profile.services || []);
+    } catch (error) {
+      console.error('Failed to load user profile:', error);
+    }
+  };
+
+  const loadServices = async () => {
+    try {
+      const services = await apiService.getAllServices();
+      setAvailableServices(services);
+    } catch (error) {
+      console.error('Failed to load services:', error);
+      // Fall back to default services if API fails
+      setAvailableServices([
+        'Home Cleaning', 'Office Cleaning', 'Window Cleaning', 'Pressure Washing', 'Gutter Cleaning',
+        'Electrician', 'Plumber', 'HVAC Services', 'Handyman Services', 'Home Renovations', 'Carpenter', 'Painter',
+        'Landscaping', 'Lawn Mowing & Maintenance', 'Snow Removal', 'Fence & Deck Services', 'Siding Installation & Repair',
+        'Car Detailing', 'Roofing', 'Pest Control', 'Appliance Repair', 'Junk Removal'
+      ]);
+    }
+  };
+
   // Convert appointments and orders to calendar events
   useEffect(() => {
     const appointmentEvents = appointments.map(apt => ({
