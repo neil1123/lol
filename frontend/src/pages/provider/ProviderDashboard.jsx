@@ -89,9 +89,9 @@ const ProviderDashboard = () => {
         </div>
       </header>
 
-      {/* Mobile Navigation Overlay */}
+      {/* Mobile Navigation Overlay - Only show on mobile */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50">
+        <div className="fixed inset-0 z-50 xl:hidden">
           <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setIsMobileMenuOpen(false)} />
           <div className="fixed top-0 left-0 w-64 h-full bg-white shadow-lg">
             <div className="p-4">
