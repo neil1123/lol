@@ -326,6 +326,11 @@ async def get_provider(provider_id: str):
 @api_router.post("/orders", response_model=Order)
 async def create_order(order_data: OrderCreate, current_user: User = Depends(get_current_user)):
     order = Order(**order_data.dict())
+    
+    # If provider is creating the order (manual order), set status to confirmed
+    if current_user.user_type == "provider":
+        order.status = "confirmed"
+    
     await db.orders.insert_one(order.dict())
     return order
 
