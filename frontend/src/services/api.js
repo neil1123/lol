@@ -135,10 +135,23 @@ class ApiService {
   }
 
   // ====== QUOTATIONS ======
-  async createQuotationRequest(quotationData) {
+  async sendQuotation(quotationData) {
     return await this.request('/quotations', {
       method: 'POST',
       body: JSON.stringify(quotationData),
+    });
+  }
+
+  async updateQuotation(orderId, updateData) {
+    return await this.request(`/quotations/${orderId}`, {
+      method: 'PUT',
+      body: JSON.stringify(updateData),
+    });
+  }
+
+  async deleteQuotation(orderId) {
+    return await this.request(`/quotations/${orderId}`, {
+      method: 'DELETE',
     });
   }
 
