@@ -553,6 +553,54 @@ async def create_quotation_request(order_data: OrderCreate):
     
     return {"message": "Quotation request sent successfully!", "order_id": order.id}
 
+@api_router.put("/quotations/{order_id}")
+async def update_quotation(order_id: str, update_data: dict, current_user: User = Depends(get_current_user)):
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can update quotations")
+    
+    # Find the order
+    order = await db.orders.find_one({"id": order_id, "provider_id": current_user.id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Update the order with new quotation data
+    update_fields = {}
+    if "quotation_amount" in update_data:
+        update_fields["quotation_amount"] = update_data["quotation_amount"]
+    if "quotation_details" in update_data:
+        update_fields["quotation_details"] = update_data["quotation_details"]
+    if "quotation_valid_until" in update_data:
+        update_fields["quotation_valid_until"] = update_data["quotation_valid_until"]
+    
+    if update_fields:
+        await db.orders.update_one(
+            {"id": order_id}, 
+            {"$set": update_fields}
+        )
+    
+    return {"message": "Quotation updated successfully!"}
+
+@api_router.delete("/quotations/{order_id}")
+async def delete_quotation(order_id: str, current_user: User = Depends(get_current_user)):
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can delete quotations")
+    
+    # Find the order
+    order = await db.orders.find_one({"id": order_id, "provider_id": current_user.id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Delete the order
+    await db.orders.delete_one({"id": order_id})
+    
+    # Also delete related message threads and messages
+    thread = await db.message_threads.find_one({"order_id": order_id})
+    if thread:
+        await db.messages.delete_many({"thread_id": thread["id"]})
+        await db.message_threads.delete_one({"order_id": order_id})
+    
+    return {"message": "Quotation deleted successfully!"}
+
 # Include the router in the main app
 app.include_router(api_router)
 
