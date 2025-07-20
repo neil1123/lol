@@ -673,14 +673,87 @@ const ProviderOrders = () => {
                     />
                   </div>
                   
-                  <div className="space-y-2">
-                    <Label htmlFor="serviceType">Service Type</Label>
-                    <Input
-                      id="serviceType"
-                      value={newOrder.serviceType}
-                      onChange={(e) => setNewOrder({...newOrder, serviceType: e.target.value})}
-                      placeholder="e.g., Plumbing, Electrical"
-                    />
+                  <div className="space-y-2 md:col-span-2">
+                    <div className="flex items-center justify-between">
+                      <Label>Service Type (Select multiple services)</Label>
+                      <div className="text-xs text-gray-500">
+                        {newOrder.services.length > 0 && `${newOrder.services.length} selected`}
+                      </div>
+                    </div>
+                    
+                    {/* Selected Services Tags */}
+                    {newOrder.services.length > 0 && (
+                      <div className="flex flex-wrap gap-2 p-2 bg-blue-50 rounded-md">
+                        {newOrder.services.map((service, index) => (
+                          <div key={index} className="flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-xs">
+                            <span>{service}</span>
+                            <button
+                              type="button"
+                              onClick={() => handleServiceToggle(service)}
+                              className="ml-1 text-blue-600 hover:text-blue-800"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    
+                    {/* Service Selection Interface */}
+                    <div className="border rounded-md p-3 max-h-40 overflow-y-auto">
+                      <div className="grid grid-cols-2 gap-2">
+                        {providerServices.map((serviceName, index) => (
+                          <div key={`provider-${index}`} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`provider-${serviceName}`}
+                              checked={newOrder.services.includes(serviceName)}
+                              onCheckedChange={() => handleServiceToggle(serviceName)}
+                            />
+                            <label
+                              htmlFor={`provider-${serviceName}`}
+                              className="text-sm cursor-pointer text-blue-700 font-medium"
+                              onClick={() => handleServiceToggle(serviceName)}
+                            >
+                              {serviceName}
+                            </label>
+                          </div>
+                        ))}
+                        
+                        {providerServices.length === 0 && (
+                          <div className="col-span-2 text-center text-gray-500 text-sm py-4">
+                            No services available. Add services from your profile.
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Other available services */}
+                      {availableServices.filter(service => !providerServices.includes(service)).length > 0 && (
+                        <>
+                          <hr className="my-2" />
+                          <div className="text-xs text-gray-500 mb-2">Other Available Services:</div>
+                          <div className="grid grid-cols-2 gap-2">
+                            {availableServices
+                              .filter(service => !providerServices.includes(service))
+                              .map((serviceName, index) => (
+                              <div key={`other-${index}`} className="flex items-center space-x-2">
+                                <Checkbox
+                                  id={`other-${serviceName}`}
+                                  checked={newOrder.services.includes(serviceName)}
+                                  onCheckedChange={() => handleServiceToggle(serviceName)}
+                                />
+                                <label
+                                  htmlFor={`other-${serviceName}`}
+                                  className="text-sm cursor-pointer text-gray-600"
+                                  onClick={() => handleServiceToggle(serviceName)}
+                                >
+                                  {serviceName}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
                   
                   <div className="space-y-2">
