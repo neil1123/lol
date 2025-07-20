@@ -67,11 +67,9 @@ const ProviderOrders = () => {
     validUntil: ''
   });
 
-  // Get user data for profile
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  const userInitials = user.name 
-    ? user.name.split(' ').map(name => name[0]).join('').toUpperCase() 
-    : 'U';
+  // User profile state - fetch from database
+  const [userProfile, setUserProfile] = useState(null);
+  const [userInitials, setUserInitials] = useState('U');
 
   const handleLogout = () => {
     handleStandardLogout(navigate);
