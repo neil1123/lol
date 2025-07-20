@@ -138,6 +138,70 @@ const ProviderOrders = () => {
     }
   };
 
+  // Handle edit quote
+  const handleEditQuote = (order) => {
+    setEditingQuote(order);
+    setEditQuoteForm({
+      quotationAmount: order.quotation_amount || '',
+      quotationDetails: order.quotation_details || '',
+      validUntil: order.quotation_valid_until || ''
+    });
+    setShowEditQuoteForm(true);
+  };
+
+  // Handle delete quote
+  const handleDeleteQuote = async (order) => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete the quote for ${order.homeowner_name}? This will remove the quote from both your system and the customer's view.`
+    );
+    
+    if (!confirmDelete) return;
+    
+    try {
+      await apiService.deleteQuotation(order.id);
+      
+      // Reload orders to reflect the change
+      loadOrders();
+      alert('Quote deleted successfully!');
+    } catch (error) {
+      console.error('Failed to delete quote:', error);
+      alert('Failed to delete quote. Please try again.');
+    }
+  };
+
+  // Handle update quote
+  const handleUpdateQuote = async () => {
+    if (!editingQuote || !editQuoteForm.quotationAmount) {
+      alert('Please enter a quotation amount');
+      return;
+    }
+    
+    try {
+      const updateData = {
+        quotation_amount: editQuoteForm.quotationAmount,
+        quotation_details: editQuoteForm.quotationDetails,
+        quotation_valid_until: editQuoteForm.validUntil
+      };
+      
+      await apiService.updateQuotation(editingQuote.id, updateData);
+      
+      // Reset form and reload orders
+      setEditQuoteForm({
+        quotationAmount: '',
+        quotationDetails: '',
+        validUntil: ''
+      });
+      setEditingQuote(null);
+      setShowEditQuoteForm(false);
+      loadOrders();
+      alert('Quote updated successfully!');
+      
+    } catch (error) {
+      console.error('Failed to update quote:', error);
+      alert('Failed to update quote. Please try again.');
+    }
+  };
+
   const handleCreateOrder = async () => {
     try {
       setError('');
