@@ -307,6 +307,7 @@ const ProviderOrders = () => {
         homeowner_address: newOrder.address,
         provider_name: userProfile.business_name || userProfile.name,
         service_type: newOrder.serviceType,
+        services: newOrder.services, // Add services array
         description: newOrder.description,
         preferred_date: newOrder.scheduledDate,
         preferred_time: '09:00',
