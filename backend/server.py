@@ -110,6 +110,8 @@ class Order(BaseModel):
     service_type: str
     description: str
     quotation_amount: Optional[float] = None
+    quotation_details: Optional[str] = None
+    quotation_valid_until: Optional[str] = None
     order_details: Optional[str] = None
     priority: str = "medium"
     status: str = "pending_quotation"
