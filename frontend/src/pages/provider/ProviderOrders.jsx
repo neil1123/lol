@@ -356,6 +356,7 @@ const ProviderOrders = () => {
         customerEmail: '',
         customerPhone: '',
         serviceType: '',
+        services: [], // Reset services array
         description: '',
         address: '',
         quotationAmount: '',
