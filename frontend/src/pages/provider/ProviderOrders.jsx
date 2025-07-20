@@ -797,12 +797,12 @@ const ProviderOrders = () => {
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <div>
-                          <CardTitle className="text-lg">{order.homeownerName}</CardTitle>
-                          <p className="text-sm text-gray-600">{order.serviceType}</p>
+                          <CardTitle className="text-lg">{order.homeowner_name}</CardTitle>
+                          <p className="text-sm text-gray-600">{order.service_type}</p>
                         </div>
                         <div className="text-right">
                           <div className="text-2xl font-bold text-green-600">
-                            ${order.quotationAmount}
+                            {order.quotation_amount ? `$${order.quotation_amount}` : (order.budget || 'Price TBD')}
                           </div>
                           <Badge className={getStatusColor(order.status)}>
                             <CheckCircle className="h-3 w-3 mr-1" />
