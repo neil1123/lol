@@ -39,6 +39,16 @@ const ProviderSettings = () => {
   const [userProfile, setUserProfile] = useState(null);
   const [userInitials, setUserInitials] = useState('U');
 
+  // Services management state
+  const [availableServices, setAvailableServices] = useState([]);
+  const [providerServices, setProviderServices] = useState([]);
+  const [isEditingServices, setIsEditingServices] = useState(false);
+  const [editedServices, setEditedServices] = useState([]);
+  const [newService, setNewService] = useState('');
+  const [showAddService, setShowAddService] = useState(false);
+  const [servicesLoading, setServicesLoading] = useState(false);
+  const [servicesSaving, setServicesSaving] = useState(false);
+
   // Load user profile on component mount
   useEffect(() => {
     loadUserProfile();
