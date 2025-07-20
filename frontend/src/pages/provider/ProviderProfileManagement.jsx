@@ -945,17 +945,230 @@ const ProviderProfileManagement = () => {
 
               {/* Preview Profile Tab */}
               <TabsContent value="preview">
-                <div className="space-y-6">
-                  {/* Preview content will be added in next iteration */}
-                  <Card>
-                    <CardContent className="text-center py-12">
-                      <Eye className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">Profile Preview</h3>
-                      <p className="text-gray-600">
-                        Preview functionality will be implemented in the next iteration
-                      </p>
+                <div className="max-w-4xl mx-auto">
+                  {/* Provider Profile Preview - How it looks to homeowners */}
+                  <Card className="mb-6">
+                    <CardHeader className="bg-blue-50 border-b">
+                      <div className="flex items-center space-x-3">
+                        <Avatar className="h-16 w-16">
+                          <AvatarFallback className="bg-blue-100 text-blue-600 text-xl font-bold">
+                            {userInitials}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <h1 className="text-2xl font-bold text-gray-900">
+                            {profileData.business_name || 'Business Name Not Set'}
+                          </h1>
+                          <p className="text-gray-600 flex items-center">
+                            <MapPin className="h-4 w-4 mr-1" />
+                            {profileData.address || 'Address not specified'}
+                          </p>
+                          <div className="flex items-center space-x-4 mt-2">
+                            {profileData.phone && (
+                              <div className="flex items-center text-sm text-gray-600">
+                                <Phone className="h-4 w-4 mr-1" />
+                                {profileData.phone}
+                              </div>
+                            )}
+                            {profileData.email && (
+                              <div className="flex items-center text-sm text-gray-600">
+                                <Mail className="h-4 w-4 mr-1" />
+                                {profileData.email}
+                              </div>
+                            )}
+                            {profileData.website && (
+                              <div className="flex items-center text-sm text-gray-600">
+                                <Globe className="h-4 w-4 mr-1" />
+                                {profileData.website}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <Button className="mb-2">
+                            <MessageSquare className="h-4 w-4 mr-2" />
+                            Text Us
+                          </Button>
+                          <p className="text-xs text-gray-500">
+                            {profileData.year_established ? `Est. ${profileData.year_established}` : 'Year not specified'}
+                          </p>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    
+                    <CardContent className="p-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        {/* Left Column */}
+                        <div className="lg:col-span-2 space-y-6">
+                          {/* Quick Information */}
+                          <div>
+                            <h3 className="text-lg font-semibold mb-3">Quick Information</h3>
+                            <div className="text-sm text-gray-600">
+                              Year of establishment: {profileData.year_established || 'Not specified'}
+                            </div>
+                          </div>
+
+                          {/* Service Categories */}
+                          {profileData.service_categories?.length > 0 && (
+                            <div>
+                              <h3 className="text-lg font-semibold mb-3">Service Categories</h3>
+                              <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+                                {profileData.service_categories.slice(0, 6).map((category, index) => (
+                                  <div key={index} className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
+                                    <div className="w-8 h-8 bg-blue-100 rounded-full mx-auto mb-2 flex items-center justify-center">
+                                      <Home className="h-4 w-4 text-blue-600" />
+                                    </div>
+                                    <span className="text-xs font-medium text-gray-800">{category}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Service Types */}
+                          {profileData.services?.length > 0 && (
+                            <div>
+                              <h3 className="text-lg font-semibold mb-3">Service Types</h3>
+                              <div className="flex flex-wrap gap-2">
+                                {profileData.services.slice(0, 8).map((service, index) => (
+                                  <Badge key={index} variant="outline" className="bg-gray-50">
+                                    {service}
+                                  </Badge>
+                                ))}
+                                {profileData.services.length > 8 && (
+                                  <Badge variant="outline" className="bg-gray-50">
+                                    +{profileData.services.length - 8} more
+                                  </Badge>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Properties Served */}
+                          {profileData.properties_served?.length > 0 && (
+                            <div>
+                              <h3 className="text-lg font-semibold mb-3">Properties We Serve</h3>
+                              <div className="flex flex-wrap gap-2">
+                                {profileData.properties_served.map((property, index) => (
+                                  <Badge key={index} variant="secondary" className="bg-green-100 text-green-800">
+                                    {property}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* About */}
+                          <div>
+                            <h3 className="text-lg font-semibold mb-3">About</h3>
+                            <p className="text-gray-600 leading-relaxed">
+                              {profileData.description || 'No description provided. This is where you can describe your business, services, and what makes you unique.'}
+                            </p>
+                          </div>
+
+                          {/* Specialties */}
+                          {profileData.specialties?.length > 0 && (
+                            <div>
+                              <h3 className="text-lg font-semibold mb-3">Specialties</h3>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {profileData.specialties.map((specialty, index) => (
+                                  <div key={index} className="flex items-center space-x-2">
+                                    <CheckCircle className="h-5 w-5 text-green-600" />
+                                    <span className="text-sm font-medium">{specialty}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Right Column */}
+                        <div className="space-y-6">
+                          {/* Quick Facts */}
+                          <Card>
+                            <CardHeader>
+                              <CardTitle className="text-lg">Quick Facts</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                              <div>
+                                <div className="flex items-center space-x-2 text-sm text-gray-600 mb-1">
+                                  <CheckCircle className="h-4 w-4" />
+                                  <span>Jobs Completed</span>
+                                </div>
+                                <p className="text-xl font-bold">{profileData.jobs_completed || 0}</p>
+                              </div>
+                              
+                              <div>
+                                <div className="flex items-center space-x-2 text-sm text-gray-600 mb-1">
+                                  <Clock className="h-4 w-4" />
+                                  <span>Response Time</span>
+                                </div>
+                                <p className="text-sm font-medium">{profileData.response_time}</p>
+                              </div>
+                              
+                              <div>
+                                <div className="flex items-center space-x-2 text-sm text-gray-600 mb-1">
+                                  <Calendar className="h-4 w-4" />
+                                  <span>Year Established</span>
+                                </div>
+                                <p className="text-xl font-bold">{profileData.year_established || 'N/A'}</p>
+                              </div>
+                            </CardContent>
+                          </Card>
+
+                          {/* Price List */}
+                          {profileData.pricing_packages?.length > 0 ? (
+                            <Card>
+                              <CardHeader>
+                                <CardTitle className="text-lg">Price List</CardTitle>
+                              </CardHeader>
+                              <CardContent className="space-y-4">
+                                {profileData.pricing_packages.map((pkg, index) => (
+                                  <div key={index} className="border rounded-lg p-4">
+                                    <div className="flex justify-between items-center mb-2">
+                                      <h4 className="font-medium">{pkg.name}</h4>
+                                      <span className="text-xl font-bold text-blue-600">${pkg.price}</span>
+                                    </div>
+                                    <p className="text-sm text-gray-600 mb-3">{pkg.description}</p>
+                                    <Button variant="outline" className="w-full">
+                                      Get Quotation
+                                    </Button>
+                                  </div>
+                                ))}
+                              </CardContent>
+                            </Card>
+                          ) : (
+                            <Card>
+                              <CardHeader>
+                                <CardTitle className="text-lg">Price List</CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <div className="text-center py-6">
+                                  <DollarSign className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                                  <p className="text-sm text-gray-500 mb-3">No pricing packages available</p>
+                                  <Button variant="outline" className="w-full">
+                                    Get Quotation
+                                  </Button>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          )}
+                        </div>
+                      </div>
                     </CardContent>
                   </Card>
+                  
+                  {/* Preview Notice */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+                    <div className="flex items-center justify-center space-x-2 text-blue-700 mb-2">
+                      <Eye className="h-5 w-5" />
+                      <span className="font-medium">Preview Mode</span>
+                    </div>
+                    <p className="text-sm text-blue-600">
+                      This is how your profile appears to homeowners when they browse for services.
+                      Missing information will be displayed as "Not specified" or left blank.
+                    </p>
+                  </div>
                 </div>
               </TabsContent>
             </Tabs>
