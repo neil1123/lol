@@ -241,13 +241,148 @@ const ProviderSettings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Mobile Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Mobile Menu Button */}
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar - Always visible on desktop */}
+      <div className="hidden xl:flex xl:flex-col xl:w-64 xl:bg-white xl:border-r xl:border-gray-200">
+        <div className="flex items-center justify-center h-16 border-b border-gray-200">
+          <Building2 className="h-8 w-8 text-blue-600 mr-2" />
+          <span className="text-xl font-bold text-gray-800">Doord</span>
+        </div>
+        
+        <nav className="flex-1 px-4 py-6 space-y-2">
+          {sidebarItems.map((item) => {
+            const IconComponent = item.icon;
+            const isActive = item.id === 'settings';
+            
+            return (
+              <button
+                key={item.id}
+                onClick={() => navigate(item.path)}
+                className={`w-full flex items-center px-4 py-2 text-left rounded-lg transition-colors ${
+                  isActive 
+                    ? 'bg-blue-50 text-blue-600 border-r-2 border-blue-600' 
+                    : 'text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                <IconComponent className="h-5 w-5 mr-3" />
+                {item.label}
+              </button>
+            );
+          })}
+        </nav>
+
+        <div className="border-t border-gray-200 p-4">
+          <button
+            onClick={handleLogout}
+            className="flex items-center w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+          >
+            <LogOut className="h-5 w-5 mr-3" />
+            Logout
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 xl:hidden">
+          <div className="bg-white w-64 h-full">
+            <div className="flex items-center justify-between h-16 border-b border-gray-200 px-4">
+              <div className="flex items-center">
+                <Building2 className="h-8 w-8 text-blue-600 mr-2" />
+                <span className="text-xl font-bold text-gray-800">Doord</span>
+              </div>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+            
+            <nav className="px-4 py-6 space-y-2">
+              {sidebarItems.map((item) => {
+                const IconComponent = item.icon;
+                const isActive = item.id === 'settings';
+                
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      navigate(item.path);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className={`w-full flex items-center px-4 py-2 text-left rounded-lg transition-colors ${
+                      isActive 
+                        ? 'bg-blue-50 text-blue-600' 
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    <IconComponent className="h-5 w-5 mr-3" />
+                    {item.label}
+                  </button>
+                );
+              })}
+            </nav>
+
+            <div className="border-t border-gray-200 p-4">
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="flex items-center w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              >
+                <LogOut className="h-5 w-5 mr-3" />
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
+        <header className="bg-white border-b border-gray-200 px-4 py-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="xl:hidden"
+                onClick={() => setIsMobileMenuOpen(true)}
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
+                <p className="text-gray-600">Manage your account settings and preferences</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" size="sm">
+                <Bell className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate('/homeservices/settings')}
+                className="flex items-center space-x-2"
+              >
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback className="bg-blue-100 text-blue-600 text-sm font-medium">
+                    {userInitials}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </div>
+          </div>
+        </header>
+
+        {/* Content */}
+        <main className="flex-1 overflow-auto p-4 md:p-6">
               <Button 
                 variant="ghost" 
                 size="sm" 
