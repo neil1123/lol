@@ -35,15 +35,15 @@ const ProviderSettings = () => {
     ? user.name.split(' ').map(name => name[0]).join('').toUpperCase() 
     : 'U';
 
-  // Profile settings
+  // Profile settings - Initialize with actual user data
   const [profileData, setProfileData] = useState({
-    businessName: 'Elite Home Solutions',
-    ownerName: 'Edward Dethe',
-    email: 'edwarddethe@gmail.com',
-    phone: '(555) 123-4567',
-    address: '123 Business St, Halifax, NS',
-    description: 'Professional home services with 10+ years of experience.',
-    website: 'www.elitehomesolutions.com'
+    businessName: user.business_name || 'Your Business Name',
+    ownerName: user.name || 'Your Name',
+    email: user.email || 'your@email.com',
+    phone: user.phone || '(555) 123-4567',
+    address: user.address || 'Your Address',
+    description: user.description || 'Professional home services provider.',
+    website: user.website || ''
   });
 
   // Notification settings
