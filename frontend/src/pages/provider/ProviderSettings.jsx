@@ -592,6 +592,207 @@ const ProviderSettings = () => {
                   </CardContent>
                 </Card>
               </TabsContent>
+
+              {/* Services Tab */}
+              <TabsContent value="services">
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle>Service Management</CardTitle>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Manage the services you offer to customers
+                        </p>
+                      </div>
+                      {!isEditingServices && (
+                        <Button onClick={handleEditServices} variant="outline">
+                          <Edit className="h-4 w-4 mr-2" />
+                          Edit Services
+                        </Button>
+                      )}
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {servicesLoading ? (
+                      <div className="text-center py-8">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                        <p className="text-gray-600">Loading services...</p>
+                      </div>
+                    ) : (
+                      <>
+                        {/* Current Services Display */}
+                        {!isEditingServices && (
+                          <div className="space-y-4">
+                            <div>
+                              <Label className="text-base font-medium">Your Current Services</Label>
+                              <p className="text-sm text-gray-600 mb-3">
+                                These services will appear in homeowner quotation forms and your order/appointment forms.
+                              </p>
+                            </div>
+                            
+                            {providerServices.length > 0 ? (
+                              <div className="flex flex-wrap gap-2">
+                                {providerServices.map((service, index) => (
+                                  <div key={index} className="bg-blue-100 text-blue-800 px-3 py-2 rounded-md text-sm font-medium">
+                                    {service}
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
+                                <Briefcase className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                                <h3 className="text-lg font-medium text-gray-900 mb-2">No Services Added</h3>
+                                <p className="text-gray-600 mb-4">
+                                  Add services to let customers know what you offer.
+                                </p>
+                                <Button onClick={handleEditServices}>
+                                  <Plus className="h-4 w-4 mr-2" />
+                                  Add Services
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Services Editing Interface */}
+                        {isEditingServices && (
+                          <div className="space-y-4">
+                            <div>
+                              <Label className="text-base font-medium">Edit Your Services</Label>
+                              <p className="text-sm text-gray-600 mb-3">
+                                Select all services you want to offer. Changes will be reflected across your orders, appointments, and customer quotation forms.
+                              </p>
+                            </div>
+
+                            {/* Selected Services Tags */}
+                            {editedServices.length > 0 && (
+                              <div className="space-y-2">
+                                <Label className="text-sm font-medium text-green-700">Selected Services ({editedServices.length})</Label>
+                                <div className="flex flex-wrap gap-2 p-3 bg-green-50 rounded-md">
+                                  {editedServices.map((service, index) => (
+                                    <div key={index} className="flex items-center bg-green-100 text-green-800 px-2 py-1 rounded-md text-xs">
+                                      <span>{service}</span>
+                                      <button
+                                        type="button"
+                                        onClick={() => handleRemoveService(service)}
+                                        className="ml-1 text-green-600 hover:text-green-800"
+                                      >
+                                        <X className="h-3 w-3" />
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Add New Service */}
+                            {showAddService && (
+                              <div className="flex items-center space-x-2 p-3 bg-blue-50 rounded-md">
+                                <Input
+                                  value={newService}
+                                  onChange={(e) => setNewService(e.target.value)}
+                                  placeholder="Enter new service name"
+                                  className="flex-1"
+                                  onKeyPress={(e) => {
+                                    if (e.key === 'Enter') {
+                                      e.preventDefault();
+                                      handleAddNewService();
+                                    }
+                                  }}
+                                />
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  onClick={handleAddNewService}
+                                  disabled={!newService.trim()}
+                                >
+                                  Add
+                                </Button>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => {
+                                    setShowAddService(false);
+                                    setNewService('');
+                                  }}
+                                >
+                                  <X className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            )}
+
+                            {/* Service Selection Grid */}
+                            <div className="space-y-2">
+                              <div className="flex items-center justify-between">
+                                <Label className="text-sm font-medium">Available Services</Label>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => setShowAddService(true)}
+                                  className="text-xs"
+                                >
+                                  <Plus className="h-3 w-3 mr-1" />
+                                  Add Custom Service
+                                </Button>
+                              </div>
+                              
+                              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 p-3 border rounded-md max-h-64 overflow-y-auto">
+                                {availableServices.map((serviceName, index) => (
+                                  <div key={index} className="flex items-center space-x-2">
+                                    <Checkbox
+                                      id={serviceName}
+                                      checked={editedServices.includes(serviceName)}
+                                      onCheckedChange={() => handleServiceToggle(serviceName)}
+                                    />
+                                    <label
+                                      htmlFor={serviceName}
+                                      className="text-sm cursor-pointer hover:text-blue-600"
+                                      onClick={() => handleServiceToggle(serviceName)}
+                                    >
+                                      {serviceName}
+                                    </label>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex space-x-3 pt-4 border-t">
+                              <Button 
+                                onClick={handleSaveServices} 
+                                disabled={servicesSaving}
+                                className="flex-1 sm:flex-none"
+                              >
+                                {servicesSaving ? (
+                                  <>
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                    Saving...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Save className="h-4 w-4 mr-2" />
+                                    Save Services
+                                  </>
+                                )}
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                onClick={handleCancelEditServices}
+                                disabled={servicesSaving}
+                                className="flex-1 sm:flex-none"
+                              >
+                                Cancel
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
             </Tabs>
           </div>
         </div>
