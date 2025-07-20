@@ -119,6 +119,18 @@ const ProviderCalendar = () => {
 
   // Handle calendar slot selection (click to create appointment)
   const handleSelectSlot = useCallback(({ start }) => {
+    // Prevent selecting past dates
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to beginning of day for comparison
+    
+    const selectedDate = new Date(start);
+    selectedDate.setHours(0, 0, 0, 0);
+    
+    if (selectedDate < today) {
+      alert('Cannot create appointments for past dates');
+      return;
+    }
+    
     const formattedDate = moment(start).format('YYYY-MM-DD');
     const formattedTime = moment(start).format('HH:mm');
     
