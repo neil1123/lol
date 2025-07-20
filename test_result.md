@@ -165,20 +165,17 @@ backend:
         agent: "testing"
         comment: "BACKEND TESTING CONFIRMS MULTI-SERVICE APPOINTMENT CREATION: Backend fully supports appointment creation with multiple services. Testing confirms: ✅ POST /api/appointments accepts services array in AppointmentCreate model ✅ Services array properly stored in Appointment document ✅ Service_type field automatically joined from services array ✅ Provider-only access control properly implemented ✅ Appointment retrieval returns complete services data ✅ Provider_id automatically set from authenticated user. Backend provides complete infrastructure for multi-service appointment scheduling."
 
-  - task: "API Service Extensions"
+  - task: "Provider Profile Management System"
     implemented: true
-    working: true
-    file: "/app/frontend/src/services/api.js"
+    working: false
+    file: "/app/frontend/src/pages/provider/ProviderProfileManagement.jsx"
     stuck_count: 0
-    priority: "medium"
-    needs_retesting: false
+    priority: "high"
+    needs_retesting: true
     status_history:
       - working: false
-        agent: "main" 
-        comment: "EXTENDED API SERVICES: Added getAllServices() and updateProviderServices() methods to support dynamic services management. API layer now supports fetching all available services and updating provider's service list."
-      - working: true
-        agent: "testing"
-        comment: "BACKEND TESTING CONFIRMS API SERVICE EXTENSIONS SUPPORT: Backend provides all necessary endpoints for frontend API service extensions. Testing validates: ✅ GET /api/services endpoint working perfectly for getAllServices() method ✅ PUT /api/providers/services endpoint working perfectly for updateProviderServices() method ✅ Proper authentication handling for provider-only endpoints ✅ Error handling for unauthorized access (403) and invalid tokens (401) ✅ Services data properly formatted for frontend consumption ✅ Real-time updates - provider service changes immediately reflected in global services list. Backend fully supports all frontend API service extension requirements."
+        agent: "main"
+        comment: "COMPREHENSIVE PROVIDER PROFILE MANAGEMENT: Created complete profile management system with edit/preview modes. FEATURES: 1) Added Company Profile to sidebar navigation 2) Edit Profile tab with sections for Basic Information, Services & Categories, Specialties & Quick Facts, and Pricing Packages 3) Preview Profile tab showing how profile appears to homeowners 4) Responsive design for mobile/desktop 5) Handle incomplete data gracefully 6) Edit buttons for each section with save/cancel functionality 7) Backend API endpoint for updating provider profiles. System allows providers to edit all profile aspects and preview customer view."
 
 backend:
   - task: "Authentication System (Registration & Login)"
