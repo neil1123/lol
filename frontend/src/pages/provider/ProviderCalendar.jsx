@@ -658,15 +658,60 @@ const ProviderCalendar = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  Service Type *
-                </label>
-                <Input
-                  value={appointmentForm.serviceType}
-                  onChange={(e) => setAppointmentForm({...appointmentForm, serviceType: e.target.value})}
-                  placeholder="e.g., Home Cleaning, Plumbing, Electrical"
-                  className="w-full"
-                />
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-sm font-medium text-gray-700 text-left">
+                    Service Type * (Select multiple services)
+                  </label>
+                  <div className="text-xs text-gray-500">
+                    {appointmentForm.services.length > 0 && `${appointmentForm.services.length} selected`}
+                  </div>
+                </div>
+                
+                {/* Selected Services Tags */}
+                {appointmentForm.services.length > 0 && (
+                  <div className="flex flex-wrap gap-2 p-2 bg-blue-50 rounded-md mb-2">
+                    {appointmentForm.services.map((service, index) => (
+                      <div key={index} className="flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-xs">
+                        <span>{service}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleServiceToggle(service)}
+                          className="ml-1 text-blue-600 hover:text-blue-800"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {/* Service Selection Interface */}
+                <div className="border rounded-md p-3 max-h-32 overflow-y-auto">
+                  <div className="grid grid-cols-2 gap-2">
+                    {providerServices.map((serviceName, index) => (
+                      <div key={`provider-${index}`} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`provider-${serviceName}`}
+                          checked={appointmentForm.services.includes(serviceName)}
+                          onCheckedChange={() => handleServiceToggle(serviceName)}
+                        />
+                        <label
+                          htmlFor={`provider-${serviceName}`}
+                          className="text-sm cursor-pointer text-blue-700 font-medium"
+                          onClick={() => handleServiceToggle(serviceName)}
+                        >
+                          {serviceName}
+                        </label>
+                      </div>
+                    ))}
+                    
+                    {providerServices.length === 0 && (
+                      <div className="col-span-2 text-center text-gray-500 text-sm py-2">
+                        No services available. Add services from your profile.
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
