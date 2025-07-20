@@ -399,7 +399,7 @@ const ProviderCustomers = () => {
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
-                  Email Address *
+                  Email Address
                 </label>
                 <Input
                   type="email"
