@@ -29,6 +29,12 @@ const ProviderSettings = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
 
+  // Get user data for profile
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const userInitials = user.name 
+    ? user.name.split(' ').map(name => name[0]).join('').toUpperCase() 
+    : 'U';
+
   // Profile settings
   const [profileData, setProfileData] = useState({
     businessName: 'Elite Home Solutions',
