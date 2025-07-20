@@ -61,6 +61,12 @@ const ProviderOrders = () => {
     scheduledDate: ''
   });
 
+  const [editQuoteForm, setEditQuoteForm] = useState({
+    quotationAmount: '',
+    quotationDetails: '',
+    validUntil: ''
+  });
+
   const handleLogout = () => {
     handleStandardLogout(navigate);
   };
