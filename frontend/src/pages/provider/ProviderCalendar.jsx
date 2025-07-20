@@ -226,12 +226,12 @@ const ProviderCalendar = () => {
       <header className="bg-white shadow-sm border-b">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button - Only show on mobile */}
             <div className="flex items-center space-x-4">
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="flex items-center"
+                className="flex items-center xl:hidden"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
                 {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
