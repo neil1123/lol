@@ -205,8 +205,8 @@ const ProviderCustomers = () => {
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="w-full p-4 md:p-8">
+        {/* Main Content - Adjust width for desktop sidebar */}
+        <div className="flex-1 xl:pl-0 p-4 md:p-8">
           <div className="max-w-6xl mx-auto">
             {/* Header */}
             <div className="mb-6">
