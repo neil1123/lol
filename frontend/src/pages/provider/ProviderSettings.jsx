@@ -178,6 +178,68 @@ const ProviderSettings = () => {
     setSecurityData({ currentPassword: '', newPassword: '', confirmPassword: '' });
   };
 
+  // Services management functions
+  const handleEditServices = () => {
+    setIsEditingServices(true);
+    setEditedServices([...providerServices]);
+  };
+
+  const handleCancelEditServices = () => {
+    setIsEditingServices(false);
+    setEditedServices([...providerServices]);
+    setShowAddService(false);
+    setNewService('');
+  };
+
+  const handleServiceToggle = (serviceName) => {
+    setEditedServices(prev => {
+      return prev.includes(serviceName)
+        ? prev.filter(s => s !== serviceName)
+        : [...prev, serviceName];
+    });
+  };
+
+  const handleAddNewService = () => {
+    if (newService.trim() && !availableServices.includes(newService.trim())) {
+      const trimmedService = newService.trim();
+      setAvailableServices(prev => [...prev, trimmedService].sort());
+      setEditedServices(prev => [...prev, trimmedService]);
+      setNewService('');
+      setShowAddService(false);
+    }
+  };
+
+  const handleRemoveService = (serviceName) => {
+    setEditedServices(prev => prev.filter(s => s !== serviceName));
+  };
+
+  const handleSaveServices = async () => {
+    try {
+      setServicesSaving(true);
+      await apiService.updateProviderServices(editedServices);
+      
+      // Update local state
+      setProviderServices([...editedServices]);
+      setIsEditingServices(false);
+      
+      // Update user profile with new services
+      if (userProfile) {
+        setUserProfile({
+          ...userProfile,
+          services: editedServices
+        });
+      }
+      
+      alert('Services updated successfully!');
+      
+    } catch (error) {
+      console.error('Failed to update services:', error);
+      alert('Failed to update services. Please try again.');
+    } finally {
+      setServicesSaving(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Header */}
