@@ -49,6 +49,11 @@ const ProviderOrders = () => {
   const [showEditQuoteForm, setShowEditQuoteForm] = useState(false);
   const [editingQuote, setEditingQuote] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // Services state
+  const [availableServices, setAvailableServices] = useState([]);
+  const [providerServices, setProviderServices] = useState([]);
+  
   const [newOrder, setNewOrder] = useState({
     customerName: '',
     customerEmail: '',
