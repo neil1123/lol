@@ -77,9 +77,36 @@ const ProviderOrders = () => {
 
   const sidebarItems = STANDARD_PROVIDER_SIDEBAR;
 
+  // Load user profile and orders on component mount
   useEffect(() => {
+    loadUserProfile();
     loadOrders();
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0);
   }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      const profile = await apiService.getUserProfile();
+      setUserProfile(profile);
+      
+      // Set user initials from actual database data
+      const initials = profile.name 
+        ? profile.name.split(' ').map(name => name[0]).join('').toUpperCase() 
+        : 'U';
+      setUserInitials(initials);
+      
+      console.log('User profile loaded:', profile);
+    } catch (error) {
+      console.error('Failed to load user profile:', error);
+      // Fallback to localStorage if API fails
+      const fallbackUser = JSON.parse(localStorage.getItem('user') || '{}');
+      if (fallbackUser.name) {
+        const initials = fallbackUser.name.split(' ').map(name => name[0]).join('').toUpperCase();
+        setUserInitials(initials);
+      }
+    }
+  };
 
   const loadOrders = async () => {
     try {
