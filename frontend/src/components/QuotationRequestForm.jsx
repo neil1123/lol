@@ -173,14 +173,68 @@ const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, prov
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label htmlFor="serviceType">Service Type</Label>
-                  <Input
-                    id="serviceType"
-                    value={formData.serviceType}
-                    onChange={(e) => handleInputChange('serviceType', e.target.value)}
-                    placeholder="e.g., Window Cleaning, Electrical Work"
-                    required
-                  />
+                  <div className="flex items-center justify-between mb-2">
+                    <Label>Services Needed (Select multiple)</Label>
+                    <div className="text-xs text-gray-500">
+                      {formData.services.length > 0 && `${formData.services.length} selected`}
+                    </div>
+                  </div>
+                  
+                  {loadingServices ? (
+                    <div className="text-center py-4">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                      <p className="text-sm text-gray-600">Loading available services...</p>
+                    </div>
+                  ) : (
+                    <>
+                      {/* Selected Services Tags */}
+                      {formData.services.length > 0 && (
+                        <div className="flex flex-wrap gap-2 p-3 bg-blue-50 rounded-md mb-3">
+                          {formData.services.map((service, index) => (
+                            <div key={index} className="flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-sm">
+                              <span>{service}</span>
+                              <button
+                                type="button"
+                                onClick={() => handleServiceToggle(service)}
+                                className="ml-1 text-blue-600 hover:text-blue-800"
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Service Selection */}
+                      {providerServices.length > 0 ? (
+                        <div className="border rounded-md p-3 max-h-40 overflow-y-auto">
+                          <div className="grid grid-cols-2 gap-2">
+                            {providerServices.map((serviceName, index) => (
+                              <div key={index} className="flex items-center space-x-2">
+                                <Checkbox
+                                  id={`service-${serviceName}`}
+                                  checked={formData.services.includes(serviceName)}
+                                  onCheckedChange={() => handleServiceToggle(serviceName)}
+                                />
+                                <label
+                                  htmlFor={`service-${serviceName}`}
+                                  className="text-sm cursor-pointer hover:text-blue-600"
+                                  onClick={() => handleServiceToggle(serviceName)}
+                                >
+                                  {serviceName}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-center py-6 text-gray-500 border-2 border-dashed border-gray-300 rounded-md">
+                          <p className="text-sm">No services available from this provider.</p>
+                          <p className="text-xs mt-1">Please contact the provider directly.</p>
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
                 
                 <div>
