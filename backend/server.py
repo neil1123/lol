@@ -165,6 +165,17 @@ class MessageThread(BaseModel):
     last_message_time: datetime = Field(default_factory=datetime.utcnow)
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
+class AppointmentCreate(BaseModel):
+    customer_name: str
+    phone_number: str
+    service_type: str
+    date: str
+    time: str
+    address: str
+    notes: Optional[str] = None
+    order_id: Optional[str] = None
+    source: Optional[str] = "manual"
+
 class Appointment(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     provider_id: str
