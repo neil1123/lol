@@ -139,6 +139,7 @@ const ProviderCalendar = () => {
     customerName: '',
     phoneNumber: '',
     serviceType: '',
+    services: [], // Array for multiple services
     date: '',
     time: '',
     address: '',
