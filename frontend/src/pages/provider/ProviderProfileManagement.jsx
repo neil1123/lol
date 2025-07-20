@@ -986,7 +986,7 @@ const ProviderProfileManagement = () => {
                         </div>
                         <div className="text-right">
                           <Button className="mb-2">
-                            <MessageSquare className="h-4 w-4 mr-2" />
+                            <Mail className="h-4 w-4 mr-2" />
                             Text Us
                           </Button>
                           <p className="text-xs text-gray-500">
