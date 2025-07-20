@@ -68,11 +68,11 @@ const ProviderCustomers = () => {
   );
 
   const handleAddCustomer = () => {
-    if (customerForm.name && customerForm.email) {
+    if (customerForm.name) {
       const newCustomer = {
         id: customers.length + 1,
         name: customerForm.name,
-        email: customerForm.email,
+        email: customerForm.email || 'Not provided',
         phone: customerForm.phone || 'N/A',
         address: customerForm.address || 'N/A',
         totalOrders: 0,
