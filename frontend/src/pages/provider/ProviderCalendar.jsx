@@ -191,6 +191,27 @@ const ProviderCalendar = () => {
   const handleCreateAppointment = async () => {
     if (appointmentForm.customerName && appointmentForm.date && appointmentForm.time && appointmentForm.serviceType) {
       try {
+        // Validate date is not in the past
+        const selectedDate = new Date(appointmentForm.date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        if (selectedDate < today) {
+          alert('Cannot create appointments for past dates');
+          return;
+        }
+        
+        console.log('Creating appointment with data:', {
+          customer_name: appointmentForm.customerName,
+          phone_number: appointmentForm.phoneNumber,
+          service_type: appointmentForm.serviceType,
+          date: appointmentForm.date,
+          time: appointmentForm.time,
+          address: appointmentForm.address,
+          notes: appointmentForm.notes,
+          source: 'manual'
+        });
+        
         const appointmentData = {
           customer_name: appointmentForm.customerName,
           phone_number: appointmentForm.phoneNumber,
@@ -202,7 +223,8 @@ const ProviderCalendar = () => {
           source: 'manual'
         };
         
-        await apiService.createAppointment(appointmentData);
+        const createdAppointment = await apiService.createAppointment(appointmentData);
+        console.log('Appointment created successfully:', createdAppointment);
         
         // Auto-add customer
         await autoAddCustomer({
@@ -224,11 +246,15 @@ const ProviderCalendar = () => {
         });
         setShowAppointmentForm(false);
         loadAppointments(); // Reload from database
+        alert('Appointment created successfully!');
         
       } catch (error) {
         console.error('Failed to create appointment:', error);
-        alert('Failed to create appointment. Please try again.');
+        console.error('Error details:', error.message);
+        alert(`Failed to create appointment: ${error.message}. Please try again.`);
       }
+    } else {
+      alert('Please fill in all required fields (Customer Name, Date, Time, Service Type)');
     }
   };
 
