@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Backend URL
-BACKEND_URL = "https://ed6d3a08-7c8b-4b12-ae0a-0f9170d6fb05.preview.emergentagent.com/api"
+BACKEND_URL = "https://7c35af56-1ef5-4ae8-baf3-29fc2a2457bf.preview.emergentagent.com/api"
 
 def test_critical_homeowner_quotation():
     """Test the critical homeowner quotation acceptance/decline functionality"""
