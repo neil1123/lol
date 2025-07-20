@@ -711,8 +711,235 @@ const ProviderProfileManagement = () => {
                     </CardContent>
                   </Card>
 
-                  {/* Continue with more sections... */}
-                  {/* I'll add more sections in the next response to stay within limits */}
+                  {/* Specialties & Quick Facts Section */}
+                  <Card>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <CardTitle>Specialties & Quick Facts</CardTitle>
+                          <p className="text-sm text-gray-600 mt-1">
+                            Highlight your business strengths and key information
+                          </p>
+                        </div>
+                        {!editingSections.specialties && (
+                          <Button variant="outline" onClick={() => startEditing('specialties')}>
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit
+                          </Button>
+                        )}
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      {!editingSections.specialties ? (
+                        <div className="space-y-6">
+                          <div>
+                            <Label className="text-sm font-medium text-gray-700 mb-3 block">Specialties</Label>
+                            {profileData.specialties?.length > 0 ? (
+                              <div className="flex flex-wrap gap-2">
+                                {profileData.specialties.map((specialty, index) => (
+                                  <Badge key={index} variant="outline" className="border-green-200 text-green-800">
+                                    <Award className="h-3 w-3 mr-1" />
+                                    {specialty}
+                                  </Badge>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-sm text-gray-500">No specialties specified</p>
+                            )}
+                          </div>
+                          
+                          <div>
+                            <Label className="text-sm font-medium text-gray-700 mb-3 block">Quick Facts</Label>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                              <div className="bg-gray-50 p-4 rounded-lg">
+                                <div className="flex items-center space-x-2 mb-2">
+                                  <CheckCircle className="h-5 w-5 text-green-600" />
+                                  <span className="font-medium">Jobs Completed</span>
+                                </div>
+                                <p className="text-2xl font-bold text-gray-900">{profileData.jobs_completed || 0}</p>
+                              </div>
+                              <div className="bg-gray-50 p-4 rounded-lg">
+                                <div className="flex items-center space-x-2 mb-2">
+                                  <Clock className="h-5 w-5 text-blue-600" />
+                                  <span className="font-medium">Response Time</span>
+                                </div>
+                                <p className="text-sm text-gray-900">{profileData.response_time}</p>
+                              </div>
+                              <div className="bg-gray-50 p-4 rounded-lg">
+                                <div className="flex items-center space-x-2 mb-2">
+                                  <Calendar className="h-5 w-5 text-purple-600" />
+                                  <span className="font-medium">Year Established</span>
+                                </div>
+                                <p className="text-2xl font-bold text-gray-900">{profileData.year_established || 'N/A'}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-6">
+                          <div>
+                            <Label className="text-sm font-medium text-gray-700 mb-3 block">Specialties</Label>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                              {defaultSpecialties.map((specialty, index) => (
+                                <div key={index} className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id={`specialty-${specialty}`}
+                                    checked={tempData.specialties?.specialties?.includes(specialty) || false}
+                                    onCheckedChange={() => toggleArrayItem('specialties', 'specialties', specialty)}
+                                  />
+                                  <label htmlFor={`specialty-${specialty}`} className="text-sm cursor-pointer">
+                                    {specialty}
+                                  </label>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <Label className="text-sm font-medium text-gray-700 mb-3 block">Quick Facts</Label>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div>
+                                <Label>Jobs Completed</Label>
+                                <Input
+                                  type="number"
+                                  value={tempData.specialties?.jobs_completed || 0}
+                                  onChange={(e) => updateTempData('specialties', 'jobs_completed', parseInt(e.target.value) || 0)}
+                                  min="0"
+                                />
+                              </div>
+                              <div>
+                                <Label>Response Time</Label>
+                                <Input
+                                  value={tempData.specialties?.response_time || ''}
+                                  onChange={(e) => updateTempData('specialties', 'response_time', e.target.value)}
+                                  placeholder="Usually responds within 1 hour"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="flex space-x-3 pt-4 border-t">
+                            <Button onClick={() => saveSection('specialties')} disabled={saving}>
+                              {saving ? 'Saving...' : 'Save Changes'}
+                            </Button>
+                            <Button variant="outline" onClick={() => cancelEditing('specialties')}>
+                              Cancel
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {/* Pricing Packages Section */}
+                  <Card>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <CardTitle>Pricing Packages</CardTitle>
+                          <p className="text-sm text-gray-600 mt-1">
+                            Set up different service packages with pricing
+                          </p>
+                        </div>
+                        {!editingSections.pricing && (
+                          <Button variant="outline" onClick={() => startEditing('pricing')}>
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit
+                          </Button>
+                        )}
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      {!editingSections.pricing ? (
+                        <div>
+                          {profileData.pricing_packages?.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                              {profileData.pricing_packages.map((pkg, index) => (
+                                <div key={index} className="border rounded-lg p-4 bg-gray-50">
+                                  <h4 className="font-medium text-gray-900 mb-2">{pkg.name}</h4>
+                                  <p className="text-2xl font-bold text-blue-600 mb-2">${pkg.price}</p>
+                                  <p className="text-sm text-gray-600">{pkg.description}</p>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
+                              <DollarSign className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                              <h3 className="text-lg font-medium text-gray-900 mb-2">No Pricing Packages</h3>
+                              <p className="text-gray-600 mb-4">
+                                Add pricing packages to help customers understand your rates.
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          {tempData.pricing?.pricing_packages?.map((pkg, index) => (
+                            <div key={index} className="border rounded-lg p-4 bg-gray-50">
+                              <div className="flex items-center justify-between mb-3">
+                                <h4 className="font-medium text-gray-900">Package #{index + 1}</h4>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => removePricingPackage('pricing', index)}
+                                  className="text-red-600 hover:text-red-800"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div>
+                                  <Label>Package Name</Label>
+                                  <Input
+                                    value={pkg.name}
+                                    onChange={(e) => updatePricingPackage('pricing', index, 'name', e.target.value)}
+                                    placeholder="Basic Package"
+                                  />
+                                </div>
+                                <div>
+                                  <Label>Price ($)</Label>
+                                  <Input
+                                    type="number"
+                                    value={pkg.price}
+                                    onChange={(e) => updatePricingPackage('pricing', index, 'price', parseFloat(e.target.value) || 0)}
+                                    placeholder="149"
+                                    min="0"
+                                    step="0.01"
+                                  />
+                                </div>
+                                <div>
+                                  <Label>Description</Label>
+                                  <Input
+                                    value={pkg.description}
+                                    onChange={(e) => updatePricingPackage('pricing', index, 'description', e.target.value)}
+                                    placeholder="Package description"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                          
+                          <Button
+                            variant="outline"
+                            onClick={() => addPricingPackage('pricing')}
+                            className="w-full border-dashed"
+                          >
+                            <Plus className="h-4 w-4 mr-2" />
+                            Add Pricing Package
+                          </Button>
+                          
+                          <div className="flex space-x-3 pt-4 border-t">
+                            <Button onClick={() => saveSection('pricing')} disabled={saving}>
+                              {saving ? 'Saving...' : 'Save Changes'}
+                            </Button>
+                            <Button variant="outline" onClick={() => cancelEditing('pricing')}>
+                              Cancel
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
                 </div>
               </TabsContent>
 
