@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Calendar as BigCalendar, momentLocalizer, Views } from 'react-big-calendar';
+import moment from 'moment';
 import apiService from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -23,6 +25,11 @@ import { Avatar, AvatarFallback } from '../../components/ui/avatar';
 import { Input } from '../../components/ui/input';
 import { Textarea } from '../../components/ui/textarea';
 import { STANDARD_PROVIDER_SIDEBAR, handleStandardLogout } from '../../constants/providerSidebarConfig';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+// Setup the localizer by providing the moment (or globalize, or Luxon) Object
+// to the correct localizer.
+const localizer = momentLocalizer(moment);
 
 const ProviderCalendar = () => {
   const navigate = useNavigate();
