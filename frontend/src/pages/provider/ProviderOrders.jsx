@@ -773,6 +773,24 @@ const ProviderOrders = () => {
                         </div>
                         
                         <div className="flex flex-col sm:flex-row gap-2 sm:space-x-3 sm:gap-0">
+                          <Button 
+                            variant="default" 
+                            onClick={() => handleEditQuote(order)} 
+                            className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700"
+                          >
+                            <Edit className="h-4 w-4 mr-2" />
+                            <span className="hidden sm:inline">Edit Quote</span>
+                            <span className="sm:hidden">Edit</span>
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            onClick={() => handleDeleteQuote(order)} 
+                            className="w-full sm:w-auto border-red-300 text-red-600 hover:bg-red-50 hover:border-red-400"
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            <span className="hidden sm:inline">Delete Quote</span>
+                            <span className="sm:hidden">Delete</span>
+                          </Button>
                           <Button variant="outline" onClick={() => handleMessageCustomer(order)} className="w-full sm:w-auto">
                             <MessageSquare className="h-4 w-4 mr-2" />
                             <span className="hidden sm:inline">Message Customer</span>
