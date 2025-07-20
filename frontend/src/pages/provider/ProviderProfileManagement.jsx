@@ -422,457 +422,163 @@ const ProviderProfileManagement = () => {
 
               {/* Edit Profile Tab */}
               <TabsContent value="edit">
-                <div className="grid gap-6">
+                <div className="space-y-6">
                   
-                  {/* Basic Information Section */}
-                  <Card>
-                    <CardHeader>
+                  {/* Basic Information Section - Profile Style */}
+                  <div className="bg-white rounded-lg border border-gray-200">
+                    <div className="bg-blue-50 px-6 py-4 border-b border-gray-200">
                       <div className="flex items-center justify-between">
-                        <div>
-                          <CardTitle>Basic Information</CardTitle>
-                          <p className="text-sm text-gray-600 mt-1">
-                            Update your business details and contact information
-                          </p>
+                        <div className="flex items-center space-x-3">
+                          <Avatar className="h-16 w-16">
+                            <AvatarFallback className="bg-blue-100 text-blue-600 text-xl font-bold">
+                              {userInitials}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <h2 className="text-2xl font-bold text-gray-900">
+                              {profileData.business_name || 'Business Name Not Set'}
+                            </h2>
+                            <p className="text-gray-600 flex items-center">
+                              <MapPin className="h-4 w-4 mr-1" />
+                              {profileData.address || 'Address not specified'}
+                            </p>
+                            <div className="flex items-center space-x-4 mt-2">
+                              {profileData.phone && (
+                                <div className="flex items-center text-sm text-gray-600">
+                                  <Phone className="h-4 w-4 mr-1" />
+                                  {profileData.phone}
+                                </div>
+                              )}
+                              {profileData.email && (
+                                <div className="flex items-center text-sm text-gray-600">
+                                  <Mail className="h-4 w-4 mr-1" />
+                                  {profileData.email}
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                        {!editingSections.basic && (
-                          <Button variant="outline" onClick={() => startEditing('basic')}>
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit
-                          </Button>
-                        )}
+                        <Button variant="outline" onClick={() => startEditing('basic')} className="flex-shrink-0">
+                          <Edit className="h-4 w-4 mr-2" />
+                          Edit
+                        </Button>
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      {!editingSections.basic ? (
+                    </div>
+
+                    {/* Basic Info Edit Form */}
+                    {editingSections.basic ? (
+                      <div className="p-6 space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                            <Label className="text-sm font-medium text-gray-700">Business Name</Label>
-                            <p className="mt-1 text-sm text-gray-900">{profileData.business_name || 'Not specified'}</p>
-                          </div>
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700">Owner Name</Label>
-                            <p className="mt-1 text-sm text-gray-900">{profileData.name || 'Not specified'}</p>
-                          </div>
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700">Email</Label>
-                            <p className="mt-1 text-sm text-gray-900">{profileData.email || 'Not specified'}</p>
-                          </div>
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700">Phone</Label>
-                            <p className="mt-1 text-sm text-gray-900">{profileData.phone || 'Not specified'}</p>
-                          </div>
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700">Address</Label>
-                            <p className="mt-1 text-sm text-gray-900">{profileData.address || 'Not specified'}</p>
-                          </div>
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700">Website</Label>
-                            <p className="mt-1 text-sm text-gray-900">{profileData.website || 'Not specified'}</p>
-                          </div>
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700">Year Established</Label>
-                            <p className="mt-1 text-sm text-gray-900">{profileData.year_established || 'Not specified'}</p>
-                          </div>
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700">Response Time</Label>
-                            <p className="mt-1 text-sm text-gray-900">{profileData.response_time}</p>
-                          </div>
-                          <div className="md:col-span-2">
-                            <Label className="text-sm font-medium text-gray-700">Description</Label>
-                            <p className="mt-1 text-sm text-gray-900">{profileData.description || 'No description provided'}</p>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="space-y-4">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                              <Label>Business Name *</Label>
-                              <Input
-                                value={tempData.basic?.business_name || ''}
-                                onChange={(e) => updateTempData('basic', 'business_name', e.target.value)}
-                                placeholder="Your Business Name"
-                              />
-                            </div>
-                            <div>
-                              <Label>Owner Name *</Label>
-                              <Input
-                                value={tempData.basic?.name || ''}
-                                onChange={(e) => updateTempData('basic', 'name', e.target.value)}
-                                placeholder="Owner Full Name"
-                              />
-                            </div>
-                            <div>
-                              <Label>Email *</Label>
-                              <Input
-                                type="email"
-                                value={tempData.basic?.email || ''}
-                                onChange={(e) => updateTempData('basic', 'email', e.target.value)}
-                                placeholder="business@example.com"
-                              />
-                            </div>
-                            <div>
-                              <Label>Phone *</Label>
-                              <Input
-                                value={tempData.basic?.phone || ''}
-                                onChange={(e) => updateTempData('basic', 'phone', e.target.value)}
-                                placeholder="(555) 123-4567"
-                              />
-                            </div>
-                            <div>
-                              <Label>Address</Label>
-                              <Input
-                                value={tempData.basic?.address || ''}
-                                onChange={(e) => updateTempData('basic', 'address', e.target.value)}
-                                placeholder="Business Address"
-                              />
-                            </div>
-                            <div>
-                              <Label>Website</Label>
-                              <Input
-                                value={tempData.basic?.website || ''}
-                                onChange={(e) => updateTempData('basic', 'website', e.target.value)}
-                                placeholder="https://yourwebsite.com"
-                              />
-                            </div>
-                            <div>
-                              <Label>Year Established</Label>
-                              <Input
-                                type="number"
-                                value={tempData.basic?.year_established || ''}
-                                onChange={(e) => updateTempData('basic', 'year_established', e.target.value)}
-                                placeholder={new Date().getFullYear().toString()}
-                                min="1900"
-                                max={new Date().getFullYear()}
-                              />
-                            </div>
-                            <div>
-                              <Label>Response Time</Label>
-                              <Input
-                                value={tempData.basic?.response_time || ''}
-                                onChange={(e) => updateTempData('basic', 'response_time', e.target.value)}
-                                placeholder="Usually responds within 1 hour"
-                              />
-                            </div>
-                          </div>
-                          <div>
-                            <Label>Business Description</Label>
-                            <Textarea
-                              value={tempData.basic?.description || ''}
-                              onChange={(e) => updateTempData('basic', 'description', e.target.value)}
-                              placeholder="Describe your business, services, and what makes you unique..."
-                              rows={4}
+                            <Label>Business Name *</Label>
+                            <Input
+                              value={tempData.basic?.business_name || ''}
+                              onChange={(e) => updateTempData('basic', 'business_name', e.target.value)}
+                              placeholder="Your Business Name"
                             />
                           </div>
-                          <div className="flex space-x-3 pt-4 border-t">
-                            <Button onClick={() => saveSection('basic')} disabled={saving}>
-                              {saving ? 'Saving...' : 'Save Changes'}
-                            </Button>
-                            <Button variant="outline" onClick={() => cancelEditing('basic')}>
-                              Cancel
-                            </Button>
+                          <div>
+                            <Label>Owner Name *</Label>
+                            <Input
+                              value={tempData.basic?.name || ''}
+                              onChange={(e) => updateTempData('basic', 'name', e.target.value)}
+                              placeholder="Owner Full Name"
+                            />
+                          </div>
+                          <div>
+                            <Label>Email *</Label>
+                            <Input
+                              type="email"
+                              value={tempData.basic?.email || ''}
+                              onChange={(e) => updateTempData('basic', 'email', e.target.value)}
+                              placeholder="business@example.com"
+                            />
+                          </div>
+                          <div>
+                            <Label>Phone *</Label>
+                            <Input
+                              value={tempData.basic?.phone || ''}
+                              onChange={(e) => updateTempData('basic', 'phone', e.target.value)}
+                              placeholder="(555) 123-4567"
+                            />
+                          </div>
+                          <div>
+                            <Label>Address</Label>
+                            <Input
+                              value={tempData.basic?.address || ''}
+                              onChange={(e) => updateTempData('basic', 'address', e.target.value)}
+                              placeholder="Business Address"
+                            />
+                          </div>
+                          <div>
+                            <Label>Website</Label>
+                            <Input
+                              value={tempData.basic?.website || ''}
+                              onChange={(e) => updateTempData('basic', 'website', e.target.value)}
+                              placeholder="https://yourwebsite.com"
+                            />
+                          </div>
+                          <div>
+                            <Label>Year Established</Label>
+                            <Input
+                              type="number"
+                              value={tempData.basic?.year_established || ''}
+                              onChange={(e) => updateTempData('basic', 'year_established', e.target.value)}
+                              placeholder={new Date().getFullYear().toString()}
+                              min="1900"
+                              max={new Date().getFullYear()}
+                            />
+                          </div>
+                          <div>
+                            <Label>Response Time</Label>
+                            <Input
+                              value={tempData.basic?.response_time || ''}
+                              onChange={(e) => updateTempData('basic', 'response_time', e.target.value)}
+                              placeholder="Usually responds within 1 hour"
+                            />
                           </div>
                         </div>
-                      )}
-                    </CardContent>
-                  </Card>
-
-                  {/* Services & Categories Section */}
-                  <Card>
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
                         <div>
-                          <CardTitle>Services & Categories</CardTitle>
-                          <p className="text-sm text-gray-600 mt-1">
-                            Define what services you offer and categories you work with
-                          </p>
+                          <Label>Business Description</Label>
+                          <Textarea
+                            value={tempData.basic?.description || ''}
+                            onChange={(e) => updateTempData('basic', 'description', e.target.value)}
+                            placeholder="Describe your business, services, and what makes you unique..."
+                            rows={4}
+                          />
                         </div>
-                        {!editingSections.services && (
-                          <Button variant="outline" onClick={() => startEditing('services')}>
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit
+                        <div className="flex space-x-3 pt-4 border-t">
+                          <Button onClick={() => saveSection('basic')} disabled={saving}>
+                            {saving ? 'Saving...' : 'Save Changes'}
                           </Button>
-                        )}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      {!editingSections.services ? (
-                        <div className="space-y-6">
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700 mb-3 block">Services Offered</Label>
-                            {profileData.services?.length > 0 ? (
-                              <div className="flex flex-wrap gap-2">
-                                {profileData.services.map((service, index) => (
-                                  <Badge key={index} variant="secondary" className="bg-blue-100 text-blue-800">
-                                    {service}
-                                  </Badge>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="text-sm text-gray-500">No services specified</p>
-                            )}
-                          </div>
-                          
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700 mb-3 block">Service Categories</Label>
-                            {profileData.service_categories?.length > 0 ? (
-                              <div className="flex flex-wrap gap-2">
-                                {profileData.service_categories.map((category, index) => (
-                                  <Badge key={index} variant="outline" className="border-green-200 text-green-800">
-                                    {category}
-                                  </Badge>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="text-sm text-gray-500">No categories specified</p>
-                            )}
-                          </div>
-                          
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700 mb-3 block">Properties Served</Label>
-                            {profileData.properties_served?.length > 0 ? (
-                              <div className="flex flex-wrap gap-2">
-                                {profileData.properties_served.map((property, index) => (
-                                  <Badge key={index} variant="outline" className="border-purple-200 text-purple-800">
-                                    {property}
-                                  </Badge>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="text-sm text-gray-500">No property types specified</p>
-                            )}
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="space-y-6">
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700 mb-3 block">Services Offered</Label>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-40 overflow-y-auto border rounded p-3">
-                              {availableServices.map((service, index) => (
-                                <div key={index} className="flex items-center space-x-2">
-                                  <Checkbox
-                                    id={`service-${service}`}
-                                    checked={tempData.services?.services?.includes(service) || false}
-                                    onCheckedChange={() => toggleArrayItem('services', 'services', service)}
-                                  />
-                                  <label htmlFor={`service-${service}`} className="text-sm cursor-pointer">
-                                    {service}
-                                  </label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                          
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700 mb-3 block">Service Categories</Label>
-                            <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
-                              {defaultServiceCategories.map((category, index) => (
-                                <div key={index} className="flex items-center space-x-2">
-                                  <Checkbox
-                                    id={`category-${category}`}
-                                    checked={tempData.services?.service_categories?.includes(category) || false}
-                                    onCheckedChange={() => toggleArrayItem('services', 'service_categories', category)}
-                                  />
-                                  <label htmlFor={`category-${category}`} className="text-sm cursor-pointer">
-                                    {category}
-                                  </label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                          
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700 mb-3 block">Properties Served</Label>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                              {defaultPropertiesServed.map((property, index) => (
-                                <div key={index} className="flex items-center space-x-2">
-                                  <Checkbox
-                                    id={`property-${property}`}
-                                    checked={tempData.services?.properties_served?.includes(property) || false}
-                                    onCheckedChange={() => toggleArrayItem('services', 'properties_served', property)}
-                                  />
-                                  <label htmlFor={`property-${property}`} className="text-sm cursor-pointer">
-                                    {property}
-                                  </label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                          
-                          <div className="flex space-x-3 pt-4 border-t">
-                            <Button onClick={() => saveSection('services')} disabled={saving}>
-                              {saving ? 'Saving...' : 'Save Changes'}
-                            </Button>
-                            <Button variant="outline" onClick={() => cancelEditing('services')}>
-                              Cancel
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-
-                  {/* Specialties & Quick Facts Section */}
-                  <Card>
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <CardTitle>Specialties & Quick Facts</CardTitle>
-                          <p className="text-sm text-gray-600 mt-1">
-                            Highlight your business strengths and key information
-                          </p>
-                        </div>
-                        {!editingSections.specialties && (
-                          <Button variant="outline" onClick={() => startEditing('specialties')}>
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit
+                          <Button variant="outline" onClick={() => cancelEditing('basic')}>
+                            Cancel
                           </Button>
-                        )}
+                        </div>
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      {!editingSections.specialties ? (
-                        <div className="space-y-6">
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700 mb-3 block">Specialties</Label>
-                            {profileData.specialties?.length > 0 ? (
-                              <div className="flex flex-wrap gap-2">
-                                {profileData.specialties.map((specialty, index) => (
-                                  <Badge key={index} variant="outline" className="border-green-200 text-green-800">
-                                    <Award className="h-3 w-3 mr-1" />
-                                    {specialty}
-                                  </Badge>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="text-sm text-gray-500">No specialties specified</p>
-                            )}
-                          </div>
-                          
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700 mb-3 block">Quick Facts</Label>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                              <div className="bg-gray-50 p-4 rounded-lg">
-                                <div className="flex items-center space-x-2 mb-2">
-                                  <CheckCircle className="h-5 w-5 text-green-600" />
-                                  <span className="font-medium">Jobs Completed</span>
-                                </div>
-                                <p className="text-2xl font-bold text-gray-900">{profileData.jobs_completed || 0}</p>
-                              </div>
-                              <div className="bg-gray-50 p-4 rounded-lg">
-                                <div className="flex items-center space-x-2 mb-2">
-                                  <Clock className="h-5 w-5 text-blue-600" />
-                                  <span className="font-medium">Response Time</span>
-                                </div>
-                                <p className="text-sm text-gray-900">{profileData.response_time}</p>
-                              </div>
-                              <div className="bg-gray-50 p-4 rounded-lg">
-                                <div className="flex items-center space-x-2 mb-2">
-                                  <Calendar className="h-5 w-5 text-purple-600" />
-                                  <span className="font-medium">Year Established</span>
-                                </div>
-                                <p className="text-2xl font-bold text-gray-900">{profileData.year_established || 'N/A'}</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="space-y-6">
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700 mb-3 block">Specialties</Label>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                              {defaultSpecialties.map((specialty, index) => (
-                                <div key={index} className="flex items-center space-x-2">
-                                  <Checkbox
-                                    id={`specialty-${specialty}`}
-                                    checked={tempData.specialties?.specialties?.includes(specialty) || false}
-                                    onCheckedChange={() => toggleArrayItem('specialties', 'specialties', specialty)}
-                                  />
-                                  <label htmlFor={`specialty-${specialty}`} className="text-sm cursor-pointer">
-                                    {specialty}
-                                  </label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                          
-                          <div>
-                            <Label className="text-sm font-medium text-gray-700 mb-3 block">Quick Facts</Label>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div>
-                                <Label>Jobs Completed</Label>
-                                <Input
-                                  type="number"
-                                  value={tempData.specialties?.jobs_completed || 0}
-                                  onChange={(e) => updateTempData('specialties', 'jobs_completed', parseInt(e.target.value) || 0)}
-                                  min="0"
-                                />
-                              </div>
-                              <div>
-                                <Label>Response Time</Label>
-                                <Input
-                                  value={tempData.specialties?.response_time || ''}
-                                  onChange={(e) => updateTempData('specialties', 'response_time', e.target.value)}
-                                  placeholder="Usually responds within 1 hour"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div className="flex space-x-3 pt-4 border-t">
-                            <Button onClick={() => saveSection('specialties')} disabled={saving}>
-                              {saving ? 'Saving...' : 'Save Changes'}
-                            </Button>
-                            <Button variant="outline" onClick={() => cancelEditing('specialties')}>
-                              Cancel
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
+                    ) : (
+                      <div className="p-6">
+                        <p className="text-gray-600 mb-2">Business Description:</p>
+                        <p className="text-gray-900">{profileData.description || 'No description provided'}</p>
+                      </div>
+                    )}
+                  </div>
 
-                  {/* Pricing Packages Section */}
-                  <Card>
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <CardTitle>Pricing Packages</CardTitle>
-                          <p className="text-sm text-gray-600 mt-1">
-                            Set up different service packages with pricing
-                          </p>
-                        </div>
-                        {!editingSections.pricing && (
-                          <Button variant="outline" onClick={() => startEditing('pricing')}>
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit
-                          </Button>
-                        )}
+                  {/* Price List Section - Profile Style */}
+                  <div className="bg-blue-600 text-white rounded-lg">
+                    <div className="px-6 py-4 flex items-center justify-between">
+                      <div className="flex items-center">
+                        <DollarSign className="h-5 w-5 mr-2 text-yellow-300" />
+                        <h2 className="text-xl font-bold">Price list</h2>
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      {!editingSections.pricing ? (
-                        <div>
-                          {profileData.pricing_packages?.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                              {profileData.pricing_packages.map((pkg, index) => (
-                                <div key={index} className="border rounded-lg p-4 bg-gray-50">
-                                  <h4 className="font-medium text-gray-900 mb-2">{pkg.name}</h4>
-                                  <p className="text-2xl font-bold text-blue-600 mb-2">${pkg.price}</p>
-                                  <p className="text-sm text-gray-600">{pkg.description}</p>
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
-                              <DollarSign className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                              <h3 className="text-lg font-medium text-gray-900 mb-2">No Pricing Packages</h3>
-                              <p className="text-gray-600 mb-4">
-                                Add pricing packages to help customers understand your rates.
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      ) : (
+                      <Button variant="outline" onClick={() => startEditing('pricing')} className="text-blue-600 bg-white hover:bg-gray-50">
+                        <Edit className="h-4 w-4 mr-2" />
+                        Edit
+                      </Button>
+                    </div>
+
+                    {editingSections.pricing ? (
+                      <div className="p-6 bg-white text-gray-900 rounded-b-lg">
                         <div className="space-y-4">
                           {tempData.pricing?.pricing_packages?.map((pkg, index) => (
                             <div key={index} className="border rounded-lg p-4 bg-gray-50">
@@ -897,14 +603,11 @@ const ProviderProfileManagement = () => {
                                   />
                                 </div>
                                 <div>
-                                  <Label>Price ($)</Label>
+                                  <Label>Price</Label>
                                   <Input
-                                    type="number"
                                     value={pkg.price}
-                                    onChange={(e) => updatePricingPackage('pricing', index, 'price', parseFloat(e.target.value) || 0)}
+                                    onChange={(e) => updatePricingPackage('pricing', index, 'price', e.target.value)}
                                     placeholder="149"
-                                    min="0"
-                                    step="0.01"
                                   />
                                 </div>
                                 <div>
@@ -937,9 +640,252 @@ const ProviderProfileManagement = () => {
                             </Button>
                           </div>
                         </div>
+                      </div>
+                    ) : (
+                      <div className="p-6">
+                        {profileData.pricing_packages?.length > 0 ? (
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {profileData.pricing_packages.slice(0, 3).map((pkg, index) => (
+                              <div key={index} className="bg-white text-gray-900 rounded-lg p-6">
+                                <div className="text-center mb-4">
+                                  <h3 className="text-lg font-semibold mb-2">{pkg.name}</h3>
+                                  <div className="text-3xl font-bold text-blue-600 mb-2">${pkg.price}</div>
+                                  <p className="text-sm text-gray-600">{pkg.description}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="bg-white text-gray-900 rounded-lg p-8 text-center">
+                            <DollarSign className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                            <p className="text-gray-600">No pricing packages set up yet</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Quick Information Section */}
+                  <div className="bg-blue-600 text-white rounded-lg">
+                    <div className="px-6 py-4 flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Calendar className="h-5 w-5 mr-2 text-yellow-300" />
+                        <h2 className="text-xl font-bold">Quick information</h2>
+                      </div>
+                      <Button variant="outline" onClick={() => startEditing('quickinfo')} className="text-blue-600 bg-white hover:bg-gray-50">
+                        <Edit className="h-4 w-4 mr-2" />
+                        Edit
+                      </Button>
+                    </div>
+
+                    {editingSections.quickinfo ? (
+                      <div className="p-6 bg-white text-gray-900 rounded-b-lg">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <Label>Jobs Completed</Label>
+                            <Input
+                              type="number"
+                              value={tempData.quickinfo?.jobs_completed || 0}
+                              onChange={(e) => updateTempData('quickinfo', 'jobs_completed', parseInt(e.target.value) || 0)}
+                              min="0"
+                            />
+                          </div>
+                          <div>
+                            <Label>Response Time</Label>
+                            <Input
+                              value={tempData.quickinfo?.response_time || ''}
+                              onChange={(e) => updateTempData('quickinfo', 'response_time', e.target.value)}
+                              placeholder="Usually responds within 1 hour"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex space-x-3 pt-4 border-t mt-4">
+                          <Button onClick={() => saveSection('quickinfo')} disabled={saving}>
+                            {saving ? 'Saving...' : 'Save Changes'}
+                          </Button>
+                          <Button variant="outline" onClick={() => cancelEditing('quickinfo')}>
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-6">
+                        <div className="bg-white text-gray-900 rounded-lg p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              <Calendar className="h-5 w-5 text-gray-600 mr-2" />
+                              <span className="text-sm">Year of establishment</span>
+                            </div>
+                            <span className="font-semibold">{profileData.year_established || '2024'}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Service Categories */}
+                  <div className="bg-white rounded-lg border border-gray-200">
+                    <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Star className="h-5 w-5 text-blue-600 mr-2" />
+                        <h2 className="text-xl font-bold">Service Categories</h2>
+                      </div>
+                      <Button variant="outline" onClick={() => startEditing('services')}>
+                        <Edit className="h-4 w-4 mr-2" />
+                        Edit
+                      </Button>
+                    </div>
+
+                    {editingSections.services ? (
+                      <div className="p-6 space-y-6">
+                        <div>
+                          <Label className="text-sm font-medium text-gray-700 mb-3 block">Services Offered</Label>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-40 overflow-y-auto border rounded p-3">
+                            {availableServices.map((service, index) => (
+                              <div key={index} className="flex items-center space-x-2">
+                                <Checkbox
+                                  id={`service-${service}`}
+                                  checked={tempData.services?.services?.includes(service) || false}
+                                  onCheckedChange={() => toggleArrayItem('services', 'services', service)}
+                                />
+                                <label htmlFor={`service-${service}`} className="text-sm cursor-pointer">
+                                  {service}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <Label className="text-sm font-medium text-gray-700 mb-3 block">Service Categories</Label>
+                          <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
+                            {defaultServiceCategories.map((category, index) => (
+                              <div key={index} className="flex items-center space-x-2">
+                                <Checkbox
+                                  id={`category-${category}`}
+                                  checked={tempData.services?.service_categories?.includes(category) || false}
+                                  onCheckedChange={() => toggleArrayItem('services', 'service_categories', category)}
+                                />
+                                <label htmlFor={`category-${category}`} className="text-sm cursor-pointer">
+                                  {category}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <Label className="text-sm font-medium text-gray-700 mb-3 block">Properties Served</Label>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            {defaultPropertiesServed.map((property, index) => (
+                              <div key={index} className="flex items-center space-x-2">
+                                <Checkbox
+                                  id={`property-${property}`}
+                                  checked={tempData.services?.properties_served?.includes(property) || false}
+                                  onCheckedChange={() => toggleArrayItem('services', 'properties_served', property)}
+                                />
+                                <label htmlFor={`property-${property}`} className="text-sm cursor-pointer">
+                                  {property}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        <div className="flex space-x-3 pt-4 border-t">
+                          <Button onClick={() => saveSection('services')} disabled={saving}>
+                            {saving ? 'Saving...' : 'Save Changes'}
+                          </Button>
+                          <Button variant="outline" onClick={() => cancelEditing('services')}>
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-6">
+                        <div className="space-y-6">
+                          {profileData.service_categories?.length > 0 ? (
+                            <div className="flex flex-wrap gap-3">
+                              {profileData.service_categories.map((category, index) => (
+                                <div key={index} className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-medium">
+                                  {category}
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-gray-500">No service categories specified</p>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Service Types */}
+                  <div className="bg-gray-50 rounded-lg border border-gray-200">
+                    <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Award className="h-5 w-5 text-blue-600 mr-2" />
+                        <h2 className="text-xl font-bold">Service Types</h2>
+                      </div>
+                      <span className="text-sm text-gray-600">Edit in Service Categories section</span>
+                    </div>
+                    <div className="p-6">
+                      {profileData.services?.length > 0 ? (
+                        <div className="flex flex-wrap gap-3">
+                          {profileData.services.map((service, index) => (
+                            <div key={index} className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-medium">
+                              {service}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-gray-500">No services specified</p>
                       )}
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
+
+                  {/* Properties Served */}
+                  <div className="bg-white rounded-lg border border-gray-200">
+                    <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Building2 className="h-5 w-5 text-blue-600 mr-2" />
+                        <h2 className="text-xl font-bold">Properties Served</h2>
+                      </div>
+                      <span className="text-sm text-gray-600">Edit in Service Categories section</span>
+                    </div>
+                    <div className="p-6">
+                      {profileData.properties_served?.length > 0 ? (
+                        <div className="flex flex-wrap gap-3">
+                          {profileData.properties_served.map((property, index) => (
+                            <div key={index} className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-medium">
+                              {property}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-gray-500">No property types specified</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* About Section */}
+                  <div className="bg-blue-600 text-white rounded-lg">
+                    <div className="px-6 py-4 flex items-center justify-between">
+                      <div className="flex items-center">
+                        <FileText className="h-5 w-5 mr-2 text-yellow-300" />
+                        <h2 className="text-xl font-bold">About {profileData.business_name || 'Your Business'}</h2>
+                      </div>
+                      <span className="text-sm text-yellow-200">Edit in Basic Information section</span>
+                    </div>
+                    <div className="p-6">
+                      <div className="bg-white text-gray-900 rounded-lg p-6">
+                        <p className="text-gray-700 leading-relaxed">
+                          {profileData.description || 'No description provided. Add a description in the Basic Information section.'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 </div>
               </TabsContent>
 
