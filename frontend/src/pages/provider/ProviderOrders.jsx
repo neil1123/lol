@@ -45,6 +45,8 @@ const ProviderOrders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showNewOrderForm, setShowNewOrderForm] = useState(false);
+  const [showEditQuoteForm, setShowEditQuoteForm] = useState(false);
+  const [editingQuote, setEditingQuote] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [newOrder, setNewOrder] = useState({
     customerName: '',
