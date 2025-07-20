@@ -66,14 +66,24 @@ const ProviderDashboard = () => {
             <div className="hidden xl:flex items-center space-x-4">
               <Button variant="ghost" size="sm">
                 <Bell className="h-4 w-4" />
+                {notifications.totalUnreadMessages > 0 && (
+                  <NotificationBadge count={notifications.totalUnreadMessages} className="ml-1" />
+                )}
               </Button>
               <div className="flex items-center space-x-2">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-blue-100 text-blue-600">
-                    ES
-                  </AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium">Elite Solutions</span>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => navigate('/homeservices/settings')}
+                  className="p-1"
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-blue-100 text-blue-600">
+                      {userInitials}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+                <span className="text-sm font-medium">{user.business_name || user.name || 'User'}</span>
               </div>
               <Button variant="ghost" size="sm" onClick={handleLogout} title="Logout">
                 <LogOut className="h-4 w-4" />
@@ -84,10 +94,23 @@ const ProviderDashboard = () => {
             <div className="xl:hidden flex items-center space-x-2">
               <Button variant="ghost" size="sm">
                 <Bell className="h-4 w-4" />
+                {notifications.totalUnreadMessages > 0 && (
+                  <NotificationBadge count={notifications.totalUnreadMessages} className="ml-1" />
+                )}
               </Button>
-              <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-blue-100 text-blue-600">
-                  ES
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => navigate('/homeservices/settings')}
+                className="p-1"
+              >
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback className="bg-blue-100 text-blue-600">
+                    {userInitials}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </div>
                 </AvatarFallback>
               </Avatar>
             </div>
