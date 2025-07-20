@@ -52,6 +52,7 @@ const ProviderSettings = () => {
   // Load user profile on component mount
   useEffect(() => {
     loadUserProfile();
+    loadServices();
   }, []);
 
   const loadUserProfile = async () => {
