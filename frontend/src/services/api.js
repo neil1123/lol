@@ -206,6 +206,13 @@ class ApiService {
       body: JSON.stringify(services),
     });
   }
+
+  async updateProviderProfile(profileData) {
+    return await this.request('/providers/profile', {
+      method: 'PUT',
+      body: JSON.stringify(profileData),
+    });
+  }
 }
 
 // Create and export singleton instance
