@@ -554,6 +554,7 @@ const ProviderOrders = () => {
                     <Input
                       id="scheduledDate"
                       type="date"
+                      min={new Date().toISOString().split('T')[0]}
                       value={newOrder.scheduledDate}
                       onChange={(e) => setNewOrder({...newOrder, scheduledDate: e.target.value})}
                     />
