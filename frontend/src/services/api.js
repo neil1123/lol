@@ -178,6 +178,11 @@ class ApiService {
     return await this.request(`/messages/${threadId}`);
   }
 
+  // ====== USER PROFILE ======
+  async getUserProfile() {
+    return await this.request('/auth/profile');
+  }
+
   // ====== APPOINTMENTS ======
   async createAppointment(appointmentData) {
     return await this.request('/appointments', {
