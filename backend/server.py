@@ -108,6 +108,7 @@ class Order(BaseModel):
     homeowner_address: str
     provider_name: str
     service_type: str
+    services: Optional[List[str]] = None  # Array for multiple services
     description: str
     quotation_amount: Optional[float] = None
     quotation_details: Optional[str] = None
