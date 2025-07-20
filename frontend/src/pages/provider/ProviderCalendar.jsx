@@ -54,6 +54,8 @@ const ProviderCalendar = () => {
   useEffect(() => {
     loadAppointments();
     loadOrders();
+    loadUserProfile();
+    loadServices();
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
   }, []);
