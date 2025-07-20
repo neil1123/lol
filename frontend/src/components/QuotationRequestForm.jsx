@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Clock, MapPin, DollarSign, FileText, Calendar } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
+import { Checkbox } from './ui/checkbox';
 import apiService from '../services/api';
 
 const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, providerId }) => {
