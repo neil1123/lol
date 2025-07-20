@@ -925,11 +925,14 @@ const ProviderOrders = () => {
                             <Calendar className="h-4 w-4 mr-2" />
                             Schedule
                           </Button>
-                          <Button variant="outline" onClick={() => handleMessageCustomer(order)} className="w-full sm:w-auto">
-                            <MessageSquare className="h-4 w-4 mr-2" />
-                            <span className="hidden sm:inline">Message Customer</span>
-                            <span className="sm:hidden">Message</span>
-                          </Button>
+                          {/* Only show message button for real homeowner orders, not manual orders */}
+                          {order.homeowner_id && !order.homeowner_id.startsWith('manual_') && (
+                            <Button variant="outline" onClick={() => handleMessageCustomer(order)} className="w-full sm:w-auto">
+                              <MessageSquare className="h-4 w-4 mr-2" />
+                              <span className="hidden sm:inline">Message Customer</span>
+                              <span className="sm:hidden">Message</span>
+                            </Button>
+                          )}
                         </div>
                       </div>
                     </CardContent>
