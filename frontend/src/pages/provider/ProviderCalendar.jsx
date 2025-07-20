@@ -44,6 +44,11 @@ const ProviderCalendar = () => {
   const [loading, setLoading] = useState(false);
   const [calendarView, setCalendarView] = useState(Views.MONTH);
   const [selectedDate, setSelectedDate] = useState(null);
+  
+  // Services state
+  const [availableServices, setAvailableServices] = useState([]);
+  const [providerServices, setProviderServices] = useState([]);
+  const [userProfile, setUserProfile] = useState(null);
 
   // Load appointments and orders from API on component mount
   useEffect(() => {
