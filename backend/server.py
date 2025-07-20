@@ -608,6 +608,47 @@ async def get_current_user_profile(current_user: User = Depends(get_current_user
     """Get current authenticated user's profile data from database"""
     return current_user
 
+# ====== SERVICES ENDPOINTS ======
+
+@api_router.get("/services", response_model=List[str])
+async def get_all_services():
+    """Get all unique services from all providers"""
+    # Get all providers and extract unique services
+    providers = await db.users.find({"user_type": "provider", "services": {"$exists": True, "$ne": []}}).to_list(1000)
+    all_services = set()
+    
+    for provider in providers:
+        if provider.get('services'):
+            all_services.update(provider['services'])
+    
+    # Also include default service categories
+    default_services = [
+        "Home Cleaning", "Office Cleaning", "Window Cleaning", "Pressure Washing", "Gutter Cleaning",
+        "Electrician", "Plumber", "HVAC Services", "Handyman Services", "Home Renovations", "Carpenter", "Painter",
+        "Landscaping", "Lawn Mowing & Maintenance", "Snow Removal", "Fence & Deck Services", "Siding Installation & Repair",
+        "Car Detailing", "Roofing", "Pest Control", "Appliance Repair", "Junk Removal"
+    ]
+    
+    all_services.update(default_services)
+    return sorted(list(all_services))
+
+@api_router.put("/providers/services")
+async def update_provider_services(services: List[str], current_user: User = Depends(get_current_user)):
+    """Update provider's services list"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can update services")
+    
+    # Update the provider's services
+    result = await db.users.update_one(
+        {"id": current_user.id},
+        {"$set": {"services": services}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Provider not found")
+    
+    return {"message": "Services updated successfully", "services": services}
+
 # Include the router in the main app
 app.include_router(api_router)
 
