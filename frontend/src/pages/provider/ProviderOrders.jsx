@@ -436,12 +436,22 @@ const ProviderOrders = () => {
             <div className="flex items-center space-x-2">
               <Button variant="ghost" size="sm">
                 <Bell className="h-4 w-4" />
+                {notifications.totalUnreadMessages > 0 && (
+                  <NotificationBadge count={notifications.totalUnreadMessages} className="ml-1" />
+                )}
               </Button>
-              <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-blue-100 text-blue-600">
-                  ES
-                </AvatarFallback>
-              </Avatar>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => navigate('/homeservices/settings')}
+                className="p-1"
+              >
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback className="bg-blue-100 text-blue-600">
+                    {userInitials}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
             </div>
           </div>
         </div>
