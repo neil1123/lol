@@ -450,26 +450,76 @@ const ProviderCalendar = () => {
 
             {/* Upcoming Appointments */}
             <div className="mt-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Appointments</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Appointments & Orders</h3>
               <div className="space-y-3">
-                {appointments.map((appointment, index) => (
-                  <Card key={index} className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-4">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                        <div>
-                          <h4 className="font-medium text-gray-900">{appointment.title}</h4>
-                          <p className="text-sm text-gray-600">
-                            {monthYear.split(' ')[0]} {appointment.date}, {appointment.time}
-                          </p>
-                        </div>
-                        <div className="flex space-x-2">
-                          <Button variant="outline" size="sm">Edit</Button>
-                          <Button variant="outline" size="sm">Cancel</Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                {appointments.length === 0 && orders.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <Calendar className="h-8 w-8 mx-auto mb-2 text-gray-400" />
+                    <p>No upcoming appointments or scheduled orders</p>
+                    <p className="text-sm">Click on the calendar to create a new appointment</p>
+                  </div>
+                ) : (
+                  <>
+                    {appointments.map((appointment, index) => (
+                      <Card key={`apt-${index}`} className="hover:shadow-md transition-shadow border-l-4 border-l-green-500">
+                        <CardContent className="p-4">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                              <h4 className="font-medium text-gray-900 flex items-center gap-2">
+                                <Badge variant="outline" className="bg-green-50 text-green-700">
+                                  Appointment
+                                </Badge>
+                                {appointment.customer_name} - {appointment.service_type}
+                              </h4>
+                              <p className="text-sm text-gray-600 mt-1">
+                                {appointment.date} at {appointment.time || '09:00'}
+                              </p>
+                              {appointment.address && (
+                                <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
+                                  <MapPin className="h-3 w-3" />
+                                  {appointment.address}
+                                </p>
+                              )}
+                            </div>
+                            <div className="flex space-x-2">
+                              <Button variant="outline" size="sm">Edit</Button>
+                              <Button variant="outline" size="sm">Cancel</Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                    
+                    {orders.filter(order => order.preferred_date).map((order, index) => (
+                      <Card key={`order-${index}`} className="hover:shadow-md transition-shadow border-l-4 border-l-amber-500">
+                        <CardContent className="p-4">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                              <h4 className="font-medium text-gray-900 flex items-center gap-2">
+                                <Badge variant="outline" className="bg-amber-50 text-amber-700">
+                                  Scheduled Order
+                                </Badge>
+                                {order.homeowner_name} - {order.service_type}
+                              </h4>
+                              <p className="text-sm text-gray-600 mt-1">
+                                {order.preferred_date} at {order.preferred_time || '09:00'}
+                              </p>
+                              {order.homeowner_address && (
+                                <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
+                                  <MapPin className="h-3 w-3" />
+                                  {order.homeowner_address}
+                                </p>
+                              )}
+                            </div>
+                            <div className="flex space-x-2">
+                              <Button variant="outline" size="sm">View Order</Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </>
+                )}
               </div>
             </div>
           </div>
