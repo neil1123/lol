@@ -237,11 +237,9 @@ const ProviderOrders = () => {
     try {
       setError('');
       
-      // Get current user
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      
-      if (!user.id) {
-        throw new Error('Please log in to create orders');
+      // Use database user profile instead of localStorage
+      if (!userProfile || !userProfile.id) {
+        throw new Error('Please ensure you are logged in properly');
       }
 
       // Generate homeowner ID for manual order
@@ -249,12 +247,12 @@ const ProviderOrders = () => {
       
       const orderData = {
         homeowner_id: homeownerId,
-        provider_id: user.id,
+        provider_id: userProfile.id,
         homeowner_name: newOrder.customerName,
         homeowner_email: newOrder.customerEmail,
         homeowner_phone: newOrder.customerPhone,
         homeowner_address: newOrder.address,
-        provider_name: user.business_name || user.name,
+        provider_name: userProfile.business_name || userProfile.name,
         service_type: newOrder.serviceType,
         description: newOrder.description,
         preferred_date: newOrder.scheduledDate,
