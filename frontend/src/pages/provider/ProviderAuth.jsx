@@ -414,36 +414,102 @@ const ProviderAuth = () => {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label>Services Offered</Label>
-                    <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto border rounded p-3">
-                      {serviceCategories.flatMap(category => 
-                        category.services.map(service => (
-                          <div key={service.id} className="flex items-center space-x-2">
-                            <Checkbox
-                              id={service.name}
-                              checked={signUpData.services.includes(service.name)}
-                              onCheckedChange={(checked) => {
-                                console.log('Checkbox changed:', service.name, 'checked:', checked);
-                                if (checked) {
-                                  handleServiceToggle(service.name);
-                                } else {
-                                  handleServiceToggle(service.name);
-                                }
-                              }}
-                            />
-                            <label
-                              htmlFor={service.name}
-                              className="text-sm cursor-pointer"
-                              onClick={() => {
-                                console.log('Label clicked for:', service.name);
-                                handleServiceToggle(service.name);
-                              }}
+                    <div className="flex items-center justify-between">
+                      <Label>Services Offered</Label>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowAddService(true)}
+                        className="text-xs"
+                      >
+                        <Plus className="h-3 w-3 mr-1" />
+                        Add Service
+                      </Button>
+                    </div>
+                    
+                    {/* Add New Service Input */}
+                    {showAddService && (
+                      <div className="flex items-center space-x-2 p-2 bg-blue-50 rounded-md">
+                        <Input
+                          value={newService}
+                          onChange={(e) => setNewService(e.target.value)}
+                          placeholder="Enter new service name"
+                          className="flex-1"
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              handleAddNewService();
+                            }
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          size="sm"
+                          onClick={handleAddNewService}
+                          disabled={!newService.trim()}
+                        >
+                          Add
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            setShowAddService(false);
+                            setNewService('');
+                          }}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    )}
+                    
+                    {/* Selected Services Tags */}
+                    {signUpData.services.length > 0 && (
+                      <div className="flex flex-wrap gap-2 p-2 bg-green-50 rounded-md">
+                        {signUpData.services.map((service, index) => (
+                          <div key={index} className="flex items-center bg-green-100 text-green-800 px-2 py-1 rounded-md text-xs">
+                            <span>{service}</span>
+                            <button
+                              type="button"
+                              onClick={() => removeCustomService(service)}
+                              className="ml-1 text-green-600 hover:text-green-800"
                             >
-                              {service.name}
-                            </label>
+                              <X className="h-3 w-3" />
+                            </button>
                           </div>
-                        ))
-                      )}
+                        ))}
+                      </div>
+                    )}
+                    
+                    <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto border rounded p-3">
+                      {availableServices.map((serviceName, index) => (
+                        <div key={index} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={serviceName}
+                            checked={signUpData.services.includes(serviceName)}
+                            onCheckedChange={(checked) => {
+                              console.log('Checkbox changed:', serviceName, 'checked:', checked);
+                              if (checked) {
+                                handleServiceToggle(serviceName);
+                              } else {
+                                handleServiceToggle(serviceName);
+                              }
+                            }}
+                          />
+                          <label
+                            htmlFor={serviceName}
+                            className="text-sm cursor-pointer"
+                            onClick={() => {
+                              console.log('Label clicked for:', serviceName);
+                              handleServiceToggle(serviceName);
+                            }}
+                          >
+                            {serviceName}
+                          </label>
+                        </div>
+                      ))}
                     </div>
                   </div>
                   
