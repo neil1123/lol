@@ -67,6 +67,12 @@ const ProviderOrders = () => {
     validUntil: ''
   });
 
+  // Get user data for profile
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const userInitials = user.name 
+    ? user.name.split(' ').map(name => name[0]).join('').toUpperCase() 
+    : 'U';
+
   const handleLogout = () => {
     handleStandardLogout(navigate);
   };
