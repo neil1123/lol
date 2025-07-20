@@ -451,7 +451,7 @@ const ProviderCustomers = () => {
                 <Button 
                   onClick={handleAddCustomer}
                   className="flex-1"
-                  disabled={!customerForm.name || !customerForm.email}
+                  disabled={!customerForm.name}
                 >
                   Add Customer
                 </Button>
