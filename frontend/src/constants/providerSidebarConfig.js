@@ -11,7 +11,8 @@ import {
   Users, 
   MessageSquare, 
   Settings, 
-  Package
+  Package,
+  Building2
 } from 'lucide-react';
 
 export const STANDARD_PROVIDER_SIDEBAR = [
@@ -20,6 +21,7 @@ export const STANDARD_PROVIDER_SIDEBAR = [
   { id: 'messages', label: 'Messages', icon: MessageSquare, path: '/homeservices/messages', notificationKey: 'messages' },
   { id: 'calendar', label: 'Calendar', icon: Calendar, path: '/homeservices/calendar' },
   { id: 'customers', label: 'Customers', icon: Users, path: '/homeservices/customers' },
+  { id: 'profile', label: 'Company Profile', icon: Building2, path: '/homeservices/profile' },
   { id: 'settings', label: 'Settings', icon: Settings, path: '/homeservices/settings' }
 ];
 
