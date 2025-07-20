@@ -600,6 +600,7 @@ const ProviderCalendar = () => {
                   <Input
                     type="date"
                     value={appointmentForm.date}
+                    min={new Date().toISOString().split('T')[0]}
                     onChange={(e) => setAppointmentForm({...appointmentForm, date: e.target.value})}
                     className="w-full"
                   />
