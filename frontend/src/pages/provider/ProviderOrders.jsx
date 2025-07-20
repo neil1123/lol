@@ -669,6 +669,69 @@ const ProviderOrders = () => {
             </Card>
           )}
 
+          {/* Edit Quote Form */}
+          {showEditQuoteForm && editingQuote && (
+            <Card className="mb-6 border-orange-200 shadow-lg">
+              <CardHeader className="bg-orange-50">
+                <CardTitle className="text-orange-800">Edit Quote for {editingQuote.homeowner_name}</CardTitle>
+                <p className="text-sm text-orange-600">Service: {editingQuote.service_type}</p>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="editQuotationAmount">Quotation Amount *</Label>
+                    <Input
+                      id="editQuotationAmount"
+                      type="number"
+                      value={editQuoteForm.quotationAmount}
+                      onChange={(e) => setEditQuoteForm({...editQuoteForm, quotationAmount: e.target.value})}
+                      placeholder="Enter amount (e.g., 500)"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="validUntil">Quote Valid Until</Label>
+                    <Input
+                      id="validUntil"
+                      type="date"
+                      min={new Date().toISOString().split('T')[0]}
+                      value={editQuoteForm.validUntil}
+                      onChange={(e) => setEditQuoteForm({...editQuoteForm, validUntil: e.target.value})}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="editQuotationDetails">Quotation Details</Label>
+                    <Textarea
+                      id="editQuotationDetails"
+                      value={editQuoteForm.quotationDetails}
+                      onChange={(e) => setEditQuoteForm({...editQuoteForm, quotationDetails: e.target.value})}
+                      placeholder="Detailed breakdown of costs, materials, labor..."
+                      rows={4}
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-2 sm:space-x-3 sm:gap-0 mt-6">
+                  <Button onClick={handleUpdateQuote} className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700">
+                    Update Quote
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      setShowEditQuoteForm(false);
+                      setEditingQuote(null);
+                      setEditQuoteForm({ quotationAmount: '', quotationDetails: '', validUntil: '' });
+                    }} 
+                    className="w-full sm:w-auto"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Error Message */}
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
