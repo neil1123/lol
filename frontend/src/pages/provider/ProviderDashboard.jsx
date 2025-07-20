@@ -111,9 +111,6 @@ const ProviderDashboard = () => {
                 </Avatar>
               </Button>
             </div>
-                </AvatarFallback>
-              </Avatar>
-            </div>
           </div>
         </div>
       </header>
