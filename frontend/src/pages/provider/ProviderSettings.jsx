@@ -66,6 +66,10 @@ const ProviderSettings = () => {
         : 'U';
       setUserInitials(initials);
       
+      // Set provider services
+      setProviderServices(profile.services || []);
+      setEditedServices(profile.services || []);
+      
       // Update profile form with actual database data
       setProfileData({
         businessName: profile.business_name || 'Your Business Name',
@@ -86,6 +90,25 @@ const ProviderSettings = () => {
         const initials = fallbackUser.name.split(' ').map(name => name[0]).join('').toUpperCase();
         setUserInitials(initials);
       }
+    }
+  };
+
+  const loadServices = async () => {
+    try {
+      setServicesLoading(true);
+      const services = await apiService.getAllServices();
+      setAvailableServices(services);
+    } catch (error) {
+      console.error('Failed to load services:', error);
+      // Fall back to default services if API fails
+      setAvailableServices([
+        'Home Cleaning', 'Office Cleaning', 'Window Cleaning', 'Pressure Washing', 'Gutter Cleaning',
+        'Electrician', 'Plumber', 'HVAC Services', 'Handyman Services', 'Home Renovations', 'Carpenter', 'Painter',
+        'Landscaping', 'Lawn Mowing & Maintenance', 'Snow Removal', 'Fence & Deck Services', 'Siding Installation & Repair',
+        'Car Detailing', 'Roofing', 'Pest Control', 'Appliance Repair', 'Junk Removal'
+      ]);
+    } finally {
+      setServicesLoading(false);
     }
   };
 
