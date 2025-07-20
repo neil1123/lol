@@ -116,39 +116,63 @@ const ProviderCalendar = () => {
 
   const sidebarItems = STANDARD_PROVIDER_SIDEBAR;
 
-  // Generate calendar days
-  const getDaysInMonth = (date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const daysInMonth = lastDay.getDate();
-    const startingDayOfWeek = firstDay.getDay();
+  // Handle calendar slot selection (click to create appointment)
+  const handleSelectSlot = useCallback(({ start }) => {
+    const formattedDate = moment(start).format('YYYY-MM-DD');
+    const formattedTime = moment(start).format('HH:mm');
     
-    const days = [];
-    
-    // Add empty cells for days before the first day of the month
-    for (let i = 0; i < startingDayOfWeek; i++) {
-      days.push(null);
+    setAppointmentForm(prev => ({
+      ...prev,
+      date: formattedDate,
+      time: formattedTime
+    }));
+    setShowAppointmentForm(true);
+  }, []);
+
+  // Handle event selection
+  const handleSelectEvent = useCallback((event) => {
+    console.log('Event selected:', event);
+    // You can add edit functionality here
+  }, []);
+
+  // Handle view change
+  const handleViewChange = useCallback((view) => {
+    setCalendarView(view);
+  }, []);
+
+  // Auto-add customer when appointment is created
+  const autoAddCustomer = async (customerData) => {
+    try {
+      // Check if customer already exists (by name and phone)
+      const existingCustomers = JSON.parse(localStorage.getItem('providerCustomers') || '[]');
+      
+      const customerExists = existingCustomers.some(c => 
+        c.name.toLowerCase() === customerData.name.toLowerCase() ||
+        (customerData.phone && c.phone === customerData.phone)
+      );
+
+      if (!customerExists) {
+        const newCustomer = {
+          id: existingCustomers.length + 1,
+          name: customerData.name,
+          email: customerData.email || 'Not provided',
+          phone: customerData.phone || 'N/A',
+          address: customerData.address || 'N/A',
+          totalOrders: 1,
+          totalSpent: 0,
+          rating: 0,
+          lastOrder: new Date().toISOString(),
+          status: 'active',
+          notes: `Added from appointment: ${customerData.serviceType}`
+        };
+        
+        const updatedCustomers = [...existingCustomers, newCustomer];
+        localStorage.setItem('providerCustomers', JSON.stringify(updatedCustomers));
+        console.log('Customer automatically added:', newCustomer);
+      }
+    } catch (error) {
+      console.error('Failed to auto-add customer:', error);
     }
-    
-    // Add days of the month
-    for (let day = 1; day <= daysInMonth; day++) {
-      days.push(day);
-    }
-    
-    return days;
-  };
-
-  const days = getDaysInMonth(currentDate);
-  const monthYear = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-
-  const previousMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
-  };
-
-  const nextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
   };
 
   const handleCreateAppointment = async () => {
@@ -166,6 +190,14 @@ const ProviderCalendar = () => {
         };
         
         await apiService.createAppointment(appointmentData);
+        
+        // Auto-add customer
+        await autoAddCustomer({
+          name: appointmentForm.customerName,
+          phone: appointmentForm.phoneNumber,
+          address: appointmentForm.address,
+          serviceType: appointmentForm.serviceType
+        });
         
         // Reset form and reload appointments
         setAppointmentForm({
@@ -185,14 +217,6 @@ const ProviderCalendar = () => {
         alert('Failed to create appointment. Please try again.');
       }
     }
-  };
-
-  const hasAppointment = (day) => {
-    return appointments.some(apt => apt.date === day);
-  };
-
-  const getAppointment = (day) => {
-    return appointments.find(apt => apt.date === day);
   };
 
   return (
