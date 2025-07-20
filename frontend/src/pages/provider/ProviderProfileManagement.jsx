@@ -945,228 +945,200 @@ const ProviderProfileManagement = () => {
 
               {/* Preview Profile Tab */}
               <TabsContent value="preview">
-                <div className="max-w-4xl mx-auto">
-                  {/* Provider Profile Preview - How it looks to homeowners */}
-                  <Card className="mb-6">
-                    <CardHeader className="bg-blue-50 border-b">
-                      <div className="flex items-center space-x-3">
-                        <Avatar className="h-16 w-16">
-                          <AvatarFallback className="bg-blue-100 text-blue-600 text-xl font-bold">
-                            {userInitials}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <h1 className="text-2xl font-bold text-gray-900">
-                            {profileData.business_name || 'Business Name Not Set'}
-                          </h1>
-                          <p className="text-gray-600 flex items-center">
-                            <MapPin className="h-4 w-4 mr-1" />
-                            {profileData.address || 'Address not specified'}
-                          </p>
-                          <div className="flex items-center space-x-4 mt-2">
-                            {profileData.phone && (
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Phone className="h-4 w-4 mr-1" />
-                                {profileData.phone}
-                              </div>
-                            )}
-                            {profileData.email && (
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Mail className="h-4 w-4 mr-1" />
-                                {profileData.email}
-                              </div>
-                            )}
-                            {profileData.website && (
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Globe className="h-4 w-4 mr-1" />
-                                {profileData.website}
-                              </div>
-                            )}
+                <div className="max-w-full">
+                  {/* Provider Profile Preview - Exact homeowner view */}
+                  <div className="min-h-screen bg-gray-50">
+                    {/* Header Section - Matches homeowner view exactly */}
+                    <div className="bg-white border-b border-gray-200">
+                      <div className="max-w-6xl mx-auto px-4 py-6">
+                        <div className="flex items-start space-x-4">
+                          <Avatar className="h-20 w-20 flex-shrink-0">
+                            <AvatarFallback className="bg-blue-100 text-blue-600 text-2xl font-bold">
+                              {userInitials}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1 min-w-0">
+                            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                              {profileData.business_name || 'Business Name Not Set'}
+                            </h1>
+                            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
+                              {profileData.address && (
+                                <div className="flex items-center">
+                                  <MapPin className="h-4 w-4 mr-1" />
+                                  {profileData.address}
+                                </div>
+                              )}
+                              {profileData.phone && (
+                                <div className="flex items-center">
+                                  <Phone className="h-4 w-4 mr-1" />
+                                  {profileData.phone}
+                                </div>
+                              )}
+                              {profileData.email && (
+                                <div className="flex items-center">
+                                  <Mail className="h-4 w-4 mr-1" />
+                                  {profileData.email}
+                                </div>
+                              )}
+                              {profileData.website && (
+                                <div className="flex items-center">
+                                  <Globe className="h-4 w-4 mr-1" />
+                                  {profileData.website}
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex space-x-3">
+                              <Button className="bg-blue-600 hover:bg-blue-700">
+                                <Mail className="h-4 w-4 mr-2" />
+                                Text Us
+                              </Button>
+                              <Button variant="outline">
+                                <Phone className="h-4 w-4 mr-2" />
+                                Call Now
+                              </Button>
+                            </div>
                           </div>
-                        </div>
-                        <div className="text-right">
-                          <Button className="mb-2">
-                            <Mail className="h-4 w-4 mr-2" />
-                            Text Us
-                          </Button>
-                          <p className="text-xs text-gray-500">
-                            {profileData.year_established ? `Est. ${profileData.year_established}` : 'Year not specified'}
-                          </p>
                         </div>
                       </div>
-                    </CardHeader>
-                    
-                    <CardContent className="p-6">
-                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        {/* Left Column */}
-                        <div className="lg:col-span-2 space-y-6">
-                          {/* Quick Information */}
-                          <div>
-                            <h3 className="text-lg font-semibold mb-3">Quick Information</h3>
-                            <div className="text-sm text-gray-600">
-                              Year of establishment: {profileData.year_established || 'Not specified'}
-                            </div>
+                    </div>
+
+                    {/* Price List Section - Exact match to homeowner view */}
+                    {(profileData.pricing_packages?.length > 0) && (
+                      <div className="bg-blue-600 text-white py-4">
+                        <div className="max-w-6xl mx-auto px-4">
+                          <div className="flex items-center mb-4">
+                            <DollarSign className="h-5 w-5 mr-2 text-yellow-300" />
+                            <h2 className="text-xl font-bold">Price list</h2>
                           </div>
-
-                          {/* Service Categories */}
-                          {profileData.service_categories?.length > 0 && (
-                            <div>
-                              <h3 className="text-lg font-semibold mb-3">Service Categories</h3>
-                              <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-                                {profileData.service_categories.slice(0, 6).map((category, index) => (
-                                  <div key={index} className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
-                                    <div className="w-8 h-8 bg-blue-100 rounded-full mx-auto mb-2 flex items-center justify-center">
-                                      <Home className="h-4 w-4 text-blue-600" />
-                                    </div>
-                                    <span className="text-xs font-medium text-gray-800">{category}</span>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {profileData.pricing_packages.slice(0, 3).map((pkg, index) => (
+                              <div key={index} className="bg-white text-gray-900 rounded-lg p-6 relative">
+                                {index === 2 && (
+                                  <div className="absolute top-3 right-3 bg-blue-600 text-white text-xs px-2 py-1 rounded">
+                                    POPULAR
                                   </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Service Types */}
-                          {profileData.services?.length > 0 && (
-                            <div>
-                              <h3 className="text-lg font-semibold mb-3">Service Types</h3>
-                              <div className="flex flex-wrap gap-2">
-                                {profileData.services.slice(0, 8).map((service, index) => (
-                                  <Badge key={index} variant="outline" className="bg-gray-50">
-                                    {service}
-                                  </Badge>
-                                ))}
-                                {profileData.services.length > 8 && (
-                                  <Badge variant="outline" className="bg-gray-50">
-                                    +{profileData.services.length - 8} more
-                                  </Badge>
                                 )}
+                                <div className="text-center mb-4">
+                                  <div className="w-12 h-12 bg-gray-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                    {index === 0 && <Home className="h-6 w-6 text-gray-600" />}
+                                    {index === 1 && <Star className="h-6 w-6 text-gray-600" />}
+                                    {index === 2 && <Award className="h-6 w-6 text-blue-600" />}
+                                  </div>
+                                  <h3 className="text-lg font-semibold mb-2">{pkg.name}</h3>
+                                  <div className="text-3xl font-bold text-blue-600 mb-2">${pkg.price}</div>
+                                  <p className="text-sm text-gray-600 mb-4">{pkg.description}</p>
+                                </div>
+                                <Button 
+                                  className={`w-full ${index === 2 ? 'bg-blue-600 hover:bg-blue-700' : ''}`}
+                                  variant={index === 2 ? 'default' : 'outline'}
+                                >
+                                  Get Quotation
+                                </Button>
                               </div>
-                            </div>
-                          )}
-
-                          {/* Properties Served */}
-                          {profileData.properties_served?.length > 0 && (
-                            <div>
-                              <h3 className="text-lg font-semibold mb-3">Properties We Serve</h3>
-                              <div className="flex flex-wrap gap-2">
-                                {profileData.properties_served.map((property, index) => (
-                                  <Badge key={index} variant="secondary" className="bg-green-100 text-green-800">
-                                    {property}
-                                  </Badge>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* About */}
-                          <div>
-                            <h3 className="text-lg font-semibold mb-3">About</h3>
-                            <p className="text-gray-600 leading-relaxed">
-                              {profileData.description || 'No description provided. This is where you can describe your business, services, and what makes you unique.'}
-                            </p>
+                            ))}
                           </div>
-
-                          {/* Specialties */}
-                          {profileData.specialties?.length > 0 && (
-                            <div>
-                              <h3 className="text-lg font-semibold mb-3">Specialties</h3>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                {profileData.specialties.map((specialty, index) => (
-                                  <div key={index} className="flex items-center space-x-2">
-                                    <CheckCircle className="h-5 w-5 text-green-600" />
-                                    <span className="text-sm font-medium">{specialty}</span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Right Column */}
-                        <div className="space-y-6">
-                          {/* Quick Facts */}
-                          <Card>
-                            <CardHeader>
-                              <CardTitle className="text-lg">Quick Facts</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                              <div>
-                                <div className="flex items-center space-x-2 text-sm text-gray-600 mb-1">
-                                  <CheckCircle className="h-4 w-4" />
-                                  <span>Jobs Completed</span>
-                                </div>
-                                <p className="text-xl font-bold">{profileData.jobs_completed || 0}</p>
-                              </div>
-                              
-                              <div>
-                                <div className="flex items-center space-x-2 text-sm text-gray-600 mb-1">
-                                  <Clock className="h-4 w-4" />
-                                  <span>Response Time</span>
-                                </div>
-                                <p className="text-sm font-medium">{profileData.response_time}</p>
-                              </div>
-                              
-                              <div>
-                                <div className="flex items-center space-x-2 text-sm text-gray-600 mb-1">
-                                  <Calendar className="h-4 w-4" />
-                                  <span>Year Established</span>
-                                </div>
-                                <p className="text-xl font-bold">{profileData.year_established || 'N/A'}</p>
-                              </div>
-                            </CardContent>
-                          </Card>
-
-                          {/* Price List */}
-                          {profileData.pricing_packages?.length > 0 ? (
-                            <Card>
-                              <CardHeader>
-                                <CardTitle className="text-lg">Price List</CardTitle>
-                              </CardHeader>
-                              <CardContent className="space-y-4">
-                                {profileData.pricing_packages.map((pkg, index) => (
-                                  <div key={index} className="border rounded-lg p-4">
-                                    <div className="flex justify-between items-center mb-2">
-                                      <h4 className="font-medium">{pkg.name}</h4>
-                                      <span className="text-xl font-bold text-blue-600">${pkg.price}</span>
-                                    </div>
-                                    <p className="text-sm text-gray-600 mb-3">{pkg.description}</p>
-                                    <Button variant="outline" className="w-full">
-                                      Get Quotation
-                                    </Button>
-                                  </div>
-                                ))}
-                              </CardContent>
-                            </Card>
-                          ) : (
-                            <Card>
-                              <CardHeader>
-                                <CardTitle className="text-lg">Price List</CardTitle>
-                              </CardHeader>
-                              <CardContent>
-                                <div className="text-center py-6">
-                                  <DollarSign className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                                  <p className="text-sm text-gray-500 mb-3">No pricing packages available</p>
-                                  <Button variant="outline" className="w-full">
-                                    Get Quotation
-                                  </Button>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          )}
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    )}
+
+                    {/* Quick Information Section */}
+                    <div className="bg-blue-600 text-white py-4">
+                      <div className="max-w-6xl mx-auto px-4">
+                        <div className="flex items-center mb-4">
+                          <Calendar className="h-5 w-5 mr-2 text-yellow-300" />
+                          <h2 className="text-xl font-bold">Quick information</h2>
+                        </div>
+                        <div className="bg-white text-gray-900 rounded-lg p-4">
+                          <div className="flex items-center">
+                            <Calendar className="h-5 w-5 text-gray-600 mr-2" />
+                            <span className="text-sm">Year of establishment</span>
+                            <span className="ml-auto font-semibold">{profileData.year_established || '2024'}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Service Categories */}
+                    {profileData.service_categories?.length > 0 && (
+                      <div className="bg-white py-6">
+                        <div className="max-w-6xl mx-auto px-4">
+                          <div className="flex items-center mb-6">
+                            <Star className="h-5 w-5 text-blue-600 mr-2" />
+                            <h2 className="text-xl font-bold">Cleaning service for</h2>
+                          </div>
+                          <div className="flex flex-wrap gap-3">
+                            {profileData.service_categories.map((category, index) => (
+                              <div key={index} className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-medium">
+                                {category}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Service Types */}
+                    {profileData.services?.length > 0 && (
+                      <div className="bg-gray-50 py-6">
+                        <div className="max-w-6xl mx-auto px-4">
+                          <div className="flex items-center mb-6">
+                            <Award className="h-5 w-5 text-blue-600 mr-2" />
+                            <h2 className="text-xl font-bold">Service type</h2>
+                          </div>
+                          <div className="flex flex-wrap gap-3">
+                            {profileData.services.map((service, index) => (
+                              <div key={index} className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-medium">
+                                {service}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Properties Served */}
+                    {profileData.properties_served?.length > 0 && (
+                      <div className="bg-white py-6">
+                        <div className="max-w-6xl mx-auto px-4">
+                          <div className="flex items-center mb-6">
+                            <Building2 className="h-5 w-5 text-blue-600 mr-2" />
+                            <h2 className="text-xl font-bold">Properties served</h2>
+                          </div>
+                          <div className="flex flex-wrap gap-3">
+                            {profileData.properties_served.map((property, index) => (
+                              <div key={index} className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-medium">
+                                {property}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* About Section */}
+                    <div className="bg-blue-600 text-white py-6">
+                      <div className="max-w-6xl mx-auto px-4">
+                        <div className="flex items-center mb-4">
+                          <FileText className="h-5 w-5 mr-2 text-yellow-300" />
+                          <h2 className="text-xl font-bold">About {profileData.business_name || 'Our Business'}</h2>
+                        </div>
+                        <div className="bg-white text-gray-900 rounded-lg p-6">
+                          <p className="text-gray-700 leading-relaxed">
+                            {profileData.description || 'No description provided. This is where you can describe your business, services, and what makes you unique.'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   
                   {/* Preview Notice */}
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center mt-6">
                     <div className="flex items-center justify-center space-x-2 text-blue-700 mb-2">
                       <Eye className="h-5 w-5" />
-                      <span className="font-medium">Preview Mode</span>
+                      <span className="font-medium">Live Preview</span>
                     </div>
                     <p className="text-sm text-blue-600">
-                      This is how your profile appears to homeowners when they browse for services.
-                      Missing information will be displayed as "Not specified" or left blank.
+                      This is exactly how your profile appears to homeowners. Missing information will show as empty sections.
                     </p>
                   </div>
                 </div>
