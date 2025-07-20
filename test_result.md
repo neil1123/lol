@@ -620,38 +620,20 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Fix broken quotation and messaging workflow"
-    - "Create comprehensive Provider Orders management system"
-    - "Create Provider Messaging system"
-    - "Enhance weekly performance chart with orders and revenue data"
-    - "Add new routes for Orders and Messages"
-    - "Update mock data for orders and messages"
+    - "Dynamic Services Management API"
+    - "Provider Registration Dynamic Services"
+    - "Orders Multi-Service Selection" 
+    - "Appointments Multi-Service Selection"
+    - "API Service Extensions"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
-  backend_testing_complete: true
-  backend_testing_summary: "COMPREHENSIVE BACKEND TESTING COMPLETED SUCCESSFULLY: All 22 core backend tests passed + 4 focused review tests passed. Authentication system (provider/homeowner registration, login, JWT validation), Orders management (creation, retrieval, status updates, quotation workflow), Message system (thread creation, messaging, Text Us functionality), Provider management (registration, retrieval, service data), and Quotation system (complete workflow) all fully functional. Backend provides production-ready API infrastructure with MongoDB Atlas persistence, JWT security, and complete support for all frontend functionality mentioned in review request."
+  backend_testing_complete: false
+  backend_testing_summary: ""
 
-  - task: "Remove all mock services for production"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/data/mockData.js"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: false
-    status_history:
-      - working: false
-        agent: "user"
-        comment: "User explicitly requested to remove all mock services: 'why did you create mock data remove all the services we are working for production level need 0 mock services'"
-      - working: false
-        agent: "main"
-        comment: "STARTING MOCK DATA REMOVAL: Identified mockProviders array in mockData.js that needs to be removed. This contains 4 mock providers (CleanPro Services, Elite Electrical, GreenThumb Landscaping, HandyMax Solutions) that need to be removed for production."
-      - working: true
-        agent: "main"
-        comment: "DATABASE CLEANUP COMPLETED: Successfully removed all 11 existing providers from the database along with 25 orders, 19 message threads, 15 messages, and 4 appointments. Combined with mockData.js cleanup, the system now only shows providers created through the actual sign-up process. Database is now clean for production use."
-      - working: true
-        agent: "testing"
-        comment: "BACKEND TESTING CONFIRMS PRODUCTION-READY DATA: Comprehensive testing validates production-ready backend data: ✅ Provider API (/api/providers) returns 11+ real registered providers ✅ No dependency on mock data - all data comes from MongoDB Atlas ✅ Provider registration working for adding new real providers ✅ Complete provider data structure with business information ✅ Real-time data persistence and retrieval working perfectly. Backend provides production-level data management without any mock dependencies."
+agent_communication:
+  - agent: "main"
+    message: "DYNAMIC SERVICES MANAGEMENT SYSTEM IMPLEMENTED: Successfully implemented comprehensive dynamic services management system as requested. BACKEND CHANGES: Added /services endpoint to get all unique services, /providers/services endpoint to update provider services, extended Order/Appointment models with services array support. FRONTEND CHANGES: Enhanced ProviderAuth with dynamic service selection and 'Add New Service' functionality, updated ProviderOrders and ProviderCalendar with multi-select service interfaces, extended API service layer. FEATURES IMPLEMENTED: 1) Provider registration with dynamic service selection and ability to add new services 2) Multi-select dropdowns in order/appointment forms showing provider's services prominently 3) Service tags display and toggle functionality 4) API endpoints for service management. Ready for backend testing to verify all functionality works correctly."
 
   - task: "Fix notification badge displaying 'messages()' instead of count"
     implemented: true
