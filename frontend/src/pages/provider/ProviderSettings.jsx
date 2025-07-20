@@ -73,15 +73,15 @@ const ProviderSettings = () => {
     }
   };
 
-  // Profile settings - Initialize with actual user data
+  // Profile settings - Initialize with empty data, will be populated from database
   const [profileData, setProfileData] = useState({
-    businessName: user.business_name || 'Your Business Name',
-    ownerName: user.name || 'Your Name',
-    email: user.email || 'your@email.com',
-    phone: user.phone || '(555) 123-4567',
-    address: user.address || 'Your Address',
-    description: user.description || 'Professional home services provider.',
-    website: user.website || ''
+    businessName: 'Loading...',
+    ownerName: 'Loading...',
+    email: 'Loading...',
+    phone: 'Loading...',
+    address: 'Loading...',
+    description: 'Loading...',
+    website: ''
   });
 
   // Notification settings
