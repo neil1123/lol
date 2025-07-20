@@ -886,10 +886,8 @@ const ProviderProfileManagement = () => {
                     </div>
                   </div>
                 </div>
-                </div>
               </TabsContent>
 
-              {/* Preview Profile Tab - continues as already defined */}
               {/* Preview Profile Tab */}
               <TabsContent value="preview">
                 <div className="max-w-full">
