@@ -265,6 +265,7 @@ const ProviderCalendar = () => {
           customer_name: appointmentForm.customerName,
           phone_number: appointmentForm.phoneNumber,
           service_type: appointmentForm.serviceType,
+          services: appointmentForm.services, // Add services array
           date: appointmentForm.date,
           time: appointmentForm.time,
           address: appointmentForm.address,
