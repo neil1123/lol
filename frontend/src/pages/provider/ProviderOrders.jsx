@@ -334,6 +334,7 @@ const ProviderOrders = () => {
           customer_name: newOrder.customerName,
           phone_number: newOrder.customerPhone,
           service_type: newOrder.serviceType,
+          services: newOrder.services, // Add services array
           date: newOrder.scheduledDate,
           time: '09:00',
           address: newOrder.address,
