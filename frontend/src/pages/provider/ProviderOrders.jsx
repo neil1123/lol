@@ -59,6 +59,7 @@ const ProviderOrders = () => {
     customerEmail: '',
     customerPhone: '',
     serviceType: '',
+    services: [], // Array for multiple services
     description: '',
     address: '',
     quotationAmount: '',
