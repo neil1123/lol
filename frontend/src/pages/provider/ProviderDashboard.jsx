@@ -27,6 +27,13 @@ const ProviderDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('home');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // Mock notification state - in real app this would come from API/context
+  const [notifications] = useState({
+    totalUnreadMessages: 0,
+    newOrders: 0,
+    quotationRequests: 0
+  });
 
   const handleLogout = () => {
     handleStandardLogout(navigate);
