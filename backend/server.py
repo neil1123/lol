@@ -665,6 +665,23 @@ async def update_provider_services(services: List[str], current_user: User = Dep
     
     return {"message": "Services updated successfully", "services": services}
 
+@api_router.put("/providers/profile")
+async def update_provider_profile(profile_data: dict, current_user: User = Depends(get_current_user)):
+    """Update provider's complete profile"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can update profile")
+    
+    # Update the provider's profile
+    result = await db.users.update_one(
+        {"id": current_user.id},
+        {"$set": profile_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Provider not found")
+    
+    return {"message": "Profile updated successfully", "profile": profile_data}
+
 # Include the router in the main app
 app.include_router(api_router)
 
