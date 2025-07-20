@@ -29,11 +29,48 @@ const ProviderSettings = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
 
-  // Get user data for profile
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  const userInitials = user.name 
-    ? user.name.split(' ').map(name => name[0]).join('').toUpperCase() 
-    : 'U';
+  // User profile state - fetch from database
+  const [userProfile, setUserProfile] = useState(null);
+  const [userInitials, setUserInitials] = useState('U');
+
+  // Load user profile on component mount
+  useEffect(() => {
+    loadUserProfile();
+  }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      const profile = await apiService.getUserProfile();
+      setUserProfile(profile);
+      
+      // Set user initials from actual database data
+      const initials = profile.name 
+        ? profile.name.split(' ').map(name => name[0]).join('').toUpperCase() 
+        : 'U';
+      setUserInitials(initials);
+      
+      // Update profile form with actual database data
+      setProfileData({
+        businessName: profile.business_name || 'Your Business Name',
+        ownerName: profile.name || 'Your Name',
+        email: profile.email || 'your@email.com',
+        phone: profile.phone || '(555) 123-4567',
+        address: profile.address || 'Your Address',
+        description: profile.description || 'Professional home services provider.',
+        website: profile.website || ''
+      });
+      
+      console.log('User profile loaded:', profile);
+    } catch (error) {
+      console.error('Failed to load user profile:', error);
+      // Fallback to localStorage if API fails
+      const fallbackUser = JSON.parse(localStorage.getItem('user') || '{}');
+      if (fallbackUser.name) {
+        const initials = fallbackUser.name.split(' ').map(name => name[0]).join('').toUpperCase();
+        setUserInitials(initials);
+      }
+    }
+  };
 
   // Profile settings - Initialize with actual user data
   const [profileData, setProfileData] = useState({
