@@ -173,9 +173,13 @@ const ProviderCustomers = () => {
       )}
 
       <div className="flex">
-        {/* Desktop Sidebar - Hidden on mobile */}
-        <div className="w-64 bg-white shadow-sm min-h-screen" style={{ display: 'none' }}>
+        {/* Desktop Sidebar - Always show on desktop like homeowner explore */}
+        <div className="hidden xl:block w-64 bg-white shadow-sm min-h-screen">
           <div className="p-4">
+            <div className="mb-6">
+              <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
+              <span className="text-sm text-gray-600">for Merchants</span>
+            </div>
             <nav className="space-y-2">
               {sidebarItems.map((item) => (
                 <Button
@@ -188,6 +192,15 @@ const ProviderCustomers = () => {
                   {item.label}
                 </Button>
               ))}
+              <hr className="my-4" />
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                onClick={handleLogout}
+              >
+                <LogOut className="h-4 w-4 mr-3" />
+                Logout
+              </Button>
             </nav>
           </div>
         </div>
