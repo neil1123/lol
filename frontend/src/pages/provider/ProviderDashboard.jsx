@@ -36,6 +36,12 @@ const ProviderDashboard = () => {
   // Empty states for fresh platform - no activities for new users
   const recentActivity = [];
 
+  // Get user data for profile
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const userInitials = user.name 
+    ? user.name.split(' ').map(name => name[0]).join('').toUpperCase() 
+    : 'U';
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Header */}
