@@ -260,7 +260,31 @@ const ProviderOrders = () => {
     }
   };
 
-  const handleCreateOrder = async () => {
+  const handleServiceToggle = (serviceName) => {
+    setNewOrder(prev => {
+      const newServices = prev.services.includes(serviceName)
+        ? prev.services.filter(s => s !== serviceName)
+        : [...prev.services, serviceName];
+      
+      return {
+        ...prev,
+        services: newServices,
+        serviceType: newServices.join(', ') // Update serviceType for backend compatibility
+      };
+    });
+  };
+
+  const addNewServiceToOrder = (serviceName) => {
+    if (serviceName.trim() && !availableServices.includes(serviceName.trim())) {
+      const trimmedService = serviceName.trim();
+      setAvailableServices(prev => [...prev, trimmedService].sort());
+      setNewOrder(prev => ({
+        ...prev,
+        services: [...prev.services, trimmedService],
+        serviceType: [...prev.services, trimmedService].join(', ')
+      }));
+    }
+  };
     try {
       setError('');
       
