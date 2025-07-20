@@ -93,6 +93,41 @@ const ProviderOrders = () => {
   //   }
   // }, [orders]);
 
+  // Auto-add customer when order is created
+  const autoAddCustomer = async (customerData) => {
+    try {
+      // Check if customer already exists (by name and email)
+      const existingCustomers = JSON.parse(localStorage.getItem('providerCustomers') || '[]');
+      
+      const customerExists = existingCustomers.some(c => 
+        c.name.toLowerCase() === customerData.name.toLowerCase() ||
+        (customerData.email && c.email === customerData.email)
+      );
+
+      if (!customerExists) {
+        const newCustomer = {
+          id: existingCustomers.length + 1,
+          name: customerData.name,
+          email: customerData.email || 'Not provided',
+          phone: customerData.phone || 'N/A',
+          address: customerData.address || 'N/A',
+          totalOrders: 1,
+          totalSpent: parseInt(customerData.quotationAmount) || 0,
+          rating: 0,
+          lastOrder: new Date().toISOString(),
+          status: 'active',
+          notes: `Added from order: ${customerData.serviceType}`
+        };
+        
+        const updatedCustomers = [...existingCustomers, newCustomer];
+        localStorage.setItem('providerCustomers', JSON.stringify(updatedCustomers));
+        console.log('Customer automatically added:', newCustomer);
+      }
+    } catch (error) {
+      console.error('Failed to auto-add customer:', error);
+    }
+  };
+
   const handleCreateOrder = async () => {
     try {
       setError('');
@@ -125,6 +160,16 @@ const ProviderOrders = () => {
       };
 
       const createdOrder = await apiService.createOrder(orderData);
+      
+      // Auto-add customer
+      await autoAddCustomer({
+        name: newOrder.customerName,
+        email: newOrder.customerEmail,
+        phone: newOrder.customerPhone,
+        address: newOrder.address,
+        serviceType: newOrder.serviceType,
+        quotationAmount: newOrder.quotationAmount
+      });
       
       // If there's a scheduled date, create appointment
       if (newOrder.scheduledDate) {
