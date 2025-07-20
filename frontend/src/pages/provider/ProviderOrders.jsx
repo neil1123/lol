@@ -88,6 +88,7 @@ const ProviderOrders = () => {
   useEffect(() => {
     loadUserProfile();
     loadOrders();
+    loadServices();
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
   }, []);
