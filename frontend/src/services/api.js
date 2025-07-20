@@ -194,6 +194,18 @@ class ApiService {
   async getAppointments() {
     return await this.request('/appointments');
   }
+
+  // ====== SERVICES ======
+  async getAllServices() {
+    return await this.request('/services');
+  }
+
+  async updateProviderServices(services) {
+    return await this.request('/providers/services', {
+      method: 'PUT',
+      body: JSON.stringify(services),
+    });
+  }
 }
 
 // Create and export singleton instance
