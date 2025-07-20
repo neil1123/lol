@@ -57,10 +57,30 @@ const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, prov
     }
   };
 
+  const handleServiceToggle = (serviceName) => {
+    setFormData(prev => {
+      const newServices = prev.services.includes(serviceName)
+        ? prev.services.filter(s => s !== serviceName)
+        : [...prev.services, serviceName];
+      
+      return {
+        ...prev,
+        services: newServices,
+        serviceType: newServices.join(', ') // Update serviceType for backend compatibility
+      };
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError('');
+    
+    if (formData.services.length === 0) {
+      setError('Please select at least one service.');
+      setIsSubmitting(false);
+      return;
+    }
     
     try {
       // Get user data
@@ -80,6 +100,7 @@ const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, prov
         homeowner_address: formData.address || user.address || '',
         provider_name: providerName,
         service_type: formData.serviceType,
+        services: formData.services, // Add services array
         description: formData.description,
         preferred_date: formData.preferredDate,
         preferred_time: formData.preferredTime,
@@ -90,7 +111,7 @@ const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, prov
       };
       
       // Send quotation request to API
-      const response = await apiService.createQuotationRequest(quotationData);
+      const response = await apiService.sendQuotation(quotationData);
       
       // Success
       onClose();
