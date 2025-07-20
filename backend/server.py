@@ -603,6 +603,11 @@ async def delete_quotation(order_id: str, current_user: User = Depends(get_curre
     
     return {"message": "Quotation deleted successfully!"}
 
+@api_router.get("/auth/profile", response_model=User)
+async def get_current_user_profile(current_user: User = Depends(get_current_user)):
+    """Get current authenticated user's profile data from database"""
+    return current_user
+
 # Include the router in the main app
 app.include_router(api_router)
 
