@@ -152,6 +152,20 @@ const ProviderCalendar = () => {
 
   const sidebarItems = STANDARD_PROVIDER_SIDEBAR;
 
+  const handleServiceToggle = (serviceName) => {
+    setAppointmentForm(prev => {
+      const newServices = prev.services.includes(serviceName)
+        ? prev.services.filter(s => s !== serviceName)
+        : [...prev.services, serviceName];
+      
+      return {
+        ...prev,
+        services: newServices,
+        serviceType: newServices.join(', ') // Update serviceType for backend compatibility
+      };
+    });
+  };
+
   // Handle calendar slot selection (click to create appointment)
   const handleSelectSlot = useCallback(({ start }) => {
     // Prevent selecting past dates
