@@ -839,7 +839,7 @@ const ProviderSettings = () => {
               </TabsContent>
             </Tabs>
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );
