@@ -421,9 +421,22 @@ const ProviderProfile = () => {
                 
                 {/* Service Tags - Mobile Optimized */}
                 <div className="flex flex-wrap justify-center sm:justify-start gap-1 sm:gap-2 mb-4 max-w-full">
-                  <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs px-2 py-1">Chairs & wardrobe</Badge>
-                  <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs px-2 py-1">Deep cleaning</Badge>
-                  <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs px-2 py-1">Vacuum</Badge>
+                  {provider.services && provider.services.length > 0 ? (
+                    provider.services.slice(0, 3).map((service, index) => (
+                      <Badge key={index} className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs px-2 py-1">
+                        {service}
+                      </Badge>
+                    ))
+                  ) : (
+                    <Badge className="bg-gray-100 text-gray-600 text-xs px-2 py-1">
+                      No services specified
+                    </Badge>
+                  )}
+                  {provider.services && provider.services.length > 3 && (
+                    <Badge className="bg-blue-50 text-blue-600 text-xs px-2 py-1">
+                      +{provider.services.length - 3} more
+                    </Badge>
+                  )}
                 </div>
               </div>
             </div>
