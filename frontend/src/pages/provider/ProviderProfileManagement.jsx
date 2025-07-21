@@ -265,148 +265,159 @@ const ProviderProfileManagement = () => {
   }
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar - Always visible on desktop */}
-      <div className="hidden xl:flex xl:flex-col xl:w-64 xl:bg-white xl:border-r xl:border-gray-200">
-        <div className="flex items-center justify-center h-16 border-b border-gray-200">
-          <Building2 className="h-8 w-8 text-blue-600 mr-2" />
-          <span className="text-xl font-bold text-gray-800">Doord</span>
-        </div>
-        
-        <nav className="flex-1 px-4 py-6 space-y-2">
-          {sidebarItems.map((item) => {
-            const IconComponent = item.icon;
-            const isActive = item.id === 'profile';
-            
-            return (
-              <button
-                key={item.id}
-                onClick={() => navigate(item.path)}
-                className={`w-full flex items-center px-4 py-2 text-left rounded-lg transition-colors ${
-                  isActive 
-                    ? 'bg-blue-50 text-blue-600 border-r-2 border-blue-600' 
-                    : 'text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                <IconComponent className="h-5 w-5 mr-3" />
-                {item.label}
-              </button>
-            );
-          })}
-        </nav>
-
-        <div className="border-t border-gray-200 p-4">
-          <button
-            onClick={handleLogout}
-            className="flex items-center w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-          >
-            <LogOut className="h-5 w-5 mr-3" />
-            Logout
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 xl:hidden">
-          <div className="bg-white w-64 h-full">
-            <div className="flex items-center justify-between h-16 border-b border-gray-200 px-4">
-              <div className="flex items-center">
-                <Building2 className="h-8 w-8 text-blue-600 mr-2" />
-                <span className="text-xl font-bold text-gray-800">Doord</span>
-              </div>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <X className="h-5 w-5" />
-              </Button>
-            </div>
-            
-            <nav className="px-4 py-6 space-y-2">
-              {sidebarItems.map((item) => {
-                const IconComponent = item.icon;
-                const isActive = item.id === 'profile';
-                
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      navigate(item.path);
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className={`w-full flex items-center px-4 py-2 text-left rounded-lg transition-colors ${
-                      isActive 
-                        ? 'bg-blue-50 text-blue-600' 
-                        : 'text-gray-700 hover:bg-gray-50'
-                    }`}
-                  >
-                    <IconComponent className="h-5 w-5 mr-3" />
-                    {item.label}
-                  </button>
-                );
-              })}
-            </nav>
-
-            <div className="border-t border-gray-200 p-4">
-              <button
-                onClick={() => {
-                  handleLogout();
-                  setIsMobileMenuOpen(false);
-                }}
-                className="flex items-center w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-              >
-                <LogOut className="h-5 w-5 mr-3" />
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <header className="bg-white border-b border-gray-200 px-4 py-4">
-          <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-gray-50">
+      {/* Mobile Header */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Mobile Menu Button - Only show on mobile */}
             <div className="flex items-center space-x-4">
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="xl:hidden"
-                onClick={() => setIsMobileMenuOpen(true)}
+                className="flex items-center xl:hidden"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
-                <Menu className="h-5 w-5" />
+                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </Button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">Company Profile</h1>
-                <p className="text-gray-600">Manage your business profile and preview how customers see you</p>
-              </div>
+              <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
+              <span className="text-sm text-gray-600 hidden sm:inline">for Merchants</span>
             </div>
             
-            <div className="flex items-center space-x-4">
+            {/* Desktop Right Side */}
+            <div className="hidden xl:flex items-center space-x-4">
               <Button variant="ghost" size="sm">
-                <Bell className="h-5 w-5" />
+                <Bell className="h-4 w-4" />
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
+              <div className="flex items-center space-x-2">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => navigate('/homeservices/settings')}
+                  className="p-1"
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-blue-100 text-blue-600">
+                      {userInitials}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+                <span className="text-sm font-medium">{userProfile?.business_name || userProfile?.name || 'User'}</span>
+              </div>
+              <Button variant="ghost" size="sm" onClick={handleLogout} title="Logout">
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* Mobile Right Side */}
+            <div className="xl:hidden flex items-center space-x-2">
+              <Button variant="ghost" size="sm">
+                <Bell className="h-4 w-4" />
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="sm" 
                 onClick={() => navigate('/homeservices/settings')}
-                className="flex items-center space-x-2"
+                className="p-1"
               >
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-blue-100 text-blue-600 text-sm font-medium">
+                  <AvatarFallback className="bg-blue-100 text-blue-600">
                     {userInitials}
                   </AvatarFallback>
                 </Avatar>
               </Button>
             </div>
           </div>
-        </header>
+        </div>
+      </header>
 
-        {/* Content */}
-        <main className="flex-1 overflow-auto p-4 md:p-6">
+      {/* Mobile Navigation Overlay - Only show on mobile */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 xl:hidden">
+          <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setIsMobileMenuOpen(false)} />
+          <div className="fixed top-0 left-0 w-64 h-full bg-white shadow-lg">
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold">Navigation</h2>
+                <Button variant="ghost" size="sm" onClick={() => setIsMobileMenuOpen(false)}>
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+              <nav className="space-y-2">
+                {sidebarItems.map((item) => (
+                  <Button
+                    key={item.id}
+                    variant={item.id === 'profile' ? "default" : "ghost"}
+                    className="w-full justify-start"
+                    onClick={() => {
+                      navigate(item.path);
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <item.icon className="h-4 w-4 mr-3" />
+                    {item.label}
+                  </Button>
+                ))}
+                <hr className="my-4" />
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="h-4 w-4 mr-3" />
+                  Logout
+                </Button>
+              </nav>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="flex">
+        {/* Desktop Sidebar - Always show on desktop like dashboard */}
+        <div className="hidden xl:block w-64 bg-white shadow-sm min-h-screen">
+          <div className="p-4">
+            <div className="mb-6">
+              <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
+            </div>
+            <nav className="space-y-2">
+              {sidebarItems.map((item) => (
+                <Button
+                  key={item.id}
+                  variant={item.id === 'profile' ? "default" : "ghost"}
+                  className="w-full justify-start"
+                  onClick={() => {
+                    navigate(item.path);
+                  }}
+                >
+                  <item.icon className="h-4 w-4 mr-3" />
+                  {item.label}
+                </Button>
+              ))}
+              <hr className="my-4" />
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                onClick={handleLogout}
+              >
+                <LogOut className="h-4 w-4 mr-3" />
+                Logout
+              </Button>
+            </nav>
+          </div>
+        </div>
+
+        {/* Main Content - Adjust width for desktop sidebar */}
+        <div className="flex-1 xl:pl-0 p-4 md:p-8">
+          <div className="max-w-7xl mx-auto">
+            {/* Profile Header */}
+            <div className="mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Company Profile</h2>
+              <p className="text-gray-600">Manage your business profile and preview how customers see you</p>
+            </div>
+
+            {/* Content */}
+            <main className="">
           <div className="max-w-6xl mx-auto">
             {/* Profile Management Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
