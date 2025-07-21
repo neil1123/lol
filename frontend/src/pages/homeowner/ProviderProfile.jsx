@@ -502,66 +502,69 @@ const ProviderProfile = () => {
                 <CardTitle className="text-xl font-bold">💰 Price list</CardTitle>
               </CardHeader>
               <CardContent className="p-4 sm:p-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-                  <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow">
-                    <div className="text-center mb-4">
-                      <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-xl sm:text-2xl text-blue-600">🏠</span>
+                {provider.pricingPackages && provider.pricingPackages.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                    {provider.pricingPackages.slice(0, 3).map((pkg, index) => (
+                      <div 
+                        key={index}
+                        className={`bg-white border rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow relative ${
+                          index === 2 ? 'border-2 border-blue-300 bg-blue-50' : 'border-gray-200'
+                        }`}
+                      >
+                        {index === 2 && (
+                          <div className="absolute top-0 right-0 bg-blue-600 text-white px-2 py-1 text-xs font-bold rounded-bl-lg">
+                            POPULAR
+                          </div>
+                        )}
+                        <div className="text-center mb-4">
+                          <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 ${
+                            index === 2 ? 'bg-blue-600' : 'bg-blue-100'
+                          }`}>
+                            <span className={`text-xl sm:text-2xl ${index === 2 ? 'text-white' : 'text-blue-600'}`}>
+                              {index === 0 ? '🏠' : index === 1 ? '✨' : '🌟'}
+                            </span>
+                          </div>
+                          <h4 className="font-bold text-base sm:text-lg mb-2 text-gray-800">{pkg.name}</h4>
+                          <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">${pkg.price}</div>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-4 text-center">{pkg.description}</p>
+                        <button className="text-blue-600 text-sm hover:underline mb-4 block mx-auto">View details →</button>
+                        <Button 
+                          className={`w-full ${
+                            index === 2 
+                              ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                              : 'border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'
+                          }`}
+                          variant={index === 2 ? 'default' : 'outline'}
+                          onClick={handleRequestQuote}
+                        >
+                          Get Quotation
+                        </Button>
                       </div>
-                      <h4 className="font-bold text-base sm:text-lg mb-2 text-gray-800">Basic House Cleaning</h4>
-                      <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">$149</div>
-                    </div>
-                    <p className="text-sm text-gray-600 mb-4 text-center">Standard cleaning service for homes up to 1500 sq ft. Includes all basic cleaning tasks.</p>
-                    <button className="text-blue-600 text-sm hover:underline mb-4 block mx-auto">View details →</button>
-                    <Button 
-                      variant="outline" 
-                      className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
-                      onClick={handleRequestQuote}
-                    >
-                      Get Quotation
-                    </Button>
+                    ))}
                   </div>
-                  
-                  <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow">
-                    <div className="text-center mb-4">
-                      <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-xl sm:text-2xl text-blue-600">✨</span>
-                      </div>
-                      <h4 className="font-bold text-base sm:text-lg mb-2 text-gray-800">Deep House Cleaning</h4>
-                      <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">$199</div>
+                ) : (
+                  <div className="text-center py-12">
+                    <div className="text-4xl mb-4">💰</div>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">No Pricing Packages Set</h3>
+                    <p className="text-gray-600 mb-6">This provider hasn't set up their pricing packages yet. Contact them directly for pricing information.</p>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
+                      <Button 
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        onClick={handleRequestQuote}
+                      >
+                        Request Custom Quote
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+                        onClick={handleTextUs}
+                      >
+                        Contact Provider
+                      </Button>
                     </div>
-                    <p className="text-sm text-gray-600 mb-4 text-center">Comprehensive deep cleaning with detailed attention to every corner of your home.</p>
-                    <button className="text-blue-600 text-sm hover:underline mb-4 block mx-auto">View details →</button>
-                    <Button 
-                      variant="outline" 
-                      className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
-                      onClick={handleRequestQuote}
-                    >
-                      Get Quotation
-                    </Button>
                   </div>
-                  
-                  <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow relative">
-                    <div className="absolute top-0 right-0 bg-blue-600 text-white px-2 py-1 text-xs font-bold rounded-bl-lg">
-                      POPULAR
-                    </div>
-                    <div className="text-center mb-4">
-                      <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-xl sm:text-2xl text-white">🌟</span>
-                      </div>
-                      <h4 className="font-bold text-base sm:text-lg mb-2 text-gray-800">Premium Package</h4>
-                      <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">$299</div>
-                    </div>
-                    <p className="text-sm text-gray-600 mb-4 text-center">Complete premium service with eco-friendly products and post-cleaning maintenance.</p>
-                    <button className="text-blue-600 text-sm hover:underline mb-4 block mx-auto">View details →</button>
-                    <Button 
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                      onClick={handleRequestQuote}
-                    >
-                      Get Quotation
-                    </Button>
-                  </div>
-                </div>
+                )}
               </CardContent>
             </Card>
 
