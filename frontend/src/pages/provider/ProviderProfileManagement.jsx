@@ -1102,7 +1102,7 @@ const ProviderProfileManagement = () => {
               </TabsContent>
             </Tabs>
           </div>
-        </main>
+        </div>
       </div>
     </div>
   );
