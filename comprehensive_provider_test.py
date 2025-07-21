@@ -16,7 +16,7 @@ import sys
 import uuid
 
 # Load environment variables
-BACKEND_URL = "https://9eab5d6b-bede-40dd-a7e3-dffdb957c16f.preview.emergentagent.com/api"
+BACKEND_URL = "https://b20dd39b-910e-4cb5-9a88-731af3f6b819.preview.emergentagent.com/api"
 
 # Global variables to store test data
 provider_token = None

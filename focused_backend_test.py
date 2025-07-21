@@ -10,7 +10,7 @@ import uuid
 import sys
 
 # Backend URL from environment
-BACKEND_URL = "https://9eab5d6b-bede-40dd-a7e3-dffdb957c16f.preview.emergentagent.com/api"
+BACKEND_URL = "https://b20dd39b-910e-4cb5-9a88-731af3f6b819.preview.emergentagent.com/api"
 
 # Test credentials
 HOMEOWNER_EMAIL = "test@homeowner.com"
