@@ -416,21 +416,19 @@ const ProviderProfileManagement = () => {
               <p className="text-gray-600">Manage your business profile and preview how customers see you</p>
             </div>
 
-            {/* Content */}
-            <main className="">
-          <div className="max-w-6xl mx-auto">
-            {/* Profile Management Tabs */}
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="edit" className="flex items-center gap-2">
-                  <Edit className="h-4 w-4" />
-                  Edit Profile
-                </TabsTrigger>
-                <TabsTrigger value="preview" className="flex items-center gap-2">
-                  <Eye className="h-4 w-4" />
-                  Preview Profile
-                </TabsTrigger>
-              </TabsList>
+            <div className="max-w-6xl mx-auto">
+              {/* Profile Management Tabs */}
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="edit" className="flex items-center gap-2">
+                    <Edit className="h-4 w-4" />
+                    Edit Profile
+                  </TabsTrigger>
+                  <TabsTrigger value="preview" className="flex items-center gap-2">
+                    <Eye className="h-4 w-4" />
+                    Preview Profile
+                  </TabsTrigger>
+                </TabsList>
 
               {/* Edit Profile Tab */}
               <TabsContent value="edit">
