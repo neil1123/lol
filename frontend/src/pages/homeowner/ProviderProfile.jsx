@@ -452,7 +452,9 @@ const ProviderProfile = () => {
                 variant="outline"
                 className="w-full bg-blue-600 text-white hover:bg-blue-700 border-blue-600 shadow-sm text-sm sm:text-base"
               >
-                💰 Starts from $199.00
+                💰 {provider.pricingPackages && provider.pricingPackages.length > 0 
+                  ? `Starts from $${Math.min(...provider.pricingPackages.map(pkg => pkg.price))}` 
+                  : 'Contact for pricing'}
               </Button>
               <Button
                 variant="outline"
