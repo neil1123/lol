@@ -585,41 +585,57 @@ const ProviderProfile = () => {
                   </div>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                    {/* Service Categories */}
                     <div className="bg-white rounded-lg p-3 sm:p-4 border border-gray-200 hover:shadow-sm transition-shadow">
                       <h5 className="font-bold mb-2 sm:mb-3 flex items-center text-blue-700 text-sm sm:text-base">
-                        <span className="mr-2">🧹</span> Cleaning service for
+                        <span className="mr-2">🧹</span> Service Categories
                       </h5>
                       <div className="flex flex-wrap gap-1 sm:gap-2">
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Chair</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Mattress</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Sofa</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Carpet</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Kitchen</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Bathroom</Badge>
+                        {provider.serviceCategories && provider.serviceCategories.length > 0 ? (
+                          provider.serviceCategories.map((category, index) => (
+                            <Badge key={index} className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">
+                              {category}
+                            </Badge>
+                          ))
+                        ) : (
+                          <Badge className="bg-gray-100 text-gray-600 text-xs">No categories specified</Badge>
+                        )}
                       </div>
                     </div>
                     
+                    {/* Services */}
                     <div className="bg-white rounded-lg p-3 sm:p-4 border border-gray-200 hover:shadow-sm transition-shadow">
                       <h5 className="font-bold mb-2 sm:mb-3 flex items-center text-blue-700 text-sm sm:text-base">
-                        <span className="mr-2">🌟</span> Service type
+                        <span className="mr-2">🌟</span> Services Offered
                       </h5>
                       <div className="flex flex-wrap gap-1 sm:gap-2">
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Deep clean</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Vacuum</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Sanitize</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Organize</Badge>
+                        {provider.services && provider.services.length > 0 ? (
+                          provider.services.map((service, index) => (
+                            <Badge key={index} className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">
+                              {service}
+                            </Badge>
+                          ))
+                        ) : (
+                          <Badge className="bg-gray-100 text-gray-600 text-xs">No services specified</Badge>
+                        )}
                       </div>
                     </div>
                     
+                    {/* Properties Served */}
                     <div className="bg-white rounded-lg p-3 sm:p-4 border border-gray-200 hover:shadow-sm transition-shadow sm:col-span-2 lg:col-span-1">
                       <h5 className="font-bold mb-2 sm:mb-3 flex items-center text-blue-700 text-sm sm:text-base">
-                        <span className="mr-2">🏢</span> Properties served
+                        <span className="mr-2">🏢</span> Properties Served
                       </h5>
                       <div className="flex flex-wrap gap-1 sm:gap-2">
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Commercial</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Office</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Residential</Badge>
-                        <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">Retail</Badge>
+                        {provider.propertiesServed && provider.propertiesServed.length > 0 ? (
+                          provider.propertiesServed.map((property, index) => (
+                            <Badge key={index} className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">
+                              {property}
+                            </Badge>
+                          ))
+                        ) : (
+                          <Badge className="bg-gray-100 text-gray-600 text-xs">No properties specified</Badge>
+                        )}
                       </div>
                     </div>
                   </div>
