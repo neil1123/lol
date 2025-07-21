@@ -43,17 +43,21 @@ const ProviderProfile = () => {
             name: providerData.business_name || providerData.name,
             description: providerData.description || `Professional ${Array.isArray(providerData.services) ? providerData.services.join(' and ') : providerData.services} services`,
             services: Array.isArray(providerData.services) ? providerData.services : [providerData.services],
+            serviceCategories: providerData.service_categories || [],
+            propertiesServed: providerData.properties_served || [],
+            pricingPackages: providerData.pricing_packages || [],
             rating: providerData.rating || 5.0,
             reviews: providerData.reviews || 0,
             completedJobs: providerData.completed_jobs || 0,
-            location: providerData.location || "Halifax, NS",
+            location: providerData.address || providerData.location || "Halifax, NS",
             responseTime: providerData.response_time || "Usually responds within 1 hour",
             yearEstablished: providerData.year_established || "2024",
             specialties: providerData.specialties || ["Professional service", "Quality work", "Customer satisfaction"],
             priceRange: providerData.price_range || "$50-$500",
             ownerName: providerData.name,
             email: providerData.email,
-            phone: providerData.phone
+            phone: providerData.phone,
+            website: providerData.website
           };
           
           setProvider(formattedProvider);
