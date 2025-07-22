@@ -248,11 +248,14 @@ const ProviderProfile = () => {
       setShowReviewForm(false);
       setReviewForm({ rating: 0, reviewText: '', orderId: '' });
       
-      // Reload provider to get updated ratings
+      // Reload provider to get updated ratings and reload reviews
       const updatedProvider = await apiService.getProviderById(id);
       if (updatedProvider) {
         setProvider(prev => ({ ...prev, ...updatedProvider }));
       }
+      
+      // Reload reviews to show the new review
+      loadProviderReviews();
     } catch (error) {
       console.error('Failed to submit review:', error);
       alert('Failed to submit review. Please try again.');
