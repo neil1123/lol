@@ -41,6 +41,7 @@ import NotificationBadge from '../../components/NotificationBadge';
 
 const ProviderOrders = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { notifications, updateNotifications } = useNotifications();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -48,6 +49,7 @@ const ProviderOrders = () => {
   const [showNewOrderForm, setShowNewOrderForm] = useState(false);
   const [showEditQuoteForm, setShowEditQuoteForm] = useState(false);
   const [editingQuote, setEditingQuote] = useState(null);
+  const [activeTab, setActiveTab] = useState('all');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   // Services state
