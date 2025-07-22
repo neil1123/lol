@@ -26,6 +26,14 @@ const ProviderProfile = () => {
   const [provider, setProvider] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [completedOrders, setCompletedOrders] = useState([]);
+  const [canLeaveReview, setCanLeaveReview] = useState(false);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewForm, setReviewForm] = useState({
+    rating: 0,
+    reviewText: '',
+    orderId: ''
+  });
 
   // Load provider from API
   useEffect(() => {
