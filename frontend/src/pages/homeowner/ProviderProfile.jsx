@@ -83,11 +83,28 @@ const ProviderProfile = () => {
     loadProvider();
   }, [id]);
 
-  // Check login status
+  // Check login status and completed orders
   useEffect(() => {
     const userType = localStorage.getItem('userType');
     setIsLoggedIn(userType === 'homeowner');
-  }, []);
+    
+    if (userType === 'homeowner') {
+      checkCompletedOrders();
+    }
+  }, [id]);
+
+  const checkCompletedOrders = async () => {
+    try {
+      const orders = await apiService.getOrders();
+      const providerOrders = orders.filter(order => 
+        order.provider_id === id && order.status === 'completed'
+      );
+      setCompletedOrders(providerOrders);
+      setCanLeaveReview(providerOrders.length > 0);
+    } catch (error) {
+      console.error('Failed to check completed orders:', error);
+    }
+  };
 
   // Scroll to top when component mounts
   useEffect(() => {
