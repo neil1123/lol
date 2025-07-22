@@ -274,13 +274,29 @@ const ProviderProfile = () => {
                 >
                   My Quotations
                 </Button>
-                <Button 
-                  variant="outline" 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="justify-start"
-                >
-                  Sign In
-                </Button>
+                {isLoggedIn ? (
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      navigate('/homeowners/dashboard');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="justify-start"
+                  >
+                    Dashboard
+                  </Button>
+                ) : (
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      navigate('/homeowners/auth');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="justify-start"
+                  >
+                    Sign In
+                  </Button>
+                )}
               </div>
             </div>
           )}
