@@ -23,6 +23,8 @@ import { STANDARD_PROVIDER_SIDEBAR, handleStandardLogout } from '../../constants
 
 const ProviderAnalytics = () => {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('analytics');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [timePeriod, setTimePeriod] = useState('weekly');
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,6 +34,23 @@ const ProviderAnalytics = () => {
     pendingQuotations: 0,
     quotations: 0
   });
+
+  // Mock notification state - in real app this would come from API/context
+  const [notifications] = useState({
+    totalUnreadMessages: 0,
+    newOrders: 0,
+    quotationRequests: 0
+  });
+
+  // User profile state - fetch from database
+  const [userProfile, setUserProfile] = useState(null);
+  const [userInitials, setUserInitials] = useState('U');
+
+  const handleLogout = () => {
+    handleStandardLogout(navigate);
+  };
+
+  const sidebarItems = STANDARD_PROVIDER_SIDEBAR;
 
   useEffect(() => {
     loadAnalyticsData();
