@@ -172,13 +172,30 @@ const HomeownerQuotations = () => {
                 >
                   Browse Services
                 </Button>
-                <Button 
-                  variant="outline" 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="justify-start"
-                >
-                  Sign In
-                </Button>
+                {/* Check authentication state */}
+                {localStorage.getItem('userType') === 'homeowner' && localStorage.getItem('authToken') ? (
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      navigate('/homeowners/dashboard');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="justify-start"
+                  >
+                    Dashboard
+                  </Button>
+                ) : (
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      navigate('/homeowners/auth');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="justify-start"
+                  >
+                    Sign In
+                  </Button>
+                )}
               </div>
             </div>
           )}
