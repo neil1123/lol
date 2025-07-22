@@ -827,7 +827,7 @@ const ProviderProfile = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  {mockReviews.map(review => (
+                  {providerReviews.map(review => (
                     <div key={review.id} className="border-b pb-6 last:border-b-0">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center space-x-2">
