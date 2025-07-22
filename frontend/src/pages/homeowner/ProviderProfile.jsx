@@ -502,18 +502,104 @@ const ProviderProfile = () => {
             </div>
           </div>
 
-          {/* Rating Section */}
+          {/* Review Section */}
           <div className="mt-6 flex justify-center lg:justify-end px-2 sm:px-0">
-            <div className="text-center bg-white/70 backdrop-blur-sm rounded-lg p-3 sm:p-4 shadow-sm border border-blue-200 w-full max-w-xs lg:w-auto">
-              <div className="text-xs sm:text-sm text-gray-700 mb-2 font-medium">⭐ Click to rate this provider</div>
-              <div className="flex space-x-1 justify-center">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button key={star} className="text-gray-300 hover:text-blue-500 transition-colors transform hover:scale-110">
-                    <Star className="h-5 w-5 sm:h-6 sm:w-6" />
-                  </button>
-                ))}
+            {canLeaveReview ? (
+              <div className="text-center bg-white/70 backdrop-blur-sm rounded-lg p-3 sm:p-4 shadow-sm border border-blue-200 w-full max-w-xs lg:w-auto">
+                {!showReviewForm ? (
+                  <>
+                    <div className="text-xs sm:text-sm text-gray-700 mb-2 font-medium">✅ You can leave a review</div>
+                    <Button 
+                      onClick={() => setShowReviewForm(true)}
+                      className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2"
+                    >
+                      Write Review
+                    </Button>
+                  </>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="text-xs sm:text-sm text-gray-700 font-medium">Rate & Review</div>
+                    
+                    {/* Star Rating */}
+                    <div className="flex space-x-1 justify-center">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button 
+                          key={star} 
+                          onClick={() => handleStarClick(star)}
+                          className={`transition-colors transform hover:scale-110 ${
+                            star <= reviewForm.rating ? 'text-yellow-500' : 'text-gray-300'
+                          }`}
+                        >
+                          <Star className="h-5 w-5 sm:h-6 sm:w-6" fill={star <= reviewForm.rating ? 'currentColor' : 'none'} />
+                        </button>
+                      ))}
+                    </div>
+                    
+                    {/* Review Text */}
+                    <Textarea
+                      placeholder="Write your review..."
+                      value={reviewForm.reviewText}
+                      onChange={(e) => setReviewForm(prev => ({ ...prev, reviewText: e.target.value }))}
+                      className="w-full text-sm"
+                      rows="3"
+                    />
+                    
+                    {/* Order Selection */}
+                    {completedOrders.length > 1 && (
+                      <select 
+                        className="w-full text-sm border rounded px-2 py-1"
+                        value={reviewForm.orderId}
+                        onChange={(e) => setReviewForm(prev => ({ ...prev, orderId: e.target.value }))}
+                      >
+                        <option value="">Select order (optional)</option>
+                        {completedOrders.map(order => (
+                          <option key={order.id} value={order.id}>
+                            Order #{order.id.slice(-6)} - {new Date(order.created_at).toLocaleDateString()}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                    
+                    {/* Action Buttons */}
+                    <div className="flex space-x-2">
+                      <Button 
+                        onClick={handleReviewSubmit}
+                        className="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 flex-1"
+                        disabled={!reviewForm.rating || !reviewForm.reviewText.trim()}
+                      >
+                        Submit
+                      </Button>
+                      <Button 
+                        onClick={() => {
+                          setShowReviewForm(false);
+                          setReviewForm({ rating: 0, reviewText: '', orderId: '' });
+                        }}
+                        variant="outline"
+                        className="text-xs px-3 py-1 flex-1"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
+            ) : isLoggedIn ? (
+              <div className="text-center bg-gray-100/70 backdrop-blur-sm rounded-lg p-3 sm:p-4 shadow-sm border border-gray-200 w-full max-w-xs lg:w-auto">
+                <div className="text-xs sm:text-sm text-gray-600 mb-2 font-medium">💭 Complete an order to review</div>
+                <p className="text-xs text-gray-500">You can only review providers after completing a job</p>
+              </div>
+            ) : (
+              <div className="text-center bg-gray-100/70 backdrop-blur-sm rounded-lg p-3 sm:p-4 shadow-sm border border-gray-200 w-full max-w-xs lg:w-auto">
+                <div className="text-xs sm:text-sm text-gray-600 mb-2 font-medium">🔐 Sign in to review</div>
+                <Button 
+                  onClick={() => navigate('/homeowners/auth')}
+                  variant="outline"
+                  className="text-xs px-3 py-1"
+                >
+                  Sign In
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>
