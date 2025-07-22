@@ -196,6 +196,22 @@ class Appointment(BaseModel):
     source: Optional[str] = "manual"
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
+class ReviewCreate(BaseModel):
+    provider_id: str
+    rating: int = Field(ge=1, le=5)  # Rating between 1-5
+    review_text: str
+    order_id: Optional[str] = None
+
+class Review(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    homeowner_id: str
+    provider_id: str
+    rating: int = Field(ge=1, le=5)
+    review_text: str
+    order_id: Optional[str] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    homeowner_name: Optional[str] = None  # For display purposes
+
 # ====== UTILITY FUNCTIONS ======
 
 def hash_password(password: str) -> str:
