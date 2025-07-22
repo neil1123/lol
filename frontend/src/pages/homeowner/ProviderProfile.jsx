@@ -213,6 +213,40 @@ const ProviderProfile = () => {
     }
   };
 
+  const handleReviewSubmit = async () => {
+    try {
+      if (!reviewForm.rating || !reviewForm.reviewText.trim()) {
+        alert('Please provide both rating and review text');
+        return;
+      }
+
+      // Submit review to backend
+      await apiService.submitReview({
+        provider_id: id,
+        rating: reviewForm.rating,
+        review_text: reviewForm.reviewText,
+        order_id: reviewForm.orderId
+      });
+
+      alert('Review submitted successfully!');
+      setShowReviewForm(false);
+      setReviewForm({ rating: 0, reviewText: '', orderId: '' });
+      
+      // Reload provider to get updated ratings
+      const updatedProvider = await apiService.getProviderById(id);
+      if (updatedProvider) {
+        setProvider(prev => ({ ...prev, ...updatedProvider }));
+      }
+    } catch (error) {
+      console.error('Failed to submit review:', error);
+      alert('Failed to submit review. Please try again.');
+    }
+  };
+
+  const handleStarClick = (rating) => {
+    setReviewForm(prev => ({ ...prev, rating }));
+  };
+
   const mockReviews = [
     {
       id: 1,
