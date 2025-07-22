@@ -288,7 +288,7 @@ const ProviderDashboard = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                      <p className="text-2xl font-bold text-gray-900">${mockDashboardData.totalSales.toLocaleString()}</p>
+                      <p className="text-2xl font-bold text-gray-900">${dashboardData.totalRevenue.toFixed(2)}</p>
                     </div>
                     <div className="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center">
                       <DollarSign className="h-4 w-4 text-blue-600" />
