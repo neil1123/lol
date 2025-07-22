@@ -934,7 +934,7 @@ const ProviderOrders = () => {
 
           {/* Orders Content */}
           {!loading && (
-            <Tabs defaultValue="pending" className="w-full">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 gap-1 h-auto p-1">
               <TabsTrigger value="pending" className="text-xs px-1 py-2 min-w-0 flex-col">
                 <span className="truncate w-full text-center">Pending</span>
