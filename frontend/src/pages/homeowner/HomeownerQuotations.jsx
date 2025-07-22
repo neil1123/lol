@@ -71,13 +71,14 @@ const HomeownerQuotations = () => {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'pending':
+      case 'pending_quotation':
         return <Clock className="h-4 w-4 text-yellow-500" />;
       case 'quoted':
         return <DollarSign className="h-4 w-4 text-blue-500" />;
       case 'accepted':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
       case 'rejected':
+      case 'declined':
         return <XCircle className="h-4 w-4 text-red-500" />;
       default:
         return <Clock className="h-4 w-4 text-gray-500" />;
