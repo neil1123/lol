@@ -239,7 +239,10 @@ const ProviderDashboard = () => {
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <Card>
+              <Card 
+                className="hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => navigate('/homeservices/analytics')}
+              >
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -253,7 +256,10 @@ const ProviderDashboard = () => {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card 
+                className="hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => navigate('/homeservices/orders?tab=confirmed')}
+              >
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -281,14 +287,15 @@ const ProviderDashboard = () => {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card 
+                className="hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => navigate('/homeservices/profile')}
+              >
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">This Week</p>
-                      <p className="text-2xl font-bold text-gray-900">
-                        ${mockDashboardData.weeklyData.reduce((sum, day) => sum + day.revenue, 0).toLocaleString()}
-                      </p>
+                      <p className="text-sm font-medium text-gray-600">View your Profile</p>
+                      <p className="text-2xl font-bold text-gray-900">Company</p>
                     </div>
                     <div className="h-8 w-8 bg-purple-100 rounded-full flex items-center justify-center">
                       <TrendingUp className="h-4 w-4 text-purple-600" />
