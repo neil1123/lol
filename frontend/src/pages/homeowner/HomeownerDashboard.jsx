@@ -402,7 +402,7 @@ const HomeownerDashboard = () => {
                       homeowner_name: user.name,
                       provider_name: provider.business_name || provider.name,
                       order_type: 'Text Us Inquiry',
-                      last_message: 'Conversation started',
+                      last_message: `New conversation with ${providerName}`,
                       last_message_time: new Date().toISOString()
                     };
                     
