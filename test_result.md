@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Implement dynamic services management system: Allow providers to select from existing services during registration and add new services. Multi-select dropdowns for orders/appointments with provider's pre-selected services. Enable homeowners to select multiple services from provider's available services in quotation forms."
+user_problem_statement: "Enhanced Dashboard System: 1) Provider Dashboard: Make 'Total Revenue' clickable leading to analytics page with graphs showing sales data from confirmed orders (no mock data), 'Active Jobs' leads to confirmed orders, 'Customer Rating' shows real data, 'This Week' changed to 'View your Profile' leading to company profile. 2) Review System: Replace 'Click to rate this provider' with full review system allowing homeowners to write reviews only after completing orders, connect star ratings to provider dashboard. 3) Footer: Make footer buttons functional with proper navigation to relevant pages."
 
 backend:
   - task: "Dynamic Services Management API"
