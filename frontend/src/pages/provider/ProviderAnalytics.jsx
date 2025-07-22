@@ -169,13 +169,158 @@ const ProviderAnalytics = () => {
   const maxCount = Math.max(...chartData.map(d => d.count), 1);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <ProviderSidebar />
-      
-      <div className="flex-1 flex flex-col">
-        <ProviderHeader />
-        
-        <main className="flex-1 p-4 md:p-8">
+    <div className="min-h-screen bg-gray-50">
+      {/* Mobile Header */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Mobile Menu Button - Only show on mobile */}
+            <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="flex items-center xl:hidden"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </Button>
+              <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
+              <span className="text-sm text-gray-600 hidden sm:inline">for Merchants</span>
+            </div>
+            
+            {/* Desktop Right Side */}
+            <div className="hidden xl:flex items-center space-x-4">
+              <Button variant="ghost" size="sm">
+                <Bell className="h-4 w-4" />
+                {notifications.totalUnreadMessages > 0 && (
+                  <NotificationBadge count={notifications.totalUnreadMessages} className="ml-1" />
+                )}
+              </Button>
+              <div className="flex items-center space-x-2">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => navigate('/homeservices/settings')}
+                  className="p-1"
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-blue-100 text-blue-600">
+                      {userInitials}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+                <span className="text-sm font-medium">{userProfile?.business_name || userProfile?.name || 'User'}</span>
+              </div>
+              <Button variant="ghost" size="sm" onClick={handleLogout} title="Logout">
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* Mobile Right Side */}
+            <div className="xl:hidden flex items-center space-x-2">
+              <Button variant="ghost" size="sm">
+                <Bell className="h-4 w-4" />
+                {notifications.totalUnreadMessages > 0 && (
+                  <NotificationBadge count={notifications.totalUnreadMessages} className="ml-1" />
+                )}
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => navigate('/homeservices/settings')}
+                className="p-1"
+              >
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback className="bg-blue-100 text-blue-600">
+                    {userInitials}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Navigation Overlay - Only show on mobile */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 xl:hidden">
+          <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setIsMobileMenuOpen(false)} />
+          <div className="fixed top-0 left-0 w-64 h-full bg-white shadow-lg">
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold">Navigation</h2>
+                <Button variant="ghost" size="sm" onClick={() => setIsMobileMenuOpen(false)}>
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+              <nav className="space-y-2">
+                {sidebarItems.map((item) => (
+                  <Button
+                    key={item.id}
+                    variant={activeTab === item.id ? "default" : "ghost"}
+                    className="w-full justify-start"
+                    onClick={() => {
+                      setActiveTab(item.id);
+                      navigate(item.path);
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <item.icon className="h-4 w-4 mr-3" />
+                    {item.label}
+                  </Button>
+                ))}
+                <hr className="my-4" />
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="h-4 w-4 mr-3" />
+                  Logout
+                </Button>
+              </nav>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="flex">
+        {/* Desktop Sidebar - Always show on desktop like homeowner explore */}
+        <div className="hidden xl:block w-64 bg-white shadow-sm min-h-screen">
+          <div className="p-4">
+            <div className="mb-6">
+              <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
+            </div>
+            <nav className="space-y-2">
+              {sidebarItems.map((item) => (
+                <Button
+                  key={item.id}
+                  variant={activeTab === item.id ? "default" : "ghost"}
+                  className="w-full justify-start"
+                  onClick={() => {
+                    setActiveTab(item.id);
+                    navigate(item.path);
+                  }}
+                >
+                  <item.icon className="h-4 w-4 mr-3" />
+                  {item.label}
+                </Button>
+              ))}
+              <hr className="my-4" />
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                onClick={handleLogout}
+              >
+                <LogOut className="h-4 w-4 mr-3" />
+                Logout
+              </Button>
+            </nav>
+          </div>
+        </div>
+
+        {/* Main Content - Adjust width for desktop sidebar */}
+        <div className="flex-1 xl:pl-0 p-4 md:p-8">
           <div className="max-w-7xl mx-auto">
             {/* Header */}
             <div className="mb-8 flex items-center justify-between">
@@ -340,7 +485,7 @@ const ProviderAnalytics = () => {
                                   Order #{order.id?.slice(-6)}
                                 </p>
                                 <p className="text-xs text-gray-500">
-                                  {new Date(order.created_at).toLocaleDateString()}
+                                  {new Date(order.request_date).toLocaleDateString()}
                                 </p>
                               </div>
                               <div className="text-right">
@@ -372,7 +517,7 @@ const ProviderAnalytics = () => {
               </>
             )}
           </div>
-        </main>
+        </div>
       </div>
     </div>
   );
