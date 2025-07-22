@@ -827,35 +827,47 @@ const ProviderProfile = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
-                  {providerReviews.map(review => (
-                    <div key={review.id} className="border-b pb-6 last:border-b-0">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center space-x-2">
-                          <Avatar className="h-8 w-8">
-                            <AvatarFallback className="text-xs">
-                              {review.customerName.split(' ').map(n => n[0]).join('')}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <span className="font-semibold">{review.customerName}</span>
-                            <div className="flex items-center space-x-1">
-                              {[...Array(5)].map((_, i) => (
-                                <Star 
-                                  key={i} 
-                                  className={`h-4 w-4 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
-                                />
-                              ))}
+                  {reviewsLoading ? (
+                    <div className="text-center py-4">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                      <p className="mt-2 text-gray-600">Loading reviews...</p>
+                    </div>
+                  ) : providerReviews.length > 0 ? (
+                    providerReviews.map(review => (
+                      <div key={review.id} className="border-b pb-6 last:border-b-0">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-2">
+                            <Avatar className="h-8 w-8">
+                              <AvatarFallback className="text-xs">
+                                {review.homeowner_name ? review.homeowner_name.split(' ').map(n => n[0]).join('') : 'U'}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="font-medium text-sm">{review.homeowner_name || 'Anonymous'}</p>
+                              <div className="flex">
+                                {[...Array(5)].map((_, i) => (
+                                  <Star 
+                                    key={i} 
+                                    className={`h-3 w-3 ${i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                                  />
+                                ))}
+                              </div>
                             </div>
                           </div>
+                          <span className="text-xs text-gray-500">
+                            {new Date(review.created_at).toLocaleDateString()}
+                          </span>
                         </div>
-                        <div className="text-sm text-gray-500">
-                          {review.date}
-                        </div>
+                        <p className="text-gray-600 text-sm">{review.review_text}</p>
                       </div>
-                      <Badge variant="secondary" className="mb-2">{review.service}</Badge>
-                      <p className="text-gray-700">{review.comment}</p>
+                    ))
+                  ) : (
+                    <div className="text-center py-8 text-gray-500">
+                      <Star className="h-8 w-8 mx-auto mb-2 text-gray-400" />
+                      <p>No reviews yet</p>
+                      <p className="text-sm">Be the first to leave a review after completing a service!</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </CardContent>
             </Card>
