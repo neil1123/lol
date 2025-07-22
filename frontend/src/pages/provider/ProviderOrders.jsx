@@ -49,7 +49,7 @@ const ProviderOrders = () => {
   const [showNewOrderForm, setShowNewOrderForm] = useState(false);
   const [showEditQuoteForm, setShowEditQuoteForm] = useState(false);
   const [editingQuote, setEditingQuote] = useState(null);
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeTab, setActiveTab] = useState('pending');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   // Services state
