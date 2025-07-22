@@ -166,7 +166,7 @@ const ProviderProfile = () => {
         homeowner_name: userData.name,
         provider_name: provider.name,
         order_type: 'Text Us Inquiry',
-        last_message: 'Conversation started',
+        last_message: `New conversation with ${provider.name}`,
         last_message_time: new Date().toISOString()
       };
       
