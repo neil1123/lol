@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bell, LogOut } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Avatar, AvatarFallback } from '../ui/avatar';
+import { Button } from './ui/button';
+import { Avatar, AvatarFallback } from './ui/avatar';
 
 const ProviderHeader = () => {
   const navigate = useNavigate();
