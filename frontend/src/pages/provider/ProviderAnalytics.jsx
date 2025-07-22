@@ -323,35 +323,37 @@ const ProviderAnalytics = () => {
         <div className="flex-1 xl:pl-0 p-4 md:p-8">
           <div className="max-w-7xl mx-auto">
             {/* Header */}
-            <div className="mb-8 flex items-center justify-between">
-              <div>
-                <div className="flex items-center mb-2">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={() => navigate('/homeservices/dashboard')}
-                    className="mr-4"
-                  >
-                    <ArrowLeft className="h-4 w-4" />
-                  </Button>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Revenue Analytics</h2>
+            <div className="mb-8">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <div className="flex items-center mb-2">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => navigate('/homeservices/dashboard')}
+                      className="mr-4"
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                    </Button>
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">Revenue Analytics</h2>
+                  </div>
+                  <p className="text-gray-600 text-sm sm:text-base">Track your business performance and revenue insights</p>
                 </div>
-                <p className="text-gray-600">Track your business performance and revenue insights</p>
-              </div>
 
-              {/* Time Period Selector */}
-              <div className="flex space-x-2">
-                {['daily', 'weekly', 'monthly', 'yearly'].map(period => (
-                  <Button
-                    key={period}
-                    variant={timePeriod === period ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setTimePeriod(period)}
-                    className="capitalize"
-                  >
-                    {period}
-                  </Button>
-                ))}
+                {/* Time Period Selector */}
+                <div className="flex flex-wrap gap-2">
+                  {['daily', 'weekly', 'monthly', 'yearly'].map(period => (
+                    <Button
+                      key={period}
+                      variant={timePeriod === period ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setTimePeriod(period)}
+                      className="capitalize text-xs sm:text-sm"
+                    >
+                      {period}
+                    </Button>
+                  ))}
+                </div>
               </div>
             </div>
 
