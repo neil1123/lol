@@ -357,21 +357,16 @@ const ProviderDashboard = () => {
                 </CardHeader>
                 <CardContent className="px-4 py-6">
                   <div className="h-48 md:h-64">
-                    <div className="space-y-3">
-                      {mockDashboardData.weeklyData.map((day, index) => (
-                        <div key={index} className="flex items-center gap-3">
-                          <span className="text-sm text-gray-600 w-8 text-left">{day.day}</span>
-                          <div className="flex-1 min-w-0">
-                            <div className="bg-gray-200 rounded-full h-2">
-                              <div 
-                                className="bg-blue-600 h-2 rounded-full" 
-                                style={{ width: `${(day.revenue / 3200) * 100}%` }}
-                              />
-                            </div>
-                          </div>
-                          <span className="text-sm font-medium text-gray-900 w-12 text-right">${day.revenue}</span>
+                    <div className="text-center py-8 text-gray-500">
+                      <BarChart3 className="h-8 w-8 mx-auto mb-2 text-gray-400" />
+                      <p>Weekly performance tracking</p>
+                      <p className="text-sm">Complete more orders to see detailed analytics</p>
+                      <div className="mt-4 text-left">
+                        <div className="bg-blue-50 p-3 rounded-lg">
+                          <p className="text-sm font-medium text-blue-900">This Week's Revenue</p>
+                          <p className="text-2xl font-bold text-blue-600">${dashboardData.weeklyRevenue.toFixed(2)}</p>
                         </div>
-                      ))}
+                      </div>
                     </div>
                   </div>
                 </CardContent>
