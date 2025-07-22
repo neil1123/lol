@@ -320,61 +320,7 @@ const ProviderProfile = () => {
         providerId={provider?.id}
       />
 
-      {/* Chat Interface */}
-      {isChatOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg max-w-md w-full max-h-[80vh] overflow-hidden">
-            <div className="p-4 border-b flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold">
-                  {provider?.name?.split(' ').map(n => n[0]).join('') || 'P'}
-                </div>
-                <div>
-                  <h3 className="font-semibold">{provider?.name}</h3>
-                  <p className="text-sm text-gray-600">Online now</p>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                onClick={() => setIsChatOpen(false)}
-                className="p-2"
-              >
-                <X className="h-5 w-5" />
-              </Button>
-            </div>
-            
-            <div className="p-4 h-64 overflow-y-auto">
-              <div className="space-y-4">
-                <div className="flex">
-                  <div className="bg-gray-100 rounded-lg p-3 max-w-xs">
-                    <p className="text-sm">Hi! I'm ready to help you get the best deal on your service. What can I do for you today?</p>
-                    <p className="text-xs text-gray-500 mt-1">Just now</p>
-                  </div>
-                </div>
-                <div className="flex">
-                  <div className="bg-gray-100 rounded-lg p-3 max-w-xs">
-                    <p className="text-sm">Our current special offer starts from $199.99. Would you like to know more details?</p>
-                    <p className="text-xs text-gray-500 mt-1">Just now</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="p-4 border-t">
-              <div className="flex space-x-2">
-                <input
-                  type="text"
-                  placeholder="Type your message..."
-                  className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <Button className="bg-blue-600 hover:bg-blue-700">
-                  <MessageCircle className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Chat Interface - Removed hardcoded messages, redirects to dashboard messages */}
 
       {/* Provider Header */}
       <div className="bg-blue-50 border-b overflow-hidden">
