@@ -319,7 +319,7 @@ const ProviderDashboard = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-gray-600">Customer Rating</p>
-                      <p className="text-2xl font-bold text-gray-900">{mockDashboardData.customerSatisfaction}</p>
+                      <p className="text-2xl font-bold text-gray-900">{dashboardData.customerRating.toFixed(1)}</p>
                     </div>
                     <div className="h-8 w-8 bg-yellow-100 rounded-full flex items-center justify-center">
                       <Star className="h-4 w-4 text-yellow-600" />
