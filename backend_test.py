@@ -1050,6 +1050,463 @@ def test_quotation_error_scenarios():
         print(f"❌ Quotation error scenarios test failed: {e}")
         return False
 
+def test_review_system_homeowner_submit_review():
+    """Test homeowner submitting a review for a provider after completing an order"""
+    print("\n🔍 Testing Review System - Homeowner Submit Review...")
+    
+    if not homeowner_token or not provider_id:
+        print("❌ Missing homeowner token or provider ID for review test")
+        return False
+    
+    try:
+        # First, create a completed order for the homeowner to review
+        order_data = {
+            "homeowner_id": homeowner_id,
+            "provider_id": provider_id,
+            "homeowner_name": "Test Homeowner",
+            "homeowner_email": "test@homeowner.com",
+            "homeowner_phone": "+1-902-555-0001",
+            "homeowner_address": "123 Test St, Halifax, NS",
+            "provider_name": "Test Provider",
+            "service_type": "Home Cleaning",
+            "description": "Regular house cleaning service"
+        }
+        
+        headers = {"Authorization": f"Bearer {homeowner_token}"}
+        response = requests.post(
+            f"{BACKEND_URL}/orders",
+            json=order_data,
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Failed to create test order for review: {response.status_code}")
+            return False
+        
+        test_order = response.json()
+        test_order_id = test_order["id"]
+        
+        # Update order status to completed (as provider)
+        provider_headers = {"Authorization": f"Bearer {provider_token}"}
+        response = requests.put(
+            f"{BACKEND_URL}/orders/{test_order_id}/status?status=completed",
+            headers=provider_headers,
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Failed to mark order as completed: {response.status_code}")
+            return False
+        
+        print("✅ Test order created and marked as completed")
+        
+        # Now submit a review
+        review_data = {
+            "provider_id": provider_id,
+            "rating": 5,
+            "review_text": "Excellent service! Very professional and thorough cleaning.",
+            "order_id": test_order_id
+        }
+        
+        response = requests.post(
+            f"{BACKEND_URL}/reviews",
+            json=review_data,
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Review submission failed with status {response.status_code}")
+            print(f"Response: {response.text}")
+            return False
+        
+        review_response = response.json()
+        
+        # Verify review data
+        if (review_response.get("provider_id") != provider_id or
+            review_response.get("rating") != 5 or
+            review_response.get("homeowner_id") != homeowner_id):
+            print(f"❌ Review data mismatch: {review_response}")
+            return False
+        
+        print("✅ Review submitted successfully")
+        return True
+        
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Review submission test failed: {e}")
+        return False
+
+def test_review_system_get_provider_reviews():
+    """Test fetching reviews for a provider"""
+    print("\n🔍 Testing Review System - Get Provider Reviews...")
+    
+    if not provider_id:
+        print("❌ Missing provider ID for review retrieval test")
+        return False
+    
+    try:
+        # Get reviews for the provider (no authentication required)
+        response = requests.get(
+            f"{BACKEND_URL}/providers/{provider_id}/reviews",
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Failed to get provider reviews with status {response.status_code}")
+            return False
+        
+        reviews = response.json()
+        
+        # Should be a list
+        if not isinstance(reviews, list):
+            print(f"❌ Expected list of reviews, got: {type(reviews)}")
+            return False
+        
+        # If we have reviews, verify structure
+        if reviews:
+            review = reviews[0]
+            required_fields = ["id", "homeowner_id", "provider_id", "rating", "review_text", "created_at"]
+            for field in required_fields:
+                if field not in review:
+                    print(f"❌ Missing required field '{field}' in review")
+                    return False
+            
+            # Verify rating is between 1-5
+            if not (1 <= review["rating"] <= 5):
+                print(f"❌ Invalid rating value: {review['rating']}")
+                return False
+        
+        print(f"✅ Retrieved {len(reviews)} reviews for provider")
+        return True
+        
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Get provider reviews test failed: {e}")
+        return False
+
+def test_review_system_validation_rules():
+    """Test review system validation rules"""
+    print("\n🔍 Testing Review System - Validation Rules...")
+    
+    if not homeowner_token or not provider_id:
+        print("❌ Missing tokens for review validation test")
+        return False
+    
+    try:
+        headers = {"Authorization": f"Bearer {homeowner_token}"}
+        
+        # Test 1: Provider trying to submit review (should fail)
+        if provider_token:
+            provider_headers = {"Authorization": f"Bearer {provider_token}"}
+            review_data = {
+                "provider_id": provider_id,
+                "rating": 4,
+                "review_text": "Good service"
+            }
+            
+            response = requests.post(
+                f"{BACKEND_URL}/reviews",
+                json=review_data,
+                headers=provider_headers,
+                timeout=30
+            )
+            
+            if response.status_code != 403:
+                print(f"❌ Expected 403 for provider review submission, got {response.status_code}")
+                return False
+            
+            print("✅ Provider review submission properly blocked (403)")
+        
+        # Test 2: Homeowner reviewing without completed order (should fail)
+        # Create a new provider for this test
+        new_provider_data = {
+            "email": f"testprovider{uuid.uuid4().hex[:8]}@doordtest.com",
+            "password": "password123",
+            "user_type": "provider",
+            "name": "Test Provider 2",
+            "business_name": "Test Services 2",
+            "services": ["Plumbing"]
+        }
+        
+        response = requests.post(
+            f"{BACKEND_URL}/auth/register",
+            json=new_provider_data,
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            new_provider = response.json()
+            new_provider_id = new_provider["user"]["id"]
+            
+            # Try to review without completed order
+            review_data = {
+                "provider_id": new_provider_id,
+                "rating": 3,
+                "review_text": "Test review without order"
+            }
+            
+            response = requests.post(
+                f"{BACKEND_URL}/reviews",
+                json=review_data,
+                headers=headers,
+                timeout=30
+            )
+            
+            if response.status_code != 400:
+                print(f"❌ Expected 400 for review without completed order, got {response.status_code}")
+                return False
+            
+            print("✅ Review without completed order properly blocked (400)")
+        
+        # Test 3: Invalid rating values
+        review_data = {
+            "provider_id": provider_id,
+            "rating": 6,  # Invalid rating > 5
+            "review_text": "Test review with invalid rating"
+        }
+        
+        response = requests.post(
+            f"{BACKEND_URL}/reviews",
+            json=review_data,
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code not in [400, 422]:
+            print(f"❌ Expected 400/422 for invalid rating, got {response.status_code}")
+            return False
+        
+        print("✅ Invalid rating properly rejected")
+        
+        # Test 4: Duplicate review (should fail)
+        # Try to submit another review for the same provider
+        review_data = {
+            "provider_id": provider_id,
+            "rating": 4,
+            "review_text": "Another review for same provider"
+        }
+        
+        response = requests.post(
+            f"{BACKEND_URL}/reviews",
+            json=review_data,
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code != 400:
+            print(f"❌ Expected 400 for duplicate review, got {response.status_code}")
+            return False
+        
+        print("✅ Duplicate review properly blocked (400)")
+        
+        print("✅ All review validation rules working correctly")
+        return True
+        
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Review validation test failed: {e}")
+        return False
+
+def test_review_system_provider_rating_update():
+    """Test that provider rating is updated when reviews are submitted"""
+    print("\n🔍 Testing Review System - Provider Rating Update...")
+    
+    if not provider_id:
+        print("❌ Missing provider ID for rating update test")
+        return False
+    
+    try:
+        # Get provider's current rating
+        response = requests.get(
+            f"{BACKEND_URL}/providers/{provider_id}",
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Failed to get provider data: {response.status_code}")
+            return False
+        
+        provider_data = response.json()
+        initial_rating = provider_data.get("rating", 0)
+        initial_review_count = provider_data.get("reviews", 0)
+        
+        print(f"ℹ️ Initial rating: {initial_rating}, review count: {initial_review_count}")
+        
+        # Create a new homeowner for this test
+        new_homeowner_data = {
+            "email": f"testhomeowner{uuid.uuid4().hex[:8]}@doordtest.com",
+            "password": "password123",
+            "user_type": "homeowner",
+            "name": "Test Homeowner 2"
+        }
+        
+        response = requests.post(
+            f"{BACKEND_URL}/auth/register",
+            json=new_homeowner_data,
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Failed to create test homeowner: {response.status_code}")
+            return False
+        
+        new_homeowner = response.json()
+        new_homeowner_id = new_homeowner["user"]["id"]
+        new_homeowner_token = new_homeowner["access_token"]
+        
+        # Create and complete an order
+        order_data = {
+            "homeowner_id": new_homeowner_id,
+            "provider_id": provider_id,
+            "homeowner_name": "Test Homeowner 2",
+            "homeowner_email": new_homeowner_data["email"],
+            "homeowner_phone": "+1-902-555-0002",
+            "homeowner_address": "456 Test Ave, Halifax, NS",
+            "provider_name": "Test Provider",
+            "service_type": "Electrical Work",
+            "description": "Electrical outlet installation"
+        }
+        
+        headers = {"Authorization": f"Bearer {new_homeowner_token}"}
+        response = requests.post(
+            f"{BACKEND_URL}/orders",
+            json=order_data,
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Failed to create test order: {response.status_code}")
+            return False
+        
+        test_order = response.json()
+        test_order_id = test_order["id"]
+        
+        # Complete the order (as provider)
+        provider_headers = {"Authorization": f"Bearer {provider_token}"}
+        response = requests.put(
+            f"{BACKEND_URL}/orders/{test_order_id}/status?status=completed",
+            headers=provider_headers,
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Failed to complete order: {response.status_code}")
+            return False
+        
+        # Submit a review with rating 4
+        review_data = {
+            "provider_id": provider_id,
+            "rating": 4,
+            "review_text": "Good electrical work, professional service.",
+            "order_id": test_order_id
+        }
+        
+        response = requests.post(
+            f"{BACKEND_URL}/reviews",
+            json=review_data,
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Failed to submit review: {response.status_code}")
+            return False
+        
+        print("✅ Review submitted successfully")
+        
+        # Check if provider rating was updated
+        response = requests.get(
+            f"{BACKEND_URL}/providers/{provider_id}",
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Failed to get updated provider data: {response.status_code}")
+            return False
+        
+        updated_provider_data = response.json()
+        updated_rating = updated_provider_data.get("rating", 0)
+        updated_review_count = updated_provider_data.get("reviews", 0)
+        
+        print(f"ℹ️ Updated rating: {updated_rating}, review count: {updated_review_count}")
+        
+        # Verify review count increased
+        if updated_review_count <= initial_review_count:
+            print(f"❌ Review count did not increase: {initial_review_count} -> {updated_review_count}")
+            return False
+        
+        # Verify rating is reasonable (should be average of all ratings)
+        if updated_rating < 1 or updated_rating > 5:
+            print(f"❌ Invalid updated rating: {updated_rating}")
+            return False
+        
+        print("✅ Provider rating and review count updated correctly")
+        return True
+        
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Provider rating update test failed: {e}")
+        return False
+
+def test_analytics_data_orders():
+    """Test that orders endpoint returns proper data for analytics calculations"""
+    print("\n🔍 Testing Analytics Data - Orders Endpoint...")
+    
+    if not provider_token:
+        print("❌ Missing provider token for analytics test")
+        return False
+    
+    try:
+        headers = {"Authorization": f"Bearer {provider_token}"}
+        response = requests.get(
+            f"{BACKEND_URL}/orders",
+            headers=headers,
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            print(f"❌ Failed to get orders for analytics: {response.status_code}")
+            return False
+        
+        orders = response.json()
+        
+        if not isinstance(orders, list):
+            print(f"❌ Expected list of orders, got: {type(orders)}")
+            return False
+        
+        # Verify order structure for analytics
+        analytics_fields = ["id", "status", "quotation_amount", "request_date", "service_type"]
+        status_counts = {"completed": 0, "in_progress": 0, "accepted": 0}
+        total_revenue = 0
+        
+        for order in orders:
+            # Check required fields for analytics
+            for field in analytics_fields:
+                if field not in order:
+                    print(f"❌ Missing analytics field '{field}' in order")
+                    return False
+            
+            # Count orders by status
+            order_status = order.get("status", "")
+            if order_status in status_counts:
+                status_counts[order_status] += 1
+            
+            # Calculate revenue from completed orders
+            if order_status == "completed" and order.get("quotation_amount"):
+                total_revenue += float(order["quotation_amount"])
+        
+        print(f"✅ Orders analytics data verified:")
+        print(f"   - Total orders: {len(orders)}")
+        print(f"   - Completed: {status_counts['completed']}")
+        print(f"   - In Progress: {status_counts['in_progress']}")
+        print(f"   - Accepted: {status_counts['accepted']}")
+        print(f"   - Total Revenue: ${total_revenue:.2f}")
+        
+        return True
+        
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Analytics data test failed: {e}")
+        return False
+
 def run_all_tests():
     """Run all backend tests"""
     print("=" * 70)
@@ -1128,6 +1585,26 @@ def run_all_tests():
     
     # Test 22: Quotation Error Scenarios
     test_results.append(("Quotation Error Scenarios", test_quotation_error_scenarios()))
+    
+    # NEW REVIEW SYSTEM TESTS
+    print("\n" + "=" * 70)
+    print("🌟 REVIEW SYSTEM TESTING")
+    print("=" * 70)
+    
+    # Test 23: Review System - Homeowner Submit Review
+    test_results.append(("Review System - Submit Review", test_review_system_homeowner_submit_review()))
+    
+    # Test 24: Review System - Get Provider Reviews
+    test_results.append(("Review System - Get Reviews", test_review_system_get_provider_reviews()))
+    
+    # Test 25: Review System - Validation Rules
+    test_results.append(("Review System - Validation", test_review_system_validation_rules()))
+    
+    # Test 26: Review System - Provider Rating Update
+    test_results.append(("Review System - Rating Update", test_review_system_provider_rating_update()))
+    
+    # Test 27: Analytics Data - Orders
+    test_results.append(("Analytics Data - Orders", test_analytics_data_orders()))
     
     # Summary
     print("\n" + "=" * 70)
