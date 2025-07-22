@@ -9,7 +9,7 @@ import json
 import sys
 
 # Backend URL from environment
-BACKEND_URL = "https://b20dd39b-910e-4cb5-9a88-731af3f6b819.preview.emergentagent.com/api"
+BACKEND_URL = "https://d0b48061-c58b-462b-ac47-e454ded62382.preview.emergentagent.com/api"
 
 def test_provider_registration_with_specific_credentials():
     """Test provider registration with the specific credentials provided"""
