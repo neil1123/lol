@@ -213,6 +213,18 @@ class ApiService {
       body: JSON.stringify(profileData),
     });
   }
+
+  // ====== REVIEWS ======
+  async submitReview(reviewData) {
+    return await this.request('/reviews', {
+      method: 'POST',
+      body: JSON.stringify(reviewData),
+    });
+  }
+
+  async getProviderReviews(providerId) {
+    return await this.request(`/providers/${providerId}/reviews`);
+  }
 }
 
 // Create and export singleton instance
