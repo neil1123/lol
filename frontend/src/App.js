@@ -23,6 +23,7 @@ import ProviderCustomers from "./pages/provider/ProviderCustomers";
 import ProviderSettings from "./pages/provider/ProviderSettings";
 import ProviderProfileManagement from "./pages/provider/ProviderProfileManagement";
 import ProviderAuth from "./pages/provider/ProviderAuth";
+import ProviderAnalytics from "./pages/provider/ProviderAnalytics";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
