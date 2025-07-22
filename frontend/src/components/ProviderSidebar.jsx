@@ -8,7 +8,7 @@ import {
   Settings, 
   Package
 } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Button } from './ui/button';
 
 const ProviderSidebar = ({ currentPage = '' }) => {
   const navigate = useNavigate();
