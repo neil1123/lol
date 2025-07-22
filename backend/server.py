@@ -698,6 +698,72 @@ async def update_provider_profile(profile_data: dict, current_user: User = Depen
     
     return {"message": "Profile updated successfully", "profile": profile_data}
 
+# ====== REVIEW ENDPOINTS ======
+
+@api_router.post("/reviews", response_model=Review)
+async def submit_review(review_data: ReviewCreate, current_user: User = Depends(get_current_user)):
+    """Submit a review for a provider"""
+    if current_user.user_type != "homeowner":
+        raise HTTPException(status_code=403, detail="Only homeowners can submit reviews")
+    
+    # Verify homeowner has a completed order with this provider
+    completed_orders = await db.orders.find({
+        "homeowner_id": current_user.id,
+        "provider_id": review_data.provider_id,
+        "status": "completed"
+    }).to_list(1000)
+    
+    if not completed_orders:
+        raise HTTPException(status_code=400, detail="You can only review providers after completing an order")
+    
+    # Check if homeowner already reviewed this provider
+    existing_review = await db.reviews.find_one({
+        "homeowner_id": current_user.id,
+        "provider_id": review_data.provider_id
+    })
+    
+    if existing_review:
+        raise HTTPException(status_code=400, detail="You have already reviewed this provider")
+    
+    # Create review
+    review = Review(
+        homeowner_id=current_user.id,
+        provider_id=review_data.provider_id,
+        rating=review_data.rating,
+        review_text=review_data.review_text,
+        order_id=review_data.order_id,
+        homeowner_name=current_user.name
+    )
+    
+    await db.reviews.insert_one(review.dict())
+    
+    # Update provider's overall rating
+    await update_provider_rating(review_data.provider_id)
+    
+    return review
+
+@api_router.get("/providers/{provider_id}/reviews", response_model=List[Review])
+async def get_provider_reviews(provider_id: str):
+    """Get all reviews for a provider"""
+    reviews = await db.reviews.find({"provider_id": provider_id}).sort("created_at", -1).to_list(1000)
+    return [Review(**review) for review in reviews]
+
+async def update_provider_rating(provider_id: str):
+    """Update provider's overall rating based on all reviews"""
+    reviews = await db.reviews.find({"provider_id": provider_id}).to_list(1000)
+    
+    if reviews:
+        avg_rating = sum(review["rating"] for review in reviews) / len(reviews)
+        review_count = len(reviews)
+        
+        await db.users.update_one(
+            {"id": provider_id},
+            {"$set": {
+                "rating": round(avg_rating, 1),
+                "reviews": review_count
+            }}
+        )
+
 # Include the router in the main app
 app.include_router(api_router)
 
