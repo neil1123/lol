@@ -555,13 +555,13 @@ async def create_quotation_request(order_data: OrderCreate):
     thread = MessageThread(**thread_data)
     await db.message_threads.insert_one(thread.dict())
     
-    # Create initial message
+    # Create initial message - remove hardcoded template
     initial_message = {
         "id": str(uuid.uuid4()),
         "thread_id": thread.id,
         "sender_id": order.homeowner_id,
         "sender_type": "homeowner",
-        "content": f"Hi {order.provider_name}! I'm interested in your {order.service_type} services. Here are the details: {order.description}. My preferred date is {order.preferred_date} and budget is {order.budget}.",
+        "content": f"New quotation request for {order.service_type} - {order.description}",
         "timestamp": datetime.utcnow(),
         "read": False
     }
