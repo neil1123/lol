@@ -83,7 +83,21 @@ const ProviderProfile = () => {
     };
     
     loadProvider();
+    loadProviderReviews();
   }, [id]);
+
+  const loadProviderReviews = async () => {
+    try {
+      setReviewsLoading(true);
+      const reviews = await apiService.getProviderReviews(id);
+      setProviderReviews(reviews);
+    } catch (error) {
+      console.error('Failed to load provider reviews:', error);
+      setProviderReviews([]);
+    } finally {
+      setReviewsLoading(false);
+    }
+  };
 
   // Check login status and completed orders
   useEffect(() => {
