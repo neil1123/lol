@@ -34,6 +34,8 @@ const ProviderProfile = () => {
     reviewText: '',
     orderId: ''
   });
+  const [providerReviews, setProviderReviews] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
 
   // Load provider from API
   useEffect(() => {
