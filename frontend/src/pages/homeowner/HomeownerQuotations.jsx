@@ -107,10 +107,10 @@ const HomeownerQuotations = () => {
     });
   };
 
-  const pendingQuotes = quotations.filter(q => q.status === 'pending');
+  const pendingQuotes = quotations.filter(q => q.status === 'pending_quotation');
   const quotedQuotes = quotations.filter(q => q.status === 'quoted');
   const acceptedQuotes = quotations.filter(q => q.status === 'accepted');
-  const rejectedQuotes = quotations.filter(q => q.status === 'rejected');
+  const rejectedQuotes = quotations.filter(q => q.status === 'rejected' || q.status === 'declined');
 
   return (
     <div className="min-h-screen bg-gray-50">
