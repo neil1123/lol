@@ -48,6 +48,12 @@ const ProviderDashboard = () => {
   // User profile state - fetch from database
   const [userProfile, setUserProfile] = useState(null);
   const [userInitials, setUserInitials] = useState('U');
+  const [dashboardData, setDashboardData] = useState({
+    totalRevenue: 0,
+    activeJobs: 0,
+    customerRating: 5.0,
+    weeklyRevenue: 0
+  });
 
   // Load user profile on component mount
   useEffect(() => {
