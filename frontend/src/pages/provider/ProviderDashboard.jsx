@@ -58,6 +58,7 @@ const ProviderDashboard = () => {
   // Load user profile on component mount
   useEffect(() => {
     loadUserProfile();
+    loadDashboardData();
   }, []);
 
   const loadUserProfile = async () => {
