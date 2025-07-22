@@ -266,33 +266,6 @@ const ProviderProfile = () => {
     setReviewForm(prev => ({ ...prev, rating }));
   };
 
-  const mockReviews = [
-    {
-      id: 1,
-      customerName: "Sarah Johnson",
-      rating: 5,
-      date: "2024-01-10",
-      service: "Home Cleaning",
-      comment: "Excellent service! Very thorough and professional. The team arrived on time and left my house spotless. Highly recommended!"
-    },
-    {
-      id: 2,
-      customerName: "Mike Wilson",
-      rating: 4,
-      date: "2024-01-05",
-      service: "Electrical Work",
-      comment: "Great work on installing new outlets in my kitchen. Professional and clean work. Would definitely use again."
-    },
-    {
-      id: 3,
-      customerName: "Emily Davis",
-      rating: 5,
-      date: "2023-12-28",
-      service: "Plumbing",
-      comment: "Fixed my leaky faucet quickly and at a fair price. Very knowledgeable and explained everything clearly."
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
