@@ -755,19 +755,63 @@ const HomeownerLanding = () => {
             <div>
               <h5 className="font-semibold mb-4">For Homeowners</h5>
               <ul className="space-y-2 text-gray-400">
-                <li>Browse Services</li>
-                <li>How It Works</li>
-                <li>Safety</li>
-                <li>Support</li>
+                <li>
+                  <button 
+                    onClick={() => navigate('/homeowners/browse')}
+                    className="hover:text-white transition-colors"
+                  >
+                    Browse Services
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => navigate('/homeowners/auth')}
+                    className="hover:text-white transition-colors"
+                  >
+                    Sign Up
+                  </button>
+                </li>
+                <li>
+                  <button className="hover:text-white transition-colors">
+                    How It Works
+                  </button>
+                </li>
+                <li>
+                  <button className="hover:text-white transition-colors">
+                    Support
+                  </button>
+                </li>
               </ul>
             </div>
             <div>
               <h5 className="font-semibold mb-4">For Providers</h5>
               <ul className="space-y-2 text-gray-400">
-                <li>Join as Provider</li>
-                <li>Explore</li>
-                <li>Resources</li>
-                <li>Community</li>
+                <li>
+                  <button 
+                    onClick={() => navigate('/homeservices/auth')}
+                    className="hover:text-white transition-colors"
+                  >
+                    Join as Provider
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => navigate('/homeowners/browse')}
+                    className="hover:text-white transition-colors"
+                  >
+                    Explore Services
+                  </button>
+                </li>
+                <li>
+                  <button className="hover:text-white transition-colors">
+                    Resources
+                  </button>
+                </li>
+                <li>
+                  <button className="hover:text-white transition-colors">
+                    Community
+                  </button>
+                </li>
               </ul>
             </div>
             <div>
