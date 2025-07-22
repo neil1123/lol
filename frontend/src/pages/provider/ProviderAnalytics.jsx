@@ -8,13 +8,18 @@ import {
   Calendar,
   ArrowLeft,
   PieChart,
-  FileText
+  FileText,
+  Bell,
+  LogOut,
+  Menu,
+  X
 } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
-import ProviderSidebar from '../../components/ProviderSidebar';
-import ProviderHeader from '../../components/ProviderHeader';
+import { Avatar, AvatarFallback } from '../../components/ui/avatar';
+import NotificationBadge from '../../components/NotificationBadge';
+import { STANDARD_PROVIDER_SIDEBAR, handleStandardLogout } from '../../constants/providerSidebarConfig';
 
 const ProviderAnalytics = () => {
   const navigate = useNavigate();
