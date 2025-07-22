@@ -95,6 +95,14 @@ const ProviderOrders = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // Handle tab query parameter
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab && ['all', 'pending', 'quoted', 'confirmed', 'in_progress', 'completed'].includes(tab)) {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
+
   const loadUserProfile = async () => {
     try {
       const profile = await apiService.getUserProfile();
