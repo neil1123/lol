@@ -237,7 +237,15 @@ const ProviderProfile = () => {
               <Button variant="ghost" onClick={() => navigate('/homeowners/quotations')}>
                 My Quotations
               </Button>
-              <Button variant="outline">Sign In</Button>
+              {isLoggedIn ? (
+                <Button variant="outline" onClick={() => navigate('/homeowners/dashboard')}>
+                  Dashboard
+                </Button>
+              ) : (
+                <Button variant="outline" onClick={() => navigate('/homeowners/auth')}>
+                  Sign In
+                </Button>
+              )}
             </div>
             
             {/* Mobile Menu Button */}
