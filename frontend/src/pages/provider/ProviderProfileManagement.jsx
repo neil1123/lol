@@ -420,13 +420,15 @@ const ProviderProfileManagement = () => {
               {/* Profile Management Tabs */}
               <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
                 <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="edit" className="flex items-center gap-2">
+                  <TabsTrigger value="edit" className="flex items-center gap-2 px-2 py-2 text-sm">
                     <Edit className="h-4 w-4" />
-                    Edit Profile
+                    <span className="hidden sm:inline">Edit Profile</span>
+                    <span className="sm:hidden">Edit</span>
                   </TabsTrigger>
-                  <TabsTrigger value="preview" className="flex items-center gap-2">
+                  <TabsTrigger value="preview" className="flex items-center gap-2 px-2 py-2 text-sm">
                     <Eye className="h-4 w-4" />
-                    Preview Profile
+                    <span className="hidden sm:inline">Preview Profile</span>
+                    <span className="sm:hidden">Preview</span>
                   </TabsTrigger>
                 </TabsList>
 
