@@ -84,6 +84,40 @@ const ProviderDashboard = () => {
     }
   };
 
+  const loadDashboardData = async () => {
+    try {
+      // Load orders to calculate total revenue and active jobs
+      const orders = await apiService.getOrders();
+      
+      const completedOrders = orders.filter(order => order.status === 'completed');
+      const activeOrders = orders.filter(order => 
+        ['accepted', 'in_progress'].includes(order.status)
+      );
+      
+      const totalRevenue = completedOrders.reduce((sum, order) => 
+        sum + (parseFloat(order.quotation_amount) || 0), 0
+      );
+      
+      // Calculate weekly revenue
+      const oneWeekAgo = new Date();
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+      
+      const weeklyRevenue = completedOrders
+        .filter(order => new Date(order.request_date) >= oneWeekAgo)
+        .reduce((sum, order) => sum + (parseFloat(order.quotation_amount) || 0), 0);
+      
+      setDashboardData({
+        totalRevenue,
+        activeJobs: activeOrders.length,
+        customerRating: userProfile?.rating || 5.0,
+        weeklyRevenue
+      });
+      
+    } catch (error) {
+      console.error('Failed to load dashboard data:', error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Header */}
