@@ -305,7 +305,7 @@ const ProviderDashboard = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-gray-600">Active Jobs</p>
-                      <p className="text-2xl font-bold text-gray-900">{mockDashboardData.activeJobs}</p>
+                      <p className="text-2xl font-bold text-gray-900">{dashboardData.activeJobs}</p>
                     </div>
                     <div className="h-8 w-8 bg-green-100 rounded-full flex items-center justify-center">
                       <Clock className="h-4 w-4 text-green-600" />
