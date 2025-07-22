@@ -134,7 +134,16 @@ const HomeownerQuotations = () => {
               <Button variant="ghost" onClick={() => navigate('/homeowners/browse')}>
                 Browse Services
               </Button>
-              <Button variant="outline">Sign In</Button>
+              {/* Check authentication state */}
+              {localStorage.getItem('userType') === 'homeowner' && localStorage.getItem('authToken') ? (
+                <Button variant="outline" onClick={() => navigate('/homeowners/dashboard')}>
+                  Dashboard
+                </Button>
+              ) : (
+                <Button variant="outline" onClick={() => navigate('/homeowners/auth')}>
+                  Sign In
+                </Button>
+              )}
             </div>
             
             {/* Mobile Menu Button */}
