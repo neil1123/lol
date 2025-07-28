@@ -6,7 +6,7 @@ Additional verification tests for specific review request issues
 import requests
 import json
 
-BACKEND_URL = "https://49b1db73-8f6e-48b0-8b5d-66d6044d313b.preview.emergentagent.com/api"
+BACKEND_URL = "https://e9a186a0-552e-428d-8681-e3901f1a654d.preview.emergentagent.com/api"
 
 def test_homeowner_pending_tab_functionality():
     """Test that homeowner can see quotations in pending tab"""
