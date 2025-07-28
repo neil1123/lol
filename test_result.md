@@ -104,6 +104,21 @@
 
 user_problem_statement: "Enhanced Dashboard System: 1) Provider Dashboard: Make 'Total Revenue' clickable leading to analytics page with graphs showing sales data from confirmed orders (no mock data), 'Active Jobs' leads to confirmed orders, 'Customer Rating' shows real data, 'This Week' changed to 'View your Profile' leading to company profile. 2) Review System: Replace 'Click to rate this provider' with full review system allowing homeowners to write reviews only after completing orders, connect star ratings to provider dashboard. 3) Footer: Make footer buttons functional with proper navigation to relevant pages."
 
+  - task: "Fix quotation amount display issue - field name mismatch"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/pages/homeowner/HomeownerQuotations.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "User reported: 'Investigate if quotation amounts are still displaying as ranges instead of specific values on the frontend' - quotations showing incorrect amounts"
+      - working: false
+        agent: "main"
+        comment: "ROOT CAUSE IDENTIFIED: Field name mismatch between backend and frontend. Backend API returns quotation_amount (snake_case) but frontend expects quotationAmount (camelCase). When quotation_amount is null, frontend shows '$null' or '$undefined'. Need to fix field name mapping and add null checking for proper display when quotations haven't been set yet."
+
 backend:
   - task: "Dynamic Services Management API"
     implemented: true
