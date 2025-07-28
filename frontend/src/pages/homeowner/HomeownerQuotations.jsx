@@ -225,7 +225,7 @@ const HomeownerQuotations = () => {
                 {localQuotes.map((quote, index) => (
                   <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
                     <div>
-                      <h4 className="font-semibold">{quote.providerName}</h4>
+                      <h4 className="font-semibold">{quote.provider_name || quote.providerName}</h4>
                       <p className="text-sm text-gray-600">{quote.description}</p>
                       <p className="text-xs text-gray-500 mt-1">
                         Requested on {formatDate(quote.timestamp)}
