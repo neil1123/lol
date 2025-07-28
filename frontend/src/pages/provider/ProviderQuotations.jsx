@@ -406,8 +406,8 @@ const ProviderQuotations = () => {
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <div>
-                          <CardTitle className="text-lg">{quote.homeownerName}</CardTitle>
-                          <p className="text-sm text-gray-600">{quote.serviceType}</p>
+                          <CardTitle className="text-lg">{quote.homeowner_name}</CardTitle>
+                          <p className="text-sm text-gray-600">{quote.service_type}</p>
                         </div>
                         <div className="text-right">
                           <div className="text-2xl font-bold text-green-600">
