@@ -914,9 +914,12 @@ const ProviderOrders = () => {
                 
                 <div className="flex flex-col sm:flex-row gap-2 sm:space-x-3 sm:gap-0 mt-6">
                   <Button onClick={handleCreateOrder} className="w-full sm:w-auto">
-                    Create Order
+                    {editingQuote ? 'Update Order' : 'Create Order'}
                   </Button>
-                  <Button variant="outline" onClick={() => setShowNewOrderForm(false)} className="w-full sm:w-auto">
+                  <Button variant="outline" onClick={() => {
+                    setShowNewOrderForm(false);
+                    setEditingQuote(null);
+                  }} className="w-full sm:w-auto">
                     Cancel
                   </Button>
                 </div>
