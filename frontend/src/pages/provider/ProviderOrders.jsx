@@ -305,28 +305,52 @@ const ProviderOrders = () => {
         throw new Error('Please ensure you are logged in properly');
       }
 
-      // Generate homeowner ID for manual order
-      const homeownerId = `manual_${Date.now()}`;
-      
-      const orderData = {
-        homeowner_id: homeownerId,
-        provider_id: userProfile.id,
-        homeowner_name: newOrder.customerName,
-        homeowner_email: newOrder.customerEmail,
-        homeowner_phone: newOrder.customerPhone,
-        homeowner_address: newOrder.address,
-        provider_name: userProfile.business_name || userProfile.name,
-        service_type: newOrder.serviceType,
-        services: newOrder.services, // Add services array
-        description: newOrder.description,
-        preferred_date: newOrder.scheduledDate,
-        preferred_time: '09:00',
-        urgency: newOrder.priority,
-        budget: newOrder.quotationAmount ? `$${newOrder.quotationAmount}` : '',
-        additional_requirements: newOrder.orderDetails
-      };
+      // Check if we're editing an existing order
+      if (editingQuote) {
+        // Update existing order
+        const updateData = {
+          homeowner_name: newOrder.customerName,
+          homeowner_email: newOrder.customerEmail,
+          homeowner_phone: newOrder.customerPhone,
+          homeowner_address: newOrder.address,
+          service_type: newOrder.serviceType,
+          services: newOrder.services,
+          description: newOrder.description,
+          preferred_date: newOrder.scheduledDate,
+          urgency: newOrder.priority,
+          budget: newOrder.quotationAmount ? `$${newOrder.quotationAmount}` : '',
+          additional_requirements: newOrder.orderDetails,
+          quotation_amount: newOrder.quotationAmount ? parseFloat(newOrder.quotationAmount) : null
+        };
+        
+        await apiService.updateOrder(editingQuote.id, updateData);
+        
+        // Reset editing state
+        setEditingQuote(null);
+        alert('Order updated successfully!');
+      } else {
+        // Create new order (existing logic)
+        const homeownerId = `manual_${Date.now()}`;
+        
+        const orderData = {
+          homeowner_id: homeownerId,
+          provider_id: userProfile.id,
+          homeowner_name: newOrder.customerName,
+          homeowner_email: newOrder.customerEmail,
+          homeowner_phone: newOrder.customerPhone,
+          homeowner_address: newOrder.address,
+          provider_name: userProfile.business_name || userProfile.name,
+          service_type: newOrder.serviceType,
+          services: newOrder.services, // Add services array
+          description: newOrder.description,
+          preferred_date: newOrder.scheduledDate,
+          preferred_time: '09:00',
+          urgency: newOrder.priority,
+          budget: newOrder.quotationAmount ? `$${newOrder.quotationAmount}` : '',
+          additional_requirements: newOrder.orderDetails
+        };
 
-      const createdOrder = await apiService.createOrder(orderData);
+        const createdOrder = await apiService.createOrder(orderData);
       
       // Auto-add customer
       await autoAddCustomer({
