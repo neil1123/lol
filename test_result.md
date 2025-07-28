@@ -388,16 +388,19 @@ frontend:
 
 backend:
   - task: "Add order editing and deletion endpoints for manual orders"
-    implemented: false
-    working: false
+    implemented: true
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: false
         agent: "main"
         comment: "NEW TASK: Need to add backend endpoints to support editing and deleting manual orders. Should include proper validation to ensure only manual orders can be edited/deleted by the provider who created them."
+      - working: true
+        agent: "main"
+        comment: "BACKEND ENDPOINTS IMPLEMENTED: Successfully added PUT /api/orders/{id} and DELETE /api/orders/{id} endpoints with comprehensive validation. Features: 1) PUT endpoint updates order data for manual orders only 2) DELETE endpoint removes orders and related appointments 3) Both endpoints validate provider ownership and manual order status (homeowner_id starts with 'manual_') 4) Proper error handling with 403/404 status codes 5) Added corresponding API service methods updateOrder() and deleteOrder() in frontend. Full CRUD functionality for manual orders complete."
 
   - task: "Add appointment rescheduling endpoint with order synchronization"
     implemented: false
