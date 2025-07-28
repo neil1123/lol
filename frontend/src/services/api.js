@@ -134,6 +134,19 @@ class ApiService {
     });
   }
 
+  async updateOrder(orderId, orderData) {
+    return await this.request(`/orders/${orderId}`, {
+      method: 'PUT',
+      body: JSON.stringify(orderData),
+    });
+  }
+
+  async deleteOrder(orderId) {
+    return await this.request(`/orders/${orderId}`, {
+      method: 'DELETE',
+    });
+  }
+
   // ====== QUOTATIONS ======
   async sendQuotation(quotationData) {
     return await this.request('/quotations', {
