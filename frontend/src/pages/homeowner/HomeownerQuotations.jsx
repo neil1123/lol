@@ -301,13 +301,6 @@ const HomeownerQuotations = () => {
                           <p className="text-gray-700">{quote.quotation_details}</p>
                         </div>
                         
-                        {quote.quotation_details && (
-                          <div>
-                            <h4 className="font-semibold mb-2">Provider Notes</h4>
-                            <p className="text-gray-700">{quote.quotation_details}</p>
-                          </div>
-                        )}
-                        
                         <div className="flex items-center space-x-4 text-sm text-gray-500">
                           <span>📅 Requested on {formatDate(quote.request_date)}</span>
                         </div>
