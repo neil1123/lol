@@ -1166,6 +1166,21 @@ const ProviderOrders = () => {
                             <Calendar className="h-4 w-4 mr-2" />
                             Schedule
                           </Button>
+                          {/* Show Edit and Delete buttons for manual orders */}
+                          {order.homeowner_id && order.homeowner_id.startsWith('manual_') && (
+                            <>
+                              <Button variant="outline" onClick={() => handleEditOrder(order)} className="w-full sm:w-auto">
+                                <Edit className="h-4 w-4 mr-2" />
+                                <span className="hidden sm:inline">Edit Order</span>
+                                <span className="sm:hidden">Edit</span>
+                              </Button>
+                              <Button variant="outline" onClick={() => handleDeleteOrder(order)} className="w-full sm:w-auto text-red-600 hover:text-red-700 border-red-200 hover:border-red-300">
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                <span className="hidden sm:inline">Delete Order</span>
+                                <span className="sm:hidden">Delete</span>
+                              </Button>
+                            </>
+                          )}
                           {/* Only show message button for real homeowner orders, not manual orders */}
                           {order.homeowner_id && !order.homeowner_id.startsWith('manual_') && (
                             <Button variant="outline" onClick={() => handleMessageCustomer(order)} className="w-full sm:w-auto">
