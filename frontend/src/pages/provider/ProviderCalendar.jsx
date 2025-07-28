@@ -874,6 +874,170 @@ const ProviderCalendar = () => {
           </div>
         </div>
       )}
+
+      {/* Details Pop-up Modal */}
+      {showDetailPopup && popupDetails && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between rounded-t-lg">
+              <h2 className="text-lg font-semibold text-gray-900">
+                {popupDetails.type === 'appointment' ? 'Appointment Details' : 'Order Details'}
+              </h2>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setShowDetailPopup(false)}
+                className="hover:bg-gray-100 rounded-full p-1"
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div className="grid grid-cols-1 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {popupDetails.type === 'appointment' ? 'Customer' : 'Homeowner'}
+                  </label>
+                  <div className="flex items-center text-gray-900">
+                    <User className="h-4 w-4 mr-2 text-gray-500" />
+                    {popupDetails.type === 'appointment' 
+                      ? popupDetails.data.customer_name 
+                      : popupDetails.data.homeowner_name}
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Service Type
+                  </label>
+                  <div className="flex items-center text-gray-900">
+                    <FileText className="h-4 w-4 mr-2 text-gray-500" />
+                    {popupDetails.data.service_type}
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Date & Time
+                  </label>
+                  <div className="flex items-center text-gray-900">
+                    <Clock className="h-4 w-4 mr-2 text-gray-500" />
+                    {popupDetails.type === 'appointment' 
+                      ? `${popupDetails.data.date} at ${popupDetails.data.time}`
+                      : `${popupDetails.data.preferred_date} at ${popupDetails.data.preferred_time || '09:00'}`}
+                  </div>
+                </div>
+                
+                {(popupDetails.data.address || popupDetails.data.homeowner_address) && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Address
+                    </label>
+                    <div className="flex items-center text-gray-900">
+                      <MapPin className="h-4 w-4 mr-2 text-gray-500" />
+                      {popupDetails.data.address || popupDetails.data.homeowner_address}
+                    </div>
+                  </div>
+                )}
+                
+                {(popupDetails.data.phone_number || popupDetails.data.homeowner_phone) && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Phone
+                    </label>
+                    <div className="flex items-center text-gray-900">
+                      <Phone className="h-4 w-4 mr-2 text-gray-500" />
+                      {popupDetails.data.phone_number || popupDetails.data.homeowner_phone}
+                    </div>
+                  </div>
+                )}
+                
+                {popupDetails.data.notes && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Notes
+                    </label>
+                    <div className="text-gray-900 bg-gray-50 p-3 rounded-md">
+                      {popupDetails.data.notes}
+                    </div>
+                  </div>
+                )}
+                
+                {popupDetails.data.description && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Description
+                    </label>
+                    <div className="text-gray-900 bg-gray-50 p-3 rounded-md">
+                      {popupDetails.data.description}
+                    </div>
+                  </div>
+                )}
+                
+                {popupDetails.data.quotation_amount && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Amount
+                    </label>
+                    <div className="text-lg font-semibold text-green-600">
+                      ${popupDetails.data.quotation_amount}
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex gap-3 pt-4 border-t border-gray-200">
+                {popupDetails.type === 'appointment' ? (
+                  <>
+                    <Button 
+                      onClick={() => {
+                        handleEditAppointment(popupDetails.data);
+                        setShowDetailPopup(false);
+                      }}
+                      className="flex-1"
+                    >
+                      Edit Appointment
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => {
+                        handleReschedule(popupDetails.data, 'appointment');
+                        setShowDetailPopup(false);
+                      }}
+                      className="flex-1"
+                    >
+                      Reschedule
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button 
+                      onClick={() => {
+                        navigate(`/homeservices/orders?tab=confirmed`);
+                        setShowDetailPopup(false);
+                      }}
+                      className="flex-1"
+                    >
+                      View in Orders
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => {
+                        handleReschedule(popupDetails.data);
+                        setShowDetailPopup(false);
+                      }}
+                      className="flex-1"
+                    >
+                      Reschedule
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
