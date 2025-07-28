@@ -280,7 +280,7 @@ const HomeownerQuotations = () => {
                         </div>
                         <div className="text-right">
                           <div className="text-2xl font-bold text-blue-600">
-                            ${quote.quotationAmount}
+                            {quote.quotation_amount ? `$${quote.quotation_amount}` : 'Quote Pending'}
                           </div>
                           <Badge className={getStatusColor(quote.status)}>
                             {getStatusIcon(quote.status)}
