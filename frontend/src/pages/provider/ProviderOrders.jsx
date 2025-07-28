@@ -1152,7 +1152,7 @@ const ProviderOrders = () => {
                         <div className="bg-green-50 p-4 rounded-lg">
                           <p className="text-sm text-green-800">
                             <CheckCircle className="h-4 w-4 inline mr-1" />
-                            Order confirmed! Ready to start work.
+                            Order scheduled! Ready to start work.
                           </p>
                         </div>
                         
