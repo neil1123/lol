@@ -321,28 +321,34 @@ backend:
 
 frontend:
   - task: "Add Edit/Delete functionality for manual orders in confirmed orders section"
-    implemented: false
-    working: false
+    implemented: true
+    working: true
     file: "/app/frontend/src/pages/provider/ProviderOrders.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: false
         agent: "main"
         comment: "NEW TASK: Need to add Edit and Delete buttons for manually created orders in the confirmed orders section. Should allow homeservices to edit order information and delete orders they created manually via 'New Order' button."
+      - working: true
+        agent: "main"
+        comment: "EDIT/DELETE FUNCTIONALITY IMPLEMENTED: Successfully added Edit and Delete buttons for manual orders in confirmed orders section. Features implemented: 1) Edit button opens existing order form with pre-filled data 2) Delete button shows confirmation dialog before deletion 3) Both functions validate that order is manual (homeowner_id starts with 'manual_') 4) Form title changes to 'Edit Order' when editing 5) Submit button changes to 'Update Order' when editing 6) Added backend endpoints PUT /api/orders/{id} and DELETE /api/orders/{id} with proper validation. Frontend and backend integration complete."
 
   - task: "Change 'confirmed' text to 'scheduled' in confirmed orders section"
-    implemented: false
-    working: false
+    implemented: true
+    working: true
     file: "/app/frontend/src/pages/provider/ProviderOrders.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: false
         agent: "main"
         comment: "NEW TASK: Customer reported green 'confirmed' text looks like it's paid. Need to replace 'confirmed' text with 'scheduled' in confirmed orders section to avoid confusion."
+      - working: true
+        agent: "main"
+        comment: "TEXT CHANGE COMPLETED: Successfully changed 'confirmed' text to 'scheduled' in confirmed orders section. Updated both the Badge component (line 1145) and status message (line 1155) from 'Confirmed' to 'Scheduled' and 'Order confirmed!' to 'Order scheduled!'. This removes confusion about payment status."
 
   - task: "Implement calendar date click pop-up with order details"
     implemented: false
