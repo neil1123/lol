@@ -379,7 +379,7 @@ const ProviderQuotations = () => {
                       <div className="space-y-4">
                         <div>
                           <h4 className="font-semibold mb-2">Quote Details</h4>
-                          <p className="text-gray-700">{quote.quotationDetails}</p>
+                          <p className="text-gray-700">{quote.quotation_details}</p>
                         </div>
                         
                         <div className="bg-blue-50 p-4 rounded-lg">
