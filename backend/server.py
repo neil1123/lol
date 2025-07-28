@@ -608,6 +608,32 @@ async def get_appointments(current_user: User = Depends(get_current_user)):
     appointments = await db.appointments.find({"provider_id": current_user.id}).to_list(1000)
     return [Appointment(**appointment) for appointment in appointments]
 
+@api_router.put("/appointments/{appointment_id}")
+async def update_appointment(appointment_id: str, update_data: dict, current_user: User = Depends(get_current_user)):
+    """Update appointment details - only by the provider who created them"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can update appointments")
+    
+    # Get the appointment first
+    appointment = await db.appointments.find_one({"id": appointment_id})
+    if not appointment:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    
+    # Check if provider owns this appointment
+    if appointment["provider_id"] != current_user.id:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Update the appointment
+    result = await db.appointments.update_one(
+        {"id": appointment_id, "provider_id": current_user.id},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    
+    return {"message": "Appointment updated successfully"}
+
 # ====== QUOTATION REQUEST ENDPOINT ======
 
 @api_router.post("/quotations", response_model=Dict[str, str])
