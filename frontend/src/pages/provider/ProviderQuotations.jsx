@@ -329,8 +329,8 @@ const ProviderQuotations = () => {
                         </div>
                         
                         <div className="flex items-center space-x-4 text-sm text-gray-500">
-                          <span>📍 {quote.homeownerAddress}</span>
-                          <span>📅 {formatDate(quote.requestDate)}</span>
+                          <span>📍 {quote.homeowner_address}</span>
+                          <span>📅 {formatDate(quote.request_date)}</span>
                         </div>
                         
                         <div className="flex space-x-3">
