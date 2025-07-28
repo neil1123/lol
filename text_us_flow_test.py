@@ -12,7 +12,7 @@ import sys
 import uuid
 
 # Load environment variables
-BACKEND_URL = "https://d0b48061-c58b-462b-ac47-e454ded62382.preview.emergentagent.com/api"
+BACKEND_URL = "https://49b1db73-8f6e-48b0-8b5d-66d6044d313b.preview.emergentagent.com/api"
 
 # Test data from review request
 HOMEOWNER_EMAIL = "homeowner1@example.com"

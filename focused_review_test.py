@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Backend URL from environment
-BACKEND_URL = "https://d0b48061-c58b-462b-ac47-e454ded62382.preview.emergentagent.com/api"
+BACKEND_URL = "https://49b1db73-8f6e-48b0-8b5d-66d6044d313b.preview.emergentagent.com/api"
 
 # Global test data
 provider_token = None
