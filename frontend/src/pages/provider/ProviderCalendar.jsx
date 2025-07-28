@@ -604,7 +604,20 @@ const ProviderCalendar = () => {
                               )}
                             </div>
                             <div className="flex space-x-2">
-                              <Button variant="outline" size="sm">View Order</Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => navigate(`/homeservices/orders?tab=confirmed`)}
+                              >
+                                View Order
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleReschedule(order)}
+                              >
+                                Reschedule
+                              </Button>
                             </div>
                           </div>
                         </CardContent>
