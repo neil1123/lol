@@ -351,37 +351,38 @@ const ProviderOrders = () => {
         };
 
         const createdOrder = await apiService.createOrder(orderData);
-      
-      // Auto-add customer
-      await autoAddCustomer({
-        name: newOrder.customerName,
-        email: newOrder.customerEmail,
-        phone: newOrder.customerPhone,
-        address: newOrder.address,
-        serviceType: newOrder.serviceType,
-        quotationAmount: newOrder.quotationAmount
-      });
-      
-      // If there's a scheduled date, create appointment
-      if (newOrder.scheduledDate) {
-        const appointmentData = {
-          customer_name: newOrder.customerName,
-          phone_number: newOrder.customerPhone,
-          service_type: newOrder.serviceType,
-          services: newOrder.services, // Add services array
-          date: newOrder.scheduledDate,
-          time: '09:00',
-          address: newOrder.address,
-          notes: `Order #${createdOrder.id} - ${newOrder.description}`,
-          order_id: createdOrder.id,
-          source: 'order'
-        };
         
-        try {
-          await apiService.createAppointment(appointmentData);
-        } catch (appointmentError) {
-          console.error('Failed to create appointment:', appointmentError);
-          // Don't fail the order creation if appointment fails
+        // Auto-add customer
+        await autoAddCustomer({
+          name: newOrder.customerName,
+          email: newOrder.customerEmail,
+          phone: newOrder.customerPhone,
+          address: newOrder.address,
+          serviceType: newOrder.serviceType,
+          quotationAmount: newOrder.quotationAmount
+        });
+        
+        // If there's a scheduled date, create appointment
+        if (newOrder.scheduledDate) {
+          const appointmentData = {
+            customer_name: newOrder.customerName,
+            phone_number: newOrder.customerPhone,
+            service_type: newOrder.serviceType,
+            services: newOrder.services, // Add services array
+            date: newOrder.scheduledDate,
+            time: '09:00',
+            address: newOrder.address,
+            notes: `Order #${createdOrder.id} - ${newOrder.description}`,
+            order_id: createdOrder.id,
+            source: 'order'
+          };
+          
+          try {
+            await apiService.createAppointment(appointmentData);
+          } catch (appointmentError) {
+            console.error('Failed to create appointment:', appointmentError);
+            // Don't fail the order creation if appointment fails
+          }
         }
       }
       
