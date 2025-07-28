@@ -475,6 +475,68 @@ async def update_order_quotation(
     
     return {"message": "Order quotation updated"}
 
+@api_router.put("/orders/{order_id}")
+async def update_order(order_id: str, update_data: dict, current_user: User = Depends(get_current_user)):
+    """Update order details - only for manual orders by the provider who created them"""
+    # Get the order first
+    order = await db.orders.find_one({"id": order_id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Only providers can update orders
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can update orders")
+    
+    # Check if provider owns this order
+    if order["provider_id"] != current_user.id:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Only allow updating manual orders (homeowner_id starts with 'manual_')
+    if not order.get("homeowner_id", "").startswith("manual_"):
+        raise HTTPException(status_code=403, detail="Only manual orders can be edited")
+    
+    # Update the order
+    result = await db.orders.update_one(
+        {"id": order_id, "provider_id": current_user.id},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    return {"message": "Order updated successfully"}
+
+@api_router.delete("/orders/{order_id}")
+async def delete_order(order_id: str, current_user: User = Depends(get_current_user)):
+    """Delete order - only for manual orders by the provider who created them"""
+    # Get the order first
+    order = await db.orders.find_one({"id": order_id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Only providers can delete orders
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can delete orders")
+    
+    # Check if provider owns this order
+    if order["provider_id"] != current_user.id:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Only allow deleting manual orders (homeowner_id starts with 'manual_')
+    if not order.get("homeowner_id", "").startswith("manual_"):
+        raise HTTPException(status_code=403, detail="Only manual orders can be deleted")
+    
+    # Delete the order
+    result = await db.orders.delete_one({"id": order_id, "provider_id": current_user.id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Also delete related appointments if any
+    await db.appointments.delete_many({"order_id": order_id})
+    
+    return {"message": "Order deleted successfully"}
+
 # ====== MESSAGE ENDPOINTS ======
 
 @api_router.post("/messages/threads", response_model=MessageThread)
