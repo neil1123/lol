@@ -384,6 +384,58 @@ const ProviderOrders = () => {
     }
   };
 
+  // Handle edit order - only for manual orders
+  const handleEditOrder = (order) => {
+    if (!order.homeowner_id || !order.homeowner_id.startsWith('manual_')) {
+      alert('Only manual orders can be edited.');
+      return;
+    }
+    
+    // Populate the form with existing order data
+    setNewOrder({
+      customerName: order.homeowner_name,
+      customerEmail: order.homeowner_email,
+      customerPhone: order.homeowner_phone,
+      serviceType: order.service_type,
+      services: order.services || order.service_type.split(', '),
+      description: order.description,
+      address: order.homeowner_address,
+      quotationAmount: order.quotation_amount ? order.quotation_amount.toString() : '',
+      orderDetails: order.additional_requirements || '',
+      priority: order.urgency || 'medium',
+      scheduledDate: order.preferred_date || ''
+    });
+    
+    // Store the order being edited
+    setEditingQuote(order);
+    setShowNewOrderForm(true);
+  };
+
+  // Handle delete order - only for manual orders
+  const handleDeleteOrder = async (order) => {
+    if (!order.homeowner_id || !order.homeowner_id.startsWith('manual_')) {
+      alert('Only manual orders can be deleted.');
+      return;
+    }
+    
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete the order for ${order.homeowner_name}? This action cannot be undone.`
+    );
+    
+    if (!confirmDelete) return;
+    
+    try {
+      await apiService.deleteOrder(order.id);
+      
+      // Reload orders to reflect the change
+      loadOrders();
+      alert('Order deleted successfully!');
+    } catch (error) {
+      console.error('Failed to delete order:', error);
+      alert('Failed to delete order. Please try again.');
+    }
+  };
+
   // Function to handle messaging with proper validation
   const handleMessageCustomer = (order) => {
     if (!order.id || order.status === 'pending_quotation') {
