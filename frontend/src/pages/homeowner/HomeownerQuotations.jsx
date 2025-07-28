@@ -353,8 +353,8 @@ const HomeownerQuotations = () => {
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <div>
-                          <CardTitle className="text-lg">{quote.providerName}</CardTitle>
-                          <p className="text-sm text-gray-600">{quote.serviceType}</p>
+                          <CardTitle className="text-lg">{quote.provider_name}</CardTitle>
+                          <p className="text-sm text-gray-600">{quote.service_type}</p>
                         </div>
                         <Badge className={getStatusColor(quote.status)}>
                           {getStatusIcon(quote.status)}
