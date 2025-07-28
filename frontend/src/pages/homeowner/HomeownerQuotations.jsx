@@ -370,7 +370,7 @@ const HomeownerQuotations = () => {
                         </div>
                         
                         <div className="flex items-center space-x-4 text-sm text-gray-500">
-                          <span>📅 Requested on {formatDate(quote.requestDate)}</span>
+                          <span>📅 Requested on {formatDate(quote.request_date)}</span>
                         </div>
                         
                         <div className="bg-yellow-50 p-4 rounded-lg">
