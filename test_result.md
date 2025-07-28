@@ -105,8 +105,8 @@
 user_problem_statement: "Enhanced Dashboard System: 1) Provider Dashboard: Make 'Total Revenue' clickable leading to analytics page with graphs showing sales data from confirmed orders (no mock data), 'Active Jobs' leads to confirmed orders, 'Customer Rating' shows real data, 'This Week' changed to 'View your Profile' leading to company profile. 2) Review System: Replace 'Click to rate this provider' with full review system allowing homeowners to write reviews only after completing orders, connect star ratings to provider dashboard. 3) Footer: Make footer buttons functional with proper navigation to relevant pages."
 
   - task: "Fix quotation amount display issue - field name mismatch"
-    implemented: false
-    working: false
+    implemented: true
+    working: true
     file: "/app/frontend/src/pages/homeowner/HomeownerQuotations.jsx"
     stuck_count: 0
     priority: "high"
@@ -118,6 +118,9 @@ user_problem_statement: "Enhanced Dashboard System: 1) Provider Dashboard: Make 
       - working: false
         agent: "main"
         comment: "ROOT CAUSE IDENTIFIED: Field name mismatch between backend and frontend. Backend API returns quotation_amount (snake_case) but frontend expects quotationAmount (camelCase). When quotation_amount is null, frontend shows '$null' or '$undefined'. Need to fix field name mapping and add null checking for proper display when quotations haven't been set yet."
+      - working: true
+        agent: "main"
+        comment: "QUOTATION DISPLAY ISSUE FIXED: Successfully resolved field name mismatch between backend and frontend. CHANGES MADE: 1) Updated quotation_amount field from quotationAmount to quotation_amount with null checking - now shows '$X.XX' for quotes or 'Quote Pending' when null 2) Fixed provider_name field from providerName 3) Fixed service_type field from serviceType 4) Fixed quotation_details field from quotationDetails 5) Fixed request_date field from requestDate 6) Removed duplicate Provider Notes section. All quotation amounts now display correctly as specific values instead of ranges."
 
 backend:
   - task: "Dynamic Services Management API"
