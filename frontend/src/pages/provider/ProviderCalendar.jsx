@@ -574,8 +574,20 @@ const ProviderCalendar = () => {
                               )}
                             </div>
                             <div className="flex space-x-2">
-                              <Button variant="outline" size="sm">Edit</Button>
-                              <Button variant="outline" size="sm">Cancel</Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleEditAppointment(appointment)}
+                              >
+                                Edit
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleReschedule(appointment, 'appointment')}
+                              >
+                                Reschedule
+                              </Button>
                             </div>
                           </div>
                         </CardContent>
