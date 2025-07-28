@@ -298,7 +298,7 @@ const HomeownerQuotations = () => {
                         
                         <div>
                           <h4 className="font-semibold mb-2">Quote Details</h4>
-                          <p className="text-gray-700">{quote.quotationDetails}</p>
+                          <p className="text-gray-700">{quote.quotation_details}</p>
                         </div>
                         
                         {quote.providerResponse && (
