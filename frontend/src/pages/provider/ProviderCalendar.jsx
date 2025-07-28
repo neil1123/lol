@@ -44,6 +44,8 @@ const ProviderCalendar = () => {
   const [loading, setLoading] = useState(false);
   const [calendarView, setCalendarView] = useState(Views.MONTH);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [showDetailPopup, setShowDetailPopup] = useState(false);
+  const [popupDetails, setPopupDetails] = useState(null);
   
   // Services state
   const [availableServices, setAvailableServices] = useState([]);
