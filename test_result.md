@@ -320,6 +320,90 @@ backend:
         comment: "BACKEND TESTING CONFIRMS COMPLETE SYSTEM SEPARATION: Comprehensive testing validates the messaging and orders system separation: ✅ ORDERS SYSTEM: Order creation (/api/orders) working perfectly with status filtering support (pending_quotation, quoted, accepted, in_progress, completed). Homeowners can retrieve orders filtered by status for proper UI categorization. ✅ QUOTATION WORKFLOW: Complete quotation workflow tested - quotation requests create orders, providers can update quotation amounts (/api/orders/{id}/quotation), homeowners can accept/decline quotes (/api/orders/{id}/status). ✅ MESSAGING SYSTEM: Pure communication system working - message thread creation (/api/messages/threads) for 'Text Us' functionality, message sending/receiving (/api/messages), thread retrieval working perfectly. ✅ NOTIFICATION SUPPORT: Backend provides all data needed for notification count calculation - unread message counting and new order counting fully functional. Backend fully supports the restructured frontend architecture."
 
 frontend:
+  - task: "Add Edit/Delete functionality for manual orders in confirmed orders section"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/pages/provider/ProviderOrders.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "NEW TASK: Need to add Edit and Delete buttons for manually created orders in the confirmed orders section. Should allow homeservices to edit order information and delete orders they created manually via 'New Order' button."
+
+  - task: "Change 'confirmed' text to 'scheduled' in confirmed orders section"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/pages/provider/ProviderOrders.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "NEW TASK: Customer reported green 'confirmed' text looks like it's paid. Need to replace 'confirmed' text with 'scheduled' in confirmed orders section to avoid confusion."
+
+  - task: "Implement calendar date click pop-up with order details"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/pages/provider/ProviderCalendar.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "NEW TASK: When clicking on calendar dates that have bookings, show a pop-up with order details and a close (X) button for easy access to booking information."
+
+  - task: "Fix 'View Order' functionality in upcoming appointments"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/pages/provider/ProviderCalendar.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "NEW TASK: 'View Order' button in upcoming appointments doesn't work. Should either redirect to orders page or show details in dropdown format."
+
+  - task: "Add reschedule functionality to calendar with cross-platform sync"
+    implemented: false
+    working: false
+    file: "/app/frontend/src/pages/provider/ProviderCalendar.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "NEW TASK: Add 'Change Time/Reschedule' button next to 'View Order' in upcoming appointments to allow time editing. For non-manual orders from signed-in homeowners, changes should reflect in homeowner's orders section automatically."
+
+backend:
+  - task: "Add order editing and deletion endpoints for manual orders"
+    implemented: false
+    working: false
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "NEW TASK: Need to add backend endpoints to support editing and deleting manual orders. Should include proper validation to ensure only manual orders can be edited/deleted by the provider who created them."
+
+  - task: "Add appointment rescheduling endpoint with order synchronization"
+    implemented: false
+    working: false
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "NEW TASK: Need endpoint to handle appointment rescheduling that also updates related orders for cross-platform synchronization when homeowner is involved."
   - task: "Fix provider authentication form validation issues"
     implemented: true
     working: true
