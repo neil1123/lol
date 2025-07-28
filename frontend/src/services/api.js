@@ -208,6 +208,13 @@ class ApiService {
     return await this.request('/appointments');
   }
 
+  async updateAppointment(appointmentId, updateData) {
+    return await this.request(`/appointments/${appointmentId}`, {
+      method: 'PUT',
+      body: JSON.stringify(updateData),
+    });
+  }
+
   // ====== SERVICES ======
   async getAllServices() {
     return await this.request('/services');
