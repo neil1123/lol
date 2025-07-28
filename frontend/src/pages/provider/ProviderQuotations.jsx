@@ -55,10 +55,21 @@ const ProviderQuotations = () => {
   ];
 
   useEffect(() => {
-    // Filter quotations for current provider (mock provider ID = 1)
-    const providerQuotes = mockQuotations.filter(q => q.providerId === 1);
-    setQuotations(providerQuotes);
+    loadQuotations();
   }, []);
+
+  const loadQuotations = async () => {
+    try {
+      // Load orders from database instead of mock data
+      const ordersData = await apiService.getOrders();
+      setQuotations(ordersData);
+    } catch (error) {
+      console.error('Failed to load quotations:', error);
+      // Fallback to mock data if API fails
+      const providerQuotes = mockQuotations.filter(q => q.providerId === 1);
+      setQuotations(providerQuotes);
+    }
+  };
 
   const handleSendQuote = (quoteId) => {
     // Mock sending quote
