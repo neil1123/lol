@@ -1142,7 +1142,7 @@ const ProviderOrders = () => {
                           </div>
                           <Badge className={getStatusColor(order.status)}>
                             <CheckCircle className="h-3 w-3 mr-1" />
-                            Confirmed
+                            Scheduled
                           </Badge>
                         </div>
                       </div>
