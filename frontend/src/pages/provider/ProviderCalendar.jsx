@@ -312,6 +312,70 @@ const ProviderCalendar = () => {
     }
   };
 
+  // Handle appointment editing
+  const handleEditAppointment = (appointment) => {
+    // Populate form with appointment data for editing
+    setAppointmentForm({
+      customerName: appointment.customer_name,
+      phoneNumber: appointment.phone_number,
+      serviceType: appointment.service_type,
+      services: appointment.services || appointment.service_type.split(', '),
+      date: appointment.date,
+      time: appointment.time,
+      address: appointment.address,
+      notes: appointment.notes || ''
+    });
+    setShowAppointmentForm(true);
+  };
+
+  // Handle rescheduling (both appointments and orders)
+  const handleReschedule = (item, type = 'order') => {
+    if (type === 'appointment') {
+      // For appointments, just open edit form
+      handleEditAppointment(item);
+    } else {
+      // For orders, show reschedule dialog
+      const newDate = prompt('Enter new date (YYYY-MM-DD):', item.preferred_date);
+      const newTime = prompt('Enter new time (HH:MM):', item.preferred_time || '09:00');
+      
+      if (newDate && newTime) {
+        handleRescheduleOrder(item, newDate, newTime);
+      }
+    }
+  };
+
+  // Handle order rescheduling with cross-platform sync
+  const handleRescheduleOrder = async (order, newDate, newTime) => {
+    try {
+      // Update the order with new schedule
+      const updateData = {
+        preferred_date: newDate,
+        preferred_time: newTime
+      };
+      
+      await apiService.updateOrder(order.id, updateData);
+      
+      // If there's an associated appointment, update it too
+      const relatedAppointment = appointments.find(apt => apt.order_id === order.id);
+      if (relatedAppointment) {
+        const appointmentUpdateData = {
+          date: newDate,
+          time: newTime
+        };
+        await apiService.updateAppointment(relatedAppointment.id, appointmentUpdateData);
+      }
+      
+      // Reload data
+      loadOrders();
+      loadAppointments();
+      
+      alert('Order rescheduled successfully! Changes will be reflected for the homeowner as well.');
+    } catch (error) {
+      console.error('Failed to reschedule order:', error);
+      alert('Failed to reschedule order. Please try again.');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Header */}
