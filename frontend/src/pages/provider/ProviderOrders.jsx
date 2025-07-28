@@ -724,7 +724,7 @@ const ProviderOrders = () => {
           {showNewOrderForm && (
             <Card className="mb-8">
               <CardHeader>
-                <CardTitle>Create New Order</CardTitle>
+                <CardTitle>{editingQuote ? 'Edit Order' : 'Create New Order'}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
