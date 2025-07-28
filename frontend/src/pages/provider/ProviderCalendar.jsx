@@ -193,10 +193,11 @@ const ProviderCalendar = () => {
     setShowAppointmentForm(true);
   }, []);
 
-  // Handle event selection
+  // Handle event selection - show pop-up with details
   const handleSelectEvent = useCallback((event) => {
     console.log('Event selected:', event);
-    // You can add edit functionality here
+    setPopupDetails(event);
+    setShowDetailPopup(true);
   }, []);
 
   // Handle view change
