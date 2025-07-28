@@ -24,6 +24,7 @@ import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
 import { Textarea } from '../../components/ui/textarea';
 import { mockQuotations } from '../../data/mockData';
+import apiService from '../../services/api';
 
 const ProviderQuotations = () => {
   const navigate = useNavigate();
