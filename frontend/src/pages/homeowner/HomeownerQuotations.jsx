@@ -301,10 +301,10 @@ const HomeownerQuotations = () => {
                           <p className="text-gray-700">{quote.quotation_details}</p>
                         </div>
                         
-                        {quote.providerResponse && (
+                        {quote.quotation_details && (
                           <div>
                             <h4 className="font-semibold mb-2">Provider Notes</h4>
-                            <p className="text-gray-700">{quote.providerResponse}</p>
+                            <p className="text-gray-700">{quote.quotation_details}</p>
                           </div>
                         )}
                         
