@@ -123,6 +123,16 @@ const ServiceProviderLanding = () => {
                   For Homeowners
                 </Button>
                 <Button 
+                  variant="ghost" 
+                  onClick={() => {
+                    navigate('/property-manager');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="justify-start"
+                >
+                  For Property Managers
+                </Button>
+                <Button 
                   variant="outline" 
                   onClick={() => {
                     navigate('/homeservices/auth');
