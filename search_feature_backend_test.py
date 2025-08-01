@@ -346,10 +346,11 @@ def test_search_integration_workflow():
         cleaning_providers = []
         for provider in providers:
             provider_services = provider.get("services", [])
-            for service in provider_services:
-                if "cleaning" in service.lower():
-                    cleaning_providers.append(provider)
-                    break
+            if provider_services:  # Check if services is not None
+                for service in provider_services:
+                    if service and "cleaning" in service.lower():
+                        cleaning_providers.append(provider)
+                        break
         
         print_success(f"Search workflow working - Found {len(cleaning_providers)} cleaning providers")
         
