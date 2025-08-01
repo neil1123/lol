@@ -199,6 +199,71 @@ const TenantDashboard = () => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto py-4 sm:py-6 px-4 sm:px-6 lg:px-8">
         <div>
+          {/* Hero Search Section */}
+          <div className="mb-6 sm:mb-8">
+            <div className="relative bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 sm:p-8 lg:p-10">
+              {/* Background Elements */}
+              <div className="absolute inset-0 overflow-hidden rounded-2xl">
+                <div className="absolute top-4 right-4 w-32 h-32 bg-blue-200/30 rounded-full blur-2xl"></div>
+                <div className="absolute bottom-4 left-4 w-24 h-24 bg-blue-300/20 rounded-full blur-xl"></div>
+              </div>
+
+              {/* Main Content */}
+              <div className="relative z-10 text-center">
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
+                  Home Services{' '}
+                  <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                    for Your Home
+                  </span>
+                </h1>
+                
+                <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto">
+                  Request services for your property - all bookings require property manager approval
+                </p>
+
+                {/* Search Bar */}
+                <div className="relative max-w-xl mx-auto mb-4 sm:mb-6">
+                  <div className="relative bg-white rounded-xl p-2 shadow-lg border border-gray-200">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
+                      <div className="relative flex-1">
+                        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        <Input
+                          placeholder="What service do you need? (e.g., cleaning, plumbing)"
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="pl-12 py-3 text-sm sm:text-base border-0 bg-transparent focus:ring-0 focus:outline-none placeholder:text-gray-500"
+                        />
+                      </div>
+                      <Button 
+                        size="lg" 
+                        onClick={() => navigate(`/homeowners/browse?search=${searchTerm}`)}
+                        className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 sm:px-6 py-3 text-sm sm:text-base font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                      >
+                        Find Services
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Quick Service Categories */}
+                <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+                  {['Cleaning', 'Plumbing', 'Electrical', 'Landscaping', 'Handyman'].map((service) => (
+                    <Button
+                      key={service}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => navigate(`/homeowners/browse?service=${encodeURIComponent(service)}`)}
+                      className="bg-white hover:bg-gray-50 border-gray-200 text-gray-700 hover:text-blue-700 transition-all duration-300 rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm"
+                    >
+                      {service}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Welcome Card */}
           <Card className="mb-4 sm:mb-6">
             <CardContent className="p-4 sm:p-6">
