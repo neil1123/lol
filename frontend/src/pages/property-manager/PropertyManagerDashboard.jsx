@@ -9,6 +9,7 @@ import apiService from '../../services/api';
 
 const PropertyManagerDashboard = () => {
   const [user, setUser] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const [stats, setStats] = useState({
     totalProperties: 0,
     totalTenants: 0,
