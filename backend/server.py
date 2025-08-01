@@ -159,6 +159,11 @@ class OrderCreate(BaseModel):
     budget: Optional[str] = None
     property_size: Optional[str] = None
     additional_requirements: Optional[str] = None
+    
+    # New fields for PM/Tenant workflow
+    requester_type: str = "homeowner"  # "homeowner", "tenant", or "property_manager"  
+    property_manager_id: Optional[str] = None  # For tenant orders
+    property_address: Optional[str] = None  # For PM orders - which property
 
 class MessageCreate(BaseModel):
     thread_id: str
