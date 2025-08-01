@@ -79,20 +79,37 @@ const HomeownerAuth = () => {
     }
 
     try {
-      const response = await apiService.register({
+      const registrationData = {
         email: signUpData.email,
         password: signUpData.password,
-        user_type: 'homeowner',
+        user_type: 'homeowner',  // Will be auto-changed to 'tenant' if PM code provided
         name: `${signUpData.firstName} ${signUpData.lastName}`,
         phone: signUpData.phone,
         address: signUpData.address
-      });
+      };
+
+      // Add PM code and property address if provided (for tenant registration)
+      if (signUpData.pmCode.trim()) {
+        registrationData.pm_code = signUpData.pmCode.trim();
+        registrationData.property_address = signUpData.propertyAddress.trim() || signUpData.address;
+      }
+
+      const response = await apiService.register(registrationData);
+      
+      // Navigate based on user type
+      const userType = response.user.user_type;
+      if (userType === 'tenant') {
+        navigate('/tenant/dashboard');
+      } else {
+        navigate('/homeowners/dashboard');
+      }
       
       setIsLoading(false);
-      navigate('/homeowners/dashboard');
     } catch (error) {
       setIsLoading(false);
-      if (error.message.includes('already exists')) {
+      if (error.response?.data?.detail) {
+        alert(error.response.data.detail);
+      } else if (error.message.includes('already exists')) {
         alert('User with this email already exists');
       } else {
         alert('Registration failed. Please try again.');
