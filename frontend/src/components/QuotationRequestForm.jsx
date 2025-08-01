@@ -120,7 +120,13 @@ const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, prov
       
       // Success
       onClose();
-      alert('Quotation request sent successfully! The provider will contact you soon.');
+      
+      // Different success messages based on user type
+      if (user.user_type === 'tenant') {
+        alert('Service request sent to your Property Manager for approval! You will be notified once approved.');
+      } else {
+        alert('Quotation request sent successfully! The provider will contact you soon.');
+      }
       
     } catch (error) {
       console.error('Failed to send quotation request:', error);
