@@ -29,6 +29,7 @@ import ProviderAnalytics from "./pages/provider/ProviderAnalytics";
 import PropertyManagerLanding from "./pages/property-manager/PropertyManagerLanding";
 import PropertyManagerAuth from "./pages/property-manager/PropertyManagerAuth";
 import PropertyManagerDashboard from "./pages/property-manager/PropertyManagerDashboard";
+import PropertyManagerOrders from "./pages/property-manager/PropertyManagerOrders";
 
 // Tenant Pages
 import TenantDashboard from "./pages/tenant/TenantDashboard";
