@@ -203,6 +203,13 @@ const HomeownerLanding = () => {
               >
                 For Service Providers
               </Button>
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate('/property-manager')}
+                className="text-sm"
+              >
+                For Property Managers
+              </Button>
               <Button variant="ghost" onClick={() => navigate('/homeowners/dashboard')}>
                 Explore
               </Button>
