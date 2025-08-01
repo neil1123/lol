@@ -57,15 +57,15 @@ const TenantDashboard = () => {
 
   // Filter orders by status for tenant workflow
   const sentRequests = orders.filter(order => 
-    order.status === 'pending_pm_approval' || order.status === 'pending_quotation'
+    order.status === 'pending_quotation'  // Requests sent directly to providers
   );
   
   const waitingForApproval = orders.filter(order => 
-    order.status === 'quoted' && !order.pm_approved
+    order.status === 'pending_pm_approval'  // Quotations awaiting PM approval
   );
   
   const confirmedOrders = orders.filter(order => 
-    ['accepted', 'confirmed', 'completed'].includes(order.status) && order.pm_approved
+    order.status === 'quoted' || ['accepted', 'confirmed', 'completed'].includes(order.status)
   );
 
   const getStatusColor = (status) => {
