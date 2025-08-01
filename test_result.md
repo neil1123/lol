@@ -128,6 +128,21 @@ user_problem_statement: "Enhanced Dashboard System: 1) Provider Dashboard: Make 
         agent: "testing"
         comment: "PROVIDER-SIDE QUOTATION AMOUNT DISPLAY FIX COMPREHENSIVELY TESTED AND VERIFIED! Executed focused testing of provider-side quotation functionality as requested in review. ALL 5 PROVIDER QUOTATION TESTS PASSED WITH 100% SUCCESS RATE: ✅ PROVIDER ORDERS API FIELD NAMES: GET /api/orders returns proper snake_case field names for provider view - quotation_amount (not quotationAmount), homeowner_name (not homeownerName), service_type (not serviceType), quotation_details (not quotationDetails), request_date (not requestDate), homeowner_address (not homeownerAddress) - all verified present and correct ✅ QUOTATION AMOUNT HANDLING: Orders with null quotation_amount handled correctly, specific quotation amounts ($0.00, $25.50, $150.75, $1000.00, $9999.99) all set and retrieved accurately - no ranges, only specific dollar values ✅ PROVIDER QUOTATION WORKFLOW: Complete workflow tested with test@provider.com/password123 - provider can view pending_quotation orders, update quotation amounts via PUT /api/orders/{id}/quotation, quotations show specific amounts (not ranges), homeowners can accept/decline quotes ✅ FIELD NAME CONSISTENCY: All 25 order fields verified to use snake_case naming consistently - 18 snake_case fields found, 0 camelCase violations detected, quotation-related fields properly formatted ✅ REVENUE CALCULATIONS: Revenue analytics calculations work correctly with quotation_amount field - total revenue calculated from completed orders, dashboard revenue data uses correct field names. Provider-side quotation amount display fix is fully functional and production-ready. Both provider and homeowner sides now have consistent field name handling."
 
+  - task: "Add Property Manager & Tenant user types - Phase 1: Backend Foundation" 
+    implemented: true
+    working: false
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "User requested: Addition of 2 more user types: Property Managers and Tenants. Backend foundation includes User model updates, PM code validation (666666), PM-Tenant relationship tracking, and order approval workflow."
+      - working: false
+        agent: "main"
+        comment: "PHASE 1 BACKEND FOUNDATION IMPLEMENTED: Updated User model to support 'property_manager' and 'tenant' user types. Added PM-specific fields (properties list) and Tenant-specific fields (property_manager_id, property_address). Updated Order model with PM approval fields (pm_approved, pm_approval_date, requester_type, property_address). Updated registration endpoint to handle PM code validation (666666) and tenant-PM linking. Added Property Manager endpoints: /property-manager/tenants, /property-manager/orders, /property-manager/orders/{id}/approve, /property-manager/orders/{id}/deny, /property-manager/properties. Updated quotation workflow for tenant orders to require PM approval first (pending_pm_approval status). Ready for backend testing."
+
 backend:
   - task: "Dynamic Services Management API"
     implemented: true
