@@ -709,15 +709,8 @@ async def create_quotation_request(order_data: OrderCreate):
     # Create order
     order = Order(**order_data.dict())
     
-    # Handle tenant orders - they need PM approval first
-    if order_data.requester_type == "tenant":
-        order.status = "pending_pm_approval"  # Special status for PM approval
-        
-        # Don't create message thread yet - wait for PM approval
-        await db.orders.insert_one(order.dict())
-        return {"message": "Service request sent to Property Manager for approval!", "order_id": order.id}
-    
-    # Regular homeowner or PM orders proceed normally
+    # All orders (including tenant orders) go directly to providers
+    # No initial PM approval needed - tenants can book directly
     await db.orders.insert_one(order.dict())
     
     # Create message thread
@@ -737,7 +730,7 @@ async def create_quotation_request(order_data: OrderCreate):
     thread = MessageThread(**thread_data)
     await db.message_threads.insert_one(thread.dict())
     
-    # Create initial message - remove hardcoded template
+    # Create initial message
     initial_message = {
         "id": str(uuid.uuid4()),
         "thread_id": thread.id,
