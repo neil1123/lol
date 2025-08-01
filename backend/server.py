@@ -765,6 +765,13 @@ async def update_quotation(order_id: str, update_data: dict, current_user: User 
     if "quotation_valid_until" in update_data:
         update_fields["quotation_valid_until"] = update_data["quotation_valid_until"]
     
+    # For tenant orders, quotations need PM approval instead of going directly to tenant
+    if order.get("requester_type") == "tenant":
+        update_fields["status"] = "pending_pm_approval"  # PM needs to approve the quotation
+        update_fields["pm_approved"] = None  # Reset PM approval
+    else:
+        update_fields["status"] = "quoted"  # Normal flow for homeowners
+    
     if update_fields:
         await db.orders.update_one(
             {"id": order_id}, 
