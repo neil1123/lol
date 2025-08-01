@@ -254,85 +254,92 @@ const PropertyManagerOrders = () => {
       {/* Header */}
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-blue-600">Doord</h1>
-              <span className="text-gray-600 ml-2">Property Manager - Orders</span>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center h-auto sm:h-16 py-4 sm:py-0">
+            <div className="flex items-center mb-4 sm:mb-0">
+              <h1 className="text-xl sm:text-2xl font-bold text-blue-600">Doord</h1>
+              <span className="text-gray-600 ml-2 text-sm sm:text-base">PM - Orders</span>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
               <Button
                 variant="ghost"
                 onClick={() => navigate('/property-manager/dashboard')}
+                className="text-sm"
               >
                 Back to Dashboard
               </Button>
-              <span className="text-gray-700">{user?.name}</span>
+              <span className="text-gray-700 text-sm sm:text-base">{user?.name}</span>
             </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Order Management</h2>
-            <p className="text-gray-600">Review and approve tenant service requests</p>
+      <main className="max-w-7xl mx-auto py-4 sm:py-6 px-4 sm:px-6 lg:px-8">
+        <div>
+          <div className="mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">Order Management</h2>
+            <p className="text-gray-600 text-sm sm:text-base">Review and approve tenant service requests</p>
           </div>
 
           {/* Orders Tabs */}
           <Card>
-            <CardContent className="p-6">
+            <CardContent className="p-3 sm:p-6">
               <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="pending-approval">
-                    <Clock className="h-4 w-4 mr-2" />
-                    Pending Approval ({pendingApprovalOrders.length})
+                <TabsList className="grid w-full grid-cols-3 text-xs sm:text-sm">
+                  <TabsTrigger value="pending-approval" className="flex items-center space-x-1">
+                    <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <span className="hidden sm:inline">Pending</span>
+                    <span className="sm:hidden">({pendingApprovalOrders.length})</span>
+                    <span className="hidden sm:inline">({pendingApprovalOrders.length})</span>
                   </TabsTrigger>
-                  <TabsTrigger value="active-orders">
-                    <Eye className="h-4 w-4 mr-2" />
-                    Active Orders ({activeOrders.length})
+                  <TabsTrigger value="active-orders" className="flex items-center space-x-1">
+                    <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <span className="hidden sm:inline">Active</span>
+                    <span className="sm:hidden">({activeOrders.length})</span>
+                    <span className="hidden sm:inline">({activeOrders.length})</span>
                   </TabsTrigger>
-                  <TabsTrigger value="completed-orders">
-                    <CheckCircle className="h-4 w-4 mr-2" />
-                    Completed ({completedOrders.length})
+                  <TabsTrigger value="completed-orders" className="flex items-center space-x-1">
+                    <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <span className="hidden sm:inline">Completed</span>
+                    <span className="sm:hidden">({completedOrders.length})</span>
+                    <span className="hidden sm:inline">({completedOrders.length})</span>
                   </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="pending-approval" className="mt-6">
+                <TabsContent value="pending-approval" className="mt-4 sm:mt-6">
                   {pendingApprovalOrders.length === 0 ? (
-                    <div className="text-center py-8">
-                      <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-500">No orders pending approval</p>
+                    <div className="text-center py-6 sm:py-8">
+                      <Clock className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-500 text-sm sm:text-base">No orders pending approval</p>
                     </div>
                   ) : (
-                    <div>
+                    <div className="space-y-3 sm:space-y-4">
                       {pendingApprovalOrders.map(order => renderOrderCard(order, true))}
                     </div>
                   )}
                 </TabsContent>
 
-                <TabsContent value="active-orders" className="mt-6">
+                <TabsContent value="active-orders" className="mt-4 sm:mt-6">
                   {activeOrders.length === 0 ? (
-                    <div className="text-center py-8">
-                      <Eye className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-500">No active orders</p>
+                    <div className="text-center py-6 sm:py-8">
+                      <Eye className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-500 text-sm sm:text-base">No active orders</p>
                     </div>
                   ) : (
-                    <div>
+                    <div className="space-y-3 sm:space-y-4">
                       {activeOrders.map(order => renderOrderCard(order, false))}
                     </div>
                   )}
                 </TabsContent>
 
-                <TabsContent value="completed-orders" className="mt-6">
+                <TabsContent value="completed-orders" className="mt-4 sm:mt-6">
                   {completedOrders.length === 0 ? (
-                    <div className="text-center py-8">
-                      <CheckCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-500">No completed orders</p>
+                    <div className="text-center py-6 sm:py-8">
+                      <CheckCircle className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-500 text-sm sm:text-base">No completed orders</p>
                     </div>
                   ) : (
-                    <div>
+                    <div className="space-y-3 sm:space-y-4">
                       {completedOrders.map(order => renderOrderCard(order, false))}
                     </div>
                   )}
