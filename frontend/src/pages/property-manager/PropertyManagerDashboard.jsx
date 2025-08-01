@@ -120,35 +120,35 @@ const PropertyManagerDashboard = () => {
       {/* Header */}
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-blue-600">Doord</h1>
-              <span className="text-gray-600 ml-2">Property Manager Dashboard</span>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center h-auto sm:h-16 py-4 sm:py-0">
+            <div className="flex items-center mb-4 sm:mb-0">
+              <h1 className="text-xl sm:text-2xl font-bold text-blue-600">Doord</h1>
+              <span className="text-gray-600 ml-2 text-sm sm:text-base">Property Manager Dashboard</span>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-700">Welcome, {user?.name}</span>
-              <div className="flex space-x-2">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+              <span className="text-gray-700 text-sm sm:text-base">Welcome, {user?.name}</span>
+              <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => navigate('/property-manager/orders')}
-                  className="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-gray-600 hover:text-blue-600 px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium"
                 >
                   Orders
                 </button>
                 <button
                   onClick={() => navigate('/property-manager/tenants')}
-                  className="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-gray-600 hover:text-blue-600 px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium"
                 >
                   Tenants
                 </button>
                 <button
                   onClick={() => navigate('/property-manager/properties')}
-                  className="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                  className="text-gray-600 hover:text-blue-600 px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium"
                 >
                   Properties
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="bg-red-600 text-white px-4 py-2 rounded-md text-sm hover:bg-red-700"
+                  className="bg-red-600 text-white px-3 sm:px-4 py-1 sm:py-2 rounded-md text-xs sm:text-sm hover:bg-red-700"
                 >
                   Logout
                 </button>
@@ -159,77 +159,77 @@ const PropertyManagerDashboard = () => {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
+      <main className="max-w-7xl mx-auto py-4 sm:py-6 px-4 sm:px-6 lg:px-8">
+        <div>
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-            <Card>
-              <CardContent className="p-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 mb-6 sm:mb-8">
+            <Card className="col-span-1">
+              <CardContent className="p-3 sm:p-6">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-500 rounded-md flex items-center justify-center">
+                      <svg className="w-3 h-3 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                       </svg>
                     </div>
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">Properties</p>
-                    <p className="text-2xl font-semibold text-gray-900">{stats.totalProperties}</p>
+                  <div className="ml-2 sm:ml-4">
+                    <p className="text-xs sm:text-sm font-medium text-gray-500">Properties</p>
+                    <p className="text-lg sm:text-2xl font-semibold text-gray-900">{stats.totalProperties}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardContent className="p-6">
+            <Card className="col-span-1">
+              <CardContent className="p-3 sm:p-6">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center">
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500 rounded-md flex items-center justify-center">
+                      <svg className="w-3 h-3 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
                       </svg>
                     </div>
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">Tenants</p>
-                    <p className="text-2xl font-semibold text-gray-900">{stats.totalTenants}</p>
+                  <div className="ml-2 sm:ml-4">
+                    <p className="text-xs sm:text-sm font-medium text-gray-500">Tenants</p>
+                    <p className="text-lg sm:text-2xl font-semibold text-gray-900">{stats.totalTenants}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardContent className="p-6">
+            <Card className="col-span-1">
+              <CardContent className="p-3 sm:p-6">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center">
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-yellow-500 rounded-md flex items-center justify-center">
+                      <svg className="w-3 h-3 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">Pending Approvals</p>
-                    <p className="text-2xl font-semibold text-gray-900">{stats.pendingApprovals}</p>
+                  <div className="ml-2 sm:ml-4">
+                    <p className="text-xs sm:text-sm font-medium text-gray-500">Pending</p>
+                    <p className="text-lg sm:text-2xl font-semibold text-gray-900">{stats.pendingApprovals}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardContent className="p-6">
+            <Card className="col-span-1">
+              <CardContent className="p-3 sm:p-6">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-purple-500 rounded-md flex items-center justify-center">
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-purple-500 rounded-md flex items-center justify-center">
+                      <svg className="w-3 h-3 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                       </svg>
                     </div>
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">Active Orders</p>
-                    <p className="text-2xl font-semibold text-gray-900">{stats.activeOrders}</p>
+                  <div className="ml-2 sm:ml-4">
+                    <p className="text-xs sm:text-sm font-medium text-gray-500">Active</p>
+                    <p className="text-lg sm:text-2xl font-semibold text-gray-900">{stats.activeOrders}</p>
                   </div>
                 </div>
               </CardContent>
@@ -237,26 +237,26 @@ const PropertyManagerDashboard = () => {
           </div>
 
           {/* Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             {/* Pending Approvals */}
             <Card>
-              <CardHeader>
-                <CardTitle>Pending Approvals</CardTitle>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg sm:text-xl">Pending Approvals</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-0">
                 {pendingOrders.length === 0 ? (
-                  <p className="text-gray-500 text-center py-4">No pending approvals</p>
+                  <p className="text-gray-500 text-center py-6 sm:py-8 text-sm sm:text-base">No pending approvals</p>
                 ) : (
                   <div className="space-y-3">
                     {pendingOrders.map((order) => (
-                      <div key={order.id} className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
-                        <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">{order.service_type}</h4>
-                          <p className="text-sm text-gray-600">{order.homeowner_name}</p>
-                          <p className="text-sm text-gray-500">Property: {order.homeowner_address}</p>
+                      <div key={order.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-yellow-50 rounded-lg space-y-2 sm:space-y-0">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium text-gray-900 text-sm sm:text-base truncate">{order.service_type}</h4>
+                          <p className="text-xs sm:text-sm text-gray-600 truncate">{order.homeowner_name}</p>
+                          <p className="text-xs text-gray-500 truncate">Property: {order.homeowner_address}</p>
                         </div>
-                        <div className="text-right">
-                          <Badge className={getStatusColor(order.status)}>
+                        <div className="text-left sm:text-right flex-shrink-0">
+                          <Badge className={getStatusColor(order.status)} size="sm">
                             Awaiting Approval
                           </Badge>
                           <p className="text-xs text-gray-500 mt-1">{formatDate(order.request_date)}</p>
@@ -265,7 +265,7 @@ const PropertyManagerDashboard = () => {
                     ))}
                     <button
                       onClick={() => navigate('/property-manager/orders')}
-                      className="w-full text-center text-blue-600 hover:text-blue-800 text-sm font-medium py-2"
+                      className="w-full text-center text-blue-600 hover:text-blue-800 text-sm font-medium py-2 transition-colors"
                     >
                       View All Approvals →
                     </button>
@@ -276,22 +276,22 @@ const PropertyManagerDashboard = () => {
 
             {/* Recent Activity */}
             <Card>
-              <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg sm:text-xl">Recent Activity</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-0">
                 {recentActivity.length === 0 ? (
-                  <p className="text-gray-500 text-center py-4">No recent activity</p>
+                  <p className="text-gray-500 text-center py-6 sm:py-8 text-sm sm:text-base">No recent activity</p>
                 ) : (
                   <div className="space-y-3">
                     {recentActivity.map((order) => (
-                      <div key={order.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">{order.service_type}</h4>
-                          <p className="text-sm text-gray-600">{order.homeowner_name}</p>
+                      <div key={order.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-gray-50 rounded-lg space-y-2 sm:space-y-0">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium text-gray-900 text-sm sm:text-base truncate">{order.service_type}</h4>
+                          <p className="text-xs sm:text-sm text-gray-600 truncate">{order.homeowner_name}</p>
                         </div>
-                        <div className="text-right">
-                          <Badge className={getStatusColor(order.status)}>
+                        <div className="text-left sm:text-right flex-shrink-0">
+                          <Badge className={getStatusColor(order.status)} size="sm">
                             {order.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                           </Badge>
                           <p className="text-xs text-gray-500 mt-1">{formatDate(order.request_date)}</p>
