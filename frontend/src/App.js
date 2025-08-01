@@ -25,6 +25,11 @@ import ProviderProfileManagement from "./pages/provider/ProviderProfileManagemen
 import ProviderAuth from "./pages/provider/ProviderAuth";
 import ProviderAnalytics from "./pages/provider/ProviderAnalytics";
 
+// Property Manager Pages
+import PropertyManagerLanding from "./pages/property-manager/PropertyManagerLanding";
+import PropertyManagerAuth from "./pages/property-manager/PropertyManagerAuth";
+import PropertyManagerDashboard from "./pages/property-manager/PropertyManagerDashboard";
+
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
