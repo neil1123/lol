@@ -262,6 +262,16 @@ const HomeownerLanding = () => {
                 <Button 
                   variant="ghost" 
                   onClick={() => {
+                    navigate('/property-manager');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="justify-start"
+                >
+                  For Property Managers
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  onClick={() => {
                     navigate('/homeowners/dashboard');
                     setIsMobileMenuOpen(false);
                   }}
