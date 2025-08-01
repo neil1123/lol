@@ -68,34 +68,34 @@ const PropertyManagerAuth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-6 sm:space-y-8">
         {/* Header */}
         <div className="text-center">
           <h1 
-            className="text-3xl font-bold text-blue-600 cursor-pointer" 
+            className="text-2xl sm:text-3xl font-bold text-blue-600 cursor-pointer" 
             onClick={() => navigate('/property-manager')}
           >
             Doord
           </h1>
-          <p className="text-gray-600">for Property Managers</p>
-          <h2 className="mt-6 text-2xl font-bold text-gray-900">
+          <p className="text-gray-600 text-sm sm:text-base">for Property Managers</p>
+          <h2 className="mt-4 sm:mt-6 text-xl sm:text-2xl font-bold text-gray-900">
             {isLogin ? 'Sign in to your account' : 'Create your property manager account'}
           </h2>
         </div>
 
         {/* Auth Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-center">
+        <Card className="w-full">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-center text-lg sm:text-xl">
               {isLogin ? 'Property Manager Login' : 'Property Manager Registration'}
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-4 sm:px-6">
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Email */}
               <div>
-                <Label htmlFor="email">Email Address</Label>
+                <Label htmlFor="email" className="text-sm font-medium">Email Address</Label>
                 <input
                   id="email"
                   name="email"
@@ -103,14 +103,14 @@ const PropertyManagerAuth = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="mt-1 block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Enter your email"
                 />
               </div>
 
               {/* Password */}
               <div>
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-sm font-medium">Password</Label>
                 <input
                   id="password"
                   name="password"
@@ -118,7 +118,7 @@ const PropertyManagerAuth = () => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="mt-1 block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Enter your password"
                 />
               </div>
@@ -127,7 +127,7 @@ const PropertyManagerAuth = () => {
               {!isLogin && (
                 <>
                   <div>
-                    <Label htmlFor="name">Company/Full Name</Label>
+                    <Label htmlFor="name" className="text-sm font-medium">Company/Full Name</Label>
                     <input
                       id="name"
                       name="name"
@@ -135,33 +135,33 @@ const PropertyManagerAuth = () => {
                       required
                       value={formData.name}
                       onChange={handleChange}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Enter your company or full name"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="phone">Phone Number</Label>
+                    <Label htmlFor="phone" className="text-sm font-medium">Phone Number</Label>
                     <input
                       id="phone"
                       name="phone"
                       type="tel"
                       value={formData.phone}
                       onChange={handleChange}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Enter your phone number (optional)"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="address">Business Address</Label>
+                    <Label htmlFor="address" className="text-sm font-medium">Business Address</Label>
                     <input
                       id="address"
                       name="address"
                       type="text"
                       value={formData.address}
                       onChange={handleChange}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       placeholder="Enter your business address (optional)"
                     />
                   </div>
@@ -179,7 +179,7 @@ const PropertyManagerAuth = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition-colors"
               >
                 {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Create Account')}
               </button>
@@ -199,7 +199,7 @@ const PropertyManagerAuth = () => {
                       address: ''
                     });
                   }}
-                  className="text-blue-600 hover:text-blue-800 text-sm"
+                  className="text-blue-600 hover:text-blue-800 text-sm transition-colors"
                 >
                   {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
                 </button>
@@ -212,7 +212,7 @@ const PropertyManagerAuth = () => {
         <div className="text-center">
           <button
             onClick={() => navigate('/property-manager')}
-            className="text-gray-500 hover:text-gray-700 text-sm"
+            className="text-gray-500 hover:text-gray-700 text-sm transition-colors"
           >
             ← Back to Property Manager Landing
           </button>
@@ -220,17 +220,17 @@ const PropertyManagerAuth = () => {
 
         {/* Other User Types */}
         <div className="text-center text-sm text-gray-500">
-          <p>Not a property manager?</p>
-          <div className="mt-2 space-x-4">
+          <p className="mb-2">Not a property manager?</p>
+          <div className="flex flex-col sm:flex-row sm:justify-center space-y-2 sm:space-y-0 sm:space-x-4">
             <button
               onClick={() => navigate('/')}
-              className="text-blue-600 hover:text-blue-800"
+              className="text-blue-600 hover:text-blue-800 transition-colors"
             >
               Homeowner Login
             </button>
             <button
               onClick={() => navigate('/homeservices/auth')}
-              className="text-blue-600 hover:text-blue-800"
+              className="text-blue-600 hover:text-blue-800 transition-colors"
             >
               Service Provider Login
             </button>
