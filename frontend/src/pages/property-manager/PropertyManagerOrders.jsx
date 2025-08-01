@@ -128,19 +128,19 @@ const PropertyManagerOrders = () => {
   };
 
   const renderOrderCard = (order, showApprovalButtons = false) => (
-    <Card key={order.id} className="mb-6">
-      <CardContent className="p-6">
-        <div className="flex justify-between items-start mb-4">
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900">{order.service_type}</h3>
-            <p className="text-sm text-gray-600">
+    <Card key={order.id} className="mb-3 sm:mb-6">
+      <CardContent className="p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 space-y-2 sm:space-y-0">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">{order.service_type}</h3>
+            <p className="text-sm text-gray-600 truncate">
               {order.requester_type === 'tenant' ? 'Tenant' : 'Requestor'}: {order.homeowner_name}
             </p>
-            <p className="text-sm text-gray-600">Provider: {order.provider_name}</p>
-            <p className="text-sm text-gray-600">Property: {order.property_address || order.homeowner_address}</p>
+            <p className="text-sm text-gray-600 truncate">Provider: {order.provider_name}</p>
+            <p className="text-sm text-gray-600 truncate">Property: {order.property_address || order.homeowner_address}</p>
           </div>
-          <div className="text-right">
-            <Badge className={getStatusColor(order.status, order.pm_approved)}>
+          <div className="text-left sm:text-right flex-shrink-0">
+            <Badge className={getStatusColor(order.status, order.pm_approved)} size="sm">
               {getStatusText(order)}
             </Badge>
             <p className="text-xs text-gray-500 mt-1">
@@ -150,26 +150,26 @@ const PropertyManagerOrders = () => {
         </div>
 
         <div className="mb-4">
-          <h4 className="font-medium text-gray-900 mb-2">Service Description:</h4>
-          <p className="text-gray-700">{order.description}</p>
+          <h4 className="font-medium text-gray-900 mb-2 text-sm sm:text-base">Service Description:</h4>
+          <p className="text-gray-700 text-sm sm:text-base">{order.description}</p>
         </div>
 
         {order.services && order.services.length > 0 && (
           <div className="mb-4">
-            <h4 className="font-medium text-gray-900 mb-2">Services Requested:</h4>
-            <div className="flex flex-wrap gap-2">
+            <h4 className="font-medium text-gray-900 mb-2 text-sm sm:text-base">Services Requested:</h4>
+            <div className="flex flex-wrap gap-1 sm:gap-2">
               {order.services.map((service, index) => (
-                <Badge key={index} variant="outline">{service}</Badge>
+                <Badge key={index} variant="outline" className="text-xs">{service}</Badge>
               ))}
             </div>
           </div>
         )}
 
         {order.quotation_amount && (
-          <div className="bg-green-50 p-4 rounded-lg mb-4">
-            <div className="flex justify-between items-center">
-              <span className="font-medium text-green-800">Quote Amount:</span>
-              <span className="text-xl font-bold text-green-600">
+          <div className="bg-green-50 p-3 sm:p-4 rounded-lg mb-4">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-1 sm:space-y-0">
+              <span className="font-medium text-green-800 text-sm sm:text-base">Quote Amount:</span>
+              <span className="text-lg sm:text-xl font-bold text-green-600">
                 ${order.quotation_amount}
               </span>
             </div>
@@ -179,7 +179,7 @@ const PropertyManagerOrders = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 text-sm text-gray-600 mb-4">
           {order.budget && (
             <div><span className="font-medium">Budget:</span> {order.budget}</div>
           )}
@@ -196,19 +196,19 @@ const PropertyManagerOrders = () => {
 
         {/* Approval Buttons for Pending Orders */}
         {showApprovalButtons && order.status === 'pending_pm_approval' && (
-          <div className="flex space-x-3 pt-4 border-t">
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 pt-4 border-t">
             <Button
               onClick={() => handleApproveOrder(order.id)}
               disabled={processingOrder === order.id}
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+              className="flex-1 bg-green-600 hover:bg-green-700 text-white text-sm"
             >
               {processingOrder === order.id ? (
-                <div className="flex items-center">
+                <div className="flex items-center justify-center">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                   Approving...
                 </div>
               ) : (
-                <div className="flex items-center">
+                <div className="flex items-center justify-center">
                   <CheckCircle className="h-4 w-4 mr-2" />
                   Approve Request
                 </div>
@@ -218,15 +218,15 @@ const PropertyManagerOrders = () => {
               onClick={() => handleDenyOrder(order.id)}
               disabled={processingOrder === order.id}
               variant="destructive"
-              className="flex-1"
+              className="flex-1 text-sm"
             >
               {processingOrder === order.id ? (
-                <div className="flex items-center">
+                <div className="flex items-center justify-center">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                   Denying...
                 </div>
               ) : (
-                <div className="flex items-center">
+                <div className="flex items-center justify-center">
                   <XCircle className="h-4 w-4 mr-2" />
                   Deny Request
                 </div>
