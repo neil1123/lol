@@ -294,8 +294,11 @@ async def register(user_data: UserCreate):
             raise HTTPException(status_code=400, detail="Invalid property manager code")
         
         # Find the property manager associated with this code
-        # For now, find any property manager (later we'll have code-specific PMs)
-        property_manager = await db.users.find_one({"user_type": "property_manager"})
+        # For now, find the most recently created property manager (later we'll have code-specific PMs)
+        property_manager = await db.users.find_one(
+            {"user_type": "property_manager"}, 
+            sort=[("created_at", -1)]  # Get most recent PM
+        )
         if not property_manager:
             raise HTTPException(status_code=400, detail="No property manager found for this code")
         
