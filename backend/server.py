@@ -281,15 +281,49 @@ async def register(user_data: UserCreate):
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     
+    # Validate user type
+    valid_user_types = ["provider", "homeowner", "property_manager", "tenant"]
+    if user_data.user_type not in valid_user_types:
+        raise HTTPException(status_code=400, detail="Invalid user type")
+    
+    # Handle tenant registration with PM code
+    property_manager_id = None
+    if user_data.pm_code:
+        # Check if PM code is valid (currently hardcoded as 666666)
+        if user_data.pm_code != "666666":
+            raise HTTPException(status_code=400, detail="Invalid property manager code")
+        
+        # Find the property manager associated with this code
+        # For now, find any property manager (later we'll have code-specific PMs)
+        property_manager = await db.users.find_one({"user_type": "property_manager"})
+        if not property_manager:
+            raise HTTPException(status_code=400, detail="No property manager found for this code")
+        
+        # Set user type to tenant and link to PM
+        user_data.user_type = "tenant"
+        property_manager_id = property_manager["id"]
+        
+        # Add tenant's property address to PM's properties list
+        if user_data.property_address:
+            pm_properties = property_manager.get("properties", [])
+            if user_data.property_address not in pm_properties:
+                pm_properties.append(user_data.property_address)
+                await db.users.update_one(
+                    {"id": property_manager["id"]},
+                    {"$set": {"properties": pm_properties}}
+                )
+    
     # Hash password
     hashed_password = hash_password(user_data.password)
     
     # Create user object
     user_dict = user_data.dict()
     del user_dict["password"]
+    if "pm_code" in user_dict:
+        del user_dict["pm_code"]  # Remove PM code from user data
     user_dict["password_hash"] = hashed_password
     
-    # Add provider-specific fields if provider
+    # Add type-specific fields
     if user_data.user_type == "provider":
         user_dict.update({
             "description": f"Professional {', '.join(user_data.services or [])} services",
@@ -301,6 +335,15 @@ async def register(user_data: UserCreate):
             "year_established": "2024",
             "specialties": ["Professional service", "Quality work", "Customer satisfaction"],
             "price_range": "$50-$500"
+        })
+    elif user_data.user_type == "property_manager":
+        user_dict.update({
+            "properties": []  # Will be populated when tenants register
+        })
+    elif user_data.user_type == "tenant":
+        user_dict.update({
+            "property_manager_id": property_manager_id,
+            "property_address": user_data.property_address
         })
     
     user = User(**user_dict)
