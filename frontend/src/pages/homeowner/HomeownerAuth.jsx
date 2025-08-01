@@ -26,7 +26,9 @@ const HomeownerAuth = () => {
     phone: '',
     address: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    pmCode: '',  // Property Manager code (optional)
+    propertyAddress: ''  // Tenant's specific property address
   });
 
   const handleSignIn = async (e) => {
