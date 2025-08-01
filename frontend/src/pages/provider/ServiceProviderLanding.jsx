@@ -81,6 +81,13 @@ const ServiceProviderLanding = () => {
               >
                 For Homeowners
               </Button>
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate('/property-manager')}
+                className="text-sm"
+              >
+                For Property Managers
+              </Button>
               <Button variant="outline" onClick={() => navigate('/homeservices/auth')}>
                 Sign In
               </Button>
