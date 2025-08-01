@@ -917,6 +917,104 @@ async def update_provider_rating(provider_id: str):
             }}
         )
 
+# ====== PROPERTY MANAGER ENDPOINTS ======
+
+@api_router.get("/property-manager/tenants")
+async def get_property_manager_tenants(current_user: User = Depends(get_current_user)):
+    """Get all tenants for current property manager"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can access tenant data")
+    
+    tenants = await db.users.find({
+        "user_type": "tenant",
+        "property_manager_id": current_user.id
+    }).to_list(1000)
+    
+    # Remove sensitive data
+    for tenant in tenants:
+        if "password_hash" in tenant:
+            del tenant["password_hash"]
+    
+    return tenants
+
+@api_router.get("/property-manager/orders")  
+async def get_property_manager_orders(current_user: User = Depends(get_current_user)):
+    """Get all orders requiring PM approval or PM's direct orders"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can access these orders")
+    
+    # Get tenant orders requiring approval + PM's own orders
+    orders = await db.orders.find({
+        "$or": [
+            {"property_manager_id": current_user.id},  # Tenant orders needing approval
+            {"homeowner_id": current_user.id}  # PM's direct orders
+        ]
+    }).sort("request_date", -1).to_list(1000)
+    
+    return orders
+
+@api_router.put("/property-manager/orders/{order_id}/approve")
+async def approve_tenant_order(order_id: str, current_user: User = Depends(get_current_user)):
+    """Property manager approves a tenant's order"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can approve orders")
+    
+    # Find the order
+    order = await db.orders.find_one({
+        "id": order_id,
+        "property_manager_id": current_user.id
+    })
+    
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Update order with PM approval
+    await db.orders.update_one(
+        {"id": order_id},
+        {"$set": {
+            "pm_approved": True,
+            "pm_approval_date": datetime.utcnow(),
+            "status": "pending_quotation"  # Move to normal quotation process
+        }}
+    )
+    
+    return {"message": "Order approved successfully"}
+
+@api_router.put("/property-manager/orders/{order_id}/deny")  
+async def deny_tenant_order(order_id: str, current_user: User = Depends(get_current_user)):
+    """Property manager denies a tenant's order"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can deny orders")
+    
+    # Find the order
+    order = await db.orders.find_one({
+        "id": order_id,
+        "property_manager_id": current_user.id
+    })
+    
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Update order as denied
+    await db.orders.update_one(
+        {"id": order_id},
+        {"$set": {
+            "pm_approved": False,
+            "pm_approval_date": datetime.utcnow(),
+            "status": "denied"
+        }}
+    )
+    
+    return {"message": "Order denied"}
+
+@api_router.get("/property-manager/properties")
+async def get_property_manager_properties(current_user: User = Depends(get_current_user)):
+    """Get all properties managed by current property manager"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can access property data")
+    
+    return {"properties": current_user.properties or []}
+
 # Include the router in the main app
 app.include_router(api_router)
 
