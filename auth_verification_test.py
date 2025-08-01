@@ -7,7 +7,7 @@ Verify the specific test accounts work as mentioned in review request
 import requests
 import json
 
-BACKEND_URL = "https://e9a186a0-552e-428d-8681-e3901f1a654d.preview.emergentagent.com/api"
+BACKEND_URL = "https://b7fd8e2b-d76f-4ba6-ba01-bcc45f812c06.preview.emergentagent.com/api"
 
 def test_specific_accounts():
     """Test the specific accounts mentioned in review request"""
