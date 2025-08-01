@@ -976,9 +976,17 @@ def run_all_tests():
     test_results.append(("PM Properties Updated After Tenant Registration", test_pm_properties_updated_after_tenant_registration()))
     test_results.append(("Valid User Types Support", test_valid_user_types()))
     
-    # Phase 2: Property Manager Endpoints
+    # Phase 2: Order Workflow Tests (moved up to create test data)
     print("\n" + "=" * 60)
-    print("🏢 PHASE 2: PROPERTY MANAGER ENDPOINTS")
+    print("📋 PHASE 2: ORDER WORKFLOW TESTING")
+    print("=" * 60)
+    
+    test_results.append(("Tenant Order Workflow", test_tenant_order_workflow()))
+    test_results.append(("Homeowner Order Workflow", test_homeowner_order_workflow()))
+    
+    # Phase 3: Property Manager Endpoints (moved down to use test data)
+    print("\n" + "=" * 60)
+    print("🏢 PHASE 3: PROPERTY MANAGER ENDPOINTS")
     print("=" * 60)
     
     test_results.append(("PM Tenants Endpoint", test_property_manager_tenants_endpoint()))
@@ -986,14 +994,6 @@ def run_all_tests():
     test_results.append(("PM Orders Endpoint", test_property_manager_orders_endpoint()))
     test_results.append(("PM Order Approval", test_property_manager_approve_order()))
     test_results.append(("PM Order Denial", test_property_manager_deny_order()))
-    
-    # Phase 3: Order Workflow Tests
-    print("\n" + "=" * 60)
-    print("📋 PHASE 3: ORDER WORKFLOW TESTING")
-    print("=" * 60)
-    
-    test_results.append(("Tenant Order Workflow", test_tenant_order_workflow()))
-    test_results.append(("Homeowner Order Workflow", test_homeowner_order_workflow()))
     
     # Phase 4: Data Model Tests
     print("\n" + "=" * 60)
