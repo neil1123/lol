@@ -86,6 +86,9 @@ function App() {
           <Route path="/property-manager" element={<PropertyManagerLanding />} />
           <Route path="/property-manager/auth" element={<PropertyManagerAuth />} />
           <Route path="/property-manager/dashboard" element={<PropertyManagerDashboard />} />
+
+          {/* Tenant Routes */}
+          <Route path="/tenant/dashboard" element={<TenantDashboard />} />
         </Routes>
       </BrowserRouter>
     </NotificationProvider>
