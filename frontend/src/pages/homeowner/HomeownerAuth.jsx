@@ -46,9 +46,14 @@ const HomeownerAuth = () => {
       
       if (userType === 'homeowner') {
         navigate('/homeowners/dashboard');
+      } else if (userType === 'tenant') {
+        navigate('/tenant/dashboard');
       } else if (userType === 'provider') {
         // If a provider tries to login through homeowner auth, redirect to provider dashboard
         navigate('/homeservices/dashboard');
+      } else if (userType === 'property_manager') {
+        // If a PM tries to login through homeowner auth, redirect to PM dashboard
+        navigate('/property-manager/dashboard');
       } else {
         // Default to homeowner dashboard if userType is unclear
         navigate('/homeowners/dashboard');
