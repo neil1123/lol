@@ -293,6 +293,48 @@ const HomeownerAuth = () => {
                     </div>
                   </div>
                   
+                  {/* Tenant Registration Fields */}
+                  <div className="space-y-4 p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+                    <div className="text-sm font-medium text-blue-800">
+                      🏢 Tenant Registration (Optional)
+                    </div>
+                    <p className="text-xs text-blue-600">
+                      If you are a tenant and have a Property Manager code, enter it below to link your account.
+                    </p>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="pmCode">Property Manager Code (Optional)</Label>
+                      <Input
+                        id="pmCode"
+                        type="text"
+                        placeholder="Enter PM code (e.g., 666666)"
+                        value={signUpData.pmCode}
+                        onChange={(e) => setSignUpData({...signUpData, pmCode: e.target.value})}
+                        className="bg-white"
+                      />
+                    </div>
+                    
+                    {signUpData.pmCode && (
+                      <div className="space-y-2">
+                        <Label htmlFor="propertyAddress">Specific Property Address (Optional)</Label>
+                        <div className="relative">
+                          <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                          <Input
+                            id="propertyAddress"
+                            type="text"
+                            placeholder="Enter your specific property address (if different from above)"
+                            value={signUpData.propertyAddress}
+                            onChange={(e) => setSignUpData({...signUpData, propertyAddress: e.target.value})}
+                            className="pl-10 bg-white"
+                          />
+                        </div>
+                        <p className="text-xs text-blue-600">
+                          If left empty, we'll use your main address above
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  
                   <div className="space-y-2">
                     <Label htmlFor="password">Password</Label>
                     <div className="relative">
