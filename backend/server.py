@@ -940,8 +940,10 @@ async def get_property_manager_tenants(current_user: User = Depends(get_current_
         "property_manager_id": current_user.id
     }).to_list(1000)
     
-    # Remove sensitive data
+    # Remove sensitive data and MongoDB _id
     for tenant in tenants:
+        if "_id" in tenant:
+            del tenant["_id"]
         if "password_hash" in tenant:
             del tenant["password_hash"]
     
