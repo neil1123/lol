@@ -30,6 +30,9 @@ import PropertyManagerLanding from "./pages/property-manager/PropertyManagerLand
 import PropertyManagerAuth from "./pages/property-manager/PropertyManagerAuth";
 import PropertyManagerDashboard from "./pages/property-manager/PropertyManagerDashboard";
 
+// Tenant Pages
+import TenantDashboard from "./pages/tenant/TenantDashboard";
+
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
