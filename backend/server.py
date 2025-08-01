@@ -481,14 +481,14 @@ async def update_order_status(order_id: str, status: str = Query(...), current_u
             {"id": order_id, "provider_id": current_user.id},
             {"$set": {"status": status}}
         )
-    elif current_user.user_type == "homeowner":
-        # Homeowners can only update their own orders and only to accept/decline
+    elif current_user.user_type in ["homeowner", "tenant"]:
+        # Homeowners and tenants can only update their own orders and only to accept/decline
         if order["homeowner_id"] != current_user.id:
             raise HTTPException(status_code=403, detail="Access denied")
         
-        # Homeowners can only accept or decline quotes
+        # Homeowners and tenants can only accept or decline quotes
         if status not in ["accepted", "declined"]:
-            raise HTTPException(status_code=400, detail="Homeowners can only accept or decline quotes")
+            raise HTTPException(status_code=400, detail="Homeowners and tenants can only accept or decline quotes")
         
         # Update the order status
         result = await db.orders.update_one(
