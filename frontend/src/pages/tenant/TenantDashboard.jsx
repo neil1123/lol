@@ -102,16 +102,16 @@ const TenantDashboard = () => {
   };
 
   const renderOrderCard = (order) => (
-    <Card key={order.id} className="mb-4">
-      <CardContent className="p-6">
-        <div className="flex justify-between items-start mb-4">
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900">{order.service_type}</h3>
-            <p className="text-sm text-gray-600">Provider: {order.provider_name}</p>
-            <p className="text-sm text-gray-600">Property: {order.property_address || order.homeowner_address}</p>
+    <Card key={order.id} className="mb-3 sm:mb-4">
+      <CardContent className="p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 space-y-2 sm:space-y-0">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">{order.service_type}</h3>
+            <p className="text-sm text-gray-600 truncate">Provider: {order.provider_name}</p>
+            <p className="text-sm text-gray-600 truncate">Property: {order.property_address || order.homeowner_address}</p>
           </div>
-          <div className="text-right">
-            <Badge className={getStatusColor(order.status)}>
+          <div className="text-left sm:text-right flex-shrink-0">
+            <Badge className={getStatusColor(order.status)} size="sm">
               {getStatusText(order)}
             </Badge>
             <p className="text-xs text-gray-500 mt-1">
@@ -121,15 +121,15 @@ const TenantDashboard = () => {
         </div>
 
         <div className="mb-4">
-          <h4 className="font-medium text-gray-900 mb-2">Service Description:</h4>
-          <p className="text-gray-700">{order.description}</p>
+          <h4 className="font-medium text-gray-900 mb-2 text-sm sm:text-base">Service Description:</h4>
+          <p className="text-gray-700 text-sm sm:text-base">{order.description}</p>
         </div>
 
         {order.quotation_amount && (
-          <div className="bg-green-50 p-3 rounded-lg mb-4">
-            <div className="flex justify-between items-center">
-              <span className="font-medium text-green-800">Quote Amount:</span>
-              <span className="text-xl font-bold text-green-600">
+          <div className="bg-green-50 p-3 sm:p-4 rounded-lg mb-4">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-1 sm:space-y-0">
+              <span className="font-medium text-green-800 text-sm sm:text-base">Quote Amount:</span>
+              <span className="text-lg sm:text-xl font-bold text-green-600">
                 ${order.quotation_amount}
               </span>
             </div>
@@ -139,17 +139,14 @@ const TenantDashboard = () => {
           </div>
         )}
 
-        {order.budget && (
-          <div className="text-sm text-gray-600 mb-2">
-            <span className="font-medium">Budget:</span> {order.budget}
-          </div>
-        )}
-
-        {order.preferred_date && (
-          <div className="text-sm text-gray-600">
-            <span className="font-medium">Preferred Date:</span> {order.preferred_date}
-          </div>
-        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-600">
+          {order.budget && (
+            <div><span className="font-medium">Budget:</span> {order.budget}</div>
+          )}
+          {order.preferred_date && (
+            <div><span className="font-medium">Preferred Date:</span> {order.preferred_date}</div>
+          )}
+        </div>
       </CardContent>
     </Card>
   );
