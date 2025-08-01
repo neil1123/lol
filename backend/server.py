@@ -95,6 +95,9 @@ class UserCreate(BaseModel):
     business_name: Optional[str] = None
     services: Optional[List[str]] = None
     license: Optional[str] = None
+    # For tenant registration
+    pm_code: Optional[str] = None  # Property Manager code for tenant signup
+    property_address: Optional[str] = None  # Tenant's specific property address
 
 class UserLogin(BaseModel):
     email: EmailStr
