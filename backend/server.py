@@ -134,6 +134,13 @@ class Order(BaseModel):
     budget: Optional[str] = None
     property_size: Optional[str] = None
     additional_requirements: Optional[str] = None
+    
+    # Property Manager approval fields
+    property_manager_id: Optional[str] = None  # ID of property manager (if tenant order)
+    pm_approved: Optional[bool] = None  # Whether PM approved the order
+    pm_approval_date: Optional[datetime] = None  # When PM approved
+    requester_type: str = "homeowner"  # "homeowner", "tenant", or "property_manager"
+    property_address: Optional[str] = None  # For PM orders - which property
 
 class OrderCreate(BaseModel):
     homeowner_id: str
