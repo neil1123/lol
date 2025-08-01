@@ -107,7 +107,12 @@ const QuotationRequestForm = ({ isOpen, onClose, serviceType, providerName, prov
         urgency: formData.urgency,
         budget: formData.budget,
         property_size: formData.propertySize,
-        additional_requirements: formData.additionalRequirements
+        additional_requirements: formData.additionalRequirements,
+        
+        // Add tenant/PM workflow fields
+        requester_type: user.user_type || 'homeowner', // 'homeowner', 'tenant', or 'property_manager'
+        property_manager_id: user.property_manager_id || null, // For tenant orders
+        property_address: user.property_address || null  // Tenant's specific property
       };
       
       // Send quotation request to API
