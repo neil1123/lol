@@ -975,7 +975,7 @@ async def get_property_manager_orders(current_user: User = Depends(get_current_u
 
 @api_router.put("/property-manager/orders/{order_id}/approve")
 async def approve_tenant_order(order_id: str, current_user: User = Depends(get_current_user)):
-    """Property manager approves a tenant's order"""
+    """Property manager approves a tenant's order or quotation"""
     if current_user.user_type != "property_manager":
         raise HTTPException(status_code=403, detail="Only property managers can approve orders")
     
@@ -988,13 +988,22 @@ async def approve_tenant_order(order_id: str, current_user: User = Depends(get_c
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
     
+    # Determine new status based on current status
+    new_status = "pending_quotation"
+    if order.get("status") == "pending_pm_approval" and order.get("quotation_amount"):
+        # PM is approving a quotation from provider
+        new_status = "quoted"  # Ready for tenant to accept/decline
+    elif order.get("status") == "pending_pm_approval":
+        # PM is approving initial service request
+        new_status = "pending_quotation"  # Send to provider for quotation
+    
     # Update order with PM approval
     await db.orders.update_one(
         {"id": order_id},
         {"$set": {
             "pm_approved": True,
             "pm_approval_date": datetime.utcnow(),
-            "status": "pending_quotation"  # Move to normal quotation process
+            "status": new_status
         }}
     )
     
