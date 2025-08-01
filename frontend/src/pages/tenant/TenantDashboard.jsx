@@ -83,10 +83,9 @@ const TenantDashboard = () => {
   };
 
   const getStatusText = (order) => {
-    if (order.status === 'pending_pm_approval') return 'Awaiting PM Approval';
     if (order.status === 'pending_quotation') return 'Sent to Provider';
-    if (order.status === 'quoted' && !order.pm_approved) return 'Awaiting PM Approval';
-    if (order.status === 'quoted' && order.pm_approved) return 'Quote Ready';
+    if (order.status === 'pending_pm_approval') return 'Quotation Awaiting PM Approval';
+    if (order.status === 'quoted') return 'Quote Ready - Approved by PM';
     if (order.status === 'accepted') return 'Accepted';
     if (order.status === 'confirmed') return 'Confirmed';
     if (order.status === 'completed') return 'Completed';
