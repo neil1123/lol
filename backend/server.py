@@ -526,12 +526,18 @@ async def update_order_quotation(
     
     # Update the order with quotation details
     update_data = {
-        "quotation_amount": quotation_amount,
-        "status": "quoted"
+        "quotation_amount": quotation_amount
     }
     
     if quotation_details:
         update_data["quotation_details"] = quotation_details
+    
+    # For tenant orders, quotations need PM approval instead of going directly to tenant
+    if order.get("requester_type") == "tenant":
+        update_data["status"] = "pending_pm_approval"  # PM needs to approve the quotation
+        update_data["pm_approved"] = None  # Reset PM approval
+    else:
+        update_data["status"] = "quoted"  # Normal flow for homeowners
     
     result = await db.orders.update_one(
         {"id": order_id, "provider_id": current_user.id},
