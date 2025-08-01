@@ -1111,13 +1111,9 @@ const HomeownerDashboard = () => {
                 </div>
               </div>
 
-              {/* Home Services Section */}
+              {/* Service Categories Section */}
               <div className="mb-8">
-                <div className="text-center mb-8">
-                  <h3 className="text-3xl font-bold text-gray-900 mb-4">
-                    Home services at your door step
-                  </h3>
-                </div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Popular Services</h2>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-6">
                   {serviceCategories.flatMap(category => 
