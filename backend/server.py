@@ -57,7 +57,7 @@ class User(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     email: EmailStr
     password_hash: str
-    user_type: str  # "provider" or "homeowner"
+    user_type: str  # "provider", "homeowner", "property_manager", or "tenant"
     name: str
     phone: Optional[str] = None
     address: Optional[str] = None
@@ -77,6 +77,13 @@ class User(BaseModel):
     year_established: Optional[str] = "2024"
     specialties: Optional[List[str]] = None
     price_range: Optional[str] = "$50-$500"
+    
+    # Property Manager specific fields
+    properties: Optional[List[str]] = None  # List of property addresses managed
+    
+    # Tenant specific fields
+    property_manager_id: Optional[str] = None  # ID of the property manager
+    property_address: Optional[str] = None  # Specific property tenant lives in
 
 class UserCreate(BaseModel):
     email: EmailStr
