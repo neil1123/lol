@@ -966,6 +966,11 @@ async def get_property_manager_orders(current_user: User = Depends(get_current_u
         ]
     }).sort("request_date", -1).to_list(1000)
     
+    # Remove MongoDB _id from response
+    for order in orders:
+        if "_id" in order:
+            del order["_id"]
+    
     return orders
 
 @api_router.put("/property-manager/orders/{order_id}/approve")
