@@ -78,6 +78,11 @@ function App() {
           <Route path="/homeservices/customers" element={<ProviderCustomers />} />
           <Route path="/homeservices/profile" element={<ProviderProfileManagement />} />
           <Route path="/homeservices/settings" element={<ProviderSettings />} />
+
+          {/* Property Manager Routes */}
+          <Route path="/property-manager" element={<PropertyManagerLanding />} />
+          <Route path="/property-manager/auth" element={<PropertyManagerAuth />} />
+          <Route path="/property-manager/dashboard" element={<PropertyManagerDashboard />} />
         </Routes>
       </BrowserRouter>
     </NotificationProvider>
