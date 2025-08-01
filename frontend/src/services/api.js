@@ -245,6 +245,31 @@ class ApiService {
   async getProviderReviews(providerId) {
     return await this.request(`/providers/${providerId}/reviews`);
   }
+
+  // ====== PROPERTY MANAGER ======
+  async getPropertyManagerTenants() {
+    return await this.request('/property-manager/tenants');
+  }
+
+  async getPropertyManagerOrders() {
+    return await this.request('/property-manager/orders');
+  }
+
+  async approvePropertyManagerOrder(orderId) {
+    return await this.request(`/property-manager/orders/${orderId}/approve`, {
+      method: 'PUT',
+    });
+  }
+
+  async denyPropertyManagerOrder(orderId) {
+    return await this.request(`/property-manager/orders/${orderId}/deny`, {
+      method: 'PUT',
+    });
+  }
+
+  async getPropertyManagerProperties() {
+    return await this.request('/property-manager/properties');
+  }
 }
 
 // Create and export singleton instance
