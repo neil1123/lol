@@ -312,18 +312,29 @@ async def register(user_data: UserCreate):
                     {"$set": {"properties": pm_properties}}
                 )
     
+    # Handle property manager code validation during registration
+    if user_data.user_type == "property_manager" and user_data.pm_code:
+        # Check if this PM code is already in use
+        existing_pm_code = await db.users.find_one({
+            "user_type": "property_manager",
+            "pm_code": user_data.pm_code
+        })
+        if existing_pm_code:
+            raise HTTPException(status_code=400, detail="Property Manager code already in use")
+    
     # Hash password
     hashed_password = hash_password(user_data.password)
     
     # Create user object
     user_dict = user_data.dict()
     del user_dict["password"]
-    if "pm_code" in user_dict:
-        del user_dict["pm_code"]  # Remove PM code from user data
     user_dict["password_hash"] = hashed_password
     
     # Add type-specific fields
     if user_data.user_type == "provider":
+        # Remove PM code from provider data
+        if "pm_code" in user_dict:
+            del user_dict["pm_code"]
         user_dict.update({
             "description": f"Professional {', '.join(user_data.services or [])} services",
             "rating": 5.0,
@@ -337,13 +348,21 @@ async def register(user_data: UserCreate):
         })
     elif user_data.user_type == "property_manager":
         user_dict.update({
-            "properties": []  # Will be populated when tenants register
+            "properties": [],  # Will be populated when tenants register
+            "pm_code": user_data.pm_code  # Store the PM's unique code
         })
     elif user_data.user_type == "tenant":
+        # Remove PM code from tenant data (used only for lookup)
+        if "pm_code" in user_dict:
+            del user_dict["pm_code"]
         user_dict.update({
             "property_manager_id": property_manager_id,
             "property_address": user_data.property_address
         })
+    else:
+        # For homeowners, remove PM code field
+        if "pm_code" in user_dict:
+            del user_dict["pm_code"]
     
     user = User(**user_dict)
     
