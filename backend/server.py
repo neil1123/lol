@@ -97,7 +97,7 @@ class UserCreate(BaseModel):
     services: Optional[List[str]] = None
     license: Optional[str] = None
     # For tenant registration
-    pm_code: Optional[str] = None  # Property Manager code for tenant signup
+    pm_code: Optional[str] = None  # Property Manager code for tenant signup OR PM's own code during PM registration
     property_address: Optional[str] = None  # Tenant's specific property address
 
 class UserLogin(BaseModel):
