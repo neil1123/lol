@@ -30,6 +30,7 @@ import PropertyManagerLanding from "./pages/property-manager/PropertyManagerLand
 import PropertyManagerAuth from "./pages/property-manager/PropertyManagerAuth";
 import PropertyManagerDashboard from "./pages/property-manager/PropertyManagerDashboard";
 import PropertyManagerOrders from "./pages/property-manager/PropertyManagerOrders";
+import PropertyManagerTenants from "./pages/property-manager/PropertyManagerTenants";
 
 // Tenant Pages
 import TenantDashboard from "./pages/tenant/TenantDashboard";
