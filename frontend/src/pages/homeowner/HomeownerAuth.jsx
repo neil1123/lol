@@ -307,7 +307,7 @@ const HomeownerAuth = () => {
                       <Input
                         id="pmCode"
                         type="text"
-                        placeholder="Enter PM code (e.g., 666666)"
+                        placeholder="Enter your Property Manager's code"
                         value={signUpData.pmCode}
                         onChange={(e) => setSignUpData({...signUpData, pmCode: e.target.value})}
                         className="bg-white"
