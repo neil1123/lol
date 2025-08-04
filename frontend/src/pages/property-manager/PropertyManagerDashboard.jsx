@@ -374,6 +374,69 @@ const PropertyManagerDashboard = () => {
               </CardContent>
             </Card>
           </div>
+
+          {/* My Tenants Section */}
+          <div className="mt-6 sm:mt-8">
+            <Card>
+              <CardHeader className="pb-3">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
+                  <CardTitle className="text-lg sm:text-xl">My Tenants</CardTitle>
+                  <button
+                    onClick={() => navigate('/property-manager/tenants')}
+                    className="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors text-left sm:text-right"
+                  >
+                    View All Tenants →
+                  </button>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                {tenants.length === 0 ? (
+                  <div className="text-center py-6 sm:py-8">
+                    <p className="text-gray-500 mb-4 text-sm sm:text-base">No tenants registered yet</p>
+                    {user?.pm_code && (
+                      <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                        <p className="text-sm text-blue-800">
+                          <strong>Your Tenant Code:</strong> <span className="font-mono bg-blue-100 px-2 py-1 rounded">{user.pm_code}</span>
+                        </p>
+                        <p className="text-xs text-blue-600 mt-1">Share this code with tenants to get started</p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {tenants.map((tenant) => (
+                      <div key={tenant.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-gray-50 rounded-lg space-y-2 sm:space-y-0">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium text-gray-900 text-sm sm:text-base truncate">{tenant.name}</h4>
+                          <p className="text-xs sm:text-sm text-gray-600 truncate">{tenant.email}</p>
+                          {tenant.property_address && (
+                            <p className="text-xs text-gray-500 truncate">{tenant.property_address}</p>
+                          )}
+                        </div>
+                        <div className="text-left sm:text-right flex-shrink-0">
+                          <Badge 
+                            className={tenant.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'} 
+                            size="sm"
+                          >
+                            {tenant.is_active ? 'Active' : 'Inactive'}
+                          </Badge>
+                          <p className="text-xs text-gray-500 mt-1">Joined: {formatDate(tenant.created_at)}</p>
+                        </div>
+                      </div>
+                    ))}
+                    {tenants.length >= 4 && (
+                      <button
+                        onClick={() => navigate('/property-manager/tenants')}
+                        className="w-full text-center text-blue-600 hover:text-blue-800 text-sm font-medium py-2 transition-colors"
+                      >
+                        View All {stats.totalTenants} Tenants →
+                      </button>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </main>
     </div>
