@@ -69,6 +69,7 @@ const PropertyManagerDashboard = () => {
       });
 
       setPendingOrders(pendingApprovalOrders.slice(0, 5)); // Show latest 5
+      setTenants(tenants.slice(0, 4)); // Show latest 4 tenants in dashboard
       
       // Create recent activity from orders
       const sortedOrders = orders.sort((a, b) => new Date(b.request_date) - new Date(a.request_date));
