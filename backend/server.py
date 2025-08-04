@@ -289,19 +289,14 @@ async def register(user_data: UserCreate):
     
     # Handle tenant registration with PM code
     property_manager_id = None
-    if user_data.pm_code:
-        # Check if PM code is valid (currently hardcoded as 666666)
-        if user_data.pm_code != "666666":
-            raise HTTPException(status_code=400, detail="Invalid property manager code")
-        
-        # Find the property manager associated with this code
-        # For now, find the most recently created property manager (later we'll have code-specific PMs)
-        property_manager = await db.users.find_one(
-            {"user_type": "property_manager"}, 
-            sort=[("created_at", -1)]  # Get most recent PM
-        )
+    if user_data.pm_code and user_data.user_type == "homeowner":
+        # Find the property manager with this specific code
+        property_manager = await db.users.find_one({
+            "user_type": "property_manager",
+            "pm_code": user_data.pm_code
+        })
         if not property_manager:
-            raise HTTPException(status_code=400, detail="No property manager found for this code")
+            raise HTTPException(status_code=400, detail="Invalid property manager code")
         
         # Set user type to tenant and link to PM
         user_data.user_type = "tenant"
