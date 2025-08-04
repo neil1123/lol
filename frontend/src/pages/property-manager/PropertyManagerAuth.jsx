@@ -212,7 +212,8 @@ const PropertyManagerAuth = () => {
                       password: '',
                       name: '',
                       phone: '',
-                      address: ''
+                      address: '',
+                      pm_code: ''
                     });
                   }}
                   className="text-blue-600 hover:text-blue-800 text-sm transition-colors"
