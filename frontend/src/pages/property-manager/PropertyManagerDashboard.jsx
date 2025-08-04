@@ -18,6 +18,7 @@ const PropertyManagerDashboard = () => {
   });
   const [pendingOrders, setPendingOrders] = useState([]);
   const [recentActivity, setRecentActivity] = useState([]);
+  const [tenants, setTenants] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
