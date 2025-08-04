@@ -28,6 +28,13 @@ const PropertyManagerAuth = () => {
       if (isLogin) {
         response = await apiService.login(formData.email, formData.password);
       } else {
+        // Validate required fields for registration
+        if (!formData.pm_code.trim()) {
+          setError('Please provide a tenant onboarding code');
+          setLoading(false);
+          return;
+        }
+        
         const userData = {
           ...formData,
           user_type: 'property_manager'
