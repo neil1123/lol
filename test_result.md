@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-  - task: "Replace hardcoded 666666 PM code with dynamic PM codes"
+user_problem_statement: "Remove the 666666 code, allow property manager to create a code in the sign-up process, which when tenants enter is onboarded into the PM dashboard, also show the list of tenants in the customers of property manager. Just to know who onboarded."
     implemented: true
     working: true
     file: "/app/backend/server.py, /app/frontend/src/pages/property-manager/PropertyManagerAuth.jsx"
