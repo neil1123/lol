@@ -11,7 +11,8 @@ const PropertyManagerAuth = () => {
     password: '',
     name: '',
     phone: '',
-    address: ''
+    address: '',
+    pm_code: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
