@@ -80,6 +80,7 @@ class User(BaseModel):
     
     # Property Manager specific fields
     properties: Optional[List[str]] = None  # List of property addresses managed
+    pm_code: Optional[str] = None  # Unique code for tenant onboarding (only for property managers)
     
     # Tenant specific fields
     property_manager_id: Optional[str] = None  # ID of the property manager
