@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Doord Backend API Testing Script
-Tests all backend endpoints for the home services marketplace
+Property Manager Properties Functionality Test
+Focus: Testing /api/property-manager/properties endpoint
 """
 
 import requests
@@ -17,8 +17,12 @@ BACKEND_URL = "https://b7fd8e2b-d76f-4ba6-ba01-bcc45f812c06.preview.emergentagen
 # Global variables to store test data
 provider_token = None
 homeowner_token = None
+property_manager_token = None
+tenant_token = None
 provider_id = None
 homeowner_id = None
+property_manager_id = None
+tenant_id = None
 test_order_id = None
 test_thread_id = None
 
