@@ -90,7 +90,6 @@ function App() {
           <Route path="/property-manager/dashboard" element={<PropertyManagerDashboard />} />
           <Route path="/property-manager/orders" element={<PropertyManagerOrders />} />
           <Route path="/property-manager/tenants" element={<PropertyManagerTenants />} />
-          <Route path="/property-manager/properties" element={<PropertyManagerProperties />} />
 
           {/* Tenant Routes */}
           <Route path="/tenant/dashboard" element={<TenantDashboard />} />
