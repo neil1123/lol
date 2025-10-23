@@ -40,22 +40,22 @@ const HomeownerLanding = () => {
 
   const testimonials = [
     {
-      quote: "Doord helped us launch our local services marketplace 10x faster than building from scratch.",
+      quote: "Since joining Doord, I've tripled my customer base. The platform connects me with homeowners who actually need my services.",
+      author: "Mike Thompson",
+      role: "Plumbing Contractor",
+      avatar: "MT"
+    },
+    {
+      quote: "Property managers love working with me through Doord. I get steady recurring work maintaining their rental properties.",
       author: "Sarah Chen",
-      role: "CEO, LocalConnect",
+      role: "Handyman Services",
       avatar: "SC"
     },
     {
-      quote: "The property manager features are game-changing for our rental business operations.",
-      author: "Michael Rodriguez",
-      role: "Property Management Co.",
-      avatar: "MR"
-    },
-    {
-      quote: "ROI was immediate. We're processing 500+ bookings monthly within 3 months of launch.",
-      author: "Jennifer Wu",
-      role: "Founder, ServiceHub",
-      avatar: "JW"
+      quote: "The booking system is so simple. Customers find me, book directly, and payments are handled automatically.",
+      author: "David Rodriguez",
+      role: "Cleaning Services",
+      avatar: "DR"
     }
   ];
 
