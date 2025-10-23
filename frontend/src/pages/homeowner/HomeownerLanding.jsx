@@ -209,10 +209,10 @@ const HomeownerLanding = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Everything you need to launch
+              Everything you need to grow
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Complete marketplace solution with multi-user roles, payments, and property management
+              Join Doord's marketplace and start connecting with customers today
             </p>
           </div>
           
