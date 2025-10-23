@@ -135,7 +135,7 @@ const HomeownerLanding = () => {
             {/* Badge */}
             <div className="mb-6">
               <Badge className="bg-blue-50 text-blue-700 border-blue-200 px-3 py-1 text-sm font-medium">
-                🚀 Launch your marketplace in days
+                🚀 Join 1000+ service providers
               </Badge>
             </div>
             
