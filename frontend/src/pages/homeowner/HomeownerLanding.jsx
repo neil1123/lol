@@ -140,7 +140,7 @@ const HomeownerLanding = () => {
             </div>
             
             {/* Main Headline */}
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-gray-900 tracking-tight mb-6">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 tracking-tight mb-6 font-inter">
               The complete
               <br />
               <span className="text-blue-600">home services</span>
