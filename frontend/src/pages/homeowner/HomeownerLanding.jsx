@@ -242,7 +242,7 @@ const HomeownerLanding = () => {
               </ul>
             </div>
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Advanced features</h3>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-6">Advanced features</h3>
               <ul className="space-y-3">
                 {benefits.slice(3).map((benefit, index) => (
                   <li key={index} className="flex items-start gap-3">
