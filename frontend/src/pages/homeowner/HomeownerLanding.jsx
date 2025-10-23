@@ -325,51 +325,23 @@ const HomeownerLanding = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
-        {/* Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {/* Gradient Circles */}
-          <div className="absolute top-10 left-10 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl"></div>
-          <div className="absolute top-32 right-20 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
-          
-          {/* Floating Elements */}
-          <div className="absolute top-20 right-1/4 w-4 h-4 bg-blue-400 rounded-full opacity-30 animate-pulse"></div>
-          <div className="absolute top-1/3 left-1/3 w-3 h-3 bg-blue-600 rounded-full opacity-40 animate-bounce"></div>
-          <div className="absolute bottom-1/3 right-1/3 w-2 h-2 bg-blue-500 rounded-full opacity-50 animate-ping"></div>
-        </div>
-
-        {/* Main Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="p-8 sm:p-12 lg:p-16">
-            {/* Trust Indicators - Hidden on Mobile */}
-            <div className="hidden md:flex justify-center space-x-8 mb-8 opacity-70">
-              <div className="flex items-center space-x-2">
-                <Shield className="h-5 w-5 text-blue-600" />
-                <span className="text-sm font-medium text-gray-700">Verified Providers</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Clock className="h-5 w-5 text-blue-600" />
-                <span className="text-sm font-medium text-gray-700">Quick Response</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Users className="h-5 w-5 text-blue-600" />
-                <span className="text-sm font-medium text-gray-700">Trusted by 1000+</span>
-              </div>
-            </div>
-
-            {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-              Home Services{' '}
-              <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-                at your doorstep
-              </span>
+      {/* Hero Section - Cal.com Style */}
+      <section className="relative overflow-hidden bg-white">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:6rem_4rem]" />
+        
+        <div className="relative container mx-auto px-4 py-24 lg:py-32">
+          <div className="mx-auto max-w-4xl text-center">
+            {/* Main Headline - Cal.com Style */}
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 tracking-tight mb-6" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              Home services
+              <br />
+              <span className="text-blue-600">at your doorstep</span>
             </h1>
             
-            <p className="text-xl sm:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
-              Connect with verified professionals for all your home service needs. 
-              Get instant quotes, book services, and transform your home effortlessly.
+            {/* Subheadline */}
+            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed font-medium">
+              Connect with verified professionals for all your home service needs. Get instant quotes and transform your home effortlessly.
             </p>
 
             {/* Search Bar */}
@@ -398,7 +370,7 @@ const HomeownerLanding = () => {
             </div>
 
             {/* Quick Service Categories */}
-            <div className="flex flex-wrap justify-center gap-3 mb-8">
+            <div className="flex flex-wrap justify-center gap-3 mb-12">
               {['Cleaning', 'Plumbing', 'Electrical', 'Landscaping', 'Handyman'].map((service) => (
                 <Button
                   key={service}
@@ -411,31 +383,44 @@ const HomeownerLanding = () => {
                 </Button>
               ))}
             </div>
-
-            {/* Call to Action */}
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+            
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button 
                 size="lg"
-                onClick={() => navigate('/homeowners/dashboard')}
-                className="bg-white text-blue-600 hover:bg-gray-50 border-2 border-blue-600 hover:border-blue-700 px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                onClick={() => window.open('https://cal.com/neil-edward/30min', '_blank')}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
               >
-                Get Deals
+                Book Demo
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <p className="text-gray-600 text-sm">
-                or{' '}
-                <button 
-                  onClick={() => navigate('/homeowners/auth')}
-                  className="text-blue-600 hover:text-blue-700 font-semibold underline"
-                >
-                  sign up for free
-                </button>
-              </p>
+              <Button 
+                variant="outline"
+                size="lg"
+                onClick={() => navigate('/homeowners/dashboard')}
+                className="border-gray-300 text-gray-700 hover:border-blue-300 hover:text-blue-700 px-8 py-4 text-lg font-semibold rounded-xl"
+              >
+                Browse Services
+              </Button>
+            </div>
+            
+            {/* Trust Indicators */}
+            <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-500 mt-12">
+              <div className="flex items-center gap-2">
+                <Shield className="h-4 w-4 text-green-500" />
+                <span>Verified Providers</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-green-500" />
+                <span>Quick Response</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4 text-green-500" />
+                <span>Trusted by 1000+</span>
+              </div>
             </div>
           </div>
         </div>
-
-        {/* Bottom Gradient */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent"></div>
       </section>
 
       {/* How It Works Section */}
