@@ -334,7 +334,7 @@ const HomeownerLanding = () => {
                 <span className="text-xl font-bold text-white">Doord</span>
               </div>
               <p className="text-gray-400 text-sm">
-                The complete home services marketplace platform for entrepreneurs
+                Connect homeowners with trusted service providers
               </p>
             </div>
             
