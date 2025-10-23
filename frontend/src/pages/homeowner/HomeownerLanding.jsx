@@ -202,6 +202,12 @@ const HomeownerLanding = () => {
               <Button variant="ghost" onClick={() => navigate('/homeowners/dashboard')}>
                 Explore
               </Button>
+              <Button 
+                onClick={() => window.open('https://cal.com/neil-edward/30min', '_blank')}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+              >
+                Book Demo
+              </Button>
               {isLoggedIn ? (
                 <Button variant="outline" onClick={() => {
                   localStorage.removeItem('userType');
