@@ -231,7 +231,7 @@ const HomeownerLanding = () => {
           {/* Benefits List */}
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">What's included</h3>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-6">What's included</h3>
               <ul className="space-y-3">
                 {benefits.slice(0, 3).map((benefit, index) => (
                   <li key={index} className="flex items-start gap-3">
