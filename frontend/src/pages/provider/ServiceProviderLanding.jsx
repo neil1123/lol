@@ -139,6 +139,15 @@ const ServiceProviderLanding = () => {
                   For Property Managers
                 </Button>
                 <Button 
+                  onClick={() => {
+                    window.open('https://cal.com/neil-edward/30min', '_blank');
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="justify-start w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold mb-2"
+                >
+                  Book Demo
+                </Button>
+                <Button 
                   variant="outline" 
                   onClick={() => {
                     navigate('/homeservices/auth');
