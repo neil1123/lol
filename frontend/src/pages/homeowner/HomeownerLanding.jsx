@@ -141,17 +141,17 @@ const HomeownerLanding = () => {
             
             {/* Main Headline */}
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 tracking-tight mb-6 font-inter">
-              The complete
+              Connect with
               <br />
-              <span className="text-blue-600">home services</span>
+              <span className="text-blue-600">trusted homeowners</span>
               <br />
-              marketplace platform
+              in your area
             </h1>
             
             {/* Subheadline */}
             <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed font-medium">
-              Built for entrepreneurs who want to launch their own home services marketplace. 
-              Connect homeowners with service providers, manage properties, and scale your business.
+              Join Doord's home services marketplace. Get matched with local customers, 
+              manage bookings, and grow your business with verified homeowners seeking quality services.
             </p>
             
             {/* CTA Buttons */}
