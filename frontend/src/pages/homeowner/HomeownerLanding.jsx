@@ -299,10 +299,10 @@ const HomeownerLanding = () => {
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Ready to launch your marketplace?
+              Ready to grow your business?
             </h2>
             <p className="text-xl text-blue-100 mb-8">
-              Book a 30-minute demo to see how Doord can transform your business idea into reality
+              Book a demo call to see how Doord can help you connect with more customers and streamline your bookings
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -312,10 +312,10 @@ const HomeownerLanding = () => {
                 className="bg-white text-blue-600 hover:bg-gray-50 px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
               >
                 <Calendar className="mr-2 h-5 w-5" />
-                Book Your Demo Now
+                Book Your Demo Call
               </Button>
               <p className="text-blue-100 text-sm">
-                Free consultation • No commitment required
+                Free consultation • See the platform in action
               </p>
             </div>
           </div>
