@@ -11,12 +11,15 @@ const HomeownerLanding = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [activeReviewIndex, setActiveReviewIndex] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     // Check if user is logged in
     const userType = localStorage.getItem('userType');
     setIsLoggedIn(userType === 'homeowner');
+    
+    // Remove auto-redirect - allow users to see dashboard without logging in
   }, [navigate]);
 
   const customerReviews = [
@@ -26,7 +29,7 @@ const HomeownerLanding = () => {
       location: "Halifax, NS",
       service: "House Cleaning",
       rating: 5,
-      review: "Absolutely fantastic service! The team arrived on time, was incredibly professional, and left my house spotless.",
+      review: "Absolutely fantastic service! The team arrived on time, was incredibly professional, and left my house spotless. I've never seen my windows so clean!",
       avatar: "SJ",
       date: "2 weeks ago"
     },
@@ -36,7 +39,7 @@ const HomeownerLanding = () => {
       location: "Halifax, NS",
       service: "Electrical Work",
       rating: 5,
-      review: "Outstanding electrical work. The electrician was knowledgeable, explained everything clearly, and completed the job efficiently.",
+      review: "Outstanding electrical work. The electrician was knowledgeable, explained everything clearly, and completed the job efficiently. Highly recommend!",
       avatar: "MC",
       date: "1 month ago"
     },
@@ -46,12 +49,43 @@ const HomeownerLanding = () => {
       location: "Halifax, NS",
       service: "Landscaping",
       rating: 5,
-      review: "Transformed our backyard completely! The team was creative, professional, and delivered exactly what we envisioned.",
+      review: "Transformed our backyard completely! The team was creative, professional, and delivered exactly what we envisioned. Worth every penny!",
       avatar: "ER",
       date: "3 weeks ago"
+    },
+    {
+      id: 4,
+      name: "David Thompson",
+      location: "Halifax, NS",
+      service: "Plumbing",
+      rating: 5,
+      review: "Quick response time and excellent service. Fixed our emergency plumbing issue within hours. Professional and reasonably priced!",
+      avatar: "DT",
+      date: "1 week ago"
+    },
+    {
+      id: 5,
+      name: "Jessica Park",
+      location: "Halifax, NS",
+      service: "Interior Painting",
+      rating: 5,
+      review: "Amazing attention to detail! The painters were neat, fast, and the quality is exceptional. Our home looks brand new!",
+      avatar: "JP",
+      date: "2 months ago"
+    },
+    {
+      id: 6,
+      name: "Robert Wilson",
+      location: "Halifax, NS",
+      service: "HVAC Services",
+      rating: 5,
+      review: "Professional HVAC installation and maintenance. The technician was punctual, courteous, and explained everything thoroughly. Great value for money!",
+      avatar: "RW",
+      date: "1 month ago"
     }
   ];
 
+  // Mock data for top rated providers - display only
   const topProviders = [
     {
       id: 1,
@@ -86,73 +120,103 @@ const HomeownerLanding = () => {
     navigate(`/homeowners/browse?search=${searchTerm}`);
   };
 
+  const handleQuotationRequest = () => {
+    // Allow users to browse services without login
+    navigate('/homeowners/browse');
+  };
+
   const handleServiceCategoryClick = (service) => {
+    // Allow users to browse services without login
     navigate(`/homeowners/browse?service=${service}`);
   };
 
+  const handleGetDeals = () => {
+    // Allow users to see dashboard without signing up
+    navigate('/homeowners/dashboard');
+  };
+
   const handleServiceClick = (service) => {
+    console.log('Service clicked:', service);
+    console.log('Service name:', service.name);
     navigate(`/homeowners/browse?service=${encodeURIComponent(service.name)}`);
   };
 
+  // How it works steps for homeowners
+  const howItWorksSteps = [
+    {
+      step: "1",
+      title: "Tell us what you need",
+      description: "Describe your project and select the service you're looking for",
+      icon: "🔍",
+      color: "bg-blue-500"
+    },
+    {
+      step: "2", 
+      title: "Get matched with pros",
+      description: "We'll show you verified service providers in your area",
+      icon: "👥",
+      color: "bg-green-500"
+    },
+    {
+      step: "3",
+      title: "Receive quotes",
+      description: "Compare quotes and choose the best provider for your needs",
+      icon: "💰",
+      color: "bg-purple-500"
+    },
+    {
+      step: "4",
+      title: "Book & get it done",
+      description: "Schedule your service and track progress through completion",
+      icon: "✅",
+      color: "bg-orange-500"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Sharp Header - Cal.com Style */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 backdrop-blur-md bg-white/80">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-3xl font-black text-blue-600">Doord</h1>
+              <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
             </div>
             
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-1">
+            <div className="hidden md:flex items-center space-x-4">
               <Button 
                 variant="ghost" 
                 onClick={() => navigate('/homeservices')}
-                className="text-sm font-semibold text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg"
+                className="text-sm"
               >
-                For Providers
+                For Service Providers
               </Button>
               <Button 
                 variant="ghost" 
                 onClick={() => navigate('/property-manager')}
-                className="text-sm font-semibold text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg"
+                className="text-sm"
               >
-                Property Managers
+                For Property Managers
               </Button>
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate('/homeowners/dashboard')}
-                className="text-sm font-semibold text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg"
-              >
-                Browse
+              <Button variant="ghost" onClick={() => navigate('/homeowners/dashboard')}>
+                Explore
               </Button>
               {isLoggedIn ? (
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                    localStorage.removeItem('userType');
-                    localStorage.removeItem('user');
-                    setIsLoggedIn(false);
-                  }}
-                  className="text-sm font-semibold border-gray-300 text-gray-700 hover:border-gray-400 px-4 py-2 rounded-lg"
-                >
+                <Button variant="outline" onClick={() => {
+                  localStorage.removeItem('userType');
+                  localStorage.removeItem('user');
+                  setIsLoggedIn(false);
+                }}>
                   Sign Out
                 </Button>
               ) : (
                 <>
-                  <Button 
-                    variant="ghost" 
-                    onClick={() => navigate('/homeowners/auth')}
-                    className="text-sm font-semibold text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg"
-                  >
+                  <Button variant="outline" onClick={() => navigate('/homeowners/auth')}>
                     Sign In
                   </Button>
-                  <Button 
-                    onClick={() => navigate('/homeowners/auth')}
-                    className="text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-sm"
-                  >
-                    Get Started
+                  <Button onClick={() => navigate('/homeowners/auth')}>
+                    Sign Up
                   </Button>
                 </>
               )}
@@ -173,16 +237,16 @@ const HomeownerLanding = () => {
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
             <div className="md:hidden border-t bg-white py-4">
-              <div className="flex flex-col space-y-2">
+              <div className="flex flex-col space-y-3">
                 <Button 
                   variant="ghost" 
                   onClick={() => {
                     navigate('/homeservices');
                     setIsMobileMenuOpen(false);
                   }}
-                  className="justify-start font-semibold"
+                  className="justify-start"
                 >
-                  For Providers
+                  For Service Providers
                 </Button>
                 <Button 
                   variant="ghost" 
@@ -190,9 +254,9 @@ const HomeownerLanding = () => {
                     navigate('/property-manager');
                     setIsMobileMenuOpen(false);
                   }}
-                  className="justify-start font-semibold"
+                  className="justify-start"
                 >
-                  Property Managers
+                  For Property Managers
                 </Button>
                 <Button 
                   variant="ghost" 
@@ -200,137 +264,163 @@ const HomeownerLanding = () => {
                     navigate('/homeowners/dashboard');
                     setIsMobileMenuOpen(false);
                   }}
-                  className="justify-start font-semibold"
+                  className="justify-start"
                 >
-                  Browse
+                  Explore
                 </Button>
-                <div className="border-t pt-2 mt-2">
-                  {isLoggedIn ? (
+                {isLoggedIn ? (
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      localStorage.removeItem('userType');
+                      localStorage.removeItem('user');
+                      setIsLoggedIn(false);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="justify-start"
+                  >
+                    Sign Out
+                  </Button>
+                ) : (
+                  <>
                     <Button 
                       variant="outline" 
                       onClick={() => {
-                        localStorage.removeItem('userType');
-                        localStorage.removeItem('user');
-                        setIsLoggedIn(false);
+                        navigate('/homeowners/auth');
                         setIsMobileMenuOpen(false);
                       }}
-                      className="justify-start w-full font-semibold"
+                      className="justify-start"
                     >
-                      Sign Out
+                      Sign In
                     </Button>
-                  ) : (
-                    <>
-                      <Button 
-                        variant="ghost" 
-                        onClick={() => {
-                          navigate('/homeowners/auth');
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="justify-start w-full font-semibold mb-2"
-                      >
-                        Sign In
-                      </Button>
-                      <Button 
-                        onClick={() => {
-                          navigate('/homeowners/auth');
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="justify-start w-full font-bold bg-blue-600 hover:bg-blue-700"
-                      >
-                        Get Started
-                      </Button>
-                    </>
-                  )}
-                </div>
+                    <Button 
+                      onClick={() => {
+                        navigate('/homeowners/auth');
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="justify-start"
+                    >
+                      Sign Up
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           )}
         </div>
       </header>
 
-      {/* Cal.com Style Hero Section */}
-      <section className="relative bg-white pt-16 pb-20 md:pt-20 md:pb-28">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-white to-blue-50/20"></div>
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%232563eb" fill-opacity="0.03"%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
+        {/* Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Gradient Circles */}
+          <div className="absolute top-10 left-10 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-32 right-20 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl"></div>
+          
+          {/* Floating Elements */}
+          <div className="absolute top-20 right-1/4 w-4 h-4 bg-blue-400 rounded-full opacity-30 animate-pulse"></div>
+          <div className="absolute top-1/3 left-1/3 w-3 h-3 bg-blue-600 rounded-full opacity-40 animate-bounce"></div>
+          <div className="absolute bottom-1/3 right-1/3 w-2 h-2 bg-blue-500 rounded-full opacity-50 animate-ping"></div>
+        </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            {/* Trust Badge */}
-            <div className="inline-flex items-center px-4 py-2 rounded-full border border-blue-200 bg-blue-50 text-blue-800 text-sm font-semibold mb-8">
-              <Shield className="h-4 w-4 mr-2" />
-              Trusted by 1,000+ Halifax homeowners
-            </div>
-
-            {/* Main Headline - Cal.com Style Bold */}
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-gray-900 leading-tight mb-6">
-              Home services
-              <br />
-              <span className="text-blue-600">made simple</span>
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-gray-600 font-medium mb-12 max-w-3xl mx-auto leading-relaxed">
-              Connect with verified professionals. Get instant quotes. 
-              <br className="hidden md:block" />
-              Transform your home effortlessly.
-            </p>
-
-            {/* Sharp Search Bar */}
-            <div className="max-w-2xl mx-auto mb-8">
-              <div className="flex flex-col sm:flex-row bg-white rounded-2xl p-2 shadow-xl border border-gray-200">
-                <div className="relative flex-1 mb-2 sm:mb-0 sm:mr-2">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <Input
-                    placeholder="What service do you need?"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-12 pr-4 py-4 text-lg font-medium border-0 bg-transparent focus:ring-0 focus:outline-none placeholder:text-gray-500 placeholder:font-medium rounded-xl"
-                  />
-                </div>
-                <Button 
-                  size="lg" 
-                  onClick={handleSearch}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] min-h-[56px]"
-                >
-                  Find Services
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+        {/* Main Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="p-8 sm:p-12 lg:p-16">
+            {/* Trust Indicators - Hidden on Mobile */}
+            <div className="hidden md:flex justify-center space-x-8 mb-8 opacity-70">
+              <div className="flex items-center space-x-2">
+                <Shield className="h-5 w-5 text-blue-600" />
+                <span className="text-sm font-medium text-gray-700">Verified Providers</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Clock className="h-5 w-5 text-blue-600" />
+                <span className="text-sm font-medium text-gray-700">Quick Response</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Users className="h-5 w-5 text-blue-600" />
+                <span className="text-sm font-medium text-gray-700">Trusted by 1000+</span>
               </div>
             </div>
 
-            {/* Quick Service Pills */}
-            <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {/* Main Headline */}
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+              Home Services{' '}
+              <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                at your doorstep
+              </span>
+            </h1>
+            
+            <p className="text-xl sm:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+              Connect with verified professionals for all your home service needs. 
+              Get instant quotes, book services, and transform your home effortlessly.
+            </p>
+
+            {/* Search Bar */}
+            <div className="relative max-w-2xl mx-auto mb-8">
+              <div className="relative bg-white rounded-2xl p-2 shadow-lg border border-gray-200">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <Input
+                      placeholder="What service do you need? (e.g., cleaning, plumbing, electrical)"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-12 py-4 text-lg border-0 bg-transparent focus:ring-0 focus:outline-none placeholder:text-gray-500"
+                    />
+                  </div>
+                  <Button 
+                    size="lg" 
+                    onClick={handleQuotationRequest}
+                    className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 min-h-[56px] sm:min-h-[auto]"
+                  >
+                    Find Services
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Service Categories */}
+            <div className="flex flex-wrap justify-center gap-3 mb-8">
               {['Cleaning', 'Plumbing', 'Electrical', 'Landscaping', 'Handyman'].map((service) => (
-                <button
+                <Button
                   key={service}
+                  variant="outline"
+                  size="sm"
                   onClick={() => handleServiceCategoryClick(service)}
-                  className="px-6 py-3 bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 text-gray-700 hover:text-blue-700 font-semibold rounded-full transition-all duration-200 hover:shadow-md"
+                  className="bg-white hover:bg-gray-50 border-gray-200 text-gray-700 hover:text-blue-700 transition-all duration-300 rounded-full px-6 py-2"
                 >
                   {service}
-                </button>
+                </Button>
               ))}
             </div>
 
-            {/* Sharp CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            {/* Call to Action */}
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
               <Button 
                 size="lg"
                 onClick={() => navigate('/homeowners/dashboard')}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+                className="bg-white text-blue-600 hover:bg-gray-50 border-2 border-blue-600 hover:border-blue-700 px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                Browse Services
-                <ArrowRight className="ml-2 h-5 w-5" />
+                Get Deals
               </Button>
-              <Button 
-                variant="ghost"
-                onClick={() => navigate('/homeowners/auth')}
-                className="text-gray-600 hover:text-gray-900 font-semibold text-lg px-6 py-4 rounded-xl"
-              >
-                Learn more →
-              </Button>
+              <p className="text-gray-600 text-sm">
+                or{' '}
+                <button 
+                  onClick={() => navigate('/homeowners/auth')}
+                  className="text-blue-600 hover:text-blue-700 font-semibold underline"
+                >
+                  sign up for free
+                </button>
+              </p>
             </div>
           </div>
         </div>
+
+        {/* Bottom Gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent"></div>
       </section>
 
       {/* How It Works Section */}
