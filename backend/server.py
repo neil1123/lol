@@ -2,6 +2,7 @@ from fastapi import FastAPI, APIRouter, HTTPException, Depends, Query
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
+from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
@@ -12,6 +13,7 @@ from datetime import datetime, timedelta
 import jwt
 from passlib.context import CryptContext
 import hashlib
+import ssl
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -20,12 +22,23 @@ load_dotenv(ROOT_DIR / '.env')
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
 
-# NO DATABASE - ALL MONGODB CODE REMOVED
-# In-memory storage (data will be lost on restart)
-users_storage = {}
-orders_storage = {}
-messages_storage = {}
-appointments_storage = {}
+# MongoDB connection with SSL compatibility settings
+mongo_url = os.environ['MONGO_URL']
+
+# Configure with SSL bypass and connection settings for production scalability
+client = AsyncIOMotorClient(
+    mongo_url,
+    connect=False,
+    serverSelectionTimeoutMS=30000,
+    connectTimeoutMS=30000,
+    maxPoolSize=200,  # Scalable connection pool
+    minPoolSize=20,
+    maxIdleTimeMS=45000,
+    heartbeatFrequencyMS=10000,
+    retryWrites=True,
+    retryReads=True
+)
+db = client[os.environ['DB_NAME']]
 
 # JWT settings
 SECRET_KEY = "your-secret-key-change-this-in-production"
@@ -33,12 +46,12 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 24 * 60  # 24 hours
 
 # Create the main app without a prefix
-app = FastAPI(title="Doord API (No Database)", description="Home Services Marketplace API - No Database Version")
+app = FastAPI(title="Doord API", description="Home Services Marketplace API")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
-# ====== SIMPLE MODELS (NO DATABASE) ======
+# ====== DATABASE MODELS ======
 
 class User(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -50,6 +63,28 @@ class User(BaseModel):
     address: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     is_active: bool = True
+    
+    # Provider specific fields
+    business_name: Optional[str] = None
+    services: Optional[List[str]] = None
+    license: Optional[str] = None
+    description: Optional[str] = None
+    rating: Optional[float] = 5.0
+    reviews: Optional[int] = 0
+    completed_jobs: Optional[int] = 0
+    location: Optional[str] = "Halifax, NS"
+    response_time: Optional[str] = "Usually responds within 1 hour"
+    year_established: Optional[str] = "2024"
+    specialties: Optional[List[str]] = None
+    price_range: Optional[str] = "$50-$500"
+    
+    # Property Manager specific fields
+    properties: Optional[List[str]] = None  # List of property addresses managed
+    pm_code: Optional[str] = None  # Unique code for tenant onboarding (only for property managers)
+    
+    # Tenant specific fields
+    property_manager_id: Optional[str] = None  # ID of the property manager
+    property_address: Optional[str] = None  # Specific property tenant lives in
 
 class UserCreate(BaseModel):
     email: EmailStr
@@ -58,6 +93,12 @@ class UserCreate(BaseModel):
     name: str
     phone: Optional[str] = None
     address: Optional[str] = None
+    business_name: Optional[str] = None
+    services: Optional[List[str]] = None
+    license: Optional[str] = None
+    # For tenant registration
+    pm_code: Optional[str] = None  # Property Manager code for tenant signup OR PM's own code during PM registration
+    property_address: Optional[str] = None  # Tenant's specific property address
 
 class UserLogin(BaseModel):
     email: EmailStr
@@ -68,7 +109,133 @@ class Token(BaseModel):
     token_type: str
     user: Dict[str, Any]
 
-# ====== HELPER FUNCTIONS ======
+class Order(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    homeowner_id: str
+    provider_id: str
+    homeowner_name: str
+    homeowner_email: str
+    homeowner_phone: str
+    homeowner_address: str
+    provider_name: str
+    service_type: str
+    services: Optional[List[str]] = None  # Array for multiple services
+    description: str
+    quotation_amount: Optional[float] = None
+    quotation_details: Optional[str] = None
+    quotation_valid_until: Optional[str] = None
+    order_details: Optional[str] = None
+    priority: str = "medium"
+    status: str = "pending_quotation"
+    request_date: datetime = Field(default_factory=datetime.utcnow)
+    scheduled_date: Optional[str] = None
+    preferred_date: Optional[str] = None
+    preferred_time: Optional[str] = None
+    urgency: Optional[str] = None
+    budget: Optional[str] = None
+    property_size: Optional[str] = None
+    additional_requirements: Optional[str] = None
+    
+    # Property Manager approval fields
+    property_manager_id: Optional[str] = None  # ID of property manager (if tenant order)
+    pm_approved: Optional[bool] = None  # Whether PM approved the order
+    pm_approval_date: Optional[datetime] = None  # When PM approved
+    requester_type: str = "homeowner"  # "homeowner", "tenant", or "property_manager"
+    property_address: Optional[str] = None  # For PM orders - which property
+
+class OrderCreate(BaseModel):
+    homeowner_id: str
+    provider_id: str
+    homeowner_name: str
+    homeowner_email: str
+    homeowner_phone: str
+    homeowner_address: str
+    provider_name: str
+    service_type: str  # This will be comma-separated string for multiple services
+    services: Optional[List[str]] = None  # Array for multiple services
+    description: str
+    preferred_date: Optional[str] = None
+    preferred_time: Optional[str] = None
+    urgency: Optional[str] = "medium"
+    budget: Optional[str] = None
+    property_size: Optional[str] = None
+    additional_requirements: Optional[str] = None
+    
+    # New fields for PM/Tenant workflow
+    requester_type: str = "homeowner"  # "homeowner", "tenant", or "property_manager"  
+    property_manager_id: Optional[str] = None  # For tenant orders
+    property_address: Optional[str] = None  # For PM orders - which property
+
+class MessageCreate(BaseModel):
+    thread_id: str
+    content: str
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+class Message(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    thread_id: str
+    sender_id: str
+    sender_type: str  # "provider" or "homeowner"
+    content: str
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    read: bool = False
+
+class MessageThread(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    homeowner_id: str
+    provider_id: str
+    homeowner_name: str
+    provider_name: str
+    order_id: Optional[str] = None
+    order_type: str
+    last_message: str
+    last_message_time: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class AppointmentCreate(BaseModel):
+    customer_name: str
+    phone_number: str
+    service_type: str  # This will be comma-separated string for multiple services  
+    services: Optional[List[str]] = None  # Array for multiple services
+    date: str
+    time: str
+    address: str
+    notes: Optional[str] = None
+    order_id: Optional[str] = None
+    source: Optional[str] = "manual"
+
+class Appointment(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    provider_id: str
+    customer_name: str
+    phone_number: str
+    service_type: str
+    services: Optional[List[str]] = None  # Array for multiple services
+    date: str
+    time: str
+    address: str
+    notes: Optional[str] = None
+    order_id: Optional[str] = None
+    source: Optional[str] = "manual"
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class ReviewCreate(BaseModel):
+    provider_id: str
+    rating: int = Field(ge=1, le=5)  # Rating between 1-5
+    review_text: str
+    order_id: Optional[str] = None
+
+class Review(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    homeowner_id: str
+    provider_id: str
+    rating: int = Field(ge=1, le=5)
+    review_text: str
+    order_id: Optional[str] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    homeowner_name: Optional[str] = None  # For display purposes
+
+# ====== UTILITY FUNCTIONS ======
 
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
@@ -88,54 +255,119 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
     try:
-        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        token = credentials.credentials
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id: str = payload.get("sub")
         if user_id is None:
             raise HTTPException(status_code=401, detail="Invalid authentication credentials")
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Invalid authentication credentials")
     
-    # Get user from in-memory storage
-    user = users_storage.get(user_id)
+    user = await db.users.find_one({"id": user_id})
     if user is None:
         raise HTTPException(status_code=401, detail="User not found")
     return User(**user)
 
-# ====== API ENDPOINTS ======
-
+# Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
-    return {
-        "message": "Doord API (No Database Version) - Running", 
-        "status": "active",
-        "database": "DISCONNECTED - In-memory storage only",
-        "warning": "All data will be lost on server restart"
-    }
+    return {"message": "Doord API - Home Services Marketplace"}
+
+# ====== AUTHENTICATION ENDPOINTS ======
 
 @api_router.post("/auth/register", response_model=Token)
 async def register(user_data: UserCreate):
     # Check if user already exists
-    existing_user = None
-    for stored_user in users_storage.values():
-        if stored_user["email"] == user_data.email:
-            existing_user = stored_user
-            break
-    
+    existing_user = await db.users.find_one({"email": user_data.email})
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
+    
+    # Validate user type
+    valid_user_types = ["provider", "homeowner", "property_manager", "tenant"]
+    if user_data.user_type not in valid_user_types:
+        raise HTTPException(status_code=400, detail="Invalid user type")
+    
+    # Handle tenant registration with PM code
+    property_manager_id = None
+    if user_data.pm_code and user_data.user_type == "homeowner":
+        # Find the property manager with this specific code
+        property_manager = await db.users.find_one({
+            "user_type": "property_manager",
+            "pm_code": user_data.pm_code
+        })
+        if not property_manager:
+            raise HTTPException(status_code=400, detail="Invalid property manager code")
+        
+        # Set user type to tenant and link to PM
+        user_data.user_type = "tenant"
+        property_manager_id = property_manager["id"]
+        
+        # Add tenant's property address to PM's properties list
+        if user_data.property_address:
+            pm_properties = property_manager.get("properties", [])
+            if user_data.property_address not in pm_properties:
+                pm_properties.append(user_data.property_address)
+                await db.users.update_one(
+                    {"id": property_manager["id"]},
+                    {"$set": {"properties": pm_properties}}
+                )
+    
+    # Handle property manager code validation during registration
+    if user_data.user_type == "property_manager" and user_data.pm_code:
+        # Check if this PM code is already in use
+        existing_pm_code = await db.users.find_one({
+            "user_type": "property_manager",
+            "pm_code": user_data.pm_code
+        })
+        if existing_pm_code:
+            raise HTTPException(status_code=400, detail="Property Manager code already in use")
     
     # Hash password
     hashed_password = hash_password(user_data.password)
     
-    # Create user
+    # Create user object
     user_dict = user_data.dict()
-    user_dict["password_hash"] = hashed_password
     del user_dict["password"]
+    user_dict["password_hash"] = hashed_password
+    
+    # Add type-specific fields
+    if user_data.user_type == "provider":
+        # Remove PM code from provider data
+        if "pm_code" in user_dict:
+            del user_dict["pm_code"]
+        user_dict.update({
+            "description": f"Professional {', '.join(user_data.services or [])} services",
+            "rating": 5.0,
+            "reviews": 0,
+            "completed_jobs": 0,
+            "location": "Halifax, NS",
+            "response_time": "Usually responds within 1 hour",
+            "year_established": "2024",
+            "specialties": ["Professional service", "Quality work", "Customer satisfaction"],
+            "price_range": "$50-$500"
+        })
+    elif user_data.user_type == "property_manager":
+        user_dict.update({
+            "properties": [],  # Will be populated when tenants register
+            "pm_code": user_data.pm_code  # Store the PM's unique code
+        })
+    elif user_data.user_type == "tenant":
+        # Remove PM code from tenant data (used only for lookup)
+        if "pm_code" in user_dict:
+            del user_dict["pm_code"]
+        user_dict.update({
+            "property_manager_id": property_manager_id,
+            "property_address": user_data.property_address
+        })
+    else:
+        # For homeowners, remove PM code field
+        if "pm_code" in user_dict:
+            del user_dict["pm_code"]
     
     user = User(**user_dict)
     
-    # Store in memory
-    users_storage[user.id] = user.dict()
+    # Save to database
+    await db.users.insert_one(user.dict())
     
     # Create access token
     access_token = create_access_token(data={"sub": user.id})
@@ -152,69 +384,686 @@ async def register(user_data: UserCreate):
 
 @api_router.post("/auth/login", response_model=Token)
 async def login(user_credentials: UserLogin):
-    # Find user by email
-    user = None
-    for stored_user in users_storage.values():
-        if stored_user["email"] == user_credentials.email:
-            user = stored_user
-            break
+    # Find user
+    user_doc = await db.users.find_one({"email": user_credentials.email})
+    if not user_doc:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
     
-    if not user or not verify_password(user_credentials.password, user["password_hash"]):
-        raise HTTPException(status_code=401, detail="Incorrect email or password")
+    user = User(**user_doc)
+    
+    # Verify password
+    if not verify_password(user_credentials.password, user.password_hash):
+        raise HTTPException(status_code=401, detail="Invalid email or password")
     
     # Create access token
-    access_token = create_access_token(data={"sub": user["id"]})
+    access_token = create_access_token(data={"sub": user.id})
     
     # Return user data without password
-    user_data_return = user.copy()
+    user_data_return = user.dict()
     del user_data_return["password_hash"]
     
     return {
         "access_token": access_token,
-        "token_type": "bearer", 
+        "token_type": "bearer",
         "user": user_data_return
     }
 
-@api_router.get("/users/me")
+@api_router.get("/auth/me", response_model=User)
 async def get_current_user_info(current_user: User = Depends(get_current_user)):
-    user_data = current_user.dict()
-    del user_data["password_hash"]
-    return user_data
+    return current_user
 
-@api_router.get("/providers")
-async def get_providers():
-    providers = []
-    for user_data in users_storage.values():
-        if user_data.get("user_type") == "provider":
-            user_copy = user_data.copy()
-            if "password_hash" in user_copy:
-                del user_copy["password_hash"]
-            providers.append(user_copy)
+# ====== PROVIDER ENDPOINTS ======
+
+@api_router.get("/providers", response_model=List[Dict[str, Any]])
+async def get_all_providers():
+    providers = await db.users.find({"user_type": "provider", "is_active": True}).to_list(1000)
+    # Remove MongoDB _id and password_hash from response
+    for provider in providers:
+        if "_id" in provider:
+            del provider["_id"]
+        if "password_hash" in provider:
+            del provider["password_hash"]
     return providers
 
-@api_router.get("/services")
-async def get_services():
-    # Return static services list since no database
-    return [
-        "Home Cleaning", "Office Cleaning", "Deep Cleaning",
-        "Plumbing", "Emergency Plumbing", "Pipe Repair",
-        "Electrical", "Wiring", "Electrical Repair",
-        "HVAC", "Air Conditioning", "Heating",
-        "Landscaping", "Lawn Care", "Garden Maintenance",
-        "Handyman", "General Repairs", "Home Maintenance",
-        "Painting", "Interior Painting", "Exterior Painting",
-        "Roofing", "Roof Repair", "Gutter Cleaning",
-        "Window Cleaning", "Pressure Washing", "Car Detailing"
-    ]
+@api_router.get("/providers/{provider_id}", response_model=Dict[str, Any])
+async def get_provider(provider_id: str):
+    provider = await db.users.find_one({"id": provider_id, "user_type": "provider"})
+    if not provider:
+        raise HTTPException(status_code=404, detail="Provider not found")
+    
+    if "_id" in provider:
+        del provider["_id"]
+    if "password_hash" in provider:
+        del provider["password_hash"]
+    return provider
 
-@api_router.get("/orders")
+# ====== ORDER ENDPOINTS ======
+
+@api_router.post("/orders", response_model=Order)
+async def create_order(order_data: OrderCreate, current_user: User = Depends(get_current_user)):
+    order_dict = order_data.dict()
+    
+    # Handle services array - if services is provided, join them into service_type for compatibility
+    if order_data.services:
+        order_dict["service_type"] = ", ".join(order_data.services)
+    
+    order = Order(**order_dict)
+    
+    # If provider is creating the order (manual order), set status to confirmed
+    if current_user.user_type == "provider":
+        order.status = "confirmed"
+    
+    await db.orders.insert_one(order.dict())
+    return order
+
+@api_router.get("/orders", response_model=List[Order])
 async def get_orders(current_user: User = Depends(get_current_user)):
-    user_orders = []
-    for order in orders_storage.values():
-        if (order.get("homeowner_id") == current_user.id or 
-            order.get("provider_id") == current_user.id):
-            user_orders.append(order)
-    return user_orders
+    if current_user.user_type == "provider":
+        orders = await db.orders.find({"provider_id": current_user.id}).to_list(1000)
+    else:  # homeowner
+        orders = await db.orders.find({"homeowner_id": current_user.id}).to_list(1000)
+    
+    return [Order(**order) for order in orders]
+
+@api_router.get("/orders/{order_id}", response_model=Order)
+async def get_order(order_id: str, current_user: User = Depends(get_current_user)):
+    order = await db.orders.find_one({"id": order_id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Check if user has access to this order
+    if (current_user.user_type == "provider" and order["provider_id"] != current_user.id) or \
+       (current_user.user_type == "homeowner" and order["homeowner_id"] != current_user.id):
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    return Order(**order)
+
+@api_router.put("/orders/{order_id}/status")
+async def update_order_status(order_id: str, status: str = Query(...), current_user: User = Depends(get_current_user)):
+    # Get the order first to check ownership
+    order = await db.orders.find_one({"id": order_id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Check permissions based on user type
+    if current_user.user_type == "provider":
+        # Providers can update orders assigned to them with any valid status
+        if order["provider_id"] != current_user.id:
+            raise HTTPException(status_code=403, detail="Access denied")
+        
+        # Update the order status
+        result = await db.orders.update_one(
+            {"id": order_id, "provider_id": current_user.id},
+            {"$set": {"status": status}}
+        )
+    elif current_user.user_type in ["homeowner", "tenant"]:
+        # Homeowners and tenants can only update their own orders and only to accept/decline
+        if order["homeowner_id"] != current_user.id:
+            raise HTTPException(status_code=403, detail="Access denied")
+        
+        # Homeowners and tenants can only accept or decline quotes
+        if status not in ["accepted", "declined"]:
+            raise HTTPException(status_code=400, detail="Homeowners and tenants can only accept or decline quotes")
+        
+        # Update the order status
+        result = await db.orders.update_one(
+            {"id": order_id, "homeowner_id": current_user.id},
+            {"$set": {"status": status}}
+        )
+    else:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    return {"message": "Order status updated"}
+
+# Update order quotation amount
+@api_router.put("/orders/{order_id}/quotation", response_model=Dict[str, str])
+async def update_order_quotation(
+    order_id: str, 
+    quotation_amount: float = Query(..., description="Quotation amount"), 
+    quotation_details: Optional[str] = Query(None, description="Quotation details"),
+    current_user: User = Depends(get_current_user)
+):
+    # Get the order
+    order = await db.orders.find_one({"id": order_id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Only providers can update quotation details
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can update quotation details")
+    
+    # Check if provider owns this order
+    if order["provider_id"] != current_user.id:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Update the order with quotation details
+    update_data = {
+        "quotation_amount": quotation_amount
+    }
+    
+    if quotation_details:
+        update_data["quotation_details"] = quotation_details
+    
+    # For tenant orders, quotations need PM approval instead of going directly to tenant
+    if order.get("requester_type") == "tenant":
+        update_data["status"] = "pending_pm_approval"  # PM needs to approve the quotation
+        update_data["pm_approved"] = None  # Reset PM approval
+    else:
+        update_data["status"] = "quoted"  # Normal flow for homeowners
+    
+    result = await db.orders.update_one(
+        {"id": order_id, "provider_id": current_user.id},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    return {"message": "Order quotation updated"}
+
+@api_router.put("/orders/{order_id}")
+async def update_order(order_id: str, update_data: dict, current_user: User = Depends(get_current_user)):
+    """Update order details - only for manual orders by the provider who created them"""
+    # Get the order first
+    order = await db.orders.find_one({"id": order_id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Only providers can update orders
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can update orders")
+    
+    # Check if provider owns this order
+    if order["provider_id"] != current_user.id:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Only allow updating manual orders (homeowner_id starts with 'manual_')
+    if not order.get("homeowner_id", "").startswith("manual_"):
+        raise HTTPException(status_code=403, detail="Only manual orders can be edited")
+    
+    # Update the order
+    result = await db.orders.update_one(
+        {"id": order_id, "provider_id": current_user.id},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    return {"message": "Order updated successfully"}
+
+@api_router.delete("/orders/{order_id}")
+async def delete_order(order_id: str, current_user: User = Depends(get_current_user)):
+    """Delete order - only for manual orders by the provider who created them"""
+    # Get the order first
+    order = await db.orders.find_one({"id": order_id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Only providers can delete orders
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can delete orders")
+    
+    # Check if provider owns this order
+    if order["provider_id"] != current_user.id:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Only allow deleting manual orders (homeowner_id starts with 'manual_')
+    if not order.get("homeowner_id", "").startswith("manual_"):
+        raise HTTPException(status_code=403, detail="Only manual orders can be deleted")
+    
+    # Delete the order
+    result = await db.orders.delete_one({"id": order_id, "provider_id": current_user.id})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Also delete related appointments if any
+    await db.appointments.delete_many({"order_id": order_id})
+    
+    return {"message": "Order deleted successfully"}
+
+# ====== MESSAGE ENDPOINTS ======
+
+@api_router.post("/messages/threads", response_model=MessageThread)
+async def create_message_thread(thread_data: MessageThread, current_user: User = Depends(get_current_user)):
+    await db.message_threads.insert_one(thread_data.dict())
+    return thread_data
+
+@api_router.get("/messages/threads", response_model=List[MessageThread])
+async def get_message_threads(current_user: User = Depends(get_current_user)):
+    if current_user.user_type == "provider":
+        threads = await db.message_threads.find({"provider_id": current_user.id}).to_list(1000)
+    else:  # homeowner
+        threads = await db.message_threads.find({"homeowner_id": current_user.id}).to_list(1000)
+    
+    return [MessageThread(**thread) for thread in threads]
+
+@api_router.post("/messages", response_model=Message)
+async def send_message(message_data: MessageCreate, current_user: User = Depends(get_current_user)):
+    # Create the actual message with sender information from the authenticated user
+    message = Message(
+        thread_id=message_data.thread_id,
+        sender_id=current_user.id,
+        sender_type=current_user.user_type,
+        content=message_data.content,
+        timestamp=message_data.timestamp
+    )
+    
+    await db.messages.insert_one(message.dict())
+    
+    # Update thread's last message
+    await db.message_threads.update_one(
+        {"id": message_data.thread_id},
+        {"$set": {
+            "last_message": message_data.content,
+            "last_message_time": message_data.timestamp
+        }}
+    )
+    
+    return message
+
+@api_router.get("/messages/{thread_id}", response_model=List[Message])
+async def get_messages(thread_id: str, current_user: User = Depends(get_current_user)):
+    messages = await db.messages.find({"thread_id": thread_id}).sort("timestamp", 1).to_list(1000)
+    return [Message(**message) for message in messages]
+
+# ====== APPOINTMENT ENDPOINTS ======
+
+@api_router.post("/appointments", response_model=Appointment)
+async def create_appointment(appointment_data: AppointmentCreate, current_user: User = Depends(get_current_user)):
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can create appointments")
+    
+    appointment_dict = appointment_data.dict()
+    
+    # Handle services array - if services is provided, join them into service_type for compatibility
+    if appointment_data.services:
+        appointment_dict["service_type"] = ", ".join(appointment_data.services)
+    
+    # Create appointment with provider_id set from current user
+    appointment = Appointment(**appointment_dict, provider_id=current_user.id)
+    await db.appointments.insert_one(appointment.dict())
+    return appointment
+
+@api_router.get("/appointments", response_model=List[Appointment])
+async def get_appointments(current_user: User = Depends(get_current_user)):
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can view appointments")
+    
+    appointments = await db.appointments.find({"provider_id": current_user.id}).to_list(1000)
+    return [Appointment(**appointment) for appointment in appointments]
+
+@api_router.put("/appointments/{appointment_id}")
+async def update_appointment(appointment_id: str, update_data: dict, current_user: User = Depends(get_current_user)):
+    """Update appointment details - only by the provider who created them"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can update appointments")
+    
+    # Get the appointment first
+    appointment = await db.appointments.find_one({"id": appointment_id})
+    if not appointment:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    
+    # Check if provider owns this appointment
+    if appointment["provider_id"] != current_user.id:
+        raise HTTPException(status_code=403, detail="Access denied")
+    
+    # Update the appointment
+    result = await db.appointments.update_one(
+        {"id": appointment_id, "provider_id": current_user.id},
+        {"$set": update_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    
+    return {"message": "Appointment updated successfully"}
+
+# ====== QUOTATION REQUEST ENDPOINT ======
+
+@api_router.post("/quotations", response_model=Dict[str, str])
+async def create_quotation_request(order_data: OrderCreate):
+    # Create order
+    order = Order(**order_data.dict())
+    
+    # All orders (including tenant orders) go directly to providers
+    # No initial PM approval needed - tenants can book directly
+    await db.orders.insert_one(order.dict())
+    
+    # Create message thread
+    thread_data = {
+        "id": str(uuid.uuid4()),
+        "homeowner_id": order.homeowner_id,
+        "provider_id": order.provider_id,
+        "homeowner_name": order.homeowner_name,
+        "provider_name": order.provider_name,
+        "order_id": order.id,
+        "order_type": order.service_type,
+        "last_message": f"New quotation request for {order.service_type}",
+        "last_message_time": datetime.utcnow(),
+        "created_at": datetime.utcnow()
+    }
+    
+    thread = MessageThread(**thread_data)
+    await db.message_threads.insert_one(thread.dict())
+    
+    # Create initial message
+    initial_message = {
+        "id": str(uuid.uuid4()),
+        "thread_id": thread.id,
+        "sender_id": order.homeowner_id,
+        "sender_type": order.requester_type,
+        "content": f"New quotation request for {order.service_type} - {order.description}",
+        "timestamp": datetime.utcnow(),
+        "read": False
+    }
+    
+    message = Message(**initial_message)
+    await db.messages.insert_one(message.dict())
+    
+    return {"message": "Quotation request sent successfully!", "order_id": order.id}
+
+@api_router.put("/quotations/{order_id}")
+async def update_quotation(order_id: str, update_data: dict, current_user: User = Depends(get_current_user)):
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can update quotations")
+    
+    # Find the order
+    order = await db.orders.find_one({"id": order_id, "provider_id": current_user.id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Update the order with new quotation data
+    update_fields = {}
+    if "quotation_amount" in update_data:
+        update_fields["quotation_amount"] = update_data["quotation_amount"]
+    if "quotation_details" in update_data:
+        update_fields["quotation_details"] = update_data["quotation_details"]
+    if "quotation_valid_until" in update_data:
+        update_fields["quotation_valid_until"] = update_data["quotation_valid_until"]
+    
+    # For tenant orders, quotations need PM approval instead of going directly to tenant
+    if order.get("requester_type") == "tenant":
+        update_fields["status"] = "pending_pm_approval"  # PM needs to approve the quotation
+        update_fields["pm_approved"] = None  # Reset PM approval
+    else:
+        update_fields["status"] = "quoted"  # Normal flow for homeowners
+    
+    if update_fields:
+        await db.orders.update_one(
+            {"id": order_id}, 
+            {"$set": update_fields}
+        )
+    
+    return {"message": "Quotation updated successfully!"}
+
+@api_router.delete("/quotations/{order_id}")
+async def delete_quotation(order_id: str, current_user: User = Depends(get_current_user)):
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can delete quotations")
+    
+    # Find the order
+    order = await db.orders.find_one({"id": order_id, "provider_id": current_user.id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Delete the order
+    await db.orders.delete_one({"id": order_id})
+    
+    # Also delete related message threads and messages
+    thread = await db.message_threads.find_one({"order_id": order_id})
+    if thread:
+        await db.messages.delete_many({"thread_id": thread["id"]})
+        await db.message_threads.delete_one({"order_id": order_id})
+    
+    return {"message": "Quotation deleted successfully!"}
+
+@api_router.get("/auth/profile", response_model=User)
+async def get_current_user_profile(current_user: User = Depends(get_current_user)):
+    """Get current authenticated user's profile data from database"""
+    return current_user
+
+# ====== SERVICES ENDPOINTS ======
+
+@api_router.get("/services", response_model=List[str])
+async def get_all_services():
+    """Get all unique services from all providers"""
+    # Get all providers and extract unique services
+    providers = await db.users.find({"user_type": "provider", "services": {"$exists": True, "$ne": []}}).to_list(1000)
+    all_services = set()
+    
+    for provider in providers:
+        if provider.get('services'):
+            all_services.update(provider['services'])
+    
+    # Also include default service categories
+    default_services = [
+        "Home Cleaning", "Office Cleaning", "Window Cleaning", "Pressure Washing", "Gutter Cleaning",
+        "Electrician", "Plumber", "HVAC Services", "Handyman Services", "Home Renovations", "Carpenter", "Painter",
+        "Landscaping", "Lawn Mowing & Maintenance", "Snow Removal", "Fence & Deck Services", "Siding Installation & Repair",
+        "Car Detailing", "Roofing", "Pest Control", "Appliance Repair", "Junk Removal"
+    ]
+    
+    all_services.update(default_services)
+    return sorted(list(all_services))
+
+@api_router.put("/providers/services")
+async def update_provider_services(services: List[str], current_user: User = Depends(get_current_user)):
+    """Update provider's services list"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can update services")
+    
+    # Update the provider's services
+    result = await db.users.update_one(
+        {"id": current_user.id},
+        {"$set": {"services": services}}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Provider not found")
+    
+    return {"message": "Services updated successfully", "services": services}
+
+@api_router.put("/providers/profile")
+async def update_provider_profile(profile_data: dict, current_user: User = Depends(get_current_user)):
+    """Update provider's complete profile"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can update profile")
+    
+    # Update the provider's profile
+    result = await db.users.update_one(
+        {"id": current_user.id},
+        {"$set": profile_data}
+    )
+    
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Provider not found")
+    
+    return {"message": "Profile updated successfully", "profile": profile_data}
+
+# ====== REVIEW ENDPOINTS ======
+
+@api_router.post("/reviews", response_model=Review)
+async def submit_review(review_data: ReviewCreate, current_user: User = Depends(get_current_user)):
+    """Submit a review for a provider"""
+    if current_user.user_type != "homeowner":
+        raise HTTPException(status_code=403, detail="Only homeowners can submit reviews")
+    
+    # Verify homeowner has a completed order with this provider
+    completed_orders = await db.orders.find({
+        "homeowner_id": current_user.id,
+        "provider_id": review_data.provider_id,
+        "status": "completed"
+    }).to_list(1000)
+    
+    if not completed_orders:
+        raise HTTPException(status_code=400, detail="You can only review providers after completing an order")
+    
+    # Check if homeowner already reviewed this provider
+    existing_review = await db.reviews.find_one({
+        "homeowner_id": current_user.id,
+        "provider_id": review_data.provider_id
+    })
+    
+    if existing_review:
+        raise HTTPException(status_code=400, detail="You have already reviewed this provider")
+    
+    # Create review
+    review = Review(
+        homeowner_id=current_user.id,
+        provider_id=review_data.provider_id,
+        rating=review_data.rating,
+        review_text=review_data.review_text,
+        order_id=review_data.order_id,
+        homeowner_name=current_user.name
+    )
+    
+    await db.reviews.insert_one(review.dict())
+    
+    # Update provider's overall rating
+    await update_provider_rating(review_data.provider_id)
+    
+    return review
+
+@api_router.get("/providers/{provider_id}/reviews", response_model=List[Review])
+async def get_provider_reviews(provider_id: str):
+    """Get all reviews for a provider"""
+    reviews = await db.reviews.find({"provider_id": provider_id}).sort("created_at", -1).to_list(1000)
+    return [Review(**review) for review in reviews]
+
+async def update_provider_rating(provider_id: str):
+    """Update provider's overall rating based on all reviews"""
+    reviews = await db.reviews.find({"provider_id": provider_id}).to_list(1000)
+    
+    if reviews:
+        avg_rating = sum(review["rating"] for review in reviews) / len(reviews)
+        review_count = len(reviews)
+        
+        await db.users.update_one(
+            {"id": provider_id},
+            {"$set": {
+                "rating": round(avg_rating, 1),
+                "reviews": review_count
+            }}
+        )
+
+# ====== PROPERTY MANAGER ENDPOINTS ======
+
+@api_router.get("/property-manager/tenants")
+async def get_property_manager_tenants(current_user: User = Depends(get_current_user)):
+    """Get all tenants for current property manager"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can access tenant data")
+    
+    tenants = await db.users.find({
+        "user_type": "tenant",
+        "property_manager_id": current_user.id
+    }).to_list(1000)
+    
+    # Remove sensitive data and MongoDB _id
+    for tenant in tenants:
+        if "_id" in tenant:
+            del tenant["_id"]
+        if "password_hash" in tenant:
+            del tenant["password_hash"]
+    
+    return tenants
+
+@api_router.get("/property-manager/orders")  
+async def get_property_manager_orders(current_user: User = Depends(get_current_user)):
+    """Get all orders requiring PM approval or PM's direct orders"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can access these orders")
+    
+    # Get tenant orders requiring approval + PM's own orders
+    orders = await db.orders.find({
+        "$or": [
+            {"property_manager_id": current_user.id},  # Tenant orders needing approval
+            {"homeowner_id": current_user.id}  # PM's direct orders
+        ]
+    }).sort("request_date", -1).to_list(1000)
+    
+    # Remove MongoDB _id from response
+    for order in orders:
+        if "_id" in order:
+            del order["_id"]
+    
+    return orders
+
+@api_router.put("/property-manager/orders/{order_id}/approve")
+async def approve_tenant_order(order_id: str, current_user: User = Depends(get_current_user)):
+    """Property manager approves a tenant's order or quotation"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can approve orders")
+    
+    # Find the order
+    order = await db.orders.find_one({
+        "id": order_id,
+        "property_manager_id": current_user.id
+    })
+    
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Determine new status based on current status
+    new_status = "pending_quotation"
+    if order.get("status") == "pending_pm_approval" and order.get("quotation_amount"):
+        # PM is approving a quotation from provider
+        new_status = "quoted"  # Ready for tenant to accept/decline
+    elif order.get("status") == "pending_pm_approval":
+        # PM is approving initial service request
+        new_status = "pending_quotation"  # Send to provider for quotation
+    
+    # Update order with PM approval
+    await db.orders.update_one(
+        {"id": order_id},
+        {"$set": {
+            "pm_approved": True,
+            "pm_approval_date": datetime.utcnow(),
+            "status": new_status
+        }}
+    )
+    
+    return {"message": "Order approved successfully"}
+
+@api_router.put("/property-manager/orders/{order_id}/deny")  
+async def deny_tenant_order(order_id: str, current_user: User = Depends(get_current_user)):
+    """Property manager denies a tenant's order"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can deny orders")
+    
+    # Find the order
+    order = await db.orders.find_one({
+        "id": order_id,
+        "property_manager_id": current_user.id
+    })
+    
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Update order as denied
+    await db.orders.update_one(
+        {"id": order_id},
+        {"$set": {
+            "pm_approved": False,
+            "pm_approval_date": datetime.utcnow(),
+            "status": "denied"
+        }}
+    )
+    
+    return {"message": "Order denied"}
+
+@api_router.get("/property-manager/properties")
+async def get_property_manager_properties(current_user: User = Depends(get_current_user)):
+    """Get all properties managed by current property manager"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can access property data")
+    
+    return {"properties": current_user.properties or []}
 
 # Include the router in the main app
 app.include_router(api_router)
@@ -232,7 +1081,8 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
+logger = logging.getLogger(__name__)
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+@app.on_event("shutdown")
+async def shutdown_db_client():
+    client.close()
