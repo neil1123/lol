@@ -14,28 +14,28 @@ const HomeownerLanding = () => {
   const features = [
     {
       icon: <Users className="h-6 w-6" />,
-      title: "Multi-User Platform",
-      description: "Homeowners, Service Providers, Property Managers, and Tenants - all in one platform"
+      title: "Get More Customers",
+      description: "Connect with verified homeowners actively seeking your services in Halifax and surrounding areas"
     },
     {
       icon: <Zap className="h-6 w-6" />,
-      title: "Instant Matching",
-      description: "Smart algorithms connect customers with the right service providers instantly"
+      title: "Smart Matching",
+      description: "Our platform matches you with the right customers based on your skills, location, and availability"
     },
     {
       icon: <Shield className="h-6 w-6" />,
-      title: "Built-in Trust",
-      description: "Verification, reviews, and secure payments - trust built into every transaction"
+      title: "Secure & Trusted",
+      description: "All customers are verified, payments are secure, and reviews help build your reputation"
     }
   ];
 
   const benefits = [
-    "Launch your home services marketplace in days, not months",
-    "Multi-tenant architecture supports unlimited service categories",
-    "Mobile-responsive design works perfectly on all devices",
-    "Integrated payment processing and booking management",
-    "Property manager tools for rental property maintenance",
-    "Advanced matching algorithms and real-time notifications"
+    "Get matched with customers actively looking for your services",
+    "Manage all your bookings and appointments in one place",
+    "Secure payment processing with instant payouts",
+    "Build your reputation with customer reviews and ratings",
+    "Work with property managers for recurring maintenance jobs",
+    "Mobile-friendly platform works on any device"
   ];
 
   const testimonials = [
