@@ -175,15 +175,15 @@ const HomeownerLanding = () => {
             <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-500">
               <div className="flex items-center gap-2">
                 <Check className="h-4 w-4 text-green-500" />
-                <span>No setup fees</span>
+                <span>Free to join</span>
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-4 w-4 text-green-500" />
-                <span>30-day free trial</span>
+                <span>Verified customers</span>
               </div>
               <div className="flex items-center gap-2">
                 <Check className="h-4 w-4 text-green-500" />
-                <span>Cancel anytime</span>
+                <span>Secure payments</span>
               </div>
             </div>
           </div>
