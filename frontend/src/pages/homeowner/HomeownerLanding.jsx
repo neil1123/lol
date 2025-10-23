@@ -162,12 +162,12 @@ const HomeownerLanding = () => {
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center group"
               >
                 <Calendar className="mr-2 h-5 w-5" />
-                Book 30-min Demo
+                Book Demo Call
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               <button className="flex items-center text-gray-600 hover:text-gray-900 font-semibold transition-colors">
                 <Play className="mr-2 h-5 w-5" />
-                Watch 2-min overview
+                See how it works
               </button>
             </div>
             
