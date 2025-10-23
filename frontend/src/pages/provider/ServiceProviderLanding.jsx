@@ -172,40 +172,64 @@ const ServiceProviderLanding = () => {
         </div>
       </header>
 
-      {/* Hero Section with Dashboard */}
-      <section className="py-20 bg-white relative overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {/* Gradient Circles */}
-          <div className="absolute top-10 left-10 w-72 h-72 bg-blue-600/5 rounded-full blur-3xl"></div>
-          <div className="absolute top-32 right-20 w-96 h-96 bg-blue-400/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl"></div>
-          
-          {/* Floating Elements */}
-          <div className="absolute top-20 right-1/4 w-3 h-3 bg-blue-400 rounded-full opacity-30 animate-pulse"></div>
-          <div className="absolute top-1/3 left-1/3 w-2 h-2 bg-blue-600 rounded-full opacity-40 animate-bounce"></div>
-          <div className="absolute bottom-1/3 right-1/3 w-1 h-1 bg-blue-500 rounded-full opacity-50 animate-ping"></div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Left Content */}
-            <div>
-              <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-                Unlock a new revenue stream
-              </h1>
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                Build your service business with Doord's marketplace platform. Connect with customers, 
-                streamline operations, and unlock new revenue streams with our comprehensive suite of tools.
-              </p>
+      {/* Hero Section - Cal.com Style */}
+      <section className="relative overflow-hidden bg-white">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:6rem_4rem]" />
+        
+        <div className="relative container mx-auto px-4 py-24 lg:py-32">
+          <div className="mx-auto max-w-4xl text-center">
+            {/* Main Headline - Cal.com Style */}
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 tracking-tight mb-6" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              Grow your
+              <br />
+              <span className="text-blue-600">service business</span>
+            </h1>
+            
+            {/* Subheadline */}
+            <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
+              Join Doord's marketplace and connect with customers looking for your services. 
+              Streamline your bookings and grow your revenue.
+            </p>
+            
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
               <Button 
                 size="lg"
-                onClick={() => navigate('/homeservices/auth')}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                onClick={() => window.open('https://cal.com/neil-edward/30min', '_blank')}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
               >
-                Get Started
+                Book Demo
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button 
+                variant="outline"
+                size="lg"
+                onClick={() => navigate('/homeservices/auth')}
+                className="border-gray-300 text-gray-700 hover:border-blue-300 hover:text-blue-700 px-8 py-4 text-lg font-semibold rounded-xl"
+              >
+                Get Started Free
               </Button>
             </div>
+            
+            {/* Trust Indicators */}
+            <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-500">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500" />
+                <span>Free to join</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4 text-green-500" />
+                <span>1000+ customers</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <DollarSign className="h-4 w-4 text-green-500" />
+                <span>Instant payments</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
             {/* Right Dashboard Mockup */}
             <div className="relative">
