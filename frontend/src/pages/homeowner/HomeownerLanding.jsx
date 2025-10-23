@@ -193,13 +193,13 @@ const HomeownerLanding = () => {
       {/* Social Proof Section */}
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-sm font-medium text-gray-500 mb-8">Trusted by entrepreneurs worldwide</p>
+          <p className="text-sm font-medium text-gray-500 mb-8">Trusted by service providers across Halifax</p>
           <div className="flex items-center justify-center space-x-8 opacity-60">
-            {/* Mock company logos */}
-            <div className="text-2xl font-bold text-gray-400">ServicePro</div>
-            <div className="text-2xl font-bold text-gray-400">LocalFix</div>
-            <div className="text-2xl font-bold text-gray-400">HomeConnect</div>
-            <div className="text-2xl font-bold text-gray-400">FixItNow</div>
+            {/* Mock service categories */}
+            <div className="text-2xl font-bold text-gray-400">Cleaning Pro</div>
+            <div className="text-2xl font-bold text-gray-400">Fix Master</div>
+            <div className="text-2xl font-bold text-gray-400">Garden Plus</div>
+            <div className="text-2xl font-bold text-gray-400">Handy Helpers</div>
           </div>
         </div>
       </section>
