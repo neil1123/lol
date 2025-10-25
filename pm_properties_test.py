@@ -11,7 +11,7 @@ from datetime import datetime
 import uuid
 
 # Configuration
-BACKEND_URL = "https://b7fd8e2b-d76f-4ba6-ba01-bcc45f812c06.preview.emergentagent.com/api"
+BACKEND_URL = "https://property-mgmt-11.preview.emergentagent.com/api"
 
 def test_property_manager_properties():
     """

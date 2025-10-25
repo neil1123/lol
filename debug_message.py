@@ -7,7 +7,7 @@ import requests
 import json
 
 # Backend URL from environment
-BACKEND_URL = "https://b7fd8e2b-d76f-4ba6-ba01-bcc45f812c06.preview.emergentagent.com/api"
+BACKEND_URL = "https://property-mgmt-11.preview.emergentagent.com/api"
 
 def debug_message_sending():
     """Debug the message sending issue in workflow"""

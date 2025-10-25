@@ -7,7 +7,7 @@ import requests
 import json
 import uuid
 
-BACKEND_URL = "https://b7fd8e2b-d76f-4ba6-ba01-bcc45f812c06.preview.emergentagent.com/api"
+BACKEND_URL = "https://property-mgmt-11.preview.emergentagent.com/api"
 
 def create_test_homeowner():
     """Create test homeowner account"""
