@@ -176,7 +176,7 @@ const ServiceProviderLanding = () => {
       </header>
 
       {/* Hero Section - Cal.com Style */}
-      <section className="relative overflow-hidden bg-white">
+      <section className="relative overflow-hidden bg-white pt-24">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:6rem_4rem]" />
         
