@@ -316,13 +316,13 @@ const HomeownerLanding = () => {
       </header>
 
       {/* Hero Section - Cal.com Style */}
-      <section className="relative overflow-hidden bg-white">
+      <section className="relative overflow-hidden bg-white pt-24">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:6rem_4rem]" />
         
         <div className="relative container mx-auto px-4 py-24 lg:py-32">
           <div className="mx-auto max-w-4xl text-center">
-            {/* Main Headline - Cal.com Style */}
+            {/* Main Headline */}
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 tracking-tight mb-6" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
               Home services
               <br />
@@ -330,7 +330,7 @@ const HomeownerLanding = () => {
             </h1>
             
             {/* Subheadline */}
-            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed font-medium">
+            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed font-medium" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
               Connect with verified professionals for all your home service needs. Get instant quotes and transform your home effortlessly.
             </p>
 
@@ -345,12 +345,14 @@ const HomeownerLanding = () => {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-12 py-4 text-lg border-0 bg-transparent focus:ring-0 focus:outline-none placeholder:text-gray-500"
+                      style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                     />
                   </div>
                   <Button 
                     size="lg" 
                     onClick={handleQuotationRequest}
                     className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 min-h-[56px] sm:min-h-[auto]"
+                    style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                   >
                     Find Services
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -368,6 +370,7 @@ const HomeownerLanding = () => {
                   size="sm"
                   onClick={() => handleServiceCategoryClick(service)}
                   className="bg-white hover:bg-gray-50 border-gray-200 text-gray-700 hover:text-blue-700 transition-all duration-300 rounded-full px-6 py-2"
+                  style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                 >
                   {service}
                 </Button>
@@ -380,6 +383,7 @@ const HomeownerLanding = () => {
                 size="lg"
                 onClick={() => window.open('https://cal.com/neil-edward/30min', '_blank')}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+                style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
               >
                 Book Demo
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -389,6 +393,7 @@ const HomeownerLanding = () => {
                 size="lg"
                 onClick={() => navigate('/homeowners/dashboard')}
                 className="border-gray-300 text-gray-700 hover:border-blue-300 hover:text-blue-700 px-8 py-4 text-lg font-semibold rounded-xl"
+                style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
               >
                 Browse Services
               </Button>
@@ -398,16 +403,88 @@ const HomeownerLanding = () => {
             <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-500 mt-12">
               <div className="flex items-center gap-2">
                 <Shield className="h-4 w-4 text-green-500" />
-                <span>Verified Providers</span>
+                <span style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Verified Providers</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-green-500" />
-                <span>Quick Response</span>
+                <span style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Quick Response</span>
               </div>
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-green-500" />
-                <span>Trusted by 1000+</span>
+                <span style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Trusted by 1000+</span>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How it Works - Cal.com Style Cards */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              How it works
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              Get quality home services in four simple steps
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <Search className="h-4 w-4 text-white" />
+                </div>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                Search services
+              </h3>
+              <p className="text-gray-600 text-sm leading-relaxed" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                Tell us what you need. From cleaning to repairs, we connect you with the right professionals.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
+                <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+                  <Users className="h-4 w-4 text-white" />
+                </div>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                Get matched
+              </h3>
+              <p className="text-gray-600 text-sm leading-relaxed" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                We show you verified professionals in your area. Compare profiles, reviews, and pricing.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
+                <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                  <CheckCircle className="h-4 w-4 text-white" />
+                </div>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                Book easily
+              </h3>
+              <p className="text-gray-600 text-sm leading-relaxed" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                Choose your preferred professional and book a time that works for you. It's that simple.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-6">
+                <div className="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center">
+                  <Star className="h-4 w-4 text-white" />
+                </div>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                Enjoy results
+              </h3>
+              <p className="text-gray-600 text-sm leading-relaxed" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                Relax while professionals take care of your home. Rate your experience when done.
+              </p>
             </div>
           </div>
         </div>
