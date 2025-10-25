@@ -190,7 +190,7 @@ const ServiceProviderLanding = () => {
             </h1>
             
             {/* Subheadline */}
-            <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
+            <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed font-medium" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
               Join Doord's marketplace and connect with customers looking for your services. 
               Streamline your bookings and grow your revenue.
             </p>
