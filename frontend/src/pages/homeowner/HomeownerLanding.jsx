@@ -466,10 +466,10 @@ const HomeownerLanding = () => {
                   <circle cx="65" cy="55" r="2" fill="#3B82F6"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 Enjoy results
               </h3>
-              <p className="text-gray-600 text-sm leading-relaxed" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              <p className="text-gray-600 text-base leading-relaxed" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 Relax while professionals take care of your home. Rate your experience when done.
               </p>
             </div>
