@@ -69,7 +69,6 @@ const ServiceProviderLanding = () => {
           <div className="flex justify-between items-center h-14 px-6">
             <div className="flex items-center">
               <h1 className="text-xl font-bold text-blue-600" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Doord.</h1>
-              <span className="ml-2 text-sm text-gray-600" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>for Merchants</span>
             </div>
             
             {/* Desktop Navigation */}
