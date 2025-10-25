@@ -398,11 +398,11 @@ const HomeownerLanding = () => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
             {/* Step 1: Search services */}
-            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
-              <div className="mb-6 relative h-32 flex items-center justify-center overflow-hidden">
-                <svg className="w-24 h-24 transform group-hover:scale-110 transition-transform duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="bg-white rounded-2xl p-8 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+              <div className="mb-8 relative h-40 flex items-center justify-center overflow-hidden">
+                <svg className="w-32 h-32 transform group-hover:scale-110 transition-transform duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="35" cy="35" r="20" stroke="#3B82F6" strokeWidth="3" fill="none" className="animate-pulse"/>
                   <line x1="50" y1="50" x2="70" y2="70" stroke="#3B82F6" strokeWidth="3" strokeLinecap="round"/>
                   <circle cx="35" cy="35" r="12" fill="#DBEAFE" className="opacity-50"/>
