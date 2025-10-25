@@ -509,48 +509,6 @@ const HomeownerLanding = () => {
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <section className="py-20 mt-12 lg:mt-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h3 className="text-4xl font-bold text-gray-900 mb-4">
-              How It Works
-            </h3>
-            <p className="text-xl text-gray-600">
-              Get your home projects done in 4 simple steps
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-4 gap-8">
-            {howItWorksSteps.map((step, index) => (
-              <div key={index} className="text-center group relative">
-                {/* Animated step circle */}
-                <div className={`w-20 h-20 ${step.color} rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold transform group-hover:scale-110 transition-all duration-300 shadow-lg`}>
-                  {step.step}
-                </div>
-                
-                {/* Step content */}
-                <div className="space-y-3">
-                  <div className="text-4xl mb-3">{step.icon}</div>
-                  <h4 className="text-xl font-semibold text-gray-900">{step.title}</h4>
-                  <p className="text-gray-600">{step.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          <div className="text-center mt-12">
-            <Button 
-              size="lg" 
-              onClick={() => navigate('/homeowners/browse')}
-            >
-              Start Your Project Now
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
       {/* Service Categories */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
