@@ -63,41 +63,44 @@ const ServiceProviderLanding = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+      {/* Header - Cal.com Island Style */}
+      <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4">
+        <div className="bg-white/80 backdrop-blur-md border border-gray-200 rounded-2xl shadow-lg">
+          <div className="flex justify-between items-center h-14 px-6">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-blue-600">Doord.</h1>
-              <span className="ml-2 text-sm text-gray-600">for Merchants</span>
+              <h1 className="text-xl font-bold text-blue-600" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Doord.</h1>
+              <span className="ml-2 text-sm text-gray-600" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>for Merchants</span>
             </div>
             
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-6">
               <Button 
                 variant="ghost" 
                 onClick={() => navigate('/homeowners')}
-                className="text-sm"
+                className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
               >
                 For Homeowners
               </Button>
               <Button 
                 variant="ghost" 
                 onClick={() => navigate('/property-manager')}
-                className="text-sm"
+                className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
               >
                 For Property Managers
               </Button>
               <Button 
                 onClick={() => window.open('https://cal.com/neil-edward/30min', '_blank')}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg text-sm"
+                style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
               >
                 Book Demo
               </Button>
-              <Button variant="outline" onClick={() => navigate('/homeservices/auth')}>
+              <Button variant="outline" onClick={() => navigate('/homeservices/auth')} className="text-sm">
                 Sign In
               </Button>
-              <Button onClick={() => navigate('/homeservices/auth')}>
+              <Button onClick={() => navigate('/homeservices/auth')} className="text-sm">
                 Get Started
               </Button>
             </div>
@@ -109,22 +112,22 @@ const ServiceProviderLanding = () => {
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="p-2"
               >
-                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </Button>
             </div>
           </div>
           
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
-            <div className="md:hidden border-t bg-white py-4">
-              <div className="flex flex-col space-y-3">
+            <div className="md:hidden border-t bg-white/95 backdrop-blur-md rounded-b-2xl">
+              <div className="p-4 space-y-3">
                 <Button 
                   variant="ghost" 
                   onClick={() => {
                     navigate('/homeowners');
                     setIsMobileMenuOpen(false);
                   }}
-                  className="justify-start"
+                  className="justify-start w-full text-sm"
                 >
                   For Homeowners
                 </Button>
@@ -134,7 +137,7 @@ const ServiceProviderLanding = () => {
                     navigate('/property-manager');
                     setIsMobileMenuOpen(false);
                   }}
-                  className="justify-start"
+                  className="justify-start w-full text-sm"
                 >
                   For Property Managers
                 </Button>
@@ -143,7 +146,7 @@ const ServiceProviderLanding = () => {
                     window.open('https://cal.com/neil-edward/30min', '_blank');
                     setIsMobileMenuOpen(false);
                   }}
-                  className="justify-start w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold mb-2"
+                  className="justify-start w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold mb-2 text-sm"
                 >
                   Book Demo
                 </Button>
@@ -153,7 +156,7 @@ const ServiceProviderLanding = () => {
                     navigate('/homeservices/auth');
                     setIsMobileMenuOpen(false);
                   }}
-                  className="justify-start"
+                  className="justify-start w-full text-sm"
                 >
                   Sign In
                 </Button>
@@ -162,7 +165,7 @@ const ServiceProviderLanding = () => {
                     navigate('/homeservices/auth');
                     setIsMobileMenuOpen(false);
                   }}
-                  className="justify-start"
+                  className="justify-start w-full text-sm"
                 >
                   Get Started
                 </Button>
