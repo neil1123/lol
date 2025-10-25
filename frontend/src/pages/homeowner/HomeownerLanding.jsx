@@ -491,18 +491,134 @@ const HomeownerLanding = () => {
           
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
             {serviceCategories.flatMap(category => 
-              category.services.slice(0, 2).map(service => (
-                <Card 
-                  key={service.id} 
-                  className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105"
-                  onClick={() => handleServiceClick(service)}
-                >
-                  <CardContent className="p-6 text-center">
-                    <div className="text-3xl mb-3">{service.icon}</div>
-                    <h4 className="font-semibold text-sm">{service.name}</h4>
-                  </CardContent>
-                </Card>
-              ))
+              category.services.slice(0, 2).map(service => {
+                // Function to return custom SVG icon based on service name
+                const getServiceIcon = (serviceName) => {
+                  const iconMap = {
+                    'Electrician': (
+                      <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50 20 L60 50 L50 50 L55 80 L35 50 L45 50 Z" fill="#3B82F6" stroke="#1E40AF" strokeWidth="2"/>
+                        <circle cx="50" cy="50" r="35" stroke="#DBEAFE" strokeWidth="2" fill="none" opacity="0.3"/>
+                      </svg>
+                    ),
+                    'Plumber': (
+                      <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M30 70 L30 50 Q30 30 50 30 Q70 30 70 50 L70 70" stroke="#3B82F6" strokeWidth="4" strokeLinecap="round" fill="none"/>
+                        <circle cx="30" cy="75" r="5" fill="#3B82F6"/>
+                        <circle cx="70" cy="75" r="5" fill="#3B82F6"/>
+                        <path d="M40 40 Q50 35 60 40" stroke="#DBEAFE" strokeWidth="2" fill="none"/>
+                      </svg>
+                    ),
+                    'Home Cleaning': (
+                      <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="35" y="40" width="8" height="35" rx="4" fill="#3B82F6"/>
+                        <rect x="30" y="25" width="18" height="20" rx="3" fill="#DBEAFE"/>
+                        <path d="M50 50 L70 35 L70 70 L50 70 Z" fill="#3B82F6" opacity="0.6"/>
+                        <line x1="55" y1="50" x2="65" y2="50" stroke="white" strokeWidth="2"/>
+                        <line x1="55" y1="58" x2="65" y2="58" stroke="white" strokeWidth="2"/>
+                      </svg>
+                    ),
+                    'Office Cleaning': (
+                      <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="25" y="30" width="50" height="45" rx="3" stroke="#3B82F6" strokeWidth="2" fill="#DBEAFE" fillOpacity="0.2"/>
+                        <line x1="35" y1="45" x2="65" y2="45" stroke="#3B82F6" strokeWidth="2"/>
+                        <line x1="35" y1="55" x2="65" y2="55" stroke="#3B82F6" strokeWidth="2"/>
+                        <circle cx="55" cy="65" r="8" fill="#3B82F6"/>
+                        <path d="M52 65 L54 67 L58 62" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    ),
+                    'Landscaping': (
+                      <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50 60 Q35 45 35 35 Q35 25 45 25 Q50 30 50 30 Q50 30 55 25 Q65 25 65 35 Q65 45 50 60" fill="#DBEAFE"/>
+                        <path d="M50 60 Q35 45 35 35 Q35 25 45 25 Q50 30 50 30 Q50 30 55 25 Q65 25 65 35 Q65 45 50 60" stroke="#3B82F6" strokeWidth="2"/>
+                        <rect x="47" y="55" width="6" height="20" fill="#3B82F6"/>
+                      </svg>
+                    ),
+                    'Lawn Mowing & Maintenance': (
+                      <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="30" y="50" width="40" height="15" rx="3" fill="#3B82F6"/>
+                        <circle cx="38" cy="70" r="8" fill="#DBEAFE" stroke="#3B82F6" strokeWidth="2"/>
+                        <circle cx="62" cy="70" r="8" fill="#DBEAFE" stroke="#3B82F6" strokeWidth="2"/>
+                        <rect x="45" y="35" width="10" height="18" rx="2" fill="#3B82F6"/>
+                      </svg>
+                    ),
+                    'Window Cleaning': (
+                      <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="30" y="25" width="40" height="50" rx="2" stroke="#3B82F6" strokeWidth="2" fill="#DBEAFE" fillOpacity="0.2"/>
+                        <line x1="50" y1="25" x2="50" y2="75" stroke="#3B82F6" strokeWidth="2"/>
+                        <line x1="30" y1="50" x2="70" y2="50" stroke="#3B82F6" strokeWidth="2"/>
+                        <circle cx="55" cy="35" r="3" fill="#3B82F6"/>
+                        <path d="M35 40 L45 50" stroke="white" strokeWidth="2" opacity="0.6"/>
+                      </svg>
+                    ),
+                    'Pressure Washing': (
+                      <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="30" y="35" width="12" height="30" rx="2" fill="#3B82F6"/>
+                        <circle cx="36" cy="30" r="5" fill="#3B82F6"/>
+                        <path d="M42 50 L55 50 L55 65 L60 70" stroke="#3B82F6" strokeWidth="3" strokeLinecap="round"/>
+                        <line x1="60" y1="70" x2="65" y2="75" stroke="#DBEAFE" strokeWidth="2"/>
+                        <line x1="63" y1="72" x2="68" y2="77" stroke="#DBEAFE" strokeWidth="2"/>
+                        <line x1="66" y1="74" x2="71" y2="79" stroke="#DBEAFE" strokeWidth="2"/>
+                      </svg>
+                    ),
+                    'Gutter Cleaning': (
+                      <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M25 40 L50 25 L75 40 L75 45 L25 45 Z" fill="#DBEAFE" stroke="#3B82F6" strokeWidth="2"/>
+                        <rect x="70" y="45" width="8" height="25" fill="#3B82F6"/>
+                        <path d="M73 70 L73 75 L70 78" stroke="#3B82F6" strokeWidth="2" fill="none" strokeLinecap="round"/>
+                        <circle cx="68" cy="80" r="2" fill="#3B82F6"/>
+                      </svg>
+                    ),
+                    'HVAC Services': (
+                      <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="30" y="35" width="40" height="30" rx="3" fill="#DBEAFE" stroke="#3B82F6" strokeWidth="2"/>
+                        <line x1="35" y1="45" x2="65" y2="45" stroke="#3B82F6" strokeWidth="1.5"/>
+                        <line x1="35" y1="50" x2="65" y2="50" stroke="#3B82F6" strokeWidth="1.5"/>
+                        <line x1="35" y1="55" x2="65" y2="55" stroke="#3B82F6" strokeWidth="1.5"/>
+                        <circle cx="50" cy="50" r="8" fill="white" stroke="#3B82F6" strokeWidth="2"/>
+                      </svg>
+                    ),
+                    'Handyman Services': (
+                      <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="42" y="30" width="6" height="35" fill="#3B82F6"/>
+                        <circle cx="45" cy="25" r="8" fill="#3B82F6"/>
+                        <path d="M35 65 L55 65 L52 75 L38 75 Z" fill="#DBEAFE" stroke="#3B82F6" strokeWidth="2"/>
+                        <rect x="52" y="40" width="15" height="8" rx="2" fill="#3B82F6" transform="rotate(45 60 44)"/>
+                      </svg>
+                    ),
+                    'Car Detailing': (
+                      <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M25 55 L30 45 L40 40 L60 40 L70 45 L75 55 L75 65 L25 65 Z" fill="#DBEAFE" stroke="#3B82F6" strokeWidth="2"/>
+                        <circle cx="35" cy="65" r="6" fill="white" stroke="#3B82F6" strokeWidth="2"/>
+                        <circle cx="65" cy="65" r="6" fill="white" stroke="#3B82F6" strokeWidth="2"/>
+                        <rect x="42" y="45" width="16" height="12" rx="1" fill="white" stroke="#3B82F6" strokeWidth="1.5"/>
+                      </svg>
+                    )
+                  };
+                  
+                  return iconMap[serviceName] || (
+                    <svg className="w-12 h-12" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="50" cy="50" r="30" fill="#DBEAFE" stroke="#3B82F6" strokeWidth="2"/>
+                      <path d="M40 50 L48 58 L62 42" stroke="#3B82F6" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  );
+                };
+                
+                return (
+                  <Card 
+                    key={service.id} 
+                    className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 group"
+                    onClick={() => handleServiceClick(service)}
+                  >
+                    <CardContent className="p-6 text-center">
+                      <div className="mb-3 flex justify-center transform group-hover:scale-110 transition-transform duration-300">
+                        {getServiceIcon(service.name)}
+                      </div>
+                      <h4 className="font-semibold text-sm">{service.name}</h4>
+                    </CardContent>
+                  </Card>
+                );
+              })
             )}
           </div>
           
