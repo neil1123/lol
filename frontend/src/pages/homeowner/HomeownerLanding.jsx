@@ -431,11 +431,14 @@ const HomeownerLanding = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <Search className="h-4 w-4 text-white" />
-                </div>
+            {/* Step 1: Search services */}
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+              <div className="mb-6 relative h-32 flex items-center justify-center overflow-hidden">
+                <svg className="w-24 h-24 transform group-hover:scale-110 transition-transform duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="35" cy="35" r="20" stroke="#3B82F6" strokeWidth="3" fill="none" className="animate-pulse"/>
+                  <line x1="50" y1="50" x2="70" y2="70" stroke="#3B82F6" strokeWidth="3" strokeLinecap="round"/>
+                  <circle cx="35" cy="35" r="12" fill="#DBEAFE" className="opacity-50"/>
+                </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 Search services
@@ -445,11 +448,16 @@ const HomeownerLanding = () => {
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
-                <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                  <Users className="h-4 w-4 text-white" />
-                </div>
+            {/* Step 2: Get matched */}
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+              <div className="mb-6 relative h-32 flex items-center justify-center overflow-hidden">
+                <svg className="w-24 h-24 transform group-hover:scale-110 transition-transform duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="30" cy="30" r="15" fill="#DBEAFE"/>
+                  <circle cx="30" cy="30" r="7" fill="#3B82F6"/>
+                  <circle cx="70" cy="30" r="15" fill="#DBEAFE"/>
+                  <circle cx="70" cy="30" r="7" fill="#3B82F6"/>
+                  <path d="M30 48 Q50 35 70 48" stroke="#3B82F6" strokeWidth="2" fill="none" strokeDasharray="2,2" className="animate-pulse"/>
+                </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 Get matched
@@ -459,11 +467,17 @@ const HomeownerLanding = () => {
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
-                <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-                  <CheckCircle className="h-4 w-4 text-white" />
-                </div>
+            {/* Step 3: Book easily */}
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+              <div className="mb-6 relative h-32 flex items-center justify-center overflow-hidden">
+                <svg className="w-24 h-24 transform group-hover:scale-110 transition-transform duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="25" y="30" width="50" height="45" rx="5" stroke="#3B82F6" strokeWidth="2" fill="#DBEAFE" fillOpacity="0.2"/>
+                  <line x1="35" y1="45" x2="45" y2="45" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round"/>
+                  <line x1="35" y1="55" x2="65" y2="55" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round"/>
+                  <line x1="35" y1="65" x2="55" y2="65" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round"/>
+                  <circle cx="75" cy="65" r="12" fill="#3B82F6" className="animate-pulse"/>
+                  <path d="M70 65 L73 68 L80 60" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 Book easily
@@ -473,11 +487,16 @@ const HomeownerLanding = () => {
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-6">
-                <div className="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center">
-                  <Star className="h-4 w-4 text-white" />
-                </div>
+            {/* Step 4: Enjoy results */}
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+              <div className="mb-6 relative h-32 flex items-center justify-center overflow-hidden">
+                <svg className="w-24 h-24 transform group-hover:scale-110 transition-transform duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="50" cy="40" r="25" fill="#DBEAFE" fillOpacity="0.3"/>
+                  <path d="M35 40 L45 50 L65 30" stroke="#3B82F6" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M30 65 Q50 75 70 65" stroke="#3B82F6" strokeWidth="2" fill="none" className="animate-pulse"/>
+                  <circle cx="35" cy="55" r="2" fill="#3B82F6"/>
+                  <circle cx="65" cy="55" r="2" fill="#3B82F6"/>
+                </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 Enjoy results
