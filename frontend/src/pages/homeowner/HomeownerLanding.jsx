@@ -141,38 +141,6 @@ const HomeownerLanding = () => {
     navigate(`/homeowners/browse?service=${encodeURIComponent(service.name)}`);
   };
 
-  // How it works steps for homeowners
-  const howItWorksSteps = [
-    {
-      step: "1",
-      title: "Tell us what you need",
-      description: "Describe your project and select the service you're looking for",
-      icon: "🔍",
-      color: "bg-blue-500"
-    },
-    {
-      step: "2", 
-      title: "Get matched with pros",
-      description: "We'll show you verified service providers in your area",
-      icon: "👥",
-      color: "bg-green-500"
-    },
-    {
-      step: "3",
-      title: "Receive quotes",
-      description: "Compare quotes and choose the best provider for your needs",
-      icon: "💰",
-      color: "bg-purple-500"
-    },
-    {
-      step: "4",
-      title: "Book & get it done",
-      description: "Schedule your service and track progress through completion",
-      icon: "✅",
-      color: "bg-orange-500"
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-white">
       {/* Header - Cal.com Island Style */}
