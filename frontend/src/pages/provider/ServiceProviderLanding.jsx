@@ -201,6 +201,7 @@ const ServiceProviderLanding = () => {
                 size="lg"
                 onClick={() => window.open('https://cal.com/neil-edward/30min', '_blank')}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+                style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
               >
                 Book Demo
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -210,6 +211,7 @@ const ServiceProviderLanding = () => {
                 size="lg"
                 onClick={() => navigate('/homeservices/auth')}
                 className="border-gray-300 text-gray-700 hover:border-blue-300 hover:text-blue-700 px-8 py-4 text-lg font-semibold rounded-xl"
+                style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
               >
                 Get Started Free
               </Button>
