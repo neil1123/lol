@@ -221,15 +221,15 @@ const ServiceProviderLanding = () => {
             <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-500">
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4 text-green-500" />
-                <span>Free to join</span>
+                <span style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Free to join</span>
               </div>
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-green-500" />
-                <span>1000+ customers</span>
+                <span style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>1000+ customers</span>
               </div>
               <div className="flex items-center gap-2">
                 <DollarSign className="h-4 w-4 text-green-500" />
-                <span>Instant payments</span>
+                <span style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Instant payments</span>
               </div>
             </div>
           </div>
