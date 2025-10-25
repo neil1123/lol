@@ -408,18 +408,18 @@ const HomeownerLanding = () => {
                   <circle cx="35" cy="35" r="12" fill="#DBEAFE" className="opacity-50"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 Search services
               </h3>
-              <p className="text-gray-600 text-sm leading-relaxed" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              <p className="text-gray-600 text-base leading-relaxed" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 Tell us what you need. From cleaning to repairs, we connect you with the right professionals.
               </p>
             </div>
 
             {/* Step 2: Get matched */}
-            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
-              <div className="mb-6 relative h-32 flex items-center justify-center overflow-hidden">
-                <svg className="w-24 h-24 transform group-hover:scale-110 transition-transform duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="bg-white rounded-2xl p-8 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+              <div className="mb-8 relative h-40 flex items-center justify-center overflow-hidden">
+                <svg className="w-32 h-32 transform group-hover:scale-110 transition-transform duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="30" cy="30" r="15" fill="#DBEAFE"/>
                   <circle cx="30" cy="30" r="7" fill="#3B82F6"/>
                   <circle cx="70" cy="30" r="15" fill="#DBEAFE"/>
@@ -427,18 +427,18 @@ const HomeownerLanding = () => {
                   <path d="M30 48 Q50 35 70 48" stroke="#3B82F6" strokeWidth="2" fill="none" strokeDasharray="2,2" className="animate-pulse"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 Get matched
               </h3>
-              <p className="text-gray-600 text-sm leading-relaxed" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              <p className="text-gray-600 text-base leading-relaxed" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 We show you verified professionals in your area. Compare profiles, reviews, and pricing.
               </p>
             </div>
 
             {/* Step 3: Book easily */}
-            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
-              <div className="mb-6 relative h-32 flex items-center justify-center overflow-hidden">
-                <svg className="w-24 h-24 transform group-hover:scale-110 transition-transform duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="bg-white rounded-2xl p-8 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+              <div className="mb-8 relative h-40 flex items-center justify-center overflow-hidden">
+                <svg className="w-32 h-32 transform group-hover:scale-110 transition-transform duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect x="25" y="30" width="50" height="45" rx="5" stroke="#3B82F6" strokeWidth="2" fill="#DBEAFE" fillOpacity="0.2"/>
                   <line x1="35" y1="45" x2="45" y2="45" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round"/>
                   <line x1="35" y1="55" x2="65" y2="55" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round"/>
@@ -447,18 +447,18 @@ const HomeownerLanding = () => {
                   <path d="M70 65 L73 68 L80 60" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 Book easily
               </h3>
-              <p className="text-gray-600 text-sm leading-relaxed" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              <p className="text-gray-600 text-base leading-relaxed" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 Choose your preferred professional and book a time that works for you. It's that simple.
               </p>
             </div>
 
             {/* Step 4: Enjoy results */}
-            <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
-              <div className="mb-6 relative h-32 flex items-center justify-center overflow-hidden">
-                <svg className="w-24 h-24 transform group-hover:scale-110 transition-transform duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="bg-white rounded-2xl p-8 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+              <div className="mb-8 relative h-40 flex items-center justify-center overflow-hidden">
+                <svg className="w-32 h-32 transform group-hover:scale-110 transition-transform duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="50" cy="40" r="25" fill="#DBEAFE" fillOpacity="0.3"/>
                   <path d="M35 40 L45 50 L65 30" stroke="#3B82F6" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M30 65 Q50 75 70 65" stroke="#3B82F6" strokeWidth="2" fill="none" className="animate-pulse"/>
