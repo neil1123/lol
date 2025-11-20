@@ -336,19 +336,20 @@ const HomeownerLanding = () => {
               </div>
               
               <div className="relative bg-white rounded-2xl shadow-xl border-2 border-gray-200 hover:border-blue-400 transition-all duration-300">
-                <div className="flex items-center p-6">
-                  <div className="flex-1 flex items-center gap-4 px-6">
-                    <MessageCircle className="h-6 w-6 text-blue-600 flex-shrink-0" />
-                    <Input
-                      placeholder="Example: I need a plumber for a leaky faucet, my budget is around $200"
+                <div className="flex items-start gap-4 p-6">
+                  <div className="flex-1 flex items-start gap-4 px-6">
+                    <MessageCircle className="h-6 w-6 text-blue-600 flex-shrink-0 mt-2" />
+                    <textarea
+                      placeholder="Example: I need a plumber for a leaky faucet in my kitchen. The leak started yesterday and it's getting worse. My budget is around $200 and I need someone who can come this week."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       onKeyPress={(e) => {
-                        if (e.key === 'Enter' && searchTerm.trim()) {
+                        if (e.key === 'Enter' && e.ctrlKey && searchTerm.trim()) {
                           handleStartChat();
                         }
                       }}
-                      className="border-0 bg-transparent focus:ring-0 focus:outline-none text-lg placeholder:text-gray-400 py-2"
+                      rows={4}
+                      className="w-full border-0 bg-transparent focus:ring-0 focus:outline-none text-base placeholder:text-gray-400 resize-none py-2"
                       style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                     />
                   </div>
@@ -365,7 +366,7 @@ const HomeownerLanding = () => {
               </div>
               
               <p className="text-center text-xs text-gray-500 mt-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-                💡 Our AI will ask clarifying questions to match you with the best professionals
+                💡 Our AI will ask clarifying questions to match you with the best professionals • Press Ctrl+Enter to submit
               </p>
             </div>
 
