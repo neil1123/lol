@@ -333,12 +333,7 @@ const HomeownerLanding = () => {
                       onChange={(e) => setSearchTerm(e.target.value)}
                       onKeyPress={(e) => {
                         if (e.key === 'Enter' && searchTerm.trim()) {
-                          if (!isLoggedIn) {
-                            setShowSignInPopup(true);
-                          } else {
-                            setIsChatOpen(true);
-                            navigate('/homeowners/browse');
-                          }
+                          handleStartChat();
                         }
                       }}
                       className="border-0 bg-transparent focus:ring-0 focus:outline-none text-base placeholder:text-gray-400"
@@ -346,16 +341,7 @@ const HomeownerLanding = () => {
                     />
                   </div>
                   <Button
-                    onClick={() => {
-                      if (searchTerm.trim()) {
-                        if (!isLoggedIn) {
-                          setShowSignInPopup(true);
-                        } else {
-                          setIsChatOpen(true);
-                          navigate('/homeowners/browse');
-                        }
-                      }
-                    }}
+                    onClick={handleStartChat}
                     disabled={!searchTerm.trim()}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
