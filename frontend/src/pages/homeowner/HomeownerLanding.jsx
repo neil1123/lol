@@ -17,7 +17,21 @@ const HomeownerLanding = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [showSignInPopup, setShowSignInPopup] = useState(false);
   const [sessionId, setSessionId] = useState(null);
+  const [initialMessage, setInitialMessage] = useState('');
   const navigate = useNavigate();
+
+  const handleStartChat = () => {
+    if (searchTerm.trim()) {
+      if (!isLoggedIn) {
+        setShowSignInPopup(true);
+      } else {
+        setInitialMessage(searchTerm);
+        setIsChatOpen(true);
+        setSearchTerm('');
+        navigate('/homeowners/browse');
+      }
+    }
+  };
 
   useEffect(() => {
     // Check if user is logged in
