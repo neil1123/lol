@@ -303,41 +303,41 @@ const HomeownerLanding = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-b from-gray-50 to-white pt-24 pb-12">
+      <section className="relative bg-gradient-to-b from-gray-50 to-white pt-20 pb-8">
         {/* Grid Pattern Background */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:6rem_4rem]" />
          
-        <div className="relative container mx-auto px-4 py-12">
+        <div className="relative container mx-auto px-4 py-6">
           <div className="mx-auto max-w-5xl text-center">
             {/* Main Headline */}
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight mb-4" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight mb-3" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
               Home services
               <br />
               <span className="text-blue-600">at your doorstep</span>
             </h1>
             
             {/* Subheadline */}
-            <p className="text-base md:text-lg text-gray-600 mb-6 max-w-2xl mx-auto leading-relaxed font-medium" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+            <p className="text-sm md:text-base text-gray-600 mb-4 max-w-2xl mx-auto leading-relaxed font-medium" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
               Connect with verified professionals for all your home service needs. Get instant quotes and transform your home effortlessly.
             </p>
 
             {/* AI Prompt Input Bar - Emergent Style */}
-            <div className="relative max-w-5xl mx-auto mb-6">
-              <div className="text-center mb-3">
-                <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-3 py-1.5 mb-2">
+            <div className="relative max-w-5xl mx-auto mb-4">
+              <div className="text-center mb-2">
+                <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-3 py-1 mb-1.5">
                   <MessageCircle className="h-3.5 w-3.5 text-blue-600" />
                   <span className="text-xs font-semibold text-blue-700" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                     AI Assistant
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 font-medium" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                <p className="text-xs text-gray-600 font-medium" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                   Tell our AI what you need and we'll guide you to the perfect service provider
                 </p>
               </div>
               
               <div className="relative bg-white rounded-xl border border-gray-300 shadow-sm hover:border-blue-400 hover:shadow-md transition-all duration-200">
-                <div className="p-3">
-                  <div className="mb-3">
+                <div className="p-2.5">
+                  <div className="mb-2">
                     <textarea
                       placeholder="Example: I need a plumber for a leaky faucet in my kitchen. The leak started yesterday and it's getting worse. My budget is around $200..."
                       value={searchTerm}
@@ -348,7 +348,7 @@ const HomeownerLanding = () => {
                         }
                       }}
                       rows={3}
-                      className="w-full border-0 bg-transparent focus:ring-0 focus:outline-none text-base placeholder:text-gray-400 resize-none px-2 py-2"
+                      className="w-full border-0 bg-transparent focus:ring-0 focus:outline-none text-sm placeholder:text-gray-400 resize-none px-2 py-1.5"
                       style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                     />
                   </div>
@@ -356,7 +356,7 @@ const HomeownerLanding = () => {
                     <Button
                       onClick={handleStartChat}
                       disabled={!searchTerm.trim()}
-                      className="bg-gray-800 hover:bg-gray-900 text-white rounded-lg px-4 py-2 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-sm"
+                      className="bg-gray-800 hover:bg-gray-900 text-white rounded-lg px-4 py-1.5 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-xs"
                       style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                     >
                       Get Started
@@ -365,7 +365,7 @@ const HomeownerLanding = () => {
                 </div>
               </div>
               
-              <p className="text-center text-xs text-gray-500 mt-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              <p className="text-center text-xs text-gray-500 mt-1.5" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 💡 Press Ctrl+Enter to submit
               </p>
             </div>
