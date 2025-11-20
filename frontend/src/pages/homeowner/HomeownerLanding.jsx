@@ -302,43 +302,43 @@ const HomeownerLanding = () => {
         </div>
       </header>
 
-      {/* Hero Section - Cal.com Style */}
-      <section className="relative overflow-hidden bg-white pt-24">
-        {/* Background Pattern */}
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-b from-gray-50 to-white pt-24 pb-12">
+        {/* Grid Pattern Background */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#f1f5f9_1px,transparent_1px),linear-gradient(to_bottom,#f1f5f9_1px,transparent_1px)] bg-[size:6rem_4rem]" />
-        
-        <div className="relative container mx-auto px-4 py-24 lg:py-32">
-          <div className="mx-auto max-w-4xl text-center">
+         
+        <div className="relative container mx-auto px-4 py-12">
+          <div className="mx-auto max-w-5xl text-center">
             {/* Main Headline */}
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 tracking-tight mb-6" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight mb-4" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
               Home services
               <br />
               <span className="text-blue-600">at your doorstep</span>
             </h1>
             
             {/* Subheadline */}
-            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed font-medium" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+            <p className="text-base md:text-lg text-gray-600 mb-6 max-w-2xl mx-auto leading-relaxed font-medium" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
               Connect with verified professionals for all your home service needs. Get instant quotes and transform your home effortlessly.
             </p>
 
             {/* AI Prompt Input Bar */}
-            <div className="relative max-w-4xl mx-auto mb-8">
-              <div className="text-center mb-4">
-                <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-4 py-2 mb-2">
-                  <MessageCircle className="h-4 w-4 text-blue-600" />
-                  <span className="text-sm font-semibold text-blue-700" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+            <div className="relative max-w-5xl mx-auto mb-6">
+              <div className="text-center mb-3">
+                <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-3 py-1.5 mb-2">
+                  <MessageCircle className="h-3.5 w-3.5 text-blue-600" />
+                  <span className="text-xs font-semibold text-blue-700" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                     AI Assistant
                   </span>
                 </div>
-                <p className="text-base text-gray-600 font-medium" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                <p className="text-sm text-gray-600 font-medium" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                   Tell our AI what you need and we'll guide you to the perfect service provider
                 </p>
               </div>
               
               <div className="relative bg-white rounded-2xl shadow-xl border-2 border-gray-200 hover:border-blue-400 transition-all duration-300">
-                <div className="flex items-center p-4">
+                <div className="flex items-center p-3.5">
                   <div className="flex-1 flex items-center gap-3 px-4">
-                    <MessageCircle className="h-6 w-6 text-blue-600 flex-shrink-0" />
+                    <MessageCircle className="h-5 w-5 text-blue-600 flex-shrink-0" />
                     <Input
                       placeholder="Example: I need a plumber for a leaky faucet, my budget is around $200"
                       value={searchTerm}
@@ -348,23 +348,23 @@ const HomeownerLanding = () => {
                           handleStartChat();
                         }
                       }}
-                      className="border-0 bg-transparent focus:ring-0 focus:outline-none text-lg placeholder:text-gray-400"
+                      className="border-0 bg-transparent focus:ring-0 focus:outline-none text-base placeholder:text-gray-400"
                       style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                     />
                   </div>
                   <Button
                     onClick={handleStartChat}
                     disabled={!searchTerm.trim()}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                     style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                   >
                     Start
-                    <ArrowRight className="h-5 w-5" />
+                    <ArrowRight className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
               
-              <p className="text-center text-sm text-gray-500 mt-3" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+              <p className="text-center text-xs text-gray-500 mt-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
                 💡 Our AI will ask clarifying questions to match you with the best professionals
               </p>
             </div>
