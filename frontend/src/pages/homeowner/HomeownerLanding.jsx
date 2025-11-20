@@ -996,6 +996,7 @@ const HomeownerLanding = () => {
         onClose={() => setIsChatOpen(false)}
         onMinimize={() => setIsChatOpen(false)}
         sessionId={sessionId}
+        initialMessage={initialMessage}
       />
 
       {/* Sign In Popup */}
@@ -1003,6 +1004,8 @@ const HomeownerLanding = () => {
         isOpen={showSignInPopup}
         onClose={() => setShowSignInPopup(false)}
         onContinueWithoutSignIn={() => {
+          setInitialMessage(searchTerm);
+          setSearchTerm('');
           setIsChatOpen(true);
           navigate('/homeowners/browse');
         }}
