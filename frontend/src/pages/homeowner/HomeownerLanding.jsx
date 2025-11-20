@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, Star, ArrowRight, Shield, Clock, Users, CheckCircle, Menu, X } from 'lucide-react';
+import { Search, MapPin, Star, ArrowRight, Shield, Clock, Users, CheckCircle, Menu, X, MessageCircle } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { serviceCategories } from '../../data/mockData';
 import { useNavigate } from 'react-router-dom';
+import ChatSidebar from '../../components/chat/ChatSidebar';
+import SignInPopup from '../../components/chat/SignInPopup';
 
 const HomeownerLanding = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeReviewIndex, setActiveReviewIndex] = useState(0);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [showSignInPopup, setShowSignInPopup] = useState(false);
+  const [sessionId, setSessionId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
