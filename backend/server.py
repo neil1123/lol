@@ -217,6 +217,95 @@ async def get_orders(current_user: User = Depends(get_current_user)):
             user_orders.append(order)
     return user_orders
 
+# ====== AI CHAT ENDPOINTS ======
+
+class AIChatMessage(BaseModel):
+    message: str
+    session_id: Optional[str] = None
+
+class AIChatResponse(BaseModel):
+    response: str
+    session_id: str
+
+@api_router.post("/ai/chat", response_model=AIChatResponse)
+async def ai_chat(chat_message: AIChatMessage):
+    """Send a message to AI assistant and get response"""
+    from emergentintegrations.llm.chat import LlmChat, UserMessage
+    
+    # Generate or use existing session ID
+    session_id = chat_message.session_id or str(uuid.uuid4())
+    
+    # Initialize chat history if new session
+    if session_id not in ai_chat_storage:
+        ai_chat_storage[session_id] = []
+    
+    # System message for Doord marketplace context
+    system_message = """You are Doord's AI assistant, helping homeowners and service providers in the home services marketplace.
+
+Your role:
+1. Help homeowners find the right service providers (Electrician, Plumber, HVAC, Handyman, Home Cleaning, Office Cleaning, Window Cleaning, Pressure Washing, Gutter Cleaning, Landscaping, Lawn Mowing, Car Detailing, etc.)
+2. Ask clarifying questions about their service needs (budget, location, urgency, specific requirements)
+3. Guide them through the booking process
+4. If you don't know specific pricing, say: "Pricing varies by project scope. I can connect you with professionals who will provide accurate quotes after evaluating your needs."
+5. Be conversational, helpful, and guide users to the browse services page when appropriate
+
+Available Services:
+- Home Maintenance: Electrician, Plumber, HVAC, Handyman, Carpenter, Painter
+- Cleaning: Home Cleaning, Office Cleaning, Window Cleaning, Pressure Washing, Gutter Cleaning
+- Outdoor: Landscaping, Lawn Mowing, Snow Removal
+- Other: Car Detailing, Roofing, Pest Control, Appliance Repair, Junk Removal
+
+Keep responses concise and actionable. Always be helpful and professional."""
+    
+    try:
+        # Initialize LLM chat
+        chat = LlmChat(
+            api_key=os.environ.get('EMERGENT_LLM_KEY'),
+            session_id=session_id,
+            system_message=system_message
+        ).with_model("gemini", "gemini-2.0-flash-exp")
+        
+        # Create user message
+        user_message = UserMessage(text=chat_message.message)
+        
+        # Get AI response
+        ai_response = await chat.send_message(user_message)
+        
+        # Store in chat history
+        ai_chat_storage[session_id].append({
+            "role": "user",
+            "content": chat_message.message,
+            "timestamp": datetime.utcnow().isoformat()
+        })
+        ai_chat_storage[session_id].append({
+            "role": "assistant",
+            "content": ai_response,
+            "timestamp": datetime.utcnow().isoformat()
+        })
+        
+        return AIChatResponse(response=ai_response, session_id=session_id)
+        
+    except Exception as e:
+        logging.error(f"AI chat error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"AI chat error: {str(e)}")
+
+@api_router.get("/ai/history/{session_id}")
+async def get_ai_chat_history(session_id: str, limit: Optional[int] = 50):
+    """Get chat history for a session"""
+    if session_id not in ai_chat_storage:
+        return {"messages": []}
+    
+    messages = ai_chat_storage[session_id]
+    # Return last 'limit' messages
+    return {"messages": messages[-limit:] if limit else messages}
+
+@api_router.delete("/ai/history/{session_id}")
+async def clear_ai_chat_history(session_id: str):
+    """Clear chat history for a session"""
+    if session_id in ai_chat_storage:
+        del ai_chat_storage[session_id]
+    return {"message": "Chat history cleared"}
+
 # Include the router in the main app
 app.include_router(api_router)
 
