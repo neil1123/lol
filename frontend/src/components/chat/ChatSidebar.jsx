@@ -3,13 +3,14 @@ import { X, Minimize2, Send, Loader2 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 
-const ChatSidebar = ({ isOpen, onClose, onMinimize, sessionId: initialSessionId }) => {
+const ChatSidebar = ({ isOpen, onClose, onMinimize, sessionId: initialSessionId, initialMessage }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState(initialSessionId || null);
   const [sidebarWidth, setSidebarWidth] = useState(400);
   const [isResizing, setIsResizing] = useState(false);
+  const [hasInitialized, setHasInitialized] = useState(false);
   const messagesEndRef = useRef(null);
   const sidebarRef = useRef(null);
   
@@ -26,6 +27,14 @@ const ChatSidebar = ({ isOpen, onClose, onMinimize, sessionId: initialSessionId 
       loadChatHistory();
     }
   }, [sessionId]);
+
+  // Send initial message if provided
+  useEffect(() => {
+    if (initialMessage && isOpen && !hasInitialized) {
+      setHasInitialized(true);
+      sendMessage(initialMessage);
+    }
+  }, [initialMessage, isOpen, hasInitialized]);
 
   const loadChatHistory = async () => {
     try {
