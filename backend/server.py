@@ -26,6 +26,7 @@ users_storage = {}
 orders_storage = {}
 messages_storage = {}
 appointments_storage = {}
+ai_chat_storage = {}  # {session_id: [{"role": "user/assistant", "content": "...", "timestamp": "..."}]}
 
 # JWT settings
 SECRET_KEY = "your-secret-key-change-this-in-production"
