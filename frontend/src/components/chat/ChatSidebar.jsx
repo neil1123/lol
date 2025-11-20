@@ -46,11 +46,13 @@ const ChatSidebar = ({ isOpen, onClose, onMinimize, sessionId: initialSessionId,
     }
   };
 
-  const sendMessage = async () => {
-    if (!inputMessage.trim() || isLoading) return;
+  const sendMessage = async (messageText) => {
+    const userMessage = messageText || inputMessage.trim();
+    if (!userMessage || isLoading) return;
 
-    const userMessage = inputMessage.trim();
-    setInputMessage('');
+    if (!messageText) {
+      setInputMessage('');
+    }
     setIsLoading(true);
 
     // Add user message to UI immediately
