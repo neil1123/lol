@@ -307,31 +307,52 @@ const HomeownerLanding = () => {
               Connect with verified professionals for all your home service needs. Get instant quotes and transform your home effortlessly.
             </p>
 
-            {/* AI Prompt Button */}
-            <div className="relative max-w-2xl mx-auto mb-8">
-              <Button
-                onClick={() => {
-                  if (!isLoggedIn) {
-                    setShowSignInPopup(true);
-                  } else {
-                    setIsChatOpen(true);
-                    navigate('/homeowners/browse');
-                  }
-                }}
-                className="w-full bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-300 hover:border-blue-500 rounded-2xl p-6 text-left shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-between group"
-                style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                    <MessageCircle className="h-6 w-6 text-blue-600" />
+            {/* AI Prompt Input Bar */}
+            <div className="relative max-w-3xl mx-auto mb-8">
+              <div className="relative bg-white rounded-2xl shadow-xl border-2 border-gray-200 hover:border-blue-400 transition-all duration-300">
+                <div className="flex items-center p-3">
+                  <div className="flex-1 flex items-center gap-3 px-3">
+                    <MessageCircle className="h-5 w-5 text-blue-600 flex-shrink-0" />
+                    <Input
+                      placeholder="Describe what service you need... (e.g., I need a plumber for a leaky faucet)"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' && searchTerm.trim()) {
+                          if (!isLoggedIn) {
+                            setShowSignInPopup(true);
+                          } else {
+                            setIsChatOpen(true);
+                            navigate('/homeowners/browse');
+                          }
+                        }
+                      }}
+                      className="border-0 bg-transparent focus:ring-0 focus:outline-none text-base placeholder:text-gray-400"
+                      style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
+                    />
                   </div>
-                  <div>
-                    <p className="text-lg font-semibold text-gray-900">Ask our AI assistant</p>
-                    <p className="text-sm text-gray-500">Tell us what service you need and we'll guide you</p>
-                  </div>
+                  <Button
+                    onClick={() => {
+                      if (searchTerm.trim()) {
+                        if (!isLoggedIn) {
+                          setShowSignInPopup(true);
+                        } else {
+                          setIsChatOpen(true);
+                          navigate('/homeowners/browse');
+                        }
+                      }
+                    }}
+                    disabled={!searchTerm.trim()}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
+                  >
+                    <ArrowRight className="h-5 w-5" />
+                  </Button>
                 </div>
-                <ArrowRight className="h-5 w-5 text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </Button>
+              </div>
+              <p className="text-center text-sm text-gray-500 mt-3" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                Our AI will guide you to the perfect service provider
+              </p>
             </div>
 
             {/* Quick Service Categories */}
