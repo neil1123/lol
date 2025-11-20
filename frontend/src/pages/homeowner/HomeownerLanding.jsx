@@ -968,6 +968,24 @@ const HomeownerLanding = () => {
           </div>
         </div>
       </footer>
+
+      {/* Chat Sidebar */}
+      <ChatSidebar
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        onMinimize={() => setIsChatOpen(false)}
+        sessionId={sessionId}
+      />
+
+      {/* Sign In Popup */}
+      <SignInPopup
+        isOpen={showSignInPopup}
+        onClose={() => setShowSignInPopup(false)}
+        onContinueWithoutSignIn={() => {
+          setIsChatOpen(true);
+          navigate('/homeowners/browse');
+        }}
+      />
     </div>
   );
 };
