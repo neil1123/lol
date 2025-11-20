@@ -387,7 +387,7 @@ const HomeownerLanding = () => {
             </div>
             
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <Button 
                 size="lg"
                 onClick={() => window.open('https://cal.com/neil-edward/30min', '_blank')}
