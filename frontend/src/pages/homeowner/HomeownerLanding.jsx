@@ -336,8 +336,8 @@ const HomeownerLanding = () => {
               </div>
               
               <div className="relative bg-white rounded-xl border border-gray-300 shadow-sm hover:border-blue-400 hover:shadow-md transition-all duration-200">
-                <div className="flex items-start gap-2 p-3">
-                  <div className="flex-1">
+                <div className="p-3">
+                  <div className="mb-3">
                     <textarea
                       placeholder="Example: I need a plumber for a leaky faucet in my kitchen. The leak started yesterday and it's getting worse. My budget is around $200..."
                       value={searchTerm}
@@ -352,14 +352,16 @@ const HomeownerLanding = () => {
                       style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                     />
                   </div>
-                  <Button
-                    onClick={handleStartChat}
-                    disabled={!searchTerm.trim()}
-                    size="icon"
-                    className="bg-gray-800 hover:bg-gray-900 text-white rounded-full h-10 w-10 flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed mt-1"
-                  >
-                    <ArrowRight className="h-5 w-5" />
-                  </Button>
+                  <div className="flex justify-start">
+                    <Button
+                      onClick={handleStartChat}
+                      disabled={!searchTerm.trim()}
+                      className="bg-gray-800 hover:bg-gray-900 text-white rounded-lg px-4 py-2 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-sm"
+                      style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
+                    >
+                      Get Started
+                    </Button>
+                  </div>
                 </div>
               </div>
               
