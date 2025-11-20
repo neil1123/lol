@@ -409,17 +409,17 @@ const HomeownerLanding = () => {
             </div>
             
             {/* Trust Indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-500 mt-12">
+            <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-gray-500 mb-3">
               <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-green-500" />
+                <Shield className="h-3.5 w-3.5 text-green-500" />
                 <span style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Verified Providers</span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-green-500" />
+                <Clock className="h-3.5 w-3.5 text-green-500" />
                 <span style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Quick Response</span>
               </div>
               <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-green-500" />
+                <Users className="h-3.5 w-3.5 text-green-500" />
                 <span style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>Trusted by 1000+</span>
               </div>
             </div>
