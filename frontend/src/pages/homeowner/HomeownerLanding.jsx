@@ -307,31 +307,31 @@ const HomeownerLanding = () => {
               Connect with verified professionals for all your home service needs. Get instant quotes and transform your home effortlessly.
             </p>
 
-            {/* Search Bar */}
+            {/* AI Prompt Button */}
             <div className="relative max-w-2xl mx-auto mb-8">
-              <div className="relative bg-white rounded-2xl p-2 shadow-lg border border-gray-200">
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <Input
-                      placeholder="What service do you need? (e.g., cleaning, plumbing, electrical)"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-12 py-4 text-lg border-0 bg-transparent focus:ring-0 focus:outline-none placeholder:text-gray-500"
-                      style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
-                    />
+              <Button
+                onClick={() => {
+                  if (!isLoggedIn) {
+                    setShowSignInPopup(true);
+                  } else {
+                    setIsChatOpen(true);
+                    navigate('/homeowners/browse');
+                  }
+                }}
+                className="w-full bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-300 hover:border-blue-500 rounded-2xl p-6 text-left shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-between group"
+                style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                    <MessageCircle className="h-6 w-6 text-blue-600" />
                   </div>
-                  <Button 
-                    size="lg" 
-                    onClick={handleQuotationRequest}
-                    className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 min-h-[56px] sm:min-h-[auto]"
-                    style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
-                  >
-                    Find Services
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
+                  <div>
+                    <p className="text-lg font-semibold text-gray-900">Ask our AI assistant</p>
+                    <p className="text-sm text-gray-500">Tell us what service you need and we'll guide you</p>
+                  </div>
                 </div>
-              </div>
+                <ArrowRight className="h-5 w-5 text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </Button>
             </div>
 
             {/* Quick Service Categories */}
