@@ -322,13 +322,25 @@ const HomeownerLanding = () => {
             </p>
 
             {/* AI Prompt Input Bar */}
-            <div className="relative max-w-3xl mx-auto mb-8">
+            <div className="relative max-w-4xl mx-auto mb-8">
+              <div className="text-center mb-4">
+                <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-4 py-2 mb-2">
+                  <MessageCircle className="h-4 w-4 text-blue-600" />
+                  <span className="text-sm font-semibold text-blue-700" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                    AI Assistant
+                  </span>
+                </div>
+                <p className="text-base text-gray-600 font-medium" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
+                  Tell our AI what you need and we'll guide you to the perfect service provider
+                </p>
+              </div>
+              
               <div className="relative bg-white rounded-2xl shadow-xl border-2 border-gray-200 hover:border-blue-400 transition-all duration-300">
-                <div className="flex items-center p-3">
-                  <div className="flex-1 flex items-center gap-3 px-3">
-                    <MessageCircle className="h-5 w-5 text-blue-600 flex-shrink-0" />
+                <div className="flex items-center p-4">
+                  <div className="flex-1 flex items-center gap-3 px-4">
+                    <MessageCircle className="h-6 w-6 text-blue-600 flex-shrink-0" />
                     <Input
-                      placeholder="Describe what service you need... (e.g., I need a plumber for a leaky faucet)"
+                      placeholder="Example: I need a plumber for a leaky faucet, my budget is around $200"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       onKeyPress={(e) => {
@@ -336,22 +348,24 @@ const HomeownerLanding = () => {
                           handleStartChat();
                         }
                       }}
-                      className="border-0 bg-transparent focus:ring-0 focus:outline-none text-base placeholder:text-gray-400"
+                      className="border-0 bg-transparent focus:ring-0 focus:outline-none text-lg placeholder:text-gray-400"
                       style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                     />
                   </div>
                   <Button
                     onClick={handleStartChat}
                     disabled={!searchTerm.trim()}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                     style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                   >
+                    Start
                     <ArrowRight className="h-5 w-5" />
                   </Button>
                 </div>
               </div>
+              
               <p className="text-center text-sm text-gray-500 mt-3" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-                Our AI will guide you to the perfect service provider
+                💡 Our AI will ask clarifying questions to match you with the best professionals
               </p>
             </div>
 
