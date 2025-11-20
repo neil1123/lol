@@ -321,7 +321,7 @@ const HomeownerLanding = () => {
               Connect with verified professionals for all your home service needs. Get instant quotes and transform your home effortlessly.
             </p>
 
-            {/* AI Prompt Input Bar */}
+            {/* AI Prompt Input Bar - Emergent Style */}
             <div className="relative max-w-5xl mx-auto mb-6">
               <div className="text-center mb-3">
                 <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-full px-3 py-1.5 mb-2">
@@ -335,38 +335,36 @@ const HomeownerLanding = () => {
                 </p>
               </div>
               
-              <div className="relative bg-white rounded-2xl shadow-xl border-2 border-gray-200 hover:border-blue-400 transition-all duration-300">
-                <div className="flex items-start gap-4 p-6">
-                  <div className="flex-1 flex items-start gap-4 px-6">
-                    <MessageCircle className="h-6 w-6 text-blue-600 flex-shrink-0 mt-2" />
+              <div className="relative bg-white rounded-xl border border-gray-300 shadow-sm hover:border-blue-400 hover:shadow-md transition-all duration-200">
+                <div className="flex items-start gap-2 p-3">
+                  <div className="flex-1">
                     <textarea
-                      placeholder="Example: I need a plumber for a leaky faucet in my kitchen. The leak started yesterday and it's getting worse. My budget is around $200 and I need someone who can come this week."
+                      placeholder="Example: I need a plumber for a leaky faucet in my kitchen. The leak started yesterday and it's getting worse. My budget is around $200..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter' && e.ctrlKey && searchTerm.trim()) {
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && searchTerm.trim()) {
                           handleStartChat();
                         }
                       }}
-                      rows={4}
-                      className="w-full border-0 bg-transparent focus:ring-0 focus:outline-none text-base placeholder:text-gray-400 resize-none py-2"
+                      rows={3}
+                      className="w-full border-0 bg-transparent focus:ring-0 focus:outline-none text-base placeholder:text-gray-400 resize-none px-2 py-2"
                       style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                     />
                   </div>
                   <Button
                     onClick={handleStartChat}
                     disabled={!searchTerm.trim()}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-base"
-                    style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
+                    size="icon"
+                    className="bg-gray-800 hover:bg-gray-900 text-white rounded-full h-10 w-10 flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed mt-1"
                   >
-                    Start
                     <ArrowRight className="h-5 w-5" />
                   </Button>
                 </div>
               </div>
               
               <p className="text-center text-xs text-gray-500 mt-2" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-                💡 Our AI will ask clarifying questions to match you with the best professionals • Press Ctrl+Enter to submit
+                💡 Press Ctrl+Enter to submit
               </p>
             </div>
 
