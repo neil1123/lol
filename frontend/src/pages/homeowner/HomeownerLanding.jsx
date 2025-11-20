@@ -352,7 +352,7 @@ const HomeownerLanding = () => {
                       style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
                     />
                   </div>
-                  <div className="flex justify-start">
+                  <div className="flex justify-end">
                     <Button
                       onClick={handleStartChat}
                       disabled={!searchTerm.trim()}
