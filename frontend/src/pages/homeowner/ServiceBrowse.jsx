@@ -606,9 +606,11 @@ const ServiceBrowse = () => {
                       <div className="flex flex-col sm:flex-row items-start justify-between mb-4">
                         <div className="w-full">
                           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-2">
-                            <h3 className="text-lg sm:text-xl font-semibold text-gray-900">{provider.business_name || provider.name}</h3>
-                            {provider.business_name && provider.name && (
-                              <span className="text-sm text-gray-500">by {provider.name}</span>
+                            <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
+                              {provider.business_name || provider.name}
+                            </h3>
+                            {provider.business_name && provider.ownerName && (
+                              <span className="text-sm text-gray-500">by {provider.ownerName}</span>
                             )}
                             <button className="p-1 hover:bg-gray-100 rounded-full self-start sm:self-auto">
                               <svg className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
