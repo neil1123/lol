@@ -76,6 +76,8 @@ const ServiceBrowse = () => {
       const formattedProviders = providers.map(provider => ({
         id: provider.id,
         name: provider.business_name || provider.name,
+        business_name: provider.business_name,
+        ownerName: provider.name,
         description: provider.description || `Professional ${Array.isArray(provider.services) ? provider.services.join(' and ') : provider.services} services`,
         services: Array.isArray(provider.services) ? provider.services : [provider.services],
         rating: provider.rating || 5.0,
@@ -86,7 +88,6 @@ const ServiceBrowse = () => {
         yearEstablished: provider.year_established || "2024",
         specialties: provider.specialties || ["Professional service", "Quality work", "Customer satisfaction"],
         priceRange: provider.price_range || "$50-$500",
-        ownerName: provider.name,
         email: provider.email,
         phone: provider.phone
       }));
