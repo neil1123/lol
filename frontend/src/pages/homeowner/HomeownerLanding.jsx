@@ -171,11 +171,11 @@ const HomeownerLanding = () => {
             </div>
             
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-6">
+            <div className="hidden lg:flex items-center space-x-4">
               <Button 
                 variant="ghost" 
                 onClick={() => navigate('/homeservices')}
-                className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                className="text-sm font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap"
                 style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
               >
                 For Service Providers
@@ -183,14 +183,14 @@ const HomeownerLanding = () => {
               <Button 
                 variant="ghost" 
                 onClick={() => navigate('/property-manager')}
-                className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                className="text-sm font-medium text-gray-600 hover:text-gray-900 whitespace-nowrap"
                 style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
               >
                 For Property Managers
               </Button>
               <Button 
                 onClick={() => window.open('https://cal.com/neil-edward/30min', '_blank')}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg text-sm"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 py-2 rounded-lg text-sm whitespace-nowrap"
                 style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
               >
                 Book Demo
@@ -200,15 +200,15 @@ const HomeownerLanding = () => {
                   localStorage.removeItem('userType');
                   localStorage.removeItem('user');
                   setIsLoggedIn(false);
-                }} className="text-sm">
+                }} className="text-sm whitespace-nowrap">
                   Sign Out
                 </Button>
               ) : (
                 <>
-                  <Button variant="outline" onClick={() => navigate('/homeowners/auth')} className="text-sm">
+                  <Button variant="outline" onClick={() => navigate('/homeowners/auth')} className="text-sm whitespace-nowrap">
                     Sign In
                   </Button>
-                  <Button onClick={() => navigate('/homeowners/auth')} className="text-sm">
+                  <Button onClick={() => navigate('/homeowners/auth')} className="text-sm whitespace-nowrap">
                     Sign Up
                   </Button>
                 </>
@@ -216,7 +216,7 @@ const HomeownerLanding = () => {
             </div>
             
             {/* Mobile Menu Button */}
-            <div className="md:hidden">
+            <div className="lg:hidden">
               <Button
                 variant="ghost"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
