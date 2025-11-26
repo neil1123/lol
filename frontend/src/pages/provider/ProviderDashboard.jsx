@@ -35,6 +35,11 @@ const ProviderDashboard = () => {
     quotationRequests: 0
   });
 
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleLogout = () => {
     handleStandardLogout(navigate);
   };
