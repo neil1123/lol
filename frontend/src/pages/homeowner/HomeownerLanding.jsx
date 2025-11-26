@@ -229,7 +229,7 @@ const HomeownerLanding = () => {
           
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
-            <div className="md:hidden border-t bg-white/95 backdrop-blur-md rounded-b-2xl">
+            <div className="lg:hidden border-t bg-white/95 backdrop-blur-md rounded-b-2xl">
               <div className="p-4 space-y-3">
                 <Button 
                   variant="ghost" 
