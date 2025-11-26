@@ -202,9 +202,13 @@ const ServiceBrowse = () => {
           });
         });
       
-      console.log(`Provider ${provider.name}: matchesSearch=${matchesSearch}, matchesServices=${matchesServices}, selectedServices=${selectedServices.join(', ')}`);
-    
-      return matchesSearch && matchesServices;
+        console.log(`Provider ${provider.name}: matchesSearch=${matchesSearch}, matchesServices=${matchesServices}, selectedServices=${selectedServices.join(', ')}`);
+      
+        return matchesSearch && matchesServices;
+      } catch (error) {
+        console.error('Error filtering provider:', provider, error);
+        return false; // Exclude providers that cause errors
+      }
     });
 
   console.log('Filtered providers:', filteredProviders);
