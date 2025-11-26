@@ -106,28 +106,32 @@ const ServiceBrowse = () => {
 
   const filteredProviders = allProviders
     .filter(provider => {
-      // Hide Wilson Home Services entries - comprehensive filtering
-      const providerName = (provider.name || '').toLowerCase();
-      const businessName = (provider.business_name || '').toLowerCase();
-      const companyName = (provider.companyName || '').toLowerCase();
-      
-      if (providerName.includes('wilson') || 
-          businessName.includes('wilson') || 
-          companyName.includes('wilson') ||
-          providerName.includes('wilson home services') ||
-          businessName.includes('wilson home services') ||
-          companyName.includes('wilson home services')) {
-        return false;
-      }
-      
-      const matchesSearch = !searchTerm || 
-        provider.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        provider.services.some(service => 
-          service.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      
-      const matchesServices = selectedServices.length === 0 ||
-        selectedServices.some(service => {
+      try {
+        // Hide Wilson Home Services entries - comprehensive filtering
+        const providerName = (provider.name || '').toLowerCase();
+        const businessName = (provider.business_name || '').toLowerCase();
+        const companyName = (provider.companyName || '').toLowerCase();
+        
+        if (providerName.includes('wilson') || 
+            businessName.includes('wilson') || 
+            companyName.includes('wilson') ||
+            providerName.includes('wilson home services') ||
+            businessName.includes('wilson home services') ||
+            companyName.includes('wilson home services')) {
+          return false;
+        }
+        
+        // Ensure services is an array
+        const providerServices = Array.isArray(provider.services) ? provider.services : [];
+        
+        const matchesSearch = !searchTerm || 
+          provider.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          providerServices.some(service => 
+            service.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+        
+        const matchesServices = selectedServices.length === 0 ||
+          selectedServices.some(service => {
           console.log(`Filtering by service: ${service}`);
           // Strict matching for service categories - no cross-contamination
           return provider.services.some(providerService => {
