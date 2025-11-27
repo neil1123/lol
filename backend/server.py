@@ -107,11 +107,24 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Invalid authentication credentials")
     
-    # Get user from in-memory storage
-    user = users_storage.get(user_id)
-    if user is None:
+    # Get user from SQLite database
+    db = await get_db()
+    cursor = await db.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+    row = await cursor.fetchone()
+    await db.close()
+    
+    if row is None:
         raise HTTPException(status_code=401, detail="User not found")
-    return User(**user)
+    
+    # Convert row to dict
+    user_dict = dict(row)
+    # Parse JSON fields
+    if user_dict.get('services'):
+        user_dict['services'] = json.loads(user_dict['services']) if isinstance(user_dict['services'], str) else user_dict['services']
+    if user_dict.get('specialties'):
+        user_dict['specialties'] = json.loads(user_dict['specialties']) if isinstance(user_dict['specialties'], str) else user_dict['specialties']
+    
+    return User(**user_dict)
 
 # ====== API ENDPOINTS ======
 
