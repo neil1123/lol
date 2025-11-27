@@ -485,26 +485,19 @@ const ProviderAuth = () => {
                     
                     <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto border rounded p-3">
                       {availableServices.map((serviceName, index) => (
-                        <div key={index} className="flex items-center space-x-2">
+                        <div 
+                          key={index} 
+                          className="flex items-center space-x-2 cursor-pointer hover:bg-blue-50 p-1 rounded"
+                          onClick={() => handleServiceToggle(serviceName)}
+                        >
                           <Checkbox
                             id={serviceName}
                             checked={signUpData.services.includes(serviceName)}
-                            onCheckedChange={(checked) => {
-                              console.log('Checkbox changed:', serviceName, 'checked:', checked);
-                              if (checked) {
-                                handleServiceToggle(serviceName);
-                              } else {
-                                handleServiceToggle(serviceName);
-                              }
-                            }}
+                            onCheckedChange={() => handleServiceToggle(serviceName)}
                           />
                           <label
                             htmlFor={serviceName}
-                            className="text-sm cursor-pointer"
-                            onClick={() => {
-                              console.log('Label clicked for:', serviceName);
-                              handleServiceToggle(serviceName);
-                            }}
+                            className="text-sm cursor-pointer select-none flex-1"
                           >
                             {serviceName}
                           </label>
