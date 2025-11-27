@@ -259,6 +259,54 @@ async def get_current_user_info(current_user: User = Depends(get_current_user)):
     del user_data["password_hash"]
     return user_data
 
+@api_router.get("/me")
+async def get_me(current_user: User = Depends(get_current_user)):
+    """Get current user profile - alias for /users/me"""
+    db = await get_db()
+    cursor = await db.execute("SELECT * FROM users WHERE id = ?", (current_user.id,))
+    row = await cursor.fetchone()
+    await db.close()
+    
+    if not row:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    user_data = dict(row)
+    # Remove password hash
+    if "password_hash" in user_data:
+        del user_data["password_hash"]
+    
+    # Parse JSON fields
+    if user_data.get('services'):
+        user_data['services'] = json.loads(user_data['services']) if isinstance(user_data['services'], str) else user_data['services']
+    if user_data.get('specialties'):
+        user_data['specialties'] = json.loads(user_data['specialties']) if isinstance(user_data['specialties'], str) else user_data['specialties']
+    
+    return user_data
+
+@api_router.get("/auth/me")
+async def get_auth_me(current_user: User = Depends(get_current_user)):
+    """Get current user profile - alias for compatibility"""
+    db = await get_db()
+    cursor = await db.execute("SELECT * FROM users WHERE id = ?", (current_user.id,))
+    row = await cursor.fetchone()
+    await db.close()
+    
+    if not row:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    user_data = dict(row)
+    # Remove password hash
+    if "password_hash" in user_data:
+        del user_data["password_hash"]
+    
+    # Parse JSON fields
+    if user_data.get('services'):
+        user_data['services'] = json.loads(user_data['services']) if isinstance(user_data['services'], str) else user_data['services']
+    if user_data.get('specialties'):
+        user_data['specialties'] = json.loads(user_data['specialties']) if isinstance(user_data['specialties'], str) else user_data['specialties']
+    
+    return user_data
+
 @api_router.get("/users/{user_id}")
 async def get_user_by_id(user_id: str):
     """Get a user by ID (public info only)"""
