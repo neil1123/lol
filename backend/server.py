@@ -413,6 +413,7 @@ async def get_orders(current_user: User = Depends(get_current_user)):
     cursor = await db.execute("""
         SELECT * FROM orders 
         WHERE homeowner_id = ? OR provider_id = ?
+        ORDER BY created_at DESC
     """, (current_user.id, current_user.id))
     
     rows = await cursor.fetchall()
@@ -420,6 +421,85 @@ async def get_orders(current_user: User = Depends(get_current_user)):
     
     orders = [dict(row) for row in rows]
     return orders
+
+class OrderCreate(BaseModel):
+    provider_id: str
+    service: str
+    description: Optional[str] = None
+    amount: Optional[float] = None
+
+@api_router.post("/orders")
+async def create_order(order_data: OrderCreate, current_user: User = Depends(get_current_user)):
+    """Create a new order/quotation request"""
+    db = await get_db()
+    
+    # Verify provider exists
+    cursor = await db.execute("SELECT id FROM users WHERE id = ? AND user_type = 'provider'", (order_data.provider_id,))
+    provider = await cursor.fetchone()
+    
+    if not provider:
+        await db.close()
+        raise HTTPException(status_code=404, detail="Provider not found")
+    
+    # Create order
+    order_id = str(uuid.uuid4())
+    await db.execute("""
+        INSERT INTO orders (
+            id, homeowner_id, provider_id, service, description, status, amount, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        order_id,
+        current_user.id,
+        order_data.provider_id,
+        order_data.service,
+        order_data.description,
+        'pending',
+        order_data.amount,
+        datetime.utcnow().isoformat(),
+        datetime.utcnow().isoformat()
+    ))
+    
+    await db.commit()
+    await db.close()
+    
+    return {
+        "message": "Quotation request sent successfully",
+        "order_id": order_id,
+        "status": "pending"
+    }
+
+@api_router.put("/orders/{order_id}")
+async def update_order_status(
+    order_id: str,
+    status: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Update order status (for providers)"""
+    db = await get_db()
+    
+    # Verify order exists and user is the provider
+    cursor = await db.execute("""
+        SELECT provider_id FROM orders WHERE id = ?
+    """, (order_id,))
+    order = await cursor.fetchone()
+    
+    if not order:
+        await db.close()
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    if order[0] != current_user.id:
+        await db.close()
+        raise HTTPException(status_code=403, detail="Not authorized to update this order")
+    
+    # Update status
+    await db.execute("""
+        UPDATE orders SET status = ?, updated_at = ? WHERE id = ?
+    """, (status, datetime.utcnow().isoformat(), order_id))
+    
+    await db.commit()
+    await db.close()
+    
+    return {"message": "Order status updated", "status": status}
 
 # ====== AI CHAT ENDPOINTS ======
 
