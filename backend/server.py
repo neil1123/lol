@@ -890,10 +890,15 @@ app.include_router(api_router)
 async def health_check():
     """Health check endpoint for deployment verification"""
     try:
-        # Quick database ping
+        # Quick database ping with timeout
         await db.command('ping')
-        return {"status": "healthy", "database": "connected"}
+        return {
+            "status": "healthy", 
+            "database": "connected",
+            "db_name": db.name
+        }
     except Exception as e:
+        print(f"Health check failed: {e}", file=sys.stderr, flush=True)
         return {"status": "unhealthy", "error": str(e)}
 
 # Main entry point
