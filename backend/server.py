@@ -745,7 +745,7 @@ async def create_message_thread(thread_data: ThreadCreate, current_user: User = 
     
     # Create initial message if no conversation exists
     if not existing:
-        initial_message = thread_data.last_message or f"New conversation started"
+        initial_message = thread_data.last_message or "New conversation started"
         message_id = str(uuid.uuid4())
         await db.execute("""
             INSERT INTO messages (
