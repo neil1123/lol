@@ -12,7 +12,7 @@ import sys
 import uuid
 
 # Load environment variables
-BACKEND_URL = "https://doord-verify.preview.emergentagent.com/api"
+BACKEND_URL = "https://deploy-doord.preview.emergentagent.com/api"
 
 # Test data
 homeowner_token = None

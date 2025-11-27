@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Backend URL
-BACKEND_URL = "https://doord-verify.preview.emergentagent.com/api"
+BACKEND_URL = "https://deploy-doord.preview.emergentagent.com/api"
 
 def test_critical_homeowner_quotation():
     """Test the critical homeowner quotation acceptance/decline functionality"""

@@ -7,7 +7,7 @@ import requests
 import json
 import uuid
 
-BACKEND_URL = "https://doord-verify.preview.emergentagent.com/api"
+BACKEND_URL = "https://deploy-doord.preview.emergentagent.com/api"
 
 def create_test_homeowner():
     """Create test homeowner account"""

@@ -12,7 +12,7 @@ import sys
 import uuid
 
 # Load environment variables
-BACKEND_URL = "https://doord-verify.preview.emergentagent.com/api"
+BACKEND_URL = "https://deploy-doord.preview.emergentagent.com/api"
 
 # Global variables to store test data
 provider_token = None

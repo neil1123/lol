@@ -10,7 +10,7 @@ import uuid
 import sys
 
 # Backend URL from environment
-BACKEND_URL = "https://doord-verify.preview.emergentagent.com/api"
+BACKEND_URL = "https://deploy-doord.preview.emergentagent.com/api"
 
 # Test credentials
 HOMEOWNER_EMAIL = "test@homeowner.com"

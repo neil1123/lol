@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Backend URL from environment
-BACKEND_URL = "https://doord-verify.preview.emergentagent.com/api"
+BACKEND_URL = "https://deploy-doord.preview.emergentagent.com/api"
 
 # Test credentials as specified in review request
 PROVIDER_EMAIL = "test@provider.com"
