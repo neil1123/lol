@@ -826,68 +826,74 @@ async def get_message_threads(current_user: User = Depends(get_current_user)):
     import sys
     db = await get_db()
     
-    print(f"DEBUG: Getting message threads for user: {current_user.id}", file=sys.stderr, flush=True)
-    
-    cursor = await db.execute("""
-        SELECT DISTINCT conversation_id, sender_id, recipient_id, message, MAX(timestamp) as last_message_time
-        FROM messages
-        WHERE sender_id = ? OR recipient_id = ?
-        GROUP BY conversation_id
-        ORDER BY last_message_time DESC
-    """, (current_user.id, current_user.id))
-    
-    rows = await cursor.fetchall()
-    
-    print(f"DEBUG: Found {len(rows)} threads for user {current_user.id}", file=sys.stderr, flush=True)
-    
-    threads = []
-    for row in rows:
-        conv_id = row[0]
-        other_user_id = row[2] if row[1] == current_user.id else row[1]
+    try:
+        print(f"DEBUG: Getting message threads for user: {current_user.id}", file=sys.stderr, flush=True)
         
-        logging.info(f"Processing thread: {conv_id}, other_user: {other_user_id}")
+        cursor = await db.execute("""
+            SELECT DISTINCT conversation_id, sender_id, recipient_id, message, MAX(timestamp) as last_message_time
+            FROM messages
+            WHERE sender_id = ? OR recipient_id = ?
+            GROUP BY conversation_id
+            ORDER BY last_message_time DESC
+        """, (current_user.id, current_user.id))
         
-        # Get other user info
-        user_cursor = await db.execute("SELECT id, name, business_name, user_type FROM users WHERE id = ?", (other_user_id,))
-        user_info = await user_cursor.fetchone()
+        rows = await cursor.fetchall()
         
-        # Count unread messages
-        unread_cursor = await db.execute("""
-            SELECT COUNT(*) FROM messages 
-            WHERE conversation_id = ? AND recipient_id = ? AND is_read = 0
-        """, (conv_id, current_user.id))
-        unread_result = await unread_cursor.fetchone()
-        unread_count = unread_result[0] if unread_result else 0
+        print(f"DEBUG: Found {len(rows)} threads for user {current_user.id}", file=sys.stderr, flush=True)
         
-        if user_info:
-            other_user_name = user_info[2] if user_info[2] else user_info[1]
-            other_user_type = user_info[3]
+        threads = []
+        for row in rows:
+            conv_id = row[0]
+            other_user_id = row[2] if row[1] == current_user.id else row[1]
             
-            # Format thread to match frontend expectations
-            thread = {
-                "id": conv_id,
-                "conversation_id": conv_id,
-                "last_message": row[3],
-                "last_message_time": row[4],
-                "unread_count": unread_count
-            }
+            print(f"DEBUG: Processing thread: {conv_id}, other_user: {other_user_id}", file=sys.stderr, flush=True)
             
-            # Set homeowner/provider IDs based on user types
-            if other_user_type == "provider":
-                thread["provider_id"] = other_user_id
-                thread["provider_name"] = other_user_name
-                thread["homeowner_id"] = current_user.id
-                thread["homeowner_name"] = current_user.name
-            else:
-                thread["homeowner_id"] = other_user_id
-                thread["homeowner_name"] = other_user_name
-                thread["provider_id"] = current_user.id
-                thread["provider_name"] = current_user.name if hasattr(current_user, 'business_name') and current_user.business_name else current_user.name
+            # Get other user info
+            user_cursor = await db.execute("SELECT id, name, business_name, user_type FROM users WHERE id = ?", (other_user_id,))
+            user_info = await user_cursor.fetchone()
             
-            threads.append(thread)
-    
-    await db.close()
-    return threads
+            # Count unread messages
+            unread_cursor = await db.execute("""
+                SELECT COUNT(*) FROM messages 
+                WHERE conversation_id = ? AND recipient_id = ? AND is_read = 0
+            """, (conv_id, current_user.id))
+            unread_result = await unread_cursor.fetchone()
+            unread_count = unread_result[0] if unread_result else 0
+            
+            if user_info:
+                other_user_name = user_info[2] if user_info[2] else user_info[1]
+                other_user_type = user_info[3]
+                
+                # Format thread to match frontend expectations
+                thread = {
+                    "id": conv_id,
+                    "conversation_id": conv_id,
+                    "last_message": row[3],
+                    "last_message_time": row[4],
+                    "unread_count": unread_count
+                }
+                
+                # Set homeowner/provider IDs based on user types
+                if other_user_type == "provider":
+                    thread["provider_id"] = other_user_id
+                    thread["provider_name"] = other_user_name
+                    thread["homeowner_id"] = current_user.id
+                    thread["homeowner_name"] = current_user.name
+                else:
+                    thread["homeowner_id"] = other_user_id
+                    thread["homeowner_name"] = other_user_name
+                    thread["provider_id"] = current_user.id
+                    thread["provider_name"] = current_user.business_name or current_user.name
+                
+                threads.append(thread)
+        
+        print(f"DEBUG: Returning {len(threads)} threads", file=sys.stderr, flush=True)
+        return threads
+    except Exception as e:
+        print(f"DEBUG: Error in get_message_threads: {e}", file=sys.stderr, flush=True)
+        raise
+    finally:
+        await db.close()
 
 # ====== APPOINTMENTS API ======
 
