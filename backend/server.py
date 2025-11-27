@@ -548,6 +548,160 @@ async def update_order_status(
     
     return {"message": "Order status updated", "status": status}
 
+# ====== MESSAGES/CONVERSATIONS ======
+
+class MessageCreate(BaseModel):
+    recipient_id: str
+    message: str
+
+@api_router.post("/messages")
+async def send_message(message_data: MessageCreate, current_user: User = Depends(get_current_user)):
+    """Send a message to another user"""
+    db = await get_db()
+    
+    # Verify recipient exists
+    cursor = await db.execute("SELECT id FROM users WHERE id = ?", (message_data.recipient_id,))
+    recipient = await cursor.fetchone()
+    
+    if not recipient:
+        await db.close()
+        raise HTTPException(status_code=404, detail="Recipient not found")
+    
+    # Generate conversation_id (sorted IDs for consistency)
+    ids = sorted([current_user.id, message_data.recipient_id])
+    conversation_id = f"{ids[0]}_{ids[1]}"
+    
+    # Create message
+    message_id = str(uuid.uuid4())
+    await db.execute("""
+        INSERT INTO messages (
+            id, conversation_id, sender_id, recipient_id, message, timestamp, is_read
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    """, (
+        message_id,
+        conversation_id,
+        current_user.id,
+        message_data.recipient_id,
+        message_data.message,
+        datetime.utcnow().isoformat(),
+        0
+    ))
+    
+    await db.commit()
+    await db.close()
+    
+    return {
+        "message": "Message sent successfully",
+        "message_id": message_id,
+        "conversation_id": conversation_id
+    }
+
+@api_router.get("/conversations")
+async def get_conversations(current_user: User = Depends(get_current_user)):
+    """Get all conversations for current user"""
+    db = await get_db()
+    
+    cursor = await db.execute("""
+        SELECT DISTINCT conversation_id, sender_id, recipient_id, MAX(timestamp) as last_message_time
+        FROM messages
+        WHERE sender_id = ? OR recipient_id = ?
+        GROUP BY conversation_id
+        ORDER BY last_message_time DESC
+    """, (current_user.id, current_user.id))
+    
+    rows = await cursor.fetchall()
+    
+    conversations = []
+    for row in rows:
+        conv_id = row[0]
+        other_user_id = row[2] if row[1] == current_user.id else row[1]
+        
+        # Get other user info
+        user_cursor = await db.execute("SELECT name, business_name FROM users WHERE id = ?", (other_user_id,))
+        user_info = await user_cursor.fetchone()
+        
+        # Count unread messages
+        unread_cursor = await db.execute("""
+            SELECT COUNT(*) FROM messages 
+            WHERE conversation_id = ? AND recipient_id = ? AND is_read = 0
+        """, (conv_id, current_user.id))
+        unread_count = unread_cursor.fetchone()[0]
+        
+        conversations.append({
+            "conversation_id": conv_id,
+            "other_user_id": other_user_id,
+            "other_user_name": user_info[1] if user_info[1] else user_info[0],
+            "last_message_time": row[3],
+            "unread_count": unread_count
+        })
+    
+    await db.close()
+    return conversations
+
+@api_router.get("/messages/{conversation_id}")
+async def get_conversation_messages(conversation_id: str, current_user: User = Depends(get_current_user)):
+    """Get all messages in a conversation"""
+    db = await get_db()
+    
+    # Mark messages as read
+    await db.execute("""
+        UPDATE messages SET is_read = 1 
+        WHERE conversation_id = ? AND recipient_id = ?
+    """, (conversation_id, current_user.id))
+    await db.commit()
+    
+    # Get messages
+    cursor = await db.execute("""
+        SELECT id, sender_id, recipient_id, message, timestamp, is_read
+        FROM messages
+        WHERE conversation_id = ?
+        ORDER BY timestamp ASC
+    """, (conversation_id,))
+    
+    rows = await cursor.fetchall()
+    await db.close()
+    
+    messages = []
+    for row in rows:
+        messages.append({
+            "id": row[0],
+            "sender_id": row[1],
+            "recipient_id": row[2],
+            "message": row[3],
+            "timestamp": row[4],
+            "is_read": row[5]
+        })
+    
+    return messages
+
+@api_router.get("/notifications/count")
+async def get_notification_counts(current_user: User = Depends(get_current_user)):
+    """Get unread message and order counts"""
+    db = await get_db()
+    
+    # Count unread messages
+    cursor = await db.execute("""
+        SELECT COUNT(*) FROM messages WHERE recipient_id = ? AND is_read = 0
+    """, (current_user.id,))
+    unread_messages = cursor.fetchone()[0]
+    
+    # Count pending orders (for providers)
+    if current_user.user_type == "provider":
+        cursor = await db.execute("""
+            SELECT COUNT(*) FROM orders WHERE provider_id = ? AND status = 'pending'
+        """, (current_user.id,))
+        pending_orders = cursor.fetchone()[0]
+    else:
+        pending_orders = 0
+    
+    await db.close()
+    
+    return {
+        "unread_messages": unread_messages,
+        "pending_orders": pending_orders,
+        "total": unread_messages + pending_orders
+    }
+
 # ====== AI CHAT ENDPOINTS ======
 
 class AIChatMessage(BaseModel):
