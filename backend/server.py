@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 import os
 import logging
+import sys
 from pathlib import Path
 from pydantic import BaseModel, Field, EmailStr
 from typing import List, Optional, Dict, Any
@@ -14,6 +15,8 @@ from passlib.context import CryptContext
 import hashlib
 import aiosqlite
 import json
+
+print("DOORD SERVER LOADING - VERSION 2", file=sys.stderr, flush=True)
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
