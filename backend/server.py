@@ -823,9 +823,10 @@ async def create_message_thread(thread_data: ThreadCreate, current_user: User = 
 @api_router.get("/messages/threads")
 async def get_message_threads(current_user: User = Depends(get_current_user)):
     """Get all message threads for current user (alias for conversations)"""
+    import sys
     db = await get_db()
     
-    print(f"DEBUG: Getting message threads for user: {current_user.id}")
+    print(f"DEBUG: Getting message threads for user: {current_user.id}", file=sys.stderr, flush=True)
     
     cursor = await db.execute("""
         SELECT DISTINCT conversation_id, sender_id, recipient_id, message, MAX(timestamp) as last_message_time
@@ -837,7 +838,7 @@ async def get_message_threads(current_user: User = Depends(get_current_user)):
     
     rows = await cursor.fetchall()
     
-    print(f"DEBUG: Found {len(rows)} threads for user {current_user.id}")
+    print(f"DEBUG: Found {len(rows)} threads for user {current_user.id}", file=sys.stderr, flush=True)
     
     threads = []
     for row in rows:
