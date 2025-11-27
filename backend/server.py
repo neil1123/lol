@@ -75,17 +75,11 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 24 * 60  # 24 hours
 # Create the main app
 app = FastAPI(title="Doord API (MongoDB)", description="Home Services Marketplace API - MongoDB Database")
 
-# Startup event to create indexes
-@app.on_event("startup")
-async def startup():
+# Background task to create indexes (non-blocking)
+async def create_indexes():
+    """Create database indexes in background - non-blocking"""
     try:
-        print("Starting database connection check...", file=sys.stderr, flush=True)
-        # Test connection
-        await db.command('ping')
-        print(f"✅ MongoDB connected successfully to database: {db.name}", file=sys.stderr, flush=True)
-        
-        # Create indexes for better performance
-        print("Creating indexes...", file=sys.stderr, flush=True)
+        print("Creating indexes in background...", file=sys.stderr, flush=True)
         await users_collection.create_index("email", unique=True)
         await users_collection.create_index("user_type")
         await users_collection.create_index("id", unique=True)
@@ -98,12 +92,37 @@ async def startup():
         await appointments_collection.create_index("provider_id")
         await ai_chats_collection.create_index("session_id")
         print("✅ All indexes created successfully", file=sys.stderr, flush=True)
-        logging.info("✅ MongoDB connected and indexes created")
+    except Exception as e:
+        print(f"⚠️ Index creation warning (non-fatal): {e}", file=sys.stderr, flush=True)
+
+# Startup event - lightweight and fast
+@app.on_event("startup")
+async def startup():
+    import asyncio
+    try:
+        print("Starting application...", file=sys.stderr, flush=True)
+        print(f"Database name: {db.name}", file=sys.stderr, flush=True)
+        
+        # Quick connection test with 5 second timeout
+        try:
+            await asyncio.wait_for(db.command('ping'), timeout=5.0)
+            print("✅ MongoDB connection verified", file=sys.stderr, flush=True)
+        except asyncio.TimeoutError:
+            print("⚠️ MongoDB ping timed out, but continuing startup...", file=sys.stderr, flush=True)
+        except Exception as e:
+            print(f"⚠️ MongoDB ping failed: {e}, but continuing startup...", file=sys.stderr, flush=True)
+        
+        # Schedule index creation as background task (non-blocking)
+        asyncio.create_task(create_indexes())
+        
+        print("✅ Application startup complete", file=sys.stderr, flush=True)
+        logging.info("✅ Application started successfully")
     except Exception as e:
         print(f"❌ STARTUP ERROR: {e}", file=sys.stderr, flush=True)
         import traceback
         traceback.print_exc()
-        raise
+        # Don't raise - let the app start anyway
+        print("⚠️ Continuing despite startup error...", file=sys.stderr, flush=True)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
