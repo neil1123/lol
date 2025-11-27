@@ -12,7 +12,7 @@ import sys
 import uuid
 
 # Load environment variables
-BACKEND_URL = "https://pro-doord.preview.emergentagent.com/api"
+BACKEND_URL = "https://doord-verify.preview.emergentagent.com/api"
 
 # Test data from review request
 HOMEOWNER_EMAIL = "homeowner1@example.com"

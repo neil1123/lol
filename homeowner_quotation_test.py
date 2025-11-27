@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Load environment variables
-BACKEND_URL = "https://pro-doord.preview.emergentagent.com/api"
+BACKEND_URL = "https://doord-verify.preview.emergentagent.com/api"
 
 # Global variables to store test data
 homeowner_token = None
