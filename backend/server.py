@@ -30,7 +30,7 @@ if not MONGO_URL:
     print("ERROR: MONGO_URL environment variable is required", file=sys.stderr, flush=True)
     raise ValueError("MONGO_URL environment variable is required")
 
-print(f"Initializing MongoDB connection...", file=sys.stderr, flush=True)
+print("Initializing MongoDB connection...", file=sys.stderr, flush=True)
 
 # Parse database name from connection string or use environment variable
 DB_NAME = os.environ.get('DB_NAME', 'doord')
