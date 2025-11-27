@@ -866,6 +866,136 @@ async def get_message_threads(current_user: User = Depends(get_current_user)):
     await db.close()
     return threads
 
+# ====== APPOINTMENTS API ======
+
+class AppointmentCreate(BaseModel):
+    customer_name: str
+    phone_number: Optional[str] = None
+    service_type: str
+    services: Optional[List[str]] = []
+    date: str
+    time: str
+    address: Optional[str] = None
+    notes: Optional[str] = None
+    source: Optional[str] = "manual"
+    order_id: Optional[str] = None
+
+@api_router.post("/appointments")
+async def create_appointment(appointment_data: AppointmentCreate, current_user: User = Depends(get_current_user)):
+    """Create a new appointment (providers only)"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can create appointments")
+    
+    db = await get_db()
+    
+    appointment_id = str(uuid.uuid4())
+    services_json = json.dumps(appointment_data.services) if appointment_data.services else None
+    
+    await db.execute("""
+        INSERT INTO appointments (
+            id, provider_id, customer_name, phone_number, service_type, services,
+            date, time, address, notes, source, order_id, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        appointment_id,
+        current_user.id,
+        appointment_data.customer_name,
+        appointment_data.phone_number,
+        appointment_data.service_type,
+        services_json,
+        appointment_data.date,
+        appointment_data.time,
+        appointment_data.address,
+        appointment_data.notes,
+        appointment_data.source,
+        appointment_data.order_id,
+        datetime.utcnow().isoformat()
+    ))
+    
+    await db.commit()
+    await db.close()
+    
+    return {
+        "id": appointment_id,
+        "message": "Appointment created successfully",
+        **appointment_data.dict()
+    }
+
+@api_router.get("/appointments")
+async def get_appointments(current_user: User = Depends(get_current_user)):
+    """Get all appointments for current provider"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can access appointments")
+    
+    db = await get_db()
+    
+    cursor = await db.execute("""
+        SELECT * FROM appointments 
+        WHERE provider_id = ?
+        ORDER BY date ASC, time ASC
+    """, (current_user.id,))
+    
+    rows = await cursor.fetchall()
+    await db.close()
+    
+    appointments = []
+    for row in rows:
+        apt = dict(row)
+        if apt.get('services'):
+            apt['services'] = json.loads(apt['services']) if isinstance(apt['services'], str) else apt['services']
+        appointments.append(apt)
+    
+    return appointments
+
+@api_router.put("/appointments/{appointment_id}")
+async def update_appointment(
+    appointment_id: str,
+    update_data: Dict[str, Any],
+    current_user: User = Depends(get_current_user)
+):
+    """Update an appointment"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can update appointments")
+    
+    db = await get_db()
+    
+    # Verify appointment exists and belongs to provider
+    cursor = await db.execute("SELECT provider_id FROM appointments WHERE id = ?", (appointment_id,))
+    appointment = await cursor.fetchone()
+    
+    if not appointment:
+        await db.close()
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    
+    if appointment[0] != current_user.id:
+        await db.close()
+        raise HTTPException(status_code=403, detail="Not authorized to update this appointment")
+    
+    # Build update query
+    allowed_fields = ['customer_name', 'phone_number', 'service_type', 'services', 'date', 'time', 'address', 'notes']
+    update_fields = []
+    update_values = []
+    
+    for field in allowed_fields:
+        if field in update_data:
+            update_fields.append(f"{field} = ?")
+            if field == 'services':
+                update_values.append(json.dumps(update_data[field]) if update_data[field] else None)
+            else:
+                update_values.append(update_data[field])
+    
+    if not update_fields:
+        await db.close()
+        return {"message": "No fields to update"}
+    
+    update_values.append(appointment_id)
+    
+    await db.execute(f"UPDATE appointments SET {', '.join(update_fields)} WHERE id = ?", tuple(update_values))
+    await db.commit()
+    await db.close()
+    
+    return {"message": "Appointment updated successfully"}
+
 @api_router.get("/notifications/count")
 async def get_notification_counts(current_user: User = Depends(get_current_user)):
     """Get unread message and order counts"""
