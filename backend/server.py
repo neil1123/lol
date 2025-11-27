@@ -281,6 +281,30 @@ async def get_providers():
     
     return providers
 
+@api_router.get("/providers/{provider_id}")
+async def get_provider_by_id(provider_id: str):
+    """Get a single provider by ID"""
+    db = await get_db()
+    cursor = await db.execute("SELECT * FROM users WHERE id = ? AND user_type = 'provider'", (provider_id,))
+    row = await cursor.fetchone()
+    await db.close()
+    
+    if not row:
+        raise HTTPException(status_code=404, detail="Provider not found")
+    
+    user_data = dict(row)
+    # Remove password hash
+    if "password_hash" in user_data:
+        del user_data["password_hash"]
+    
+    # Parse JSON fields
+    if user_data.get('services'):
+        user_data['services'] = json.loads(user_data['services']) if isinstance(user_data['services'], str) else user_data['services']
+    if user_data.get('specialties'):
+        user_data['specialties'] = json.loads(user_data['specialties']) if isinstance(user_data['specialties'], str) else user_data['specialties']
+    
+    return user_data
+
 @api_router.put("/providers/profile")
 async def update_provider_profile(
     profile_data: Dict[str, Any],
