@@ -825,7 +825,7 @@ async def get_message_threads(current_user: User = Depends(get_current_user)):
     """Get all message threads for current user (alias for conversations)"""
     db = await get_db()
     
-    logging.info(f"Getting message threads for user: {current_user.id}")
+    print(f"DEBUG: Getting message threads for user: {current_user.id}")
     
     cursor = await db.execute("""
         SELECT DISTINCT conversation_id, sender_id, recipient_id, message, MAX(timestamp) as last_message_time
@@ -837,7 +837,7 @@ async def get_message_threads(current_user: User = Depends(get_current_user)):
     
     rows = await cursor.fetchall()
     
-    logging.info(f"Found {len(rows)} threads")
+    print(f"DEBUG: Found {len(rows)} threads for user {current_user.id}")
     
     threads = []
     for row in rows:
