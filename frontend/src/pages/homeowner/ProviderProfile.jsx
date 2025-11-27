@@ -487,9 +487,7 @@ const ProviderProfile = () => {
                 <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full hidden sm:inline">1 hr</span>
               </Button>
               <p className="text-center text-sm text-gray-600">
-                {provider.pricingPackages && provider.pricingPackages.length > 0 
-                  ? `Starts from $${Math.min(...provider.pricingPackages.map(pkg => pkg.price))}` 
-                  : provider.responseTime || 'Contact for pricing'}
+                {provider.price_range || provider.priceRange || 'Pricing available upon request'}
               </p>
             </div>
           </div>
