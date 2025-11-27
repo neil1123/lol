@@ -292,12 +292,19 @@ async def get_services():
 
 @api_router.get("/orders")
 async def get_orders(current_user: User = Depends(get_current_user)):
-    user_orders = []
-    for order in orders_storage.values():
-        if (order.get("homeowner_id") == current_user.id or 
-            order.get("provider_id") == current_user.id):
-            user_orders.append(order)
-    return user_orders
+    db = await get_db()
+    
+    # Get orders where user is either homeowner or provider
+    cursor = await db.execute("""
+        SELECT * FROM orders 
+        WHERE homeowner_id = ? OR provider_id = ?
+    """, (current_user.id, current_user.id))
+    
+    rows = await cursor.fetchall()
+    await db.close()
+    
+    orders = [dict(row) for row in rows]
+    return orders
 
 # ====== AI CHAT ENDPOINTS ======
 
