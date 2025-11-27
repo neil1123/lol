@@ -55,6 +55,7 @@ def init_database():
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_conversation ON messages(conversation_id)')
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_sender ON messages(sender_id)')
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_recipient ON messages(recipient_id)')
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_user_type ON users(user_type)')  # Performance optimization
     
     # Orders table
     cursor.execute('''
