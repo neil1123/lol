@@ -27,16 +27,35 @@ security = HTTPBearer()
 # MongoDB Configuration
 MONGO_URL = os.environ.get('MONGO_URL')
 if not MONGO_URL:
+    print("ERROR: MONGO_URL environment variable is required", file=sys.stderr, flush=True)
     raise ValueError("MONGO_URL environment variable is required")
 
-# Extract database name from URL or use default
-client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_URL)
+print(f"Initializing MongoDB connection...", file=sys.stderr, flush=True)
+
+# Parse database name from connection string or use environment variable
+DB_NAME = os.environ.get('DB_NAME', 'doord')
+
+# Create the MongoDB client
+try:
+    client = motor.motor_asyncio.AsyncIOMotorClient(
+        MONGO_URL,
+        serverSelectionTimeoutMS=10000,  # 10 second timeout for server selection
+        connectTimeoutMS=10000,  # 10 second connection timeout
+    )
+    print(f"MongoDB client created successfully", file=sys.stderr, flush=True)
+except Exception as e:
+    print(f"ERROR creating MongoDB client: {e}", file=sys.stderr, flush=True)
+    raise
+
+# Try to get default database from connection string, fall back to DB_NAME env var
 try:
     db = client.get_default_database()
-    print(f"Using default database from connection string", file=sys.stderr, flush=True)
+    print(f"Using default database from connection string: {db.name}", file=sys.stderr, flush=True)
 except Exception as e:
-    print(f"No default database in connection string, using 'doord': {e}", file=sys.stderr, flush=True)
-    db = client.doord
+    print(f"No default database in connection string, using '{DB_NAME}': {e}", file=sys.stderr, flush=True)
+    db = client[DB_NAME]
+
+print(f"Database initialized: {db.name}", file=sys.stderr, flush=True)
 
 # Collections
 users_collection = db.users
@@ -44,6 +63,7 @@ orders_collection = db.orders
 messages_collection = db.messages
 appointments_collection = db.appointments
 ai_chats_collection = db.ai_chats
+print(f"Collections initialized", file=sys.stderr, flush=True)
 
 # JWT settings
 SECRET_KEY = os.environ.get('SECRET_KEY')
