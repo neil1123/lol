@@ -12,11 +12,10 @@ import uuid
 from datetime import datetime, timedelta
 import jwt
 from passlib.context import CryptContext
-import hashlib
-import aiosqlite
-import json
+import motor.motor_asyncio
+from bson import ObjectId
 
-print("DOORD SERVER LOADING - VERSION 2", file=sys.stderr, flush=True)
+print("DOORD SERVER LOADING - MongoDB Version", file=sys.stderr, flush=True)
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -25,41 +24,58 @@ load_dotenv(ROOT_DIR / '.env')
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
 
-# SQLite Database Configuration
-DB_PATH = os.getenv('DB_PATH', '/app/backend/doord.db')
+# MongoDB Configuration
+MONGO_URL = os.environ.get('MONGO_URL')
+if not MONGO_URL:
+    raise ValueError("MONGO_URL environment variable is required")
 
-# Helper function to get database connection
-async def get_db():
-    db = await aiosqlite.connect(DB_PATH)
-    db.row_factory = aiosqlite.Row
-    return db
+client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_URL)
+db = client.get_default_database()
+
+# Collections
+users_collection = db.users
+orders_collection = db.orders
+messages_collection = db.messages
+appointments_collection = db.appointments
+ai_chats_collection = db.ai_chats
 
 # JWT settings
-SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-dev-key-only-not-for-production')
+SECRET_KEY = os.environ.get('SECRET_KEY')
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY environment variable is required")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 24 * 60  # 24 hours
 
-# Create the main app without a prefix
-app = FastAPI(title="Doord API (SQLite)", description="Home Services Marketplace API - SQLite Database")
+# Create the main app
+app = FastAPI(title="Doord API (MongoDB)", description="Home Services Marketplace API - MongoDB Database")
 
-# Startup event to initialize database
+# Startup event to create indexes
 @app.on_event("startup")
 async def startup():
-    # Run database initialization
-    import subprocess
-    subprocess.run(["python", "/app/backend/init_db.py"], check=True)
-    logging.info(f"✅ SQLite database ready at {DB_PATH}")
+    # Create indexes for better performance
+    await users_collection.create_index("email", unique=True)
+    await users_collection.create_index("user_type")
+    await users_collection.create_index("id", unique=True)
+    await orders_collection.create_index("homeowner_id")
+    await orders_collection.create_index("provider_id")
+    await orders_collection.create_index("id", unique=True)
+    await messages_collection.create_index("conversation_id")
+    await messages_collection.create_index("sender_id")
+    await messages_collection.create_index("recipient_id")
+    await appointments_collection.create_index("provider_id")
+    await ai_chats_collection.create_index("session_id")
+    logging.info(f"✅ MongoDB connected and indexes created")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
-# ====== SIMPLE MODELS (NO DATABASE) ======
+# ====== PYDANTIC MODELS ======
 
 class User(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     email: EmailStr
     password_hash: str
-    user_type: str  # "provider", "homeowner", "property_manager", or "tenant"
+    user_type: str
     name: str
     phone: Optional[str] = None
     address: Optional[str] = None
@@ -80,7 +96,7 @@ class User(BaseModel):
     pm_code: Optional[str] = None
     
     class Config:
-        extra = 'ignore'  # Ignore any extra fields from DB
+        extra = 'ignore'
 
 class UserCreate(BaseModel):
     email: EmailStr
@@ -102,438 +118,12 @@ class UserLogin(BaseModel):
 
 class Token(BaseModel):
     access_token: str
-    token_type: str
+    token_type: str = "bearer"
     user: Dict[str, Any]
 
-# ====== HELPER FUNCTIONS ======
-
-def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
-
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
-
-async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    try:
-        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: str = payload.get("sub")
-        if user_id is None:
-            raise HTTPException(status_code=401, detail="Invalid authentication credentials")
-    except jwt.PyJWTError:
-        raise HTTPException(status_code=401, detail="Invalid authentication credentials")
-    
-    # Get user from SQLite database
-    db = await get_db()
-    cursor = await db.execute("SELECT * FROM users WHERE id = ?", (user_id,))
-    row = await cursor.fetchone()
-    await db.close()
-    
-    if row is None:
-        raise HTTPException(status_code=401, detail="User not found")
-    
-    # Convert row to dict
-    user_dict = dict(row)
-    # Parse JSON fields
-    if user_dict.get('services'):
-        user_dict['services'] = json.loads(user_dict['services']) if isinstance(user_dict['services'], str) else user_dict['services']
-    if user_dict.get('specialties'):
-        user_dict['specialties'] = json.loads(user_dict['specialties']) if isinstance(user_dict['specialties'], str) else user_dict['specialties']
-    
-    return User(**user_dict)
-
-# ====== API ENDPOINTS ======
-
-@api_router.get("/")
-async def root():
-    db = await get_db()
-    cursor = await db.execute("SELECT COUNT(*) as count FROM users")
-    row = await cursor.fetchone()
-    user_count = row[0] if row else 0
-    await db.close()
-    
-    return {
-        "message": "Doord API (SQLite) - Running", 
-        "status": "active",
-        "database": f"SQLite - {user_count} users registered",
-        "database_path": DB_PATH
-    }
-
-@api_router.get("/debug/threads/{user_id}")
-async def debug_threads(user_id: str):
-    """Debug endpoint to test thread query"""
-    db = await get_db()
-    
-    cursor = await db.execute("""
-        SELECT DISTINCT conversation_id, sender_id, recipient_id, message, MAX(timestamp) as last_message_time
-        FROM messages
-        WHERE sender_id = ? OR recipient_id = ?
-        GROUP BY conversation_id
-        ORDER BY last_message_time DESC
-    """, (user_id, user_id))
-    
-    rows = await cursor.fetchall()
-    await db.close()
-    
-    return {
-        "user_id": user_id,
-        "thread_count": len(rows),
-        "threads": [dict(row) for row in rows]
-    }
-
-@api_router.get("/debug/current-user")
-async def debug_current_user(current_user: User = Depends(get_current_user)):
-    """Debug endpoint to check current user"""
-    return {
-        "user_id": current_user.id,
-        "user_email": current_user.email,
-        "user_name": current_user.name,
-        "user_type": current_user.user_type
-    }
-
-@api_router.post("/auth/register", response_model=Token)
-async def register(user_data: UserCreate):
-    db = await get_db()
-    
-    # Check if user already exists
-    cursor = await db.execute("SELECT id FROM users WHERE email = ?", (user_data.email,))
-    existing = await cursor.fetchone()
-    
-    if existing:
-        await db.close()
-        raise HTTPException(status_code=400, detail="Email already registered")
-    
-    # Hash password
-    hashed_password = hash_password(user_data.password)
-    
-    # Create user ID
-    user_id = str(uuid.uuid4())
-    
-    # Prepare user data
-    user_dict = user_data.dict()
-    del user_dict["password"]
-    
-    # Handle services and other array fields as JSON
-    services_json = json.dumps(user_dict.get('services', [])) if user_dict.get('services') else None
-    specialties_json = json.dumps(user_dict.get('specialties', [])) if user_dict.get('specialties') else None
-    
-    # Insert user
-    await db.execute("""
-        INSERT INTO users (
-            id, email, password_hash, user_type, name, phone, address,
-            business_name, services, description, location, specialties, created_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        user_id,
-        user_data.email,
-        hashed_password,
-        user_data.user_type,
-        user_data.name,
-        user_dict.get('phone'),
-        user_dict.get('address'),
-        user_dict.get('business_name'),
-        services_json,
-        user_dict.get('description'),
-        user_dict.get('location'),
-        specialties_json,
-        datetime.utcnow().isoformat()
-    ))
-    
-    await db.commit()
-    await db.close()
-    
-    # Create access token
-    access_token = create_access_token(data={"sub": user_id})
-    
-    # Prepare user response
-    user_response = {
-        "id": user_id,
-        "email": user_data.email,
-        "user_type": user_data.user_type,
-        "name": user_data.name,
-        "phone": user_dict.get('phone'),
-        "address": user_dict.get('address'),
-        "business_name": user_dict.get('business_name'),
-        "services": user_dict.get('services', []),
-        "created_at": datetime.utcnow().isoformat()
-    }
-    
-    return Token(access_token=access_token, token_type="bearer", user=user_response)
-
-@api_router.post("/auth/login", response_model=Token)
-async def login(user_credentials: UserLogin):
-    db = await get_db()
-    
-    # Find user by email
-    cursor = await db.execute("SELECT * FROM users WHERE email = ?", (user_credentials.email,))
-    row = await cursor.fetchone()
-    
-    if not row:
-        await db.close()
-        raise HTTPException(status_code=401, detail="Incorrect email or password")
-    
-    user = dict(row)
-    
-    # Verify password
-    if not verify_password(user_credentials.password, user["password_hash"]):
-        await db.close()
-        raise HTTPException(status_code=401, detail="Incorrect email or password")
-    
-    await db.close()
-    
-    # Parse JSON fields
-    if user.get('services'):
-        user['services'] = json.loads(user['services']) if isinstance(user['services'], str) else user['services']
-    if user.get('specialties'):
-        user['specialties'] = json.loads(user['specialties']) if isinstance(user['specialties'], str) else user['specialties']
-    
-    # Create access token
-    access_token = create_access_token(data={"sub": user["id"]})
-    
-    # Return user data without password
-    user_data_return = {k: v for k, v in user.items() if k != "password_hash"}
-    
-    return Token(access_token=access_token, token_type="bearer", user=user_data_return)
-
-@api_router.get("/users/me")
-async def get_current_user_info(current_user: User = Depends(get_current_user)):
-    user_data = current_user.dict()
-    del user_data["password_hash"]
-    return user_data
-
-@api_router.get("/me")
-async def get_me(current_user: User = Depends(get_current_user)):
-    """Get current user profile - alias for /users/me"""
-    db = await get_db()
-    cursor = await db.execute("SELECT * FROM users WHERE id = ?", (current_user.id,))
-    row = await cursor.fetchone()
-    await db.close()
-    
-    if not row:
-        raise HTTPException(status_code=404, detail="User not found")
-    
-    user_data = dict(row)
-    # Remove password hash
-    if "password_hash" in user_data:
-        del user_data["password_hash"]
-    
-    # Parse JSON fields
-    if user_data.get('services'):
-        user_data['services'] = json.loads(user_data['services']) if isinstance(user_data['services'], str) else user_data['services']
-    if user_data.get('specialties'):
-        user_data['specialties'] = json.loads(user_data['specialties']) if isinstance(user_data['specialties'], str) else user_data['specialties']
-    
-    return user_data
-
-@api_router.get("/auth/me")
-async def get_auth_me(current_user: User = Depends(get_current_user)):
-    """Get current user profile - alias for compatibility"""
-    db = await get_db()
-    cursor = await db.execute("SELECT * FROM users WHERE id = ?", (current_user.id,))
-    row = await cursor.fetchone()
-    await db.close()
-    
-    if not row:
-        raise HTTPException(status_code=404, detail="User not found")
-    
-    user_data = dict(row)
-    # Remove password hash
-    if "password_hash" in user_data:
-        del user_data["password_hash"]
-    
-    # Parse JSON fields
-    if user_data.get('services'):
-        user_data['services'] = json.loads(user_data['services']) if isinstance(user_data['services'], str) else user_data['services']
-    if user_data.get('specialties'):
-        user_data['specialties'] = json.loads(user_data['specialties']) if isinstance(user_data['specialties'], str) else user_data['specialties']
-    
-    return user_data
-
-@api_router.get("/users/{user_id}")
-async def get_user_by_id(user_id: str):
-    """Get a user by ID (public info only)"""
-    db = await get_db()
-    cursor = await db.execute("SELECT * FROM users WHERE id = ?", (user_id,))
-    row = await cursor.fetchone()
-    await db.close()
-    
-    if not row:
-        raise HTTPException(status_code=404, detail="User not found")
-    
-    user_data = dict(row)
-    # Remove sensitive data
-    if "password_hash" in user_data:
-        del user_data["password_hash"]
-    
-    # Parse JSON fields
-    if user_data.get('services'):
-        user_data['services'] = json.loads(user_data['services']) if isinstance(user_data['services'], str) else user_data['services']
-    if user_data.get('specialties'):
-        user_data['specialties'] = json.loads(user_data['specialties']) if isinstance(user_data['specialties'], str) else user_data['specialties']
-    
-    return user_data
-
-@api_router.get("/providers")
-async def get_providers():
-    db = await get_db()
-    cursor = await db.execute("SELECT * FROM users WHERE user_type = 'provider'")
-    rows = await cursor.fetchall()
-    await db.close()
-    
-    providers = []
-    for row in rows:
-        user_data = dict(row)
-        # Remove password hash
-        if "password_hash" in user_data:
-            del user_data["password_hash"]
-        # Parse JSON fields
-        if user_data.get('services'):
-            user_data['services'] = json.loads(user_data['services']) if isinstance(user_data['services'], str) else user_data['services']
-        if user_data.get('specialties'):
-            user_data['specialties'] = json.loads(user_data['specialties']) if isinstance(user_data['specialties'], str) else user_data['specialties']
-        providers.append(user_data)
-    
-    return providers
-
-@api_router.get("/providers/{provider_id}")
-async def get_provider_by_id(provider_id: str):
-    """Get a single provider by ID"""
-    db = await get_db()
-    cursor = await db.execute("SELECT * FROM users WHERE id = ? AND user_type = 'provider'", (provider_id,))
-    row = await cursor.fetchone()
-    await db.close()
-    
-    if not row:
-        raise HTTPException(status_code=404, detail="Provider not found")
-    
-    user_data = dict(row)
-    # Remove password hash
-    if "password_hash" in user_data:
-        del user_data["password_hash"]
-    
-    # Parse JSON fields
-    if user_data.get('services'):
-        user_data['services'] = json.loads(user_data['services']) if isinstance(user_data['services'], str) else user_data['services']
-    if user_data.get('specialties'):
-        user_data['specialties'] = json.loads(user_data['specialties']) if isinstance(user_data['specialties'], str) else user_data['specialties']
-    
-    return user_data
-
-@api_router.put("/providers/profile")
-async def update_provider_profile(
-    profile_data: Dict[str, Any],
-    current_user: User = Depends(get_current_user)
-):
-    """Update provider profile"""
-    if current_user.user_type != "provider":
-        raise HTTPException(status_code=403, detail="Only providers can update provider profiles")
-    
-    db = await get_db()
-    
-    # Prepare update fields
-    update_fields = []
-    update_values = []
-    
-    allowed_fields = ['business_name', 'description', 'location', 'phone', 'address', 
-                     'services', 'specialties', 'price_range', 'year_established', 'response_time']
-    
-    for field in allowed_fields:
-        if field in profile_data:
-            update_fields.append(f"{field} = ?")
-            # Handle JSON fields
-            if field in ['services', 'specialties']:
-                update_values.append(json.dumps(profile_data[field]) if profile_data[field] else None)
-            else:
-                update_values.append(profile_data[field])
-    
-    if not update_fields:
-        await db.close()
-        return {"message": "No fields to update"}
-    
-    # Add updated_at timestamp
-    update_fields.append("updated_at = ?")
-    update_values.append(datetime.utcnow().isoformat())
-    
-    # Add user ID for WHERE clause
-    update_values.append(current_user.id)
-    
-    # Execute update
-    query = f"UPDATE users SET {', '.join(update_fields)} WHERE id = ?"
-    await db.execute(query, tuple(update_values))
-    await db.commit()
-    
-    # Fetch updated user
-    cursor = await db.execute("SELECT * FROM users WHERE id = ?", (current_user.id,))
-    row = await cursor.fetchone()
-    await db.close()
-    
-    if row:
-        user_data = dict(row)
-        if "password_hash" in user_data:
-            del user_data["password_hash"]
-        # Parse JSON fields
-        if user_data.get('services'):
-            user_data['services'] = json.loads(user_data['services']) if isinstance(user_data['services'], str) else user_data['services']
-        if user_data.get('specialties'):
-            user_data['specialties'] = json.loads(user_data['specialties']) if isinstance(user_data['specialties'], str) else user_data['specialties']
-        return {"message": "Profile updated successfully", "user": user_data}
-    
-    raise HTTPException(status_code=500, detail="Failed to fetch updated profile")
-
-@api_router.get("/services")
-async def get_services():
-    # Return static services list since no database
-    return [
-        "Home Cleaning", "Office Cleaning", "Deep Cleaning",
-        "Plumbing", "Emergency Plumbing", "Pipe Repair",
-        "Electrical", "Wiring", "Electrical Repair",
-        "HVAC", "Air Conditioning", "Heating",
-        "Landscaping", "Lawn Care", "Garden Maintenance",
-        "Handyman", "General Repairs", "Home Maintenance",
-        "Painting", "Interior Painting", "Exterior Painting",
-        "Roofing", "Roof Repair", "Gutter Cleaning",
-        "Window Cleaning", "Pressure Washing", "Car Detailing"
-    ]
-
-@api_router.get("/orders")
-async def get_orders(current_user: User = Depends(get_current_user)):
-    db = await get_db()
-    
-    # Get orders where user is either homeowner or provider
-    cursor = await db.execute("""
-        SELECT o.*, 
-               h.name as homeowner_name, h.email as homeowner_email, h.phone as homeowner_phone, h.address as homeowner_address,
-               p.name as provider_owner_name, p.business_name as provider_name, p.email as provider_email, p.phone as provider_phone
-        FROM orders o
-        LEFT JOIN users h ON o.homeowner_id = h.id
-        LEFT JOIN users p ON o.provider_id = p.id
-        WHERE o.homeowner_id = ? OR o.provider_id = ?
-        ORDER BY o.created_at DESC
-    """, (current_user.id, current_user.id))
-    
-    rows = await cursor.fetchall()
-    await db.close()
-    
-    orders = []
-    for row in rows:
-        order_dict = dict(row)
-        # Use business_name for provider if available
-        if order_dict.get('provider_name'):
-            order_dict['provider_name'] = order_dict['provider_name']
-        elif order_dict.get('provider_owner_name'):
-            order_dict['provider_name'] = order_dict['provider_owner_name']
-        orders.append(order_dict)
-    
-    return orders
+class MessageCreate(BaseModel):
+    recipient_id: str
+    message: str
 
 class OrderCreate(BaseModel):
     provider_id: str
@@ -547,47 +137,279 @@ class OrderCreate(BaseModel):
     property_size: Optional[str] = None
     additional_requirements: Optional[str] = None
 
+class ThreadCreate(BaseModel):
+    homeowner_id: Optional[str] = None
+    provider_id: str
+    homeowner_name: Optional[str] = None
+    provider_name: Optional[str] = None
+    order_type: Optional[str] = None
+    last_message: Optional[str] = None
+    last_message_time: Optional[str] = None
+
+class AppointmentCreate(BaseModel):
+    customer_name: str
+    phone_number: Optional[str] = None
+    service_type: str
+    services: Optional[List[str]] = []
+    date: str
+    time: str
+    address: Optional[str] = None
+    notes: Optional[str] = None
+    source: Optional[str] = "manual"
+    order_id: Optional[str] = None
+
+# ====== HELPER FUNCTIONS ======
+
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    try:
+        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            raise HTTPException(status_code=401, detail="Invalid authentication credentials")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Invalid authentication credentials")
+    
+    user_doc = await users_collection.find_one({"id": user_id}, {"_id": 0})
+    
+    if user_doc is None:
+        raise HTTPException(status_code=401, detail="User not found")
+    
+    return User(**user_doc)
+
+def user_to_response(user_doc: dict) -> dict:
+    """Convert user document to response format (remove password_hash and _id)"""
+    if user_doc is None:
+        return None
+    response = {k: v for k, v in user_doc.items() if k not in ['password_hash', '_id']}
+    return response
+
+# ====== API ENDPOINTS ======
+
+@api_router.get("/")
+async def root():
+    user_count = await users_collection.count_documents({})
+    return {
+        "message": "Doord API (MongoDB) - Running", 
+        "status": "active",
+        "database": f"MongoDB - {user_count} users registered"
+    }
+
+# ====== AUTH ENDPOINTS ======
+
+@api_router.post("/auth/register", response_model=Token)
+async def register(user_data: UserCreate):
+    # Check if user already exists
+    existing = await users_collection.find_one({"email": user_data.email})
+    if existing:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    # Hash password
+    password_hash = pwd_context.hash(user_data.password)
+    
+    # Create user document
+    user_id = str(uuid.uuid4())
+    user_doc = {
+        "id": user_id,
+        "email": user_data.email,
+        "password_hash": password_hash,
+        "user_type": user_data.user_type,
+        "name": user_data.name,
+        "phone": user_data.phone,
+        "address": user_data.address,
+        "business_name": user_data.business_name,
+        "services": user_data.services or [],
+        "description": user_data.description,
+        "location": user_data.location,
+        "specialties": user_data.specialties or [],
+        "rating": 5.0,
+        "reviews": 0,
+        "completed_jobs": 0,
+        "response_time": None,
+        "year_established": None,
+        "price_range": None,
+        "created_at": datetime.utcnow().isoformat(),
+        "updated_at": datetime.utcnow().isoformat(),
+        "is_active": True,
+        "pm_code": user_data.pm_code
+    }
+    
+    await users_collection.insert_one(user_doc)
+    
+    # Create access token
+    access_token = create_access_token(data={"sub": user_id})
+    
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": user_to_response(user_doc)
+    }
+
+@api_router.post("/auth/login", response_model=Token)
+async def login(user_data: UserLogin):
+    user_doc = await users_collection.find_one({"email": user_data.email})
+    
+    if not user_doc:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+    
+    if not pwd_context.verify(user_data.password, user_doc["password_hash"]):
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+    
+    access_token = create_access_token(data={"sub": user_doc["id"]})
+    
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": user_to_response(user_doc)
+    }
+
+# ====== USER PROFILE ENDPOINTS ======
+
+@api_router.get("/users/me")
+async def get_current_user_info(current_user: User = Depends(get_current_user)):
+    user_data = current_user.dict()
+    del user_data["password_hash"]
+    return user_data
+
+@api_router.get("/me")
+async def get_me(current_user: User = Depends(get_current_user)):
+    """Get current user profile"""
+    user_doc = await users_collection.find_one({"id": current_user.id}, {"_id": 0, "password_hash": 0})
+    if not user_doc:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user_doc
+
+@api_router.get("/auth/me")
+async def get_auth_me(current_user: User = Depends(get_current_user)):
+    """Get current user profile - alias"""
+    user_doc = await users_collection.find_one({"id": current_user.id}, {"_id": 0, "password_hash": 0})
+    if not user_doc:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user_doc
+
+@api_router.put("/users/me")
+async def update_user_profile(update_data: Dict[str, Any], current_user: User = Depends(get_current_user)):
+    """Update current user profile"""
+    allowed_fields = ['name', 'phone', 'address', 'business_name', 'services', 
+                      'description', 'location', 'specialties', 'price_range',
+                      'year_established', 'response_time']
+    
+    update_dict = {k: v for k, v in update_data.items() if k in allowed_fields}
+    update_dict["updated_at"] = datetime.utcnow().isoformat()
+    
+    if update_dict:
+        await users_collection.update_one(
+            {"id": current_user.id},
+            {"$set": update_dict}
+        )
+    
+    updated_user = await users_collection.find_one({"id": current_user.id}, {"_id": 0, "password_hash": 0})
+    return updated_user
+
+# ====== PROVIDERS ENDPOINTS ======
+
+@api_router.get("/providers")
+async def get_providers(service: Optional[str] = None, location: Optional[str] = None):
+    """Get all providers, optionally filtered by service or location"""
+    query = {"user_type": "provider", "is_active": True}
+    
+    if service:
+        query["services"] = {"$in": [service]}
+    if location:
+        query["location"] = {"$regex": location, "$options": "i"}
+    
+    cursor = users_collection.find(query, {"_id": 0, "password_hash": 0}).limit(100)
+    providers = await cursor.to_list(length=100)
+    return providers
+
+@api_router.get("/providers/{provider_id}")
+async def get_provider(provider_id: str):
+    """Get a specific provider by ID"""
+    provider = await users_collection.find_one(
+        {"id": provider_id, "user_type": "provider"},
+        {"_id": 0, "password_hash": 0}
+    )
+    if not provider:
+        raise HTTPException(status_code=404, detail="Provider not found")
+    return provider
+
+@api_router.get("/services")
+async def get_all_services():
+    """Get list of all available services"""
+    return [
+        "Home Cleaning", "Office Cleaning", "Deep Cleaning", "Window Cleaning",
+        "Plumbing", "Pipe Repair", "Drain Cleaning", "Water Heater Services",
+        "Electrical", "Wiring", "Panel Upgrades", "Lighting Installation",
+        "HVAC", "AC Repair", "Heating Services", "Duct Cleaning",
+        "Landscaping", "Lawn Care", "Garden Maintenance",
+        "Handyman", "General Repairs", "Home Maintenance",
+        "Painting", "Interior Painting", "Exterior Painting",
+        "Roofing", "Roof Repair", "Gutter Cleaning",
+        "Pressure Washing", "Car Detailing"
+    ]
+
+# ====== ORDERS ENDPOINTS ======
+
+@api_router.get("/orders")
+async def get_orders(current_user: User = Depends(get_current_user)):
+    """Get orders for current user"""
+    query = {"$or": [{"homeowner_id": current_user.id}, {"provider_id": current_user.id}]}
+    cursor = orders_collection.find(query, {"_id": 0}).sort("created_at", -1)
+    orders = await cursor.to_list(length=100)
+    
+    # Enrich with user details
+    for order in orders:
+        homeowner = await users_collection.find_one({"id": order.get("homeowner_id")}, {"_id": 0, "password_hash": 0})
+        provider = await users_collection.find_one({"id": order.get("provider_id")}, {"_id": 0, "password_hash": 0})
+        if homeowner:
+            order["homeowner_name"] = homeowner.get("name")
+            order["homeowner_email"] = homeowner.get("email")
+            order["homeowner_phone"] = homeowner.get("phone")
+            order["homeowner_address"] = homeowner.get("address")
+        if provider:
+            order["provider_name"] = provider.get("business_name") or provider.get("name")
+            order["provider_email"] = provider.get("email")
+            order["provider_phone"] = provider.get("phone")
+    
+    return orders
+
 @api_router.post("/orders")
 async def create_order(order_data: OrderCreate, current_user: User = Depends(get_current_user)):
     """Create a new order/quotation request"""
-    db = await get_db()
-    
     # Verify provider exists
-    cursor = await db.execute("SELECT id FROM users WHERE id = ? AND user_type = 'provider'", (order_data.provider_id,))
-    provider = await cursor.fetchone()
-    
+    provider = await users_collection.find_one({"id": order_data.provider_id, "user_type": "provider"})
     if not provider:
-        await db.close()
         raise HTTPException(status_code=404, detail="Provider not found")
     
-    # Create order
     order_id = str(uuid.uuid4())
-    await db.execute("""
-        INSERT INTO orders (
-            id, homeowner_id, provider_id, service, description, status, amount, 
-            preferred_date, preferred_time, urgency, budget, property_size, additional_requirements,
-            created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        order_id,
-        current_user.id,
-        order_data.provider_id,
-        order_data.service,
-        order_data.description,
-        'pending',
-        order_data.amount,
-        order_data.preferred_date,
-        order_data.preferred_time,
-        order_data.urgency,
-        order_data.budget,
-        order_data.property_size,
-        order_data.additional_requirements,
-        datetime.utcnow().isoformat(),
-        datetime.utcnow().isoformat()
-    ))
+    order_doc = {
+        "id": order_id,
+        "homeowner_id": current_user.id,
+        "provider_id": order_data.provider_id,
+        "service": order_data.service,
+        "description": order_data.description,
+        "status": "pending",
+        "amount": order_data.amount,
+        "preferred_date": order_data.preferred_date,
+        "preferred_time": order_data.preferred_time,
+        "urgency": order_data.urgency,
+        "budget": order_data.budget,
+        "property_size": order_data.property_size,
+        "additional_requirements": order_data.additional_requirements,
+        "quotation_amount": None,
+        "quotation_details": None,
+        "quotation_valid_until": None,
+        "created_at": datetime.utcnow().isoformat(),
+        "updated_at": datetime.utcnow().isoformat()
+    }
     
-    await db.commit()
-    await db.close()
+    await orders_collection.insert_one(order_doc)
     
     return {
         "message": "Quotation request sent successfully",
@@ -598,124 +420,112 @@ async def create_order(order_data: OrderCreate, current_user: User = Depends(get
 @api_router.post("/quotations")
 async def create_quotation(quotation_data: Dict[str, Any], current_user: User = Depends(get_current_user)):
     """Create a new quotation request (alias for orders)"""
-    db = await get_db()
-    
     provider_id = quotation_data.get('provider_id')
     if not provider_id:
         raise HTTPException(status_code=400, detail="provider_id is required")
     
-    # Verify provider exists
-    cursor = await db.execute("SELECT id FROM users WHERE id = ? AND user_type = 'provider'", (provider_id,))
-    provider = await cursor.fetchone()
-    
+    provider = await users_collection.find_one({"id": provider_id, "user_type": "provider"})
     if not provider:
-        await db.close()
         raise HTTPException(status_code=404, detail="Provider not found")
     
-    # Create order
     order_id = str(uuid.uuid4())
-    service_name = quotation_data.get('service_type', '') or ', '.join(quotation_data.get('services', []))
+    services = quotation_data.get('services', [])
+    service_str = ', '.join(services) if isinstance(services, list) else str(services)
     
-    await db.execute("""
-        INSERT INTO orders (
-            id, homeowner_id, provider_id, service, description, status, amount, created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        order_id,
-        current_user.id,
-        provider_id,
-        service_name,
-        quotation_data.get('description', ''),
-        'pending',
-        None,  # Amount will be filled by provider
-        datetime.utcnow().isoformat(),
-        datetime.utcnow().isoformat()
-    ))
+    order_doc = {
+        "id": order_id,
+        "homeowner_id": current_user.id,
+        "provider_id": provider_id,
+        "service": service_str,
+        "description": quotation_data.get('description'),
+        "status": "pending",
+        "amount": None,
+        "preferred_date": quotation_data.get('preferred_date'),
+        "preferred_time": quotation_data.get('preferred_time'),
+        "urgency": quotation_data.get('urgency'),
+        "budget": quotation_data.get('budget'),
+        "property_size": quotation_data.get('property_size'),
+        "additional_requirements": quotation_data.get('additional_requirements'),
+        "created_at": datetime.utcnow().isoformat(),
+        "updated_at": datetime.utcnow().isoformat()
+    }
     
-    await db.commit()
-    await db.close()
+    await orders_collection.insert_one(order_doc)
     
     return {
         "message": "Quotation request sent successfully",
         "order_id": order_id,
-        "status": "pending",
-        "id": order_id  # For compatibility
+        "status": "pending"
     }
 
-@api_router.put("/orders/{order_id}")
-async def update_order_status(
-    order_id: str,
-    status: str,
-    current_user: User = Depends(get_current_user)
-):
-    """Update order status (for providers)"""
-    db = await get_db()
-    
-    # Verify order exists and user is the provider
-    cursor = await db.execute("""
-        SELECT provider_id FROM orders WHERE id = ?
-    """, (order_id,))
-    order = await cursor.fetchone()
-    
+@api_router.put("/orders/{order_id}/status")
+async def update_order_status(order_id: str, status: str, current_user: User = Depends(get_current_user)):
+    """Update order status"""
+    order = await orders_collection.find_one({"id": order_id})
     if not order:
-        await db.close()
         raise HTTPException(status_code=404, detail="Order not found")
     
-    if order[0] != current_user.id:
-        await db.close()
-        raise HTTPException(status_code=403, detail="Not authorized to update this order")
+    if order["provider_id"] != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized")
     
-    # Update status
-    await db.execute("""
-        UPDATE orders SET status = ?, updated_at = ? WHERE id = ?
-    """, (status, datetime.utcnow().isoformat(), order_id))
-    
-    await db.commit()
-    await db.close()
+    await orders_collection.update_one(
+        {"id": order_id},
+        {"$set": {"status": status, "updated_at": datetime.utcnow().isoformat()}}
+    )
     
     return {"message": "Order status updated", "status": status}
 
-# ====== MESSAGES/CONVERSATIONS ======
+@api_router.put("/orders/{order_id}/quotation")
+async def update_order_quotation(
+    order_id: str, 
+    quotation_amount: float = Query(...),
+    quotation_details: Optional[str] = Query(None),
+    current_user: User = Depends(get_current_user)
+):
+    """Update order quotation details"""
+    order = await orders_collection.find_one({"id": order_id})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    if order["provider_id"] != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    update_data = {
+        "quotation_amount": quotation_amount,
+        "status": "quoted",
+        "updated_at": datetime.utcnow().isoformat()
+    }
+    if quotation_details:
+        update_data["quotation_details"] = quotation_details
+    
+    await orders_collection.update_one({"id": order_id}, {"$set": update_data})
+    
+    return {"message": "Quotation updated", "quotation_amount": quotation_amount}
 
-class MessageCreate(BaseModel):
-    recipient_id: str
-    message: str
+# ====== MESSAGES ENDPOINTS ======
 
 @api_router.post("/messages")
 async def send_message(message_data: MessageCreate, current_user: User = Depends(get_current_user)):
-    """Send a message to another user"""
-    db = await get_db()
-    
-    # Verify recipient exists
-    cursor = await db.execute("SELECT id FROM users WHERE id = ?", (message_data.recipient_id,))
-    recipient = await cursor.fetchone()
-    
+    """Send a message"""
+    recipient = await users_collection.find_one({"id": message_data.recipient_id})
     if not recipient:
-        await db.close()
         raise HTTPException(status_code=404, detail="Recipient not found")
     
-    # Generate conversation_id (sorted IDs for consistency)
     ids = sorted([current_user.id, message_data.recipient_id])
     conversation_id = f"{ids[0]}_{ids[1]}"
     
-    # Create message
     message_id = str(uuid.uuid4())
-    await db.execute("""
-        INSERT INTO messages (
-            id, conversation_id, sender_id, recipient_id, message, timestamp, is_read
-        ) VALUES (?, ?, ?, ?, ?, ?, ?)
-    """, (
-        message_id,
-        conversation_id,
-        current_user.id,
-        message_data.recipient_id,
-        message_data.message,
-        datetime.utcnow().isoformat(),
-        0
-    ))
+    message_doc = {
+        "id": message_id,
+        "conversation_id": conversation_id,
+        "sender_id": current_user.id,
+        "recipient_id": message_data.recipient_id,
+        "message": message_data.message,
+        "timestamp": datetime.utcnow().isoformat(),
+        "is_read": False
+    }
     
-    await db.commit()
-    await db.close()
+    await messages_collection.insert_one(message_doc)
     
     return {
         "message": "Message sent successfully",
@@ -723,68 +533,39 @@ async def send_message(message_data: MessageCreate, current_user: User = Depends
         "conversation_id": conversation_id
     }
 
-# ====== MESSAGE THREADS API (Frontend compatibility) - MUST BE BEFORE {conversation_id} ======
-
-class ThreadCreate(BaseModel):
-    homeowner_id: Optional[str] = None
-    provider_id: str
-    homeowner_name: Optional[str] = None
-    provider_name: Optional[str] = None
-    order_type: Optional[str] = None
-    last_message: Optional[str] = None
-    last_message_time: Optional[str] = None
-
 @api_router.post("/messages/threads")
 async def create_message_thread(thread_data: ThreadCreate, current_user: User = Depends(get_current_user)):
-    """Create a new message thread between homeowner and provider"""
-    db = await get_db()
-    
-    provider_id = thread_data.provider_id
-    
-    # Verify provider exists
-    cursor = await db.execute("SELECT id, name, business_name FROM users WHERE id = ? AND user_type = 'provider'", (provider_id,))
-    provider = await cursor.fetchone()
-    
+    """Create a new message thread"""
+    provider = await users_collection.find_one({"id": thread_data.provider_id, "user_type": "provider"})
     if not provider:
-        await db.close()
         raise HTTPException(status_code=404, detail="Provider not found")
     
-    # Generate conversation_id (sorted IDs for consistency)
-    ids = sorted([current_user.id, provider_id])
+    ids = sorted([current_user.id, thread_data.provider_id])
     conversation_id = f"{ids[0]}_{ids[1]}"
     
-    # Check if conversation already exists
-    cursor = await db.execute("SELECT id FROM messages WHERE conversation_id = ? LIMIT 1", (conversation_id,))
-    existing = await cursor.fetchone()
+    existing = await messages_collection.find_one({"conversation_id": conversation_id})
     
-    # Create initial message if no conversation exists
     if not existing:
         initial_message = thread_data.last_message or "New conversation started"
         message_id = str(uuid.uuid4())
-        await db.execute("""
-            INSERT INTO messages (
-                id, conversation_id, sender_id, recipient_id, message, timestamp, is_read
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
-        """, (
-            message_id,
-            conversation_id,
-            current_user.id,
-            provider_id,
-            initial_message,
-            datetime.utcnow().isoformat(),
-            0
-        ))
-        await db.commit()
+        message_doc = {
+            "id": message_id,
+            "conversation_id": conversation_id,
+            "sender_id": current_user.id,
+            "recipient_id": thread_data.provider_id,
+            "message": initial_message,
+            "timestamp": datetime.utcnow().isoformat(),
+            "is_read": False
+        }
+        await messages_collection.insert_one(message_doc)
     
-    provider_name = provider[2] if provider[2] else provider[1]
-    
-    await db.close()
+    provider_name = provider.get("business_name") or provider.get("name")
     
     return {
         "id": conversation_id,
         "conversation_id": conversation_id,
         "homeowner_id": current_user.id,
-        "provider_id": provider_id,
+        "provider_id": thread_data.provider_id,
         "provider_name": provider_name,
         "homeowner_name": current_user.name,
         "last_message": thread_data.last_message or "New conversation started",
@@ -796,46 +577,45 @@ async def get_message_threads(current_user: User = Depends(get_current_user)):
     """Get all message threads for current user"""
     user_id = current_user.id
     
-    db = await get_db()
+    pipeline = [
+        {"$match": {"$or": [{"sender_id": user_id}, {"recipient_id": user_id}]}},
+        {"$sort": {"timestamp": -1}},
+        {"$group": {
+            "_id": "$conversation_id",
+            "last_message": {"$first": "$message"},
+            "last_message_time": {"$first": "$timestamp"},
+            "sender_id": {"$first": "$sender_id"},
+            "recipient_id": {"$first": "$recipient_id"}
+        }}
+    ]
     
-    cursor = await db.execute("""
-        SELECT DISTINCT conversation_id, sender_id, recipient_id, message, MAX(timestamp) as last_message_time
-        FROM messages
-        WHERE sender_id = ? OR recipient_id = ?
-        GROUP BY conversation_id
-        ORDER BY last_message_time DESC
-    """, (user_id, user_id))
-    
-    rows = await cursor.fetchall()
+    cursor = messages_collection.aggregate(pipeline)
+    conversations = await cursor.to_list(length=100)
     
     threads = []
-    for row in rows:
-        conv_id = row[0]
-        sender = row[1]
-        recipient = row[2]
+    for conv in conversations:
+        conv_id = conv["_id"]
+        sender = conv["sender_id"]
+        recipient = conv["recipient_id"]
         other_user_id = recipient if sender == user_id else sender
         
-        # Get other user info
-        user_cursor = await db.execute("SELECT id, name, business_name, user_type FROM users WHERE id = ?", (other_user_id,))
-        user_info = await user_cursor.fetchone()
+        other_user = await users_collection.find_one({"id": other_user_id}, {"_id": 0, "password_hash": 0})
         
-        # Count unread messages
-        unread_cursor = await db.execute("""
-            SELECT COUNT(*) FROM messages 
-            WHERE conversation_id = ? AND recipient_id = ? AND is_read = 0
-        """, (conv_id, user_id))
-        unread_result = await unread_cursor.fetchone()
-        unread_count = unread_result[0] if unread_result else 0
+        unread_count = await messages_collection.count_documents({
+            "conversation_id": conv_id,
+            "recipient_id": user_id,
+            "is_read": False
+        })
         
-        if user_info:
-            other_user_name = user_info[2] if user_info[2] else user_info[1]
-            other_user_type = user_info[3]
+        if other_user:
+            other_user_name = other_user.get("business_name") or other_user.get("name")
+            other_user_type = other_user.get("user_type")
             
             thread = {
                 "id": conv_id,
                 "conversation_id": conv_id,
-                "last_message": row[3],
-                "last_message_time": row[4],
+                "last_message": conv["last_message"],
+                "last_message_time": conv["last_message_time"],
                 "unread_count": unread_count
             }
             
@@ -852,135 +632,56 @@ async def get_message_threads(current_user: User = Depends(get_current_user)):
             
             threads.append(thread)
     
-    await db.close()
     return threads
 
 @api_router.get("/conversations")
 async def get_conversations(current_user: User = Depends(get_current_user)):
     """Get all conversations for current user"""
-    db = await get_db()
-    
-    cursor = await db.execute("""
-        SELECT DISTINCT conversation_id, sender_id, recipient_id, MAX(timestamp) as last_message_time
-        FROM messages
-        WHERE sender_id = ? OR recipient_id = ?
-        GROUP BY conversation_id
-        ORDER BY last_message_time DESC
-    """, (current_user.id, current_user.id))
-    
-    rows = await cursor.fetchall()
-    
-    conversations = []
-    for row in rows:
-        conv_id = row[0]
-        other_user_id = row[2] if row[1] == current_user.id else row[1]
-        
-        # Get other user info
-        user_cursor = await db.execute("SELECT name, business_name FROM users WHERE id = ?", (other_user_id,))
-        user_info = await user_cursor.fetchone()
-        
-        # Count unread messages
-        unread_cursor = await db.execute("""
-            SELECT COUNT(*) FROM messages 
-            WHERE conversation_id = ? AND recipient_id = ? AND is_read = 0
-        """, (conv_id, current_user.id))
-        unread_count = unread_cursor.fetchone()[0]
-        
-        conversations.append({
-            "conversation_id": conv_id,
-            "other_user_id": other_user_id,
-            "other_user_name": user_info[1] if user_info[1] else user_info[0],
-            "last_message_time": row[3],
-            "unread_count": unread_count
-        })
-    
-    await db.close()
-    return conversations
+    return await get_message_threads(current_user)
 
 @api_router.get("/messages/{conversation_id}")
 async def get_conversation_messages(conversation_id: str, current_user: User = Depends(get_current_user)):
     """Get all messages in a conversation"""
-    db = await get_db()
-    
     # Mark messages as read
-    await db.execute("""
-        UPDATE messages SET is_read = 1 
-        WHERE conversation_id = ? AND recipient_id = ?
-    """, (conversation_id, current_user.id))
-    await db.commit()
+    await messages_collection.update_many(
+        {"conversation_id": conversation_id, "recipient_id": current_user.id},
+        {"$set": {"is_read": True}}
+    )
     
-    # Get messages
-    cursor = await db.execute("""
-        SELECT id, sender_id, recipient_id, message, timestamp, is_read
-        FROM messages
-        WHERE conversation_id = ?
-        ORDER BY timestamp ASC
-    """, (conversation_id,))
+    cursor = messages_collection.find(
+        {"conversation_id": conversation_id},
+        {"_id": 0}
+    ).sort("timestamp", 1)
     
-    rows = await cursor.fetchall()
-    await db.close()
-    
-    messages = []
-    for row in rows:
-        messages.append({
-            "id": row[0],
-            "sender_id": row[1],
-            "recipient_id": row[2],
-            "message": row[3],
-            "timestamp": row[4],
-            "is_read": row[5]
-        })
-    
+    messages = await cursor.to_list(length=500)
     return messages
 
-# ====== APPOINTMENTS API ======
-
-class AppointmentCreate(BaseModel):
-    customer_name: str
-    phone_number: Optional[str] = None
-    service_type: str
-    services: Optional[List[str]] = []
-    date: str
-    time: str
-    address: Optional[str] = None
-    notes: Optional[str] = None
-    source: Optional[str] = "manual"
-    order_id: Optional[str] = None
+# ====== APPOINTMENTS ENDPOINTS ======
 
 @api_router.post("/appointments")
 async def create_appointment(appointment_data: AppointmentCreate, current_user: User = Depends(get_current_user)):
-    """Create a new appointment (providers only)"""
+    """Create a new appointment"""
     if current_user.user_type != "provider":
         raise HTTPException(status_code=403, detail="Only providers can create appointments")
     
-    db = await get_db()
-    
     appointment_id = str(uuid.uuid4())
-    services_json = json.dumps(appointment_data.services) if appointment_data.services else None
+    appointment_doc = {
+        "id": appointment_id,
+        "provider_id": current_user.id,
+        "customer_name": appointment_data.customer_name,
+        "phone_number": appointment_data.phone_number,
+        "service_type": appointment_data.service_type,
+        "services": appointment_data.services or [],
+        "date": appointment_data.date,
+        "time": appointment_data.time,
+        "address": appointment_data.address,
+        "notes": appointment_data.notes,
+        "source": appointment_data.source,
+        "order_id": appointment_data.order_id,
+        "created_at": datetime.utcnow().isoformat()
+    }
     
-    await db.execute("""
-        INSERT INTO appointments (
-            id, provider_id, customer_name, phone_number, service_type, services,
-            date, time, address, notes, source, order_id, created_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        appointment_id,
-        current_user.id,
-        appointment_data.customer_name,
-        appointment_data.phone_number,
-        appointment_data.service_type,
-        services_json,
-        appointment_data.date,
-        appointment_data.time,
-        appointment_data.address,
-        appointment_data.notes,
-        appointment_data.source,
-        appointment_data.order_id,
-        datetime.utcnow().isoformat()
-    ))
-    
-    await db.commit()
-    await db.close()
+    await appointments_collection.insert_one(appointment_doc)
     
     return {
         "id": appointment_id,
@@ -994,96 +695,51 @@ async def get_appointments(current_user: User = Depends(get_current_user)):
     if current_user.user_type != "provider":
         raise HTTPException(status_code=403, detail="Only providers can access appointments")
     
-    db = await get_db()
+    cursor = appointments_collection.find(
+        {"provider_id": current_user.id},
+        {"_id": 0}
+    ).sort([("date", 1), ("time", 1)])
     
-    cursor = await db.execute("""
-        SELECT * FROM appointments 
-        WHERE provider_id = ?
-        ORDER BY date ASC, time ASC
-    """, (current_user.id,))
-    
-    rows = await cursor.fetchall()
-    await db.close()
-    
-    appointments = []
-    for row in rows:
-        apt = dict(row)
-        if apt.get('services'):
-            apt['services'] = json.loads(apt['services']) if isinstance(apt['services'], str) else apt['services']
-        appointments.append(apt)
-    
+    appointments = await cursor.to_list(length=500)
     return appointments
 
 @api_router.put("/appointments/{appointment_id}")
-async def update_appointment(
-    appointment_id: str,
-    update_data: Dict[str, Any],
-    current_user: User = Depends(get_current_user)
-):
+async def update_appointment(appointment_id: str, update_data: Dict[str, Any], current_user: User = Depends(get_current_user)):
     """Update an appointment"""
     if current_user.user_type != "provider":
         raise HTTPException(status_code=403, detail="Only providers can update appointments")
     
-    db = await get_db()
-    
-    # Verify appointment exists and belongs to provider
-    cursor = await db.execute("SELECT provider_id FROM appointments WHERE id = ?", (appointment_id,))
-    appointment = await cursor.fetchone()
-    
+    appointment = await appointments_collection.find_one({"id": appointment_id})
     if not appointment:
-        await db.close()
         raise HTTPException(status_code=404, detail="Appointment not found")
     
-    if appointment[0] != current_user.id:
-        await db.close()
-        raise HTTPException(status_code=403, detail="Not authorized to update this appointment")
+    if appointment["provider_id"] != current_user.id:
+        raise HTTPException(status_code=403, detail="Not authorized")
     
-    # Build update query
     allowed_fields = ['customer_name', 'phone_number', 'service_type', 'services', 'date', 'time', 'address', 'notes']
-    update_fields = []
-    update_values = []
+    update_dict = {k: v for k, v in update_data.items() if k in allowed_fields}
     
-    for field in allowed_fields:
-        if field in update_data:
-            update_fields.append(f"{field} = ?")
-            if field == 'services':
-                update_values.append(json.dumps(update_data[field]) if update_data[field] else None)
-            else:
-                update_values.append(update_data[field])
-    
-    if not update_fields:
-        await db.close()
-        return {"message": "No fields to update"}
-    
-    update_values.append(appointment_id)
-    
-    await db.execute(f"UPDATE appointments SET {', '.join(update_fields)} WHERE id = ?", tuple(update_values))
-    await db.commit()
-    await db.close()
+    if update_dict:
+        await appointments_collection.update_one({"id": appointment_id}, {"$set": update_dict})
     
     return {"message": "Appointment updated successfully"}
 
+# ====== NOTIFICATIONS ENDPOINTS ======
+
 @api_router.get("/notifications/count")
-async def get_notification_counts(current_user: User = Depends(get_current_user)):
-    """Get unread message and order counts"""
-    db = await get_db()
+async def get_notification_count(current_user: User = Depends(get_current_user)):
+    """Get notification counts for current user"""
+    unread_messages = await messages_collection.count_documents({
+        "recipient_id": current_user.id,
+        "is_read": False
+    })
     
-    # Count unread messages
-    cursor = await db.execute("""
-        SELECT COUNT(*) FROM messages WHERE recipient_id = ? AND is_read = 0
-    """, (current_user.id,))
-    unread_messages = cursor.fetchone()[0]
-    
-    # Count pending orders (for providers)
+    pending_orders = 0
     if current_user.user_type == "provider":
-        cursor = await db.execute("""
-            SELECT COUNT(*) FROM orders WHERE provider_id = ? AND status = 'pending'
-        """, (current_user.id,))
-        pending_orders = cursor.fetchone()[0]
-    else:
-        pending_orders = 0
-    
-    await db.close()
+        pending_orders = await orders_collection.count_documents({
+            "provider_id": current_user.id,
+            "status": "pending"
+        })
     
     return {
         "unread_messages": unread_messages,
@@ -1091,9 +747,43 @@ async def get_notification_counts(current_user: User = Depends(get_current_user)
         "total": unread_messages + pending_orders
     }
 
-# ====== AI CHAT ENDPOINTS ======
+# ====== DEBUG ENDPOINTS ======
 
-class AIChatMessage(BaseModel):
+@api_router.get("/debug/threads/{user_id}")
+async def debug_threads(user_id: str):
+    """Debug endpoint to test thread query"""
+    pipeline = [
+        {"$match": {"$or": [{"sender_id": user_id}, {"recipient_id": user_id}]}},
+        {"$sort": {"timestamp": -1}},
+        {"$group": {
+            "_id": "$conversation_id",
+            "last_message": {"$first": "$message"},
+            "last_message_time": {"$first": "$timestamp"}
+        }}
+    ]
+    
+    cursor = messages_collection.aggregate(pipeline)
+    threads = await cursor.to_list(length=100)
+    
+    return {
+        "user_id": user_id,
+        "thread_count": len(threads),
+        "threads": threads
+    }
+
+@api_router.get("/debug/current-user")
+async def debug_current_user(current_user: User = Depends(get_current_user)):
+    """Debug endpoint to check current user"""
+    return {
+        "user_id": current_user.id,
+        "user_email": current_user.email,
+        "user_name": current_user.name,
+        "user_type": current_user.user_type
+    }
+
+# ====== AI CHAT ENDPOINTS (Placeholder) ======
+
+class ChatMessage(BaseModel):
     message: str
     session_id: Optional[str] = None
 
@@ -1102,108 +792,61 @@ class AIChatResponse(BaseModel):
     session_id: str
 
 @api_router.post("/ai/chat", response_model=AIChatResponse)
-async def ai_chat(chat_message: AIChatMessage):
-    """Send a message to AI assistant and get response"""
-    from emergentintegrations.llm.chat import LlmChat, UserMessage
-    
-    # Generate or use existing session ID
+async def ai_chat(chat_message: ChatMessage):
+    """AI chat endpoint placeholder"""
     session_id = chat_message.session_id or str(uuid.uuid4())
     
-    # System message for Doord marketplace context
-    system_message = """You are Doord's AI assistant, helping homeowners and service providers in the home services marketplace.
-
-Your role:
-1. Help homeowners find the right service providers (Electrician, Plumber, HVAC, Handyman, Home Cleaning, Office Cleaning, Window Cleaning, Pressure Washing, Gutter Cleaning, Landscaping, Lawn Mowing, Car Detailing, Painting, etc.)
-2. Ask clarifying questions about their service needs (budget, location, urgency, specific requirements)
-3. Guide them through the booking process
-4. If you don't know specific pricing, say: "Pricing varies by project scope. I can connect you with professionals who will provide accurate quotes after evaluating your needs."
-5. Be conversational, helpful, and guide users to the browse services page when appropriate
-
-Available Services:
-- Home Maintenance: Electrician, Plumber, HVAC, Handyman, Carpenter, Painter
-- Cleaning: Home Cleaning, Office Cleaning, Window Cleaning, Pressure Washing, Gutter Cleaning
-- Outdoor: Landscaping, Lawn Mowing, Snow Removal
-- Other: Car Detailing, Roofing, Pest Control, Appliance Repair, Junk Removal
-
-Keep responses concise and actionable. Always be helpful and professional."""
+    # Store chat in database
+    await ai_chats_collection.insert_one({
+        "session_id": session_id,
+        "role": "user",
+        "content": chat_message.message,
+        "timestamp": datetime.utcnow().isoformat()
+    })
     
-    try:
-        # Initialize LLM chat
-        chat = LlmChat(
-            api_key=os.environ.get('EMERGENT_LLM_KEY'),
-            session_id=session_id,
-            system_message=system_message
-        ).with_model("gemini", "gemini-2.0-flash-exp")
-        
-        # Create user message
-        user_message = UserMessage(text=chat_message.message)
-        
-        # Get AI response
-        ai_response = await chat.send_message(user_message)
-        
-        # Store in SQLite database
-        db = await get_db()
-        await db.execute("""
-            INSERT INTO ai_chats (session_id, role, content, timestamp)
-            VALUES (?, ?, ?, ?)
-        """, (session_id, "user", chat_message.message, datetime.utcnow().isoformat()))
-        
-        await db.execute("""
-            INSERT INTO ai_chats (session_id, role, content, timestamp)
-            VALUES (?, ?, ?, ?)
-        """, (session_id, "assistant", ai_response, datetime.utcnow().isoformat()))
-        
-        await db.commit()
-        await db.close()
-        
-        return AIChatResponse(response=ai_response, session_id=session_id)
-        
-    except Exception as e:
-        logging.error(f"AI chat error: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"AI chat error: {str(e)}")
+    # Simple response (replace with actual AI integration)
+    response = f"Thank you for your message. Our AI assistant is currently being set up. Your message: '{chat_message.message[:50]}...'"
+    
+    await ai_chats_collection.insert_one({
+        "session_id": session_id,
+        "role": "assistant",
+        "content": response,
+        "timestamp": datetime.utcnow().isoformat()
+    })
+    
+    return AIChatResponse(response=response, session_id=session_id)
 
 @api_router.get("/ai/history/{session_id}")
-async def get_ai_chat_history(session_id: str, limit: Optional[int] = 50):
+async def get_chat_history(session_id: str):
     """Get chat history for a session"""
-    db = await get_db()
+    cursor = ai_chats_collection.find(
+        {"session_id": session_id},
+        {"_id": 0}
+    ).sort("timestamp", 1)
     
-    query = "SELECT role, content, timestamp FROM ai_chats WHERE session_id = ? ORDER BY timestamp DESC"
-    if limit:
-        query += f" LIMIT {limit}"
-    
-    cursor = await db.execute(query, (session_id,))
-    rows = await cursor.fetchall()
-    await db.close()
-    
-    messages = [{"role": row[0], "content": row[1], "timestamp": row[2]} for row in reversed(rows)]
+    messages = await cursor.to_list(length=100)
     return {"messages": messages}
 
 @api_router.delete("/ai/history/{session_id}")
-async def clear_ai_chat_history(session_id: str):
+async def clear_chat_history(session_id: str):
     """Clear chat history for a session"""
-    db = await get_db()
-    await db.execute("DELETE FROM ai_chats WHERE session_id = ?", (session_id,))
-    await db.commit()
-    await db.close()
+    await ai_chats_collection.delete_many({"session_id": session_id})
     return {"message": "Chat history cleared"}
 
-# Include the router in the main app
-app.include_router(api_router)
+# ====== CORS CONFIGURATION ======
 
 app.add_middleware(
     CORSMiddleware,
-    allow_credentials=True,
     allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
+# Include the API router
+app.include_router(api_router)
 
+# Main entry point
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
