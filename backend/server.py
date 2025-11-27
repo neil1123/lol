@@ -42,7 +42,7 @@ try:
         serverSelectionTimeoutMS=10000,  # 10 second timeout for server selection
         connectTimeoutMS=10000,  # 10 second connection timeout
     )
-    print(f"MongoDB client created successfully", file=sys.stderr, flush=True)
+    print("MongoDB client created successfully", file=sys.stderr, flush=True)
 except Exception as e:
     print(f"ERROR creating MongoDB client: {e}", file=sys.stderr, flush=True)
     raise
