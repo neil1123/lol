@@ -214,28 +214,38 @@ async def register(user_data: UserCreate):
 
 @api_router.post("/auth/login", response_model=Token)
 async def login(user_credentials: UserLogin):
-    # Find user by email
-    user = None
-    for stored_user in users_storage.values():
-        if stored_user["email"] == user_credentials.email:
-            user = stored_user
-            break
+    db = await get_db()
     
-    if not user or not verify_password(user_credentials.password, user["password_hash"]):
+    # Find user by email
+    cursor = await db.execute("SELECT * FROM users WHERE email = ?", (user_credentials.email,))
+    row = await cursor.fetchone()
+    
+    if not row:
+        await db.close()
         raise HTTPException(status_code=401, detail="Incorrect email or password")
+    
+    user = dict(row)
+    
+    # Verify password
+    if not verify_password(user_credentials.password, user["password_hash"]):
+        await db.close()
+        raise HTTPException(status_code=401, detail="Incorrect email or password")
+    
+    await db.close()
+    
+    # Parse JSON fields
+    if user.get('services'):
+        user['services'] = json.loads(user['services']) if isinstance(user['services'], str) else user['services']
+    if user.get('specialties'):
+        user['specialties'] = json.loads(user['specialties']) if isinstance(user['specialties'], str) else user['specialties']
     
     # Create access token
     access_token = create_access_token(data={"sub": user["id"]})
     
     # Return user data without password
-    user_data_return = user.copy()
-    del user_data_return["password_hash"]
+    user_data_return = {k: v for k, v in user.items() if k != "password_hash"}
     
-    return {
-        "access_token": access_token,
-        "token_type": "bearer", 
-        "user": user_data_return
-    }
+    return Token(access_token=access_token, token_type="bearer", user=user_data_return)
 
 @api_router.get("/users/me")
 async def get_current_user_info(current_user: User = Depends(get_current_user)):
