@@ -12,6 +12,8 @@ from datetime import datetime, timedelta
 import jwt
 from passlib.context import CryptContext
 import hashlib
+import aiosqlite
+import json
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -20,13 +22,14 @@ load_dotenv(ROOT_DIR / '.env')
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
 
-# NO DATABASE - ALL MONGODB CODE REMOVED
-# In-memory storage (data will be lost on restart)
-users_storage = {}
-orders_storage = {}
-messages_storage = {}
-appointments_storage = {}
-ai_chat_storage = {}  # {session_id: [{"role": "user/assistant", "content": "...", "timestamp": "..."}]}
+# SQLite Database Configuration
+DB_PATH = os.getenv('DB_PATH', '/app/backend/doord.db')
+
+# Helper function to get database connection
+async def get_db():
+    db = await aiosqlite.connect(DB_PATH)
+    db.row_factory = aiosqlite.Row
+    return db
 
 # JWT settings
 SECRET_KEY = "your-secret-key-change-this-in-production"
