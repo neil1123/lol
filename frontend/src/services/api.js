@@ -193,7 +193,7 @@ class ApiService {
 
   // ====== USER PROFILE ======
   async getUserProfile() {
-    return await this.request('/auth/profile');
+    return await this.request('/me');
   }
 
   // ====== APPOINTMENTS ======
