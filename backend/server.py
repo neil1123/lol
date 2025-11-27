@@ -255,13 +255,24 @@ async def get_current_user_info(current_user: User = Depends(get_current_user)):
 
 @api_router.get("/providers")
 async def get_providers():
+    db = await get_db()
+    cursor = await db.execute("SELECT * FROM users WHERE user_type = 'provider'")
+    rows = await cursor.fetchall()
+    await db.close()
+    
     providers = []
-    for user_data in users_storage.values():
-        if user_data.get("user_type") == "provider":
-            user_copy = user_data.copy()
-            if "password_hash" in user_copy:
-                del user_copy["password_hash"]
-            providers.append(user_copy)
+    for row in rows:
+        user_data = dict(row)
+        # Remove password hash
+        if "password_hash" in user_data:
+            del user_data["password_hash"]
+        # Parse JSON fields
+        if user_data.get('services'):
+            user_data['services'] = json.loads(user_data['services']) if isinstance(user_data['services'], str) else user_data['services']
+        if user_data.get('specialties'):
+            user_data['specialties'] = json.loads(user_data['specialties']) if isinstance(user_data['specialties'], str) else user_data['specialties']
+        providers.append(user_data)
+    
     return providers
 
 @api_router.get("/services")
