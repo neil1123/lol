@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Identify root cause: MongoDB initialization failure due to missing default database name in MONGO_URL",
+    "status": "completed"
+  },
+  {
+    "content": "Verify MONGO_URL format lacks database name - should include database name after credentials",
+    "status": "completed"
+  },
+  {
+    "content": "Check if replacement deployment (property-mgmt-11) secrets were correctly copied",
+    "status": "in_progress"
+  },
+  {
+    "content": "Recommend MONGO_URL fix: add /doord-cloud-doord to connection string after maxPoolSize parameter",
+    "status": "pending"
+  },
+  {
+    "content": "Verify app can connect to MongoDB after URL correction",
+    "status": "pending"
+  }
+]
