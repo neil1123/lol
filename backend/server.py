@@ -865,6 +865,17 @@ app.add_middleware(
 # Include the API router
 app.include_router(api_router)
 
+# Add root health check for Kubernetes probes
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for deployment verification"""
+    try:
+        # Quick database ping
+        await db.command('ping')
+        return {"status": "healthy", "database": "connected"}
+    except Exception as e:
+        return {"status": "unhealthy", "error": str(e)}
+
 # Main entry point
 if __name__ == "__main__":
     import uvicorn
