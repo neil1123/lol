@@ -317,15 +317,11 @@ async def ai_chat(chat_message: AIChatMessage):
     # Generate or use existing session ID
     session_id = chat_message.session_id or str(uuid.uuid4())
     
-    # Initialize chat history if new session
-    if session_id not in ai_chat_storage:
-        ai_chat_storage[session_id] = []
-    
     # System message for Doord marketplace context
     system_message = """You are Doord's AI assistant, helping homeowners and service providers in the home services marketplace.
 
 Your role:
-1. Help homeowners find the right service providers (Electrician, Plumber, HVAC, Handyman, Home Cleaning, Office Cleaning, Window Cleaning, Pressure Washing, Gutter Cleaning, Landscaping, Lawn Mowing, Car Detailing, etc.)
+1. Help homeowners find the right service providers (Electrician, Plumber, HVAC, Handyman, Home Cleaning, Office Cleaning, Window Cleaning, Pressure Washing, Gutter Cleaning, Landscaping, Lawn Mowing, Car Detailing, Painting, etc.)
 2. Ask clarifying questions about their service needs (budget, location, urgency, specific requirements)
 3. Guide them through the booking process
 4. If you don't know specific pricing, say: "Pricing varies by project scope. I can connect you with professionals who will provide accurate quotes after evaluating your needs."
@@ -353,17 +349,20 @@ Keep responses concise and actionable. Always be helpful and professional."""
         # Get AI response
         ai_response = await chat.send_message(user_message)
         
-        # Store in chat history
-        ai_chat_storage[session_id].append({
-            "role": "user",
-            "content": chat_message.message,
-            "timestamp": datetime.utcnow().isoformat()
-        })
-        ai_chat_storage[session_id].append({
-            "role": "assistant",
-            "content": ai_response,
-            "timestamp": datetime.utcnow().isoformat()
-        })
+        # Store in SQLite database
+        db = await get_db()
+        await db.execute("""
+            INSERT INTO ai_chats (session_id, role, content, timestamp)
+            VALUES (?, ?, ?, ?)
+        """, (session_id, "user", chat_message.message, datetime.utcnow().isoformat()))
+        
+        await db.execute("""
+            INSERT INTO ai_chats (session_id, role, content, timestamp)
+            VALUES (?, ?, ?, ?)
+        """, (session_id, "assistant", ai_response, datetime.utcnow().isoformat()))
+        
+        await db.commit()
+        await db.close()
         
         return AIChatResponse(response=ai_response, session_id=session_id)
         
