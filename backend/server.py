@@ -281,6 +281,67 @@ async def get_providers():
     
     return providers
 
+@api_router.put("/providers/profile")
+async def update_provider_profile(
+    profile_data: Dict[str, Any],
+    current_user: User = Depends(get_current_user)
+):
+    """Update provider profile"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can update provider profiles")
+    
+    db = await get_db()
+    
+    # Prepare update fields
+    update_fields = []
+    update_values = []
+    
+    allowed_fields = ['business_name', 'description', 'location', 'phone', 'address', 
+                     'services', 'specialties', 'price_range', 'year_established', 'response_time']
+    
+    for field in allowed_fields:
+        if field in profile_data:
+            update_fields.append(f"{field} = ?")
+            # Handle JSON fields
+            if field in ['services', 'specialties']:
+                update_values.append(json.dumps(profile_data[field]) if profile_data[field] else None)
+            else:
+                update_values.append(profile_data[field])
+    
+    if not update_fields:
+        await db.close()
+        return {"message": "No fields to update"}
+    
+    # Add updated_at timestamp
+    update_fields.append("updated_at = ?")
+    update_values.append(datetime.utcnow().isoformat())
+    
+    # Add user ID for WHERE clause
+    update_values.append(current_user.id)
+    
+    # Execute update
+    query = f"UPDATE users SET {', '.join(update_fields)} WHERE id = ?"
+    await db.execute(query, tuple(update_values))
+    await db.commit()
+    
+    # Fetch updated user
+    cursor = await db.execute("SELECT * FROM users WHERE id = ?", (current_user.id,))
+    row = await cursor.fetchone()
+    await db.close()
+    
+    if row:
+        user_data = dict(row)
+        if "password_hash" in user_data:
+            del user_data["password_hash"]
+        # Parse JSON fields
+        if user_data.get('services'):
+            user_data['services'] = json.loads(user_data['services']) if isinstance(user_data['services'], str) else user_data['services']
+        if user_data.get('specialties'):
+            user_data['specialties'] = json.loads(user_data['specialties']) if isinstance(user_data['specialties'], str) else user_data['specialties']
+        return {"message": "Profile updated successfully", "user": user_data}
+    
+    raise HTTPException(status_code=500, detail="Failed to fetch updated profile")
+
 @api_router.get("/services")
 async def get_services():
     # Return static services list since no database
