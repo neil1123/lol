@@ -11,7 +11,7 @@ import sys
 from datetime import datetime
 
 # Load environment variables
-BACKEND_URL = "https://property-mgmt-11.preview.emergentagent.com/api"
+BACKEND_URL = "https://pro-doord.preview.emergentagent.com/api"
 
 # Global test data
 pm_tokens = {}

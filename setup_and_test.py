@@ -9,7 +9,7 @@ import uuid
 import sys
 
 # Backend URL from environment
-BACKEND_URL = "https://property-mgmt-11.preview.emergentagent.com/api"
+BACKEND_URL = "https://pro-doord.preview.emergentagent.com/api"
 
 def setup_test_users():
     """Create test users for testing"""
