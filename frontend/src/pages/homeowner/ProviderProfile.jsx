@@ -143,8 +143,8 @@ const ProviderProfile = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Provider not found</h2>
-          <Button onClick={() => navigate('/homeowners/browse')}>
-            Back to Browse
+          <Button onClick={() => navigate(-1)}>
+            Go Back
           </Button>
         </div>
       </div>
