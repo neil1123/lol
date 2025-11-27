@@ -22,6 +22,11 @@ const PropertyManagerDashboard = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     // Check authentication and get user data
     const token = localStorage.getItem('token');
