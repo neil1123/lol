@@ -63,7 +63,7 @@ orders_collection = db.orders
 messages_collection = db.messages
 appointments_collection = db.appointments
 ai_chats_collection = db.ai_chats
-print(f"Collections initialized", file=sys.stderr, flush=True)
+print("Collections initialized", file=sys.stderr, flush=True)
 
 # JWT settings
 SECRET_KEY = os.environ.get('SECRET_KEY')
