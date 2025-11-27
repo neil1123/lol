@@ -145,41 +145,72 @@ async def root():
 
 @api_router.post("/auth/register", response_model=Token)
 async def register(user_data: UserCreate):
-    # Check if user already exists
-    existing_user = None
-    for stored_user in users_storage.values():
-        if stored_user["email"] == user_data.email:
-            existing_user = stored_user
-            break
+    db = await get_db()
     
-    if existing_user:
+    # Check if user already exists
+    cursor = await db.execute("SELECT id FROM users WHERE email = ?", (user_data.email,))
+    existing = await cursor.fetchone()
+    
+    if existing:
+        await db.close()
         raise HTTPException(status_code=400, detail="Email already registered")
     
     # Hash password
     hashed_password = hash_password(user_data.password)
     
-    # Create user
+    # Create user ID
+    user_id = str(uuid.uuid4())
+    
+    # Prepare user data
     user_dict = user_data.dict()
-    user_dict["password_hash"] = hashed_password
     del user_dict["password"]
     
-    user = User(**user_dict)
+    # Handle services and other array fields as JSON
+    services_json = json.dumps(user_dict.get('services', [])) if user_dict.get('services') else None
+    specialties_json = json.dumps(user_dict.get('specialties', [])) if user_dict.get('specialties') else None
     
-    # Store in memory
-    users_storage[user.id] = user.dict()
+    # Insert user
+    await db.execute("""
+        INSERT INTO users (
+            id, email, password_hash, user_type, name, phone, address,
+            business_name, services, description, location, specialties, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        user_id,
+        user_data.email,
+        hashed_password,
+        user_data.user_type,
+        user_data.name,
+        user_dict.get('phone'),
+        user_dict.get('address'),
+        user_dict.get('business_name'),
+        services_json,
+        user_dict.get('description'),
+        user_dict.get('location'),
+        specialties_json,
+        datetime.utcnow().isoformat()
+    ))
+    
+    await db.commit()
+    await db.close()
     
     # Create access token
-    access_token = create_access_token(data={"sub": user.id})
+    access_token = create_access_token(data={"sub": user_id})
     
-    # Return user data without password
-    user_data_return = user.dict()
-    del user_data_return["password_hash"]
-    
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-        "user": user_data_return
+    # Prepare user response
+    user_response = {
+        "id": user_id,
+        "email": user_data.email,
+        "user_type": user_data.user_type,
+        "name": user_data.name,
+        "phone": user_dict.get('phone'),
+        "address": user_dict.get('address'),
+        "business_name": user_dict.get('business_name'),
+        "services": user_dict.get('services', []),
+        "created_at": datetime.utcnow().isoformat()
     }
+    
+    return Token(access_token=access_token, token_type="bearer", user=user_response)
 
 @api_router.post("/auth/login", response_model=Token)
 async def login(user_credentials: UserLogin):
