@@ -826,11 +826,10 @@ async def create_message_thread(thread_data: ThreadCreate, current_user: User = 
 @api_router.get("/messages/threads")
 async def get_message_threads(current_user: User = Depends(get_current_user)):
     """Get all message threads for current user (alias for conversations)"""
-    import sys
     db = await get_db()
     
     try:
-        print(f"DEBUG: Getting message threads for user: {current_user.id}", file=sys.stderr, flush=True)
+        logging.error(f"DEBUG: Getting message threads for user: {current_user.id}")
         
         cursor = await db.execute("""
             SELECT DISTINCT conversation_id, sender_id, recipient_id, message, MAX(timestamp) as last_message_time
@@ -842,14 +841,14 @@ async def get_message_threads(current_user: User = Depends(get_current_user)):
         
         rows = await cursor.fetchall()
         
-        print(f"DEBUG: Found {len(rows)} threads for user {current_user.id}", file=sys.stderr, flush=True)
+        logging.error(f"DEBUG: Found {len(rows)} threads for user {current_user.id}")
         
         threads = []
         for row in rows:
             conv_id = row[0]
             other_user_id = row[2] if row[1] == current_user.id else row[1]
             
-            print(f"DEBUG: Processing thread: {conv_id}, other_user: {other_user_id}", file=sys.stderr, flush=True)
+            logging.error(f"DEBUG: Processing thread: {conv_id}, other_user: {other_user_id}")
             
             # Get other user info
             user_cursor = await db.execute("SELECT id, name, business_name, user_type FROM users WHERE id = ?", (other_user_id,))
@@ -890,10 +889,10 @@ async def get_message_threads(current_user: User = Depends(get_current_user)):
                 
                 threads.append(thread)
         
-        print(f"DEBUG: Returning {len(threads)} threads", file=sys.stderr, flush=True)
+        logging.error(f"DEBUG: Returning {len(threads)} threads")
         return threads
     except Exception as e:
-        print(f"DEBUG: Error in get_message_threads: {e}", file=sys.stderr, flush=True)
+        logging.error(f"DEBUG: Error in get_message_threads: {e}")
         raise
     finally:
         await db.close()
