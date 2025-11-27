@@ -860,87 +860,27 @@ async def get_message_threads(current_user: User = Depends(get_current_user)):
     """Get all message threads for current user (alias for conversations)"""
     user_id = current_user.id
     
-    try:
-        db = await get_db()
-        
-        cursor = await db.execute("""
-            SELECT DISTINCT conversation_id, sender_id, recipient_id, message, MAX(timestamp) as last_message_time
-            FROM messages
-            WHERE sender_id = ? OR recipient_id = ?
-            GROUP BY conversation_id
-            ORDER BY last_message_time DESC
-        """, (user_id, user_id))
-        
-        rows = await cursor.fetchall()
-        
-        # Debug return
-        if len(rows) == 0:
-            # Let's check if messages exist at all
-            all_cursor = await db.execute("SELECT COUNT(*) FROM messages")
-            all_count = (await all_cursor.fetchone())[0]
-            
-            # Check with literal user_id
-            check_cursor = await db.execute("SELECT * FROM messages WHERE sender_id = '2dfbed82-9d36-4d33-8abc-501ad02624cc'")
-            check_rows = await check_cursor.fetchall()
-            
-            await db.close()
-            return {
-                "debug": True,
-                "user_id": user_id,
-                "total_messages": all_count,
-                "literal_check_count": len(check_rows),
-                "user_id_type": str(type(user_id)),
-                "threads": []
-            }
-        
-        threads = []
-        for row in rows:
-            conv_id = row[0]
-            sender = row[1]
-            recipient = row[2]
-            other_user_id = recipient if sender == user_id else sender
-            
-            # Get other user info
-            user_cursor = await db.execute("SELECT id, name, business_name, user_type FROM users WHERE id = ?", (other_user_id,))
-            user_info = await user_cursor.fetchone()
-            
-            # Count unread messages
-            unread_cursor = await db.execute("""
-                SELECT COUNT(*) FROM messages 
-                WHERE conversation_id = ? AND recipient_id = ? AND is_read = 0
-            """, (conv_id, user_id))
-            unread_result = await unread_cursor.fetchone()
-            unread_count = unread_result[0] if unread_result else 0
-            
-            if user_info:
-                other_user_name = user_info[2] if user_info[2] else user_info[1]
-                other_user_type = user_info[3]
-                
-                thread = {
-                    "id": conv_id,
-                    "conversation_id": conv_id,
-                    "last_message": row[3],
-                    "last_message_time": row[4],
-                    "unread_count": unread_count
-                }
-                
-                if other_user_type == "provider":
-                    thread["provider_id"] = other_user_id
-                    thread["provider_name"] = other_user_name
-                    thread["homeowner_id"] = user_id
-                    thread["homeowner_name"] = current_user.name
-                else:
-                    thread["homeowner_id"] = other_user_id
-                    thread["homeowner_name"] = other_user_name
-                    thread["provider_id"] = user_id
-                    thread["provider_name"] = current_user.business_name or current_user.name
-                
-                threads.append(thread)
-        
-        await db.close()
-        return threads
-    except Exception as e:
-        return {"error": str(e), "user_id": user_id}
+    db = await get_db()
+    
+    cursor = await db.execute("""
+        SELECT DISTINCT conversation_id, sender_id, recipient_id, message, MAX(timestamp) as last_message_time
+        FROM messages
+        WHERE sender_id = ? OR recipient_id = ?
+        GROUP BY conversation_id
+        ORDER BY last_message_time DESC
+    """, (user_id, user_id))
+    
+    rows = await cursor.fetchall()
+    
+    # Debug: return raw info about what we got
+    return {
+        "debug": True,
+        "user_id": user_id,
+        "user_id_type": str(type(user_id)),
+        "rows_type": str(type(rows)),
+        "rows_len": len(rows) if rows else 0,
+        "rows_repr": repr(rows)[:500] if rows else "None"
+    }
 
 # ====== APPOINTMENTS API ======
 
