@@ -468,6 +468,53 @@ async def create_order(order_data: OrderCreate, current_user: User = Depends(get
         "status": "pending"
     }
 
+@api_router.post("/quotations")
+async def create_quotation(quotation_data: Dict[str, Any], current_user: User = Depends(get_current_user)):
+    """Create a new quotation request (alias for orders)"""
+    db = await get_db()
+    
+    provider_id = quotation_data.get('provider_id')
+    if not provider_id:
+        raise HTTPException(status_code=400, detail="provider_id is required")
+    
+    # Verify provider exists
+    cursor = await db.execute("SELECT id FROM users WHERE id = ? AND user_type = 'provider'", (provider_id,))
+    provider = await cursor.fetchone()
+    
+    if not provider:
+        await db.close()
+        raise HTTPException(status_code=404, detail="Provider not found")
+    
+    # Create order
+    order_id = str(uuid.uuid4())
+    service_name = quotation_data.get('service_type', '') or ', '.join(quotation_data.get('services', []))
+    
+    await db.execute("""
+        INSERT INTO orders (
+            id, homeowner_id, provider_id, service, description, status, amount, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        order_id,
+        current_user.id,
+        provider_id,
+        service_name,
+        quotation_data.get('description', ''),
+        'pending',
+        None,  # Amount will be filled by provider
+        datetime.utcnow().isoformat(),
+        datetime.utcnow().isoformat()
+    ))
+    
+    await db.commit()
+    await db.close()
+    
+    return {
+        "message": "Quotation request sent successfully",
+        "order_id": order_id,
+        "status": "pending",
+        "id": order_id  # For compatibility
+    }
+
 @api_router.put("/orders/{order_id}")
 async def update_order_status(
     order_id: str,
