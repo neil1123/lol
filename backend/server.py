@@ -58,19 +58,32 @@ app = FastAPI(title="Doord API (MongoDB)", description="Home Services Marketplac
 # Startup event to create indexes
 @app.on_event("startup")
 async def startup():
-    # Create indexes for better performance
-    await users_collection.create_index("email", unique=True)
-    await users_collection.create_index("user_type")
-    await users_collection.create_index("id", unique=True)
-    await orders_collection.create_index("homeowner_id")
-    await orders_collection.create_index("provider_id")
-    await orders_collection.create_index("id", unique=True)
-    await messages_collection.create_index("conversation_id")
-    await messages_collection.create_index("sender_id")
-    await messages_collection.create_index("recipient_id")
-    await appointments_collection.create_index("provider_id")
-    await ai_chats_collection.create_index("session_id")
-    logging.info("✅ MongoDB connected and indexes created")
+    try:
+        print("Starting database connection check...", file=sys.stderr, flush=True)
+        # Test connection
+        await db.command('ping')
+        print(f"✅ MongoDB connected successfully to database: {db.name}", file=sys.stderr, flush=True)
+        
+        # Create indexes for better performance
+        print("Creating indexes...", file=sys.stderr, flush=True)
+        await users_collection.create_index("email", unique=True)
+        await users_collection.create_index("user_type")
+        await users_collection.create_index("id", unique=True)
+        await orders_collection.create_index("homeowner_id")
+        await orders_collection.create_index("provider_id")
+        await orders_collection.create_index("id", unique=True)
+        await messages_collection.create_index("conversation_id")
+        await messages_collection.create_index("sender_id")
+        await messages_collection.create_index("recipient_id")
+        await appointments_collection.create_index("provider_id")
+        await ai_chats_collection.create_index("session_id")
+        print("✅ All indexes created successfully", file=sys.stderr, flush=True)
+        logging.info("✅ MongoDB connected and indexes created")
+    except Exception as e:
+        print(f"❌ STARTUP ERROR: {e}", file=sys.stderr, flush=True)
+        import traceback
+        traceback.print_exc()
+        raise
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
