@@ -70,6 +70,12 @@ class UserCreate(BaseModel):
     name: str
     phone: Optional[str] = None
     address: Optional[str] = None
+    business_name: Optional[str] = None
+    services: Optional[List[str]] = []
+    description: Optional[str] = None
+    location: Optional[str] = None
+    specialties: Optional[List[str]] = []
+    pm_code: Optional[str] = None
 
 class UserLogin(BaseModel):
     email: EmailStr
