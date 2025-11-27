@@ -373,18 +373,26 @@ Keep responses concise and actionable. Always be helpful and professional."""
 @api_router.get("/ai/history/{session_id}")
 async def get_ai_chat_history(session_id: str, limit: Optional[int] = 50):
     """Get chat history for a session"""
-    if session_id not in ai_chat_storage:
-        return {"messages": []}
+    db = await get_db()
     
-    messages = ai_chat_storage[session_id]
-    # Return last 'limit' messages
-    return {"messages": messages[-limit:] if limit else messages}
+    query = "SELECT role, content, timestamp FROM ai_chats WHERE session_id = ? ORDER BY timestamp DESC"
+    if limit:
+        query += f" LIMIT {limit}"
+    
+    cursor = await db.execute(query, (session_id,))
+    rows = await cursor.fetchall()
+    await db.close()
+    
+    messages = [{"role": row[0], "content": row[1], "timestamp": row[2]} for row in reversed(rows)]
+    return {"messages": messages}
 
 @api_router.delete("/ai/history/{session_id}")
 async def clear_ai_chat_history(session_id: str):
     """Clear chat history for a session"""
-    if session_id in ai_chat_storage:
-        del ai_chat_storage[session_id]
+    db = await get_db()
+    await db.execute("DELETE FROM ai_chats WHERE session_id = ?", (session_id,))
+    await db.commit()
+    await db.close()
     return {"message": "Chat history cleared"}
 
 # Include the router in the main app
