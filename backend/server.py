@@ -709,6 +709,138 @@ async def send_message(message_data: MessageCreate, current_user: User = Depends
         "conversation_id": conversation_id
     }
 
+# ====== MESSAGE THREADS API (Frontend compatibility) - MUST BE BEFORE {conversation_id} ======
+
+class ThreadCreate(BaseModel):
+    homeowner_id: Optional[str] = None
+    provider_id: str
+    homeowner_name: Optional[str] = None
+    provider_name: Optional[str] = None
+    order_type: Optional[str] = None
+    last_message: Optional[str] = None
+    last_message_time: Optional[str] = None
+
+@api_router.post("/messages/threads")
+async def create_message_thread(thread_data: ThreadCreate, current_user: User = Depends(get_current_user)):
+    """Create a new message thread between homeowner and provider"""
+    db = await get_db()
+    
+    provider_id = thread_data.provider_id
+    
+    # Verify provider exists
+    cursor = await db.execute("SELECT id, name, business_name FROM users WHERE id = ? AND user_type = 'provider'", (provider_id,))
+    provider = await cursor.fetchone()
+    
+    if not provider:
+        await db.close()
+        raise HTTPException(status_code=404, detail="Provider not found")
+    
+    # Generate conversation_id (sorted IDs for consistency)
+    ids = sorted([current_user.id, provider_id])
+    conversation_id = f"{ids[0]}_{ids[1]}"
+    
+    # Check if conversation already exists
+    cursor = await db.execute("SELECT id FROM messages WHERE conversation_id = ? LIMIT 1", (conversation_id,))
+    existing = await cursor.fetchone()
+    
+    # Create initial message if no conversation exists
+    if not existing:
+        initial_message = thread_data.last_message or f"New conversation started"
+        message_id = str(uuid.uuid4())
+        await db.execute("""
+            INSERT INTO messages (
+                id, conversation_id, sender_id, recipient_id, message, timestamp, is_read
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (
+            message_id,
+            conversation_id,
+            current_user.id,
+            provider_id,
+            initial_message,
+            datetime.utcnow().isoformat(),
+            0
+        ))
+        await db.commit()
+    
+    provider_name = provider[2] if provider[2] else provider[1]
+    
+    await db.close()
+    
+    return {
+        "id": conversation_id,
+        "conversation_id": conversation_id,
+        "homeowner_id": current_user.id,
+        "provider_id": provider_id,
+        "provider_name": provider_name,
+        "homeowner_name": current_user.name,
+        "last_message": thread_data.last_message or "New conversation started",
+        "last_message_time": datetime.utcnow().isoformat()
+    }
+
+@api_router.get("/messages/threads")
+async def get_message_threads(current_user: User = Depends(get_current_user)):
+    """Get all message threads for current user"""
+    user_id = current_user.id
+    
+    db = await get_db()
+    
+    cursor = await db.execute("""
+        SELECT DISTINCT conversation_id, sender_id, recipient_id, message, MAX(timestamp) as last_message_time
+        FROM messages
+        WHERE sender_id = ? OR recipient_id = ?
+        GROUP BY conversation_id
+        ORDER BY last_message_time DESC
+    """, (user_id, user_id))
+    
+    rows = await cursor.fetchall()
+    
+    threads = []
+    for row in rows:
+        conv_id = row[0]
+        sender = row[1]
+        recipient = row[2]
+        other_user_id = recipient if sender == user_id else sender
+        
+        # Get other user info
+        user_cursor = await db.execute("SELECT id, name, business_name, user_type FROM users WHERE id = ?", (other_user_id,))
+        user_info = await user_cursor.fetchone()
+        
+        # Count unread messages
+        unread_cursor = await db.execute("""
+            SELECT COUNT(*) FROM messages 
+            WHERE conversation_id = ? AND recipient_id = ? AND is_read = 0
+        """, (conv_id, user_id))
+        unread_result = await unread_cursor.fetchone()
+        unread_count = unread_result[0] if unread_result else 0
+        
+        if user_info:
+            other_user_name = user_info[2] if user_info[2] else user_info[1]
+            other_user_type = user_info[3]
+            
+            thread = {
+                "id": conv_id,
+                "conversation_id": conv_id,
+                "last_message": row[3],
+                "last_message_time": row[4],
+                "unread_count": unread_count
+            }
+            
+            if other_user_type == "provider":
+                thread["provider_id"] = other_user_id
+                thread["provider_name"] = other_user_name
+                thread["homeowner_id"] = user_id
+                thread["homeowner_name"] = current_user.name
+            else:
+                thread["homeowner_id"] = other_user_id
+                thread["homeowner_name"] = other_user_name
+                thread["provider_id"] = user_id
+                thread["provider_name"] = current_user.business_name or current_user.name
+            
+            threads.append(thread)
+    
+    await db.close()
+    return threads
+
 @api_router.get("/conversations")
 async def get_conversations(current_user: User = Depends(get_current_user)):
     """Get all conversations for current user"""
