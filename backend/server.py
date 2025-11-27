@@ -60,8 +60,20 @@ class User(BaseModel):
     name: str
     phone: Optional[str] = None
     address: Optional[str] = None
+    business_name: Optional[str] = None
+    services: Optional[List[str]] = []
+    description: Optional[str] = None
+    location: Optional[str] = None
+    specialties: Optional[List[str]] = []
+    rating: Optional[float] = 5.0
+    reviews: Optional[int] = 0
+    completed_jobs: Optional[int] = 0
+    response_time: Optional[str] = None
+    year_established: Optional[str] = None
+    price_range: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     is_active: bool = True
+    pm_code: Optional[str] = None
 
 class UserCreate(BaseModel):
     email: EmailStr
