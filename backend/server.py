@@ -37,7 +37,15 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 24 * 60  # 24 hours
 
 # Create the main app without a prefix
-app = FastAPI(title="Doord API (No Database)", description="Home Services Marketplace API - No Database Version")
+app = FastAPI(title="Doord API (SQLite)", description="Home Services Marketplace API - SQLite Database")
+
+# Startup event to initialize database
+@app.on_event("startup")
+async def startup():
+    # Run database initialization
+    import subprocess
+    subprocess.run(["python", "/app/backend/init_db.py"], check=True)
+    logging.info(f"✅ SQLite database ready at {DB_PATH}")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
