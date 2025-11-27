@@ -71,9 +71,13 @@ class User(BaseModel):
     response_time: Optional[str] = None
     year_established: Optional[str] = None
     price_range: Optional[str] = None
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
+    updated_at: Optional[str] = None
     is_active: bool = True
     pm_code: Optional[str] = None
+    
+    class Config:
+        extra = 'ignore'  # Ignore any extra fields from DB
 
 class UserCreate(BaseModel):
     email: EmailStr
