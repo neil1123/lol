@@ -130,11 +130,17 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
 
 @api_router.get("/")
 async def root():
+    db = await get_db()
+    cursor = await db.execute("SELECT COUNT(*) as count FROM users")
+    row = await cursor.fetchone()
+    user_count = row[0] if row else 0
+    await db.close()
+    
     return {
-        "message": "Doord API (No Database Version) - Running", 
+        "message": "Doord API (SQLite) - Running", 
         "status": "active",
-        "database": "DISCONNECTED - In-memory storage only",
-        "warning": "All data will be lost on server restart"
+        "database": f"SQLite - {user_count} users registered",
+        "database_path": DB_PATH
     }
 
 @api_router.post("/auth/register", response_model=Token)
