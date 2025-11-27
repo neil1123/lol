@@ -190,6 +190,16 @@ async def debug_threads(user_id: str):
         "threads": [dict(row) for row in rows]
     }
 
+@api_router.get("/debug/current-user")
+async def debug_current_user(current_user: User = Depends(get_current_user)):
+    """Debug endpoint to check current user"""
+    return {
+        "user_id": current_user.id,
+        "user_email": current_user.email,
+        "user_name": current_user.name,
+        "user_type": current_user.user_type
+    }
+
 @api_router.post("/auth/register", response_model=Token)
 async def register(user_data: UserCreate):
     db = await get_db()
