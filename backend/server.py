@@ -459,15 +459,29 @@ async def get_orders(current_user: User = Depends(get_current_user)):
     
     # Get orders where user is either homeowner or provider
     cursor = await db.execute("""
-        SELECT * FROM orders 
-        WHERE homeowner_id = ? OR provider_id = ?
-        ORDER BY created_at DESC
+        SELECT o.*, 
+               h.name as homeowner_name, h.email as homeowner_email, h.phone as homeowner_phone, h.address as homeowner_address,
+               p.name as provider_owner_name, p.business_name as provider_name, p.email as provider_email, p.phone as provider_phone
+        FROM orders o
+        LEFT JOIN users h ON o.homeowner_id = h.id
+        LEFT JOIN users p ON o.provider_id = p.id
+        WHERE o.homeowner_id = ? OR o.provider_id = ?
+        ORDER BY o.created_at DESC
     """, (current_user.id, current_user.id))
     
     rows = await cursor.fetchall()
     await db.close()
     
-    orders = [dict(row) for row in rows]
+    orders = []
+    for row in rows:
+        order_dict = dict(row)
+        # Use business_name for provider if available
+        if order_dict.get('provider_name'):
+            order_dict['provider_name'] = order_dict['provider_name']
+        elif order_dict.get('provider_owner_name'):
+            order_dict['provider_name'] = order_dict['provider_owner_name']
+        orders.append(order_dict)
+    
     return orders
 
 class OrderCreate(BaseModel):
