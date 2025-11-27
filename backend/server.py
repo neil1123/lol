@@ -29,8 +29,14 @@ MONGO_URL = os.environ.get('MONGO_URL')
 if not MONGO_URL:
     raise ValueError("MONGO_URL environment variable is required")
 
+# Extract database name from URL or use default
 client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_URL)
-db = client.get_default_database()
+try:
+    db = client.get_default_database()
+    print(f"Using default database from connection string", file=sys.stderr, flush=True)
+except Exception as e:
+    print(f"No default database in connection string, using 'doord': {e}", file=sys.stderr, flush=True)
+    db = client.doord
 
 # Collections
 users_collection = db.users
