@@ -540,6 +540,12 @@ class OrderCreate(BaseModel):
     service: str
     description: Optional[str] = None
     amount: Optional[float] = None
+    preferred_date: Optional[str] = None
+    preferred_time: Optional[str] = None
+    urgency: Optional[str] = None
+    budget: Optional[str] = None
+    property_size: Optional[str] = None
+    additional_requirements: Optional[str] = None
 
 @api_router.post("/orders")
 async def create_order(order_data: OrderCreate, current_user: User = Depends(get_current_user)):
@@ -558,8 +564,10 @@ async def create_order(order_data: OrderCreate, current_user: User = Depends(get
     order_id = str(uuid.uuid4())
     await db.execute("""
         INSERT INTO orders (
-            id, homeowner_id, provider_id, service, description, status, amount, created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            id, homeowner_id, provider_id, service, description, status, amount, 
+            preferred_date, preferred_time, urgency, budget, property_size, additional_requirements,
+            created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         order_id,
         current_user.id,
@@ -568,6 +576,12 @@ async def create_order(order_data: OrderCreate, current_user: User = Depends(get
         order_data.description,
         'pending',
         order_data.amount,
+        order_data.preferred_date,
+        order_data.preferred_time,
+        order_data.urgency,
+        order_data.budget,
+        order_data.property_size,
+        order_data.additional_requirements,
         datetime.utcnow().isoformat(),
         datetime.utcnow().isoformat()
     ))
