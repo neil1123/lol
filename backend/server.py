@@ -168,6 +168,28 @@ async def root():
         "database_path": DB_PATH
     }
 
+@api_router.get("/debug/threads/{user_id}")
+async def debug_threads(user_id: str):
+    """Debug endpoint to test thread query"""
+    db = await get_db()
+    
+    cursor = await db.execute("""
+        SELECT DISTINCT conversation_id, sender_id, recipient_id, message, MAX(timestamp) as last_message_time
+        FROM messages
+        WHERE sender_id = ? OR recipient_id = ?
+        GROUP BY conversation_id
+        ORDER BY last_message_time DESC
+    """, (user_id, user_id))
+    
+    rows = await cursor.fetchall()
+    await db.close()
+    
+    return {
+        "user_id": user_id,
+        "thread_count": len(rows),
+        "threads": [dict(row) for row in rows]
+    }
+
 @api_router.post("/auth/register", response_model=Token)
 async def register(user_data: UserCreate):
     db = await get_db()
