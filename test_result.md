@@ -894,12 +894,12 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Dynamic Property Manager Code System Testing - COMPLETED"
+    - "Doord Backend API Review Request Testing - COMPLETED"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
   backend_testing_complete: true
-  backend_testing_summary: "DYNAMIC PROPERTY MANAGER CODE SYSTEM TESTING COMPLETED SUCCESSFULLY: Comprehensive backend testing of the new dynamic PM code system that replaced hardcoded 666666 system confirms complete functionality. All 9 critical tests passed with 100% success rate: 1) Property Manager registration with custom PM codes working (PM39957D, PM51E815, PMF0B1AB) 2) PM code uniqueness validation preventing duplicates 3) Tenant registration with valid PM codes auto-converting user_type and linking to PM 4) Invalid PM code handling with proper error messages 5) PM tenant list endpoint returning correct tenants for each PM 6) Hardcoded 666666 system completely removed and rejected 7) Existing user authentication preserved (test@homeowner.com, test@provider.com) 8) Tenant order workflow with PM approval requirement working 9) Backend health and API accessibility confirmed. CRITICAL SYSTEM UPGRADE VERIFIED: Dynamic PM code system fully functional, legacy hardcoded system removed, PM-Tenant relationship management operational, all existing functionality preserved. System is production-ready for dynamic PM code workflow."
+  backend_testing_summary: "DOORD BACKEND API REVIEW REQUEST TESTING COMPLETED SUCCESSFULLY: Comprehensive testing of all API endpoints specified in the review request confirms complete functionality. All 14 critical tests passed with 100% success rate: 1) Backend health check at https://pro-doord.preview.emergentagent.com/api working 2) Provider registration with email 'newprovider@test.com', business_name 'New Test Cleaning', services array working 3) Provider login and /api/me endpoint returning correct data 4) GET /api/providers and GET /api/providers/{id} endpoints working 5) Homeowner registration 'newhomeowner@test.com' working 6) Message thread creation and retrieval working 7) Order creation as homeowner with all specified fields working 8) Provider order retrieval showing homeowner_name working 9) Appointment creation and retrieval working. COMPLETE API WORKFLOW VERIFIED: User registration → authentication → profile management → message threads → order creation → appointment scheduling. SQLite database integration working perfectly. All endpoints responding correctly with proper data structures. System is production-ready and fully functional for the Doord home services marketplace."
 
 agent_communication:
   - agent: "main"
