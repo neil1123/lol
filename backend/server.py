@@ -64,7 +64,7 @@ async def startup():
     await messages_collection.create_index("recipient_id")
     await appointments_collection.create_index("provider_id")
     await ai_chats_collection.create_index("session_id")
-    logging.info(f"✅ MongoDB connected and indexes created")
+    logging.info("✅ MongoDB connected and indexes created")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
