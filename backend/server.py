@@ -32,7 +32,7 @@ async def get_db():
     return db
 
 # JWT settings
-SECRET_KEY = "your-secret-key-change-this-in-production"
+SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-dev-key-only-not-for-production')
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 24 * 60  # 24 hours
 
