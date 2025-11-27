@@ -63,6 +63,11 @@ const HomeownerDashboard = () => {
   });
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
+
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const [ordersError, setOrdersError] = useState('');
   const [activeOrdersTab, setActiveOrdersTab] = useState('quotes'); // Start with quotes tab
   const [searchTerm, setSearchTerm] = useState('');
