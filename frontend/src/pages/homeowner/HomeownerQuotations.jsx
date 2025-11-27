@@ -123,7 +123,7 @@ const HomeownerQuotations = () => {
             <div className="flex items-center space-x-4">
               <Button 
                 variant="ghost" 
-                onClick={() => navigate('/homeowners')}
+                onClick={() => navigate(-1)}
                 className="p-2"
               >
                 <ArrowLeft className="h-5 w-5" />
