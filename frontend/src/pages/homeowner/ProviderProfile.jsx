@@ -471,14 +471,6 @@ const ProviderProfile = () => {
               </Button>
               <Button
                 variant="outline"
-                className="w-full bg-blue-600 text-white hover:bg-blue-700 border-blue-600 shadow-sm text-sm sm:text-base"
-              >
-                💰 {provider.pricingPackages && provider.pricingPackages.length > 0 
-                  ? `Starts from $${Math.min(...provider.pricingPackages.map(pkg => pkg.price))}` 
-                  : 'Contact for pricing'}
-              </Button>
-              <Button
-                variant="outline"
                 className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white shadow-sm text-sm sm:text-base"
                 onClick={handleTextUs}
               >
@@ -486,9 +478,11 @@ const ProviderProfile = () => {
                 <span className="truncate">💬 Text Us</span>
                 <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full hidden sm:inline">1 hr</span>
               </Button>
-              <p className="text-center text-sm text-gray-600">
-                {provider.price_range || provider.priceRange || 'Pricing available upon request'}
-              </p>
+              {provider.pricingPackages && provider.pricingPackages.length > 0 && (
+                <p className="text-center text-sm text-gray-600">
+                  💰 Starts from ${Math.min(...provider.pricingPackages.map(pkg => pkg.price))}
+                </p>
+              )}
             </div>
           </div>
 
