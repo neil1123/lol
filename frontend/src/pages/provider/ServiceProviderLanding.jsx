@@ -815,7 +815,7 @@ const ServiceProviderLanding = () => {
             </p>
             <Button 
               size="lg"
-              onClick={() => navigate('/homeservices/auth')}
+              onClick={() => navigate('/homeservices/auth?mode=signup')}
               className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
             >
               Get Started Free
