@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Mail, Lock, User, Phone, MapPin, Briefcase, Plus, X } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
-import { Checkbox } from '../../components/ui/checkbox';
 import { serviceCategories } from '../../data/mockData';
 import apiService from '../../services/api';
 
 const ProviderAuth = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [availableServices, setAvailableServices] = useState([]);
   const [newService, setNewService] = useState('');
   const [showAddService, setShowAddService] = useState(false);
+  const [activeTab, setActiveTab] = useState('signin');
   
   // Sign In Form
   const [signInData, setSignInData] = useState({
@@ -37,6 +38,16 @@ const ProviderAuth = () => {
     experience: '',
     license: ''
   });
+
+  // Set initial tab based on URL parameter
+  useEffect(() => {
+    const mode = searchParams.get('mode');
+    if (mode === 'signup') {
+      setActiveTab('signup');
+    } else {
+      setActiveTab('signin');
+    }
+  }, [searchParams]);
 
   // Load available services on component mount
   useEffect(() => {
