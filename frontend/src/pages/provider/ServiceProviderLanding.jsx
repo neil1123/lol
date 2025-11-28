@@ -208,7 +208,7 @@ const ServiceProviderLanding = () => {
               <Button 
                 variant="outline"
                 size="lg"
-                onClick={() => navigate('/homeservices/auth')}
+                onClick={() => navigate('/homeservices/auth?mode=signup')}
                 className="border-gray-300 text-gray-700 hover:border-blue-300 hover:text-blue-700 px-8 py-4 text-lg font-semibold rounded-xl"
                 style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
               >
