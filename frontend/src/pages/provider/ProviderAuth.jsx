@@ -495,25 +495,39 @@ const ProviderAuth = () => {
                     )}
                     
                     <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto border rounded p-3">
-                      {availableServices.map((serviceName, index) => (
-                        <div 
-                          key={index} 
-                          className="flex items-center space-x-2 cursor-pointer hover:bg-blue-50 p-1 rounded"
-                          onClick={() => handleServiceToggle(serviceName)}
-                        >
-                          <Checkbox
-                            id={serviceName}
-                            checked={signUpData.services.includes(serviceName)}
-                            onCheckedChange={() => handleServiceToggle(serviceName)}
-                          />
-                          <label
-                            htmlFor={serviceName}
-                            className="text-sm cursor-pointer select-none flex-1"
+                      {availableServices.map((serviceName, index) => {
+                        const isSelected = signUpData.services.includes(serviceName);
+                        return (
+                          <div 
+                            key={index} 
+                            className={`flex items-center space-x-2 cursor-pointer p-2 rounded border transition-colors ${
+                              isSelected 
+                                ? 'bg-blue-100 border-blue-500' 
+                                : 'hover:bg-gray-50 border-transparent'
+                            }`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleServiceToggle(serviceName);
+                            }}
                           >
-                            {serviceName}
-                          </label>
-                        </div>
-                      ))}
+                            <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                              isSelected 
+                                ? 'bg-blue-600 border-blue-600' 
+                                : 'border-gray-300'
+                            }`}>
+                              {isSelected && (
+                                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                                </svg>
+                              )}
+                            </div>
+                            <span className={`text-sm select-none flex-1 ${isSelected ? 'font-medium text-blue-800' : ''}`}>
+                              {serviceName}
+                            </span>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                   
