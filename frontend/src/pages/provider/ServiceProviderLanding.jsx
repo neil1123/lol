@@ -152,7 +152,7 @@ const ServiceProviderLanding = () => {
                 <Button 
                   variant="outline" 
                   onClick={() => {
-                    navigate('/homeservices/auth');
+                    navigate('/homeservices/auth?mode=signin');
                     setIsMobileMenuOpen(false);
                   }}
                   className="justify-start w-full text-sm"
@@ -161,7 +161,7 @@ const ServiceProviderLanding = () => {
                 </Button>
                 <Button 
                   onClick={() => {
-                    navigate('/homeservices/auth');
+                    navigate('/homeservices/auth?mode=signup');
                     setIsMobileMenuOpen(false);
                   }}
                   className="justify-start w-full text-sm"
