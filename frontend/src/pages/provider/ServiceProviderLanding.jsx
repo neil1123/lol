@@ -96,10 +96,10 @@ const ServiceProviderLanding = () => {
               >
                 Book Demo
               </Button>
-              <Button variant="outline" onClick={() => navigate('/homeservices/auth')} className="text-sm">
+              <Button variant="outline" onClick={() => navigate('/homeservices/auth?mode=signin')} className="text-sm">
                 Sign In
               </Button>
-              <Button onClick={() => navigate('/homeservices/auth')} className="text-sm">
+              <Button onClick={() => navigate('/homeservices/auth?mode=signup')} className="text-sm">
                 Get Started
               </Button>
             </div>
