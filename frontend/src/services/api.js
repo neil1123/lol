@@ -1,9 +1,12 @@
 // API Service Layer for Doord Application
-const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
+// In production, REACT_APP_BACKEND_URL is automatically set by Emergent deployment
+// In development, it falls back to localhost:8001
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
 
 class ApiService {
   constructor() {
     this.baseURL = `${API_BASE_URL}/api`;
+    console.log('API Base URL:', this.baseURL);
   }
 
   // Get auth token from localStorage
