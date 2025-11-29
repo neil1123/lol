@@ -403,14 +403,17 @@ const ProviderOrders = () => {
       
     } catch (error) {
       console.error('Failed to create order:', error);
-      // Handle error properly - check if it's an object
+      // Handle error properly - check if it's an Error object or a plain object
       let errorMessage = 'Failed to create order. Please try again.';
-      if (error && typeof error === 'object') {
-        errorMessage = error.message || error.detail || JSON.stringify(error);
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (error && typeof error === 'object') {
+        errorMessage = error.message || error.detail || error.error || JSON.stringify(error);
       } else if (typeof error === 'string') {
         errorMessage = error;
       }
       setError(errorMessage);
+      alert(errorMessage);
     }
   };
 
