@@ -450,40 +450,92 @@ async def get_orders(current_user: User = Depends(get_current_user)):
 @api_router.post("/orders")
 async def create_order(order_data: OrderCreate, current_user: User = Depends(get_current_user)):
     """Create a new order/quotation request"""
-    # Verify provider exists
-    provider = await users_collection.find_one({"id": order_data.provider_id, "user_type": "provider"})
-    if not provider:
-        raise HTTPException(status_code=404, detail="Provider not found")
     
-    order_id = str(uuid.uuid4())
-    order_doc = {
-        "id": order_id,
-        "homeowner_id": current_user.id,
-        "provider_id": order_data.provider_id,
-        "service": order_data.service,
-        "description": order_data.description,
-        "status": "pending",
-        "amount": order_data.amount,
-        "preferred_date": order_data.preferred_date,
-        "preferred_time": order_data.preferred_time,
-        "urgency": order_data.urgency,
-        "budget": order_data.budget,
-        "property_size": order_data.property_size,
-        "additional_requirements": order_data.additional_requirements,
-        "quotation_amount": None,
-        "quotation_details": None,
-        "quotation_valid_until": None,
-        "created_at": datetime.utcnow().isoformat(),
-        "updated_at": datetime.utcnow().isoformat()
-    }
+    # Check if this is a manual order created by provider
+    is_manual_order = order_data.homeowner_id and order_data.homeowner_id.startswith('manual_')
     
-    await orders_collection.insert_one(order_doc)
-    
-    return {
-        "message": "Quotation request sent successfully",
-        "order_id": order_id,
-        "status": "pending"
-    }
+    if is_manual_order:
+        # Provider creating manual order
+        order_id = str(uuid.uuid4())
+        service_type = order_data.service_type or order_data.service or ''
+        services_list = order_data.services or [service_type] if service_type else []
+        
+        order_doc = {
+            "id": order_id,
+            "homeowner_id": order_data.homeowner_id,
+            "provider_id": current_user.id,
+            "homeowner_name": order_data.homeowner_name or "Manual Customer",
+            "homeowner_email": order_data.homeowner_email or "",
+            "homeowner_phone": order_data.homeowner_phone or "",
+            "homeowner_address": order_data.homeowner_address or "",
+            "provider_name": order_data.provider_name or current_user.business_name or current_user.name,
+            "service_type": service_type,
+            "services": services_list,
+            "service": service_type,
+            "description": order_data.description,
+            "status": "confirmed",  # Manual orders start as confirmed
+            "request_date": datetime.utcnow().isoformat(),
+            "preferred_date": order_data.preferred_date,
+            "preferred_time": order_data.preferred_time or "09:00",
+            "urgency": order_data.urgency or "medium",
+            "budget": order_data.budget,
+            "additional_requirements": order_data.additional_requirements,
+            "quotation_amount": float(order_data.budget.replace('$', '')) if order_data.budget else None,
+            "created_at": datetime.utcnow().isoformat(),
+            "updated_at": datetime.utcnow().isoformat()
+        }
+        
+        await orders_collection.insert_one(order_doc)
+        
+        return {
+            "message": "Order created successfully",
+            "order_id": order_id,
+            "id": order_id,
+            "status": "confirmed"
+        }
+    else:
+        # Homeowner creating quotation request
+        provider = await users_collection.find_one({"id": order_data.provider_id, "user_type": "provider"})
+        if not provider:
+            raise HTTPException(status_code=404, detail="Provider not found")
+        
+        order_id = str(uuid.uuid4())
+        order_doc = {
+            "id": order_id,
+            "homeowner_id": current_user.id,
+            "homeowner_name": current_user.name,
+            "homeowner_email": current_user.email,
+            "homeowner_phone": current_user.phone or "",
+            "homeowner_address": current_user.address or "",
+            "provider_id": order_data.provider_id,
+            "provider_name": provider.get('business_name') or provider.get('name'),
+            "service": order_data.service,
+            "service_type": order_data.service,
+            "description": order_data.description,
+            "status": "pending_quotation",
+            "amount": order_data.amount,
+            "request_date": datetime.utcnow().isoformat(),
+            "preferred_date": order_data.preferred_date,
+            "preferred_time": order_data.preferred_time,
+            "urgency": order_data.urgency,
+            "budget": order_data.budget,
+            "property_size": order_data.property_size,
+            "additional_requirements": order_data.additional_requirements,
+            "quotation_amount": None,
+            "quotation_details": None,
+            "quotation_valid_until": None,
+            "created_at": datetime.utcnow().isoformat(),
+            "updated_at": datetime.utcnow().isoformat()
+        }
+        
+        await orders_collection.insert_one(order_doc)
+        
+        return {
+            "message": "Quotation request sent successfully",
+            "order_id": order_id,
+            "id": order_id,
+            "status": "pending_quotation"
+        }
 
 @api_router.post("/quotations")
 async def create_quotation(quotation_data: Dict[str, Any], current_user: User = Depends(get_current_user)):
