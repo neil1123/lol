@@ -872,10 +872,10 @@ const ProviderOrders = () => {
                   <div className="space-y-2">
                     <Label htmlFor="priority">Priority</Label>
                     <Select value={newOrder.priority} onValueChange={(value) => setNewOrder({...newOrder, priority: value})}>
-                      <SelectTrigger className="relative z-50">
+                      <SelectTrigger className="relative">
                         <SelectValue placeholder="Select priority" />
                       </SelectTrigger>
-                      <SelectContent className="z-[100]">
+                      <SelectContent position="popper" sideOffset={5} className="z-[9999] bg-white">
                         <SelectItem value="low">Low</SelectItem>
                         <SelectItem value="medium">Medium</SelectItem>
                         <SelectItem value="high">High</SelectItem>
