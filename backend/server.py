@@ -275,7 +275,7 @@ def parse_json_field(value):
         return value
     try:
         return json.loads(value)
-    except:
+    except Exception:
         return []
 
 async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
