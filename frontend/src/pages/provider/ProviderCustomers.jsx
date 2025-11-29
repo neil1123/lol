@@ -23,11 +23,13 @@ import { Avatar, AvatarFallback } from '../../components/ui/avatar';
 import { Input } from '../../components/ui/input';
 import { Textarea } from '../../components/ui/textarea';
 import { STANDARD_PROVIDER_SIDEBAR, handleStandardLogout } from '../../constants/providerSidebarConfig';
+import apiService from '../../services/api';
 
 const ProviderCustomers = () => {
   const navigate = useNavigate();
   const [customers, setCustomers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showCustomerForm, setShowCustomerForm] = useState(false);
   const [customerForm, setCustomerForm] = useState({
