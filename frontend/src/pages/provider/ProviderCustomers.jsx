@@ -477,6 +477,19 @@ const ProviderCustomers = () => {
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
+                  Total Spent ($)
+                </label>
+                <Input
+                  type="number"
+                  value={customerForm.totalSpent}
+                  onChange={(e) => setCustomerForm({...customerForm, totalSpent: e.target.value})}
+                  placeholder="0.00"
+                  className="w-full"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1 text-left">
                   Notes
                 </label>
                 <Textarea
