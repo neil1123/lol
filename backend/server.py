@@ -103,8 +103,8 @@ async def create_indexes():
         await appointments_collection.create_index("provider_id")
         await ai_chats_collection.create_index("session_id")
         print("✅ All indexes created successfully", file=sys.stderr, flush=True)
-    except Exception:
-        print(f"⚠️ Index creation warning (non-fatal): {e}", file=sys.stderr, flush=True)
+    except Exception as idx_err:
+        print(f"⚠️ Index creation warning (non-fatal): {idx_err}", file=sys.stderr, flush=True)
 
 # Startup event - lightweight and fast
 @app.on_event("startup")
@@ -120,16 +120,16 @@ async def startup():
             print("✅ MongoDB connection verified", file=sys.stderr, flush=True)
         except asyncio.TimeoutError:
             print("⚠️ MongoDB ping timed out, but continuing startup...", file=sys.stderr, flush=True)
-        except Exception:
-            print(f"⚠️ MongoDB ping failed: {e}, but continuing startup...", file=sys.stderr, flush=True)
+        except Exception as ping_err:
+            print(f"⚠️ MongoDB ping failed: {ping_err}, but continuing startup...", file=sys.stderr, flush=True)
         
         # Schedule index creation as background task (non-blocking)
         asyncio.create_task(create_indexes())
         
         print("✅ Application startup complete", file=sys.stderr, flush=True)
         logging.info("✅ Application started successfully")
-    except Exception:
-        print(f"❌ STARTUP ERROR: {e}", file=sys.stderr, flush=True)
+    except Exception as startup_err:
+        print(f"❌ STARTUP ERROR: {startup_err}", file=sys.stderr, flush=True)
         import traceback
         traceback.print_exc()
         # Don't raise - let the app start anyway
