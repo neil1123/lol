@@ -46,8 +46,8 @@ const ProviderDashboard = () => {
 
   const sidebarItems = STANDARD_PROVIDER_SIDEBAR;
 
-  // Empty states for fresh platform - no activities for new users
-  const recentActivity = [];
+  // Empty states for fresh platform - will be populated from API
+  const [recentActivity, setRecentActivity] = useState([]);
 
   // User profile state - fetch from database
   const [userProfile, setUserProfile] = useState(null);
@@ -63,6 +63,7 @@ const ProviderDashboard = () => {
   useEffect(() => {
     loadUserProfile();
     loadDashboardData();
+    loadUpcomingActivities();
   }, []);
 
   const loadUserProfile = async () => {
@@ -88,19 +89,82 @@ const ProviderDashboard = () => {
     }
   };
 
+  const loadUpcomingActivities = async () => {
+    try {
+      // Load appointments and orders for upcoming activities
+      const [appointments, orders] = await Promise.all([
+        apiService.getAppointments(),
+        apiService.getOrders()
+      ]);
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      // Get upcoming appointments (future dates)
+      const upcomingAppointments = appointments
+        .filter(apt => new Date(apt.date) >= today)
+        .map(apt => ({
+          id: `apt-${apt.id}`,
+          type: 'appointment',
+          title: `Appointment with ${apt.customer_name}`,
+          description: apt.service_type,
+          date: apt.date,
+          time: apt.time || '09:00',
+          icon: 'calendar'
+        }));
+      
+      // Get upcoming/pending orders
+      const upcomingOrders = orders
+        .filter(order => ['pending_quotation', 'quotation_sent', 'confirmed', 'in_progress'].includes(order.status))
+        .slice(0, 5)
+        .map(order => ({
+          id: `order-${order.id}`,
+          type: 'order',
+          title: `Order from ${order.homeowner_name}`,
+          description: `${order.service_type} - ${order.status.replace('_', ' ')}`,
+          date: order.preferred_date || order.request_date,
+          time: order.preferred_time || '',
+          icon: 'package'
+        }));
+      
+      // Combine and sort by date
+      const activities = [...upcomingAppointments, ...upcomingOrders]
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .slice(0, 5);
+      
+      setRecentActivity(activities);
+    } catch (error) {
+      console.error('Failed to load upcoming activities:', error);
+      setRecentActivity([]);
+    }
+  };
+
   const loadDashboardData = async () => {
     try {
-      // Load orders to calculate total revenue and active jobs
-      const orders = await apiService.getOrders();
+      // Load orders and customers to calculate total revenue and active jobs
+      const [orders, customers] = await Promise.all([
+        apiService.getOrders(),
+        apiService.getCustomers()
+      ]);
       
       const completedOrders = orders.filter(order => order.status === 'completed');
       const activeOrders = orders.filter(order => 
-        ['accepted', 'in_progress'].includes(order.status)
+        ['accepted', 'in_progress', 'confirmed'].includes(order.status)
       );
       
-      const totalRevenue = completedOrders.reduce((sum, order) => 
+      // Revenue from completed orders
+      const orderRevenue = completedOrders.reduce((sum, order) => 
         sum + (parseFloat(order.quotation_amount) || 0), 0
       );
+      
+      // Revenue from customers' total_spent
+      const customerRevenue = customers.reduce((sum, customer) => 
+        sum + (parseFloat(customer.total_spent) || 0), 0
+      );
+      
+      // Total revenue is the max of order revenue and customer revenue
+      // (to avoid double counting)
+      const totalRevenue = Math.max(orderRevenue, customerRevenue);
       
       // Calculate weekly revenue
       const oneWeekAgo = new Date();
