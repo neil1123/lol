@@ -195,6 +195,15 @@ class OrderCreate(BaseModel):
     budget: Optional[str] = None
     property_size: Optional[str] = None
     additional_requirements: Optional[str] = None
+    # Fields for manual order creation by provider
+    homeowner_id: Optional[str] = None
+    homeowner_name: Optional[str] = None
+    homeowner_email: Optional[str] = None
+    homeowner_phone: Optional[str] = None
+    homeowner_address: Optional[str] = None
+    provider_name: Optional[str] = None
+    service_type: Optional[str] = None
+    services: Optional[List[str]] = None
 
 class ThreadCreate(BaseModel):
     homeowner_id: Optional[str] = None
