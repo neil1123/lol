@@ -181,8 +181,13 @@ class Token(BaseModel):
     user: Dict[str, Any]
 
 class MessageCreate(BaseModel):
-    recipient_id: str
-    message: str
+    recipient_id: Optional[str] = None
+    message: Optional[str] = None
+    # Alternative fields for thread-based messaging
+    thread_id: Optional[str] = None
+    content: Optional[str] = None
+    sender_id: Optional[str] = None
+    sender_type: Optional[str] = None
 
 class OrderCreate(BaseModel):
     provider_id: str
