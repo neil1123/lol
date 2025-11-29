@@ -558,7 +558,7 @@ async def create_order(order_data: OrderCreate, current_user: User = Depends(get
             if order_data.budget:
                 try:
                     quotation_amount = float(order_data.budget.replace('$', '').replace(',', ''))
-                except:
+                except Exception:
                     pass
             
             await db.execute('''
