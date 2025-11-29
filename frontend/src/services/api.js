@@ -237,6 +237,31 @@ class ApiService {
     });
   }
 
+  // ====== CUSTOMERS ======
+  async getCustomers() {
+    return await this.request('/customers');
+  }
+
+  async createCustomer(customerData) {
+    return await this.request('/customers', {
+      method: 'POST',
+      body: JSON.stringify(customerData),
+    });
+  }
+
+  async updateCustomer(customerId, customerData) {
+    return await this.request(`/customers/${customerId}`, {
+      method: 'PUT',
+      body: JSON.stringify(customerData),
+    });
+  }
+
+  async deleteCustomer(customerId) {
+    return await this.request(`/customers/${customerId}`, {
+      method: 'DELETE',
+    });
+  }
+
   // ====== REVIEWS ======
   async submitReview(reviewData) {
     return await this.request('/reviews', {
