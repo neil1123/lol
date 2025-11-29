@@ -98,13 +98,13 @@ const ProviderCustomers = () => {
   const handleAddCustomer = () => {
     if (customerForm.name) {
       const newCustomer = {
-        id: customers.length + 1,
+        id: Date.now(), // Use timestamp for unique ID
         name: customerForm.name,
         email: customerForm.email || 'Not provided',
         phone: customerForm.phone || 'N/A',
         address: customerForm.address || 'N/A',
         totalOrders: 0,
-        totalSpent: 0,
+        totalSpent: parseFloat(customerForm.totalSpent) || 0,
         rating: 0,
         lastOrder: null,
         status: 'active',
@@ -117,6 +117,7 @@ const ProviderCustomers = () => {
         email: '',
         phone: '',
         address: '',
+        totalSpent: '',
         notes: ''
       });
       setShowCustomerForm(false);
