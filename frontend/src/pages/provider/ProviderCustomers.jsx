@@ -35,8 +35,13 @@ const ProviderCustomers = () => {
     email: '',
     phone: '',
     address: '',
+    totalSpent: '',
     notes: ''
   });
+
+  // User profile state
+  const [userProfile, setUserProfile] = useState(null);
+  const [userInitials, setUserInitials] = useState('U');
 
   const handleLogout = () => {
     handleStandardLogout(navigate);
@@ -53,7 +58,30 @@ const ProviderCustomers = () => {
       // Start with empty array for fresh platform
       setCustomers([]);
     }
+    // Load user profile
+    loadUserProfile();
   }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      const apiService = (await import('../../services/api')).default;
+      const profile = await apiService.getUserProfile();
+      setUserProfile(profile);
+      
+      // Set user initials from actual database data
+      const name = profile.name || profile.business_name || '';
+      if (name) {
+        const names = name.trim().split(' ').filter(n => n);
+        if (names.length === 1) {
+          setUserInitials(names[0][0].toUpperCase());
+        } else {
+          setUserInitials(names.map(n => n[0]).join('').toUpperCase().slice(0, 2));
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load user profile:', error);
+    }
+  };
 
   // Save customers to localStorage whenever customers change
   useEffect(() => {
