@@ -290,51 +290,57 @@ async def root():
 
 @api_router.post("/auth/register", response_model=Token)
 async def register(user_data: UserCreate):
-    # Check if user already exists
-    existing = await users_collection.find_one({"email": user_data.email})
-    if existing:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    
-    # Hash password
-    password_hash = pwd_context.hash(user_data.password)
-    
-    # Create user document
-    user_id = str(uuid.uuid4())
-    user_doc = {
-        "id": user_id,
-        "email": user_data.email,
-        "password_hash": password_hash,
-        "user_type": user_data.user_type,
-        "name": user_data.name,
-        "phone": user_data.phone,
-        "address": user_data.address,
-        "business_name": user_data.business_name,
-        "services": user_data.services or [],
-        "description": user_data.description,
-        "location": user_data.location,
-        "specialties": user_data.specialties or [],
-        "rating": 5.0,
-        "reviews": 0,
-        "completed_jobs": 0,
-        "response_time": None,
-        "year_established": None,
-        "price_range": None,
-        "created_at": datetime.utcnow().isoformat(),
-        "updated_at": datetime.utcnow().isoformat(),
-        "is_active": True,
-        "pm_code": user_data.pm_code
-    }
-    
-    await users_collection.insert_one(user_doc)
-    
-    # Create access token
-    access_token = create_access_token(data={"sub": user_id})
-    
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-        "user": user_to_response(user_doc)
-    }
+    try:
+        # Check if user already exists
+        existing = await users_collection.find_one({"email": user_data.email})
+        if existing:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        
+        # Hash password
+        password_hash = pwd_context.hash(user_data.password)
+        
+        # Create user document
+        user_id = str(uuid.uuid4())
+        user_doc = {
+            "id": user_id,
+            "email": user_data.email,
+            "password_hash": password_hash,
+            "user_type": user_data.user_type,
+            "name": user_data.name,
+            "phone": user_data.phone,
+            "address": user_data.address,
+            "business_name": user_data.business_name,
+            "services": user_data.services or [],
+            "description": user_data.description,
+            "location": user_data.location,
+            "specialties": user_data.specialties or [],
+            "rating": 5.0,
+            "reviews": 0,
+            "completed_jobs": 0,
+            "response_time": None,
+            "year_established": None,
+            "price_range": None,
+            "created_at": datetime.utcnow().isoformat(),
+            "updated_at": datetime.utcnow().isoformat(),
+            "is_active": True,
+            "pm_code": user_data.pm_code
+        }
+        
+        await users_collection.insert_one(user_doc)
+        
+        # Create access token
+        access_token = create_access_token(data={"sub": user_id})
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "user": user_to_response(user_doc)
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Registration error: {e}", file=sys.stderr, flush=True)
+        raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
 
 @api_router.post("/auth/login", response_model=Token)
 async def login(user_data: UserLogin):
