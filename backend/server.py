@@ -41,8 +41,8 @@ try:
         connectTimeoutMS=10000,  # 10 second connection timeout
     )
     print("MongoDB client created successfully", file=sys.stderr, flush=True)
-except Exception:
-    print(f"ERROR creating MongoDB client: {e}", file=sys.stderr, flush=True)
+except Exception as mongo_err:
+    print(f"ERROR creating MongoDB client: {mongo_err}", file=sys.stderr, flush=True)
     raise
 
 # Try to get default database from connection string
