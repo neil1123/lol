@@ -403,7 +403,9 @@ const ProviderCalendar = () => {
               </Button>
               <Avatar className="h-8 w-8">
                 <AvatarFallback className="bg-blue-100 text-blue-600">
-                  ES
+                  {userProfile?.name ? 
+                    userProfile.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 
+                    'U'}
                 </AvatarFallback>
               </Avatar>
             </div>
