@@ -103,31 +103,47 @@ const ProviderCustomers = () => {
     }
   };
 
-  // Save customers to localStorage whenever customers change
-  useEffect(() => {
-    if (customers.length >= 0) {
-      localStorage.setItem('providerCustomers', JSON.stringify(customers));
-    }
-  }, [customers]);
-
   const filteredCustomers = customers.filter(customer =>
     customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     customer.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAddCustomer = () => {
+  const handleAddCustomer = async () => {
     if (customerForm.name) {
-      const newCustomer = {
-        id: Date.now(), // Use timestamp for unique ID
-        name: customerForm.name,
-        email: customerForm.email || 'Not provided',
-        phone: customerForm.phone || 'N/A',
-        address: customerForm.address || 'N/A',
-        totalOrders: 0,
-        totalSpent: parseFloat(customerForm.totalSpent) || 0,
-        rating: 0,
-        lastOrder: null,
-        status: 'active',
+      try {
+        const customerData = {
+          name: customerForm.name,
+          email: customerForm.email || 'Not provided',
+          phone: customerForm.phone || 'N/A',
+          address: customerForm.address || 'N/A',
+          total_orders: 0,
+          total_spent: parseFloat(customerForm.totalSpent) || 0,
+          rating: 0,
+          last_order: null,
+          status: 'active',
+          notes: customerForm.notes
+        };
+        
+        await apiService.createCustomer(customerData);
+        
+        // Reload customers from database
+        await loadCustomers();
+        
+        setCustomerForm({
+          name: '',
+          email: '',
+          phone: '',
+          address: '',
+          totalSpent: '',
+          notes: ''
+        });
+        setShowCustomerForm(false);
+      } catch (error) {
+        console.error('Failed to add customer:', error);
+        alert('Failed to add customer. Please try again.');
+      }
+    }
+  };
         notes: customerForm.notes
       };
       
