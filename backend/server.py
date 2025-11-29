@@ -632,6 +632,42 @@ async def update_order_quotation(
 @api_router.post("/messages")
 async def send_message(message_data: MessageCreate, current_user: User = Depends(get_current_user)):
     """Send a message"""
+    
+    # Handle thread-based messaging (from ProviderMessaging)
+    if message_data.thread_id or message_data.content:
+        conversation_id = message_data.thread_id
+        message_content = message_data.content or message_data.message
+        
+        # Extract recipient from conversation_id
+        if conversation_id and '_' in conversation_id:
+            parts = conversation_id.split('_')
+            recipient_id = parts[1] if parts[0] == current_user.id else parts[0]
+        else:
+            recipient_id = message_data.recipient_id
+        
+        if not recipient_id:
+            raise HTTPException(status_code=400, detail="Recipient ID is required")
+        
+        message_id = str(uuid.uuid4())
+        message_doc = {
+            "id": message_id,
+            "conversation_id": conversation_id,
+            "sender_id": current_user.id,
+            "recipient_id": recipient_id,
+            "message": message_content,
+            "timestamp": datetime.utcnow().isoformat(),
+            "is_read": False
+        }
+        
+        await messages_collection.insert_one(message_doc)
+        
+        return {
+            "message": "Message sent successfully",
+            "message_id": message_id,
+            "conversation_id": conversation_id
+        }
+    
+    # Handle direct messaging (original format)
     recipient = await users_collection.find_one({"id": message_data.recipient_id})
     if not recipient:
         raise HTTPException(status_code=404, detail="Recipient not found")
