@@ -806,6 +806,90 @@ async def get_notification_count(current_user: User = Depends(get_current_user))
         "total": unread_messages + pending_orders
     }
 
+# ====== CUSTOMERS ENDPOINTS ======
+
+@api_router.get("/customers")
+async def get_customers(current_user: User = Depends(get_current_user)):
+    """Get all customers for the current provider"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can access customers")
+    
+    customers = await customers_collection.find(
+        {"provider_id": current_user.id},
+        {"_id": 0}
+    ).to_list(1000)
+    
+    return customers
+
+@api_router.post("/customers")
+async def create_customer(customer_data: dict, current_user: User = Depends(get_current_user)):
+    """Create a new customer for the current provider"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can create customers")
+    
+    customer = {
+        "id": str(uuid.uuid4()),
+        "provider_id": current_user.id,
+        "name": customer_data.get("name", ""),
+        "email": customer_data.get("email", "Not provided"),
+        "phone": customer_data.get("phone", "N/A"),
+        "address": customer_data.get("address", "N/A"),
+        "total_orders": customer_data.get("total_orders", 0),
+        "total_spent": float(customer_data.get("total_spent", 0)),
+        "rating": customer_data.get("rating", 0),
+        "last_order": customer_data.get("last_order"),
+        "status": customer_data.get("status", "active"),
+        "notes": customer_data.get("notes", ""),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await customers_collection.insert_one(customer)
+    
+    # Return without _id
+    customer.pop("_id", None)
+    return customer
+
+@api_router.put("/customers/{customer_id}")
+async def update_customer(customer_id: str, customer_data: dict, current_user: User = Depends(get_current_user)):
+    """Update a customer"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can update customers")
+    
+    # Only update allowed fields
+    allowed_fields = ['name', 'email', 'phone', 'address', 'total_orders', 'total_spent', 'rating', 'status', 'notes']
+    update_data = {k: v for k, v in customer_data.items() if k in allowed_fields}
+    
+    if update_data:
+        await customers_collection.update_one(
+            {"id": customer_id, "provider_id": current_user.id},
+            {"$set": update_data}
+        )
+    
+    updated_customer = await customers_collection.find_one(
+        {"id": customer_id, "provider_id": current_user.id},
+        {"_id": 0}
+    )
+    
+    if not updated_customer:
+        raise HTTPException(status_code=404, detail="Customer not found")
+    
+    return updated_customer
+
+@api_router.delete("/customers/{customer_id}")
+async def delete_customer(customer_id: str, current_user: User = Depends(get_current_user)):
+    """Delete a customer"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can delete customers")
+    
+    result = await customers_collection.delete_one(
+        {"id": customer_id, "provider_id": current_user.id}
+    )
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Customer not found")
+    
+    return {"message": "Customer deleted successfully"}
+
 # ====== DEBUG ENDPOINTS ======
 
 @api_router.get("/debug/threads/{user_id}")
