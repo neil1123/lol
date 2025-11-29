@@ -485,7 +485,7 @@ async def create_order(order_data: OrderCreate, current_user: User = Depends(get
             "urgency": order_data.urgency or "medium",
             "budget": order_data.budget,
             "additional_requirements": order_data.additional_requirements,
-            "quotation_amount": float(order_data.budget.replace('$', '')) if order_data.budget else None,
+            "quotation_amount": float(order_data.budget.replace('$', '').replace(',', '')) if order_data.budget and order_data.budget.strip() else None,
             "created_at": datetime.utcnow().isoformat(),
             "updated_at": datetime.utcnow().isoformat()
         }
