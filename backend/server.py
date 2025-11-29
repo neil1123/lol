@@ -190,8 +190,8 @@ class MessageCreate(BaseModel):
     sender_type: Optional[str] = None
 
 class OrderCreate(BaseModel):
-    provider_id: str
-    service: str
+    provider_id: Optional[str] = None
+    service: Optional[str] = None
     description: Optional[str] = None
     amount: Optional[float] = None
     preferred_date: Optional[str] = None
