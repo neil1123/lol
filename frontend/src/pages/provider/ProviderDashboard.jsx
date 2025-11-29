@@ -184,7 +184,6 @@ const ProviderDashboard = () => {
     loadUserProfile();
     loadDashboardData();
     loadUpcomingActivities();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
