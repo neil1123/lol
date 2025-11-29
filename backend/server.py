@@ -265,14 +265,26 @@ def user_to_response(user_doc: dict) -> dict:
 
 # ====== API ENDPOINTS ======
 
+@api_router.get("/ping")
+async def ping():
+    """Simple ping endpoint that doesn't require database"""
+    return {"status": "ok", "message": "Backend is running"}
+
 @api_router.get("/")
 async def root():
-    user_count = await users_collection.count_documents({})
-    return {
-        "message": "Doord API (MongoDB) - Running", 
-        "status": "active",
-        "database": f"MongoDB - {user_count} users registered"
-    }
+    try:
+        user_count = await users_collection.count_documents({})
+        return {
+            "message": "Doord API (MongoDB) - Running", 
+            "status": "active",
+            "database": f"MongoDB - {user_count} users registered"
+        }
+    except Exception as e:
+        return {
+            "message": "Doord API - Database Error", 
+            "status": "error",
+            "error": str(e)
+        }
 
 # ====== AUTH ENDPOINTS ======
 
