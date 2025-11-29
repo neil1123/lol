@@ -300,7 +300,22 @@ const ProviderOrders = () => {
       
       // Use database user profile instead of localStorage
       if (!userProfile || !userProfile.id) {
-        throw new Error('Please ensure you are logged in properly');
+        setError('Please ensure you are logged in properly');
+        alert('Please ensure you are logged in properly');
+        return;
+      }
+
+      // Validate required fields
+      if (!newOrder.customerName || !newOrder.customerName.trim()) {
+        setError('Customer name is required');
+        alert('Customer name is required');
+        return;
+      }
+
+      if (!newOrder.serviceType && (!newOrder.services || newOrder.services.length === 0)) {
+        setError('Please select at least one service');
+        alert('Please select at least one service');
+        return;
       }
 
       // Check if we're editing an existing order
