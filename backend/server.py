@@ -289,11 +289,11 @@ async def root():
             "status": "active",
             "database": f"MongoDB - {user_count} users registered"
         }
-    except Exception:
+    except Exception as db_err:
         return {
             "message": "Doord API - Database Error", 
             "status": "error",
-            "error": str(e)
+            "error": str(db_err)
         }
 
 # ====== AUTH ENDPOINTS ======
@@ -348,9 +348,9 @@ async def register(user_data: UserCreate):
         }
     except HTTPException:
         raise
-    except Exception:
-        print(f"Registration error: {e}", file=sys.stderr, flush=True)
-        raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
+    except Exception as reg_err:
+        print(f"Registration error: {reg_err}", file=sys.stderr, flush=True)
+        raise HTTPException(status_code=500, detail=f"Registration failed: {str(reg_err)}")
 
 @api_router.post("/auth/login", response_model=Token)
 async def login(user_data: UserLogin):
