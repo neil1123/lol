@@ -599,22 +599,7 @@ const ProviderCalendar = () => {
                       };
                     }}
                     components={{
-                      toolbar: (props) => (
-                        <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                          <div className="flex items-center gap-2">
-                            <Button variant="outline" size="sm" onClick={() => props.onNavigate('PREV')}>
-                              <ChevronLeft className="h-4 w-4" />
-                            </Button>
-                            <Button variant="outline" size="sm" onClick={() => props.onNavigate('TODAY')}>
-                              Today
-                            </Button>
-                            <Button variant="outline" size="sm" onClick={() => props.onNavigate('NEXT')}>
-                              <ChevronRight className="h-4 w-4" />
-                            </Button>
-                          </div>
-                          <h3 className="text-lg font-semibold">{props.label}</h3>
-                        </div>
-                      )
+                      toolbar: CustomToolbar
                     }}
                   />
                 </div>
