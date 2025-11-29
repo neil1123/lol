@@ -457,13 +457,18 @@ const ProviderDashboard = () => {
                     ) : (
                       recentActivity.map((activity) => (
                         <div key={activity.id} className="flex items-start space-x-3">
-                          <div className="h-2 w-2 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
+                          <div className={`h-2 w-2 rounded-full mt-2 flex-shrink-0 ${
+                            activity.type === 'appointment' ? 'bg-green-600' : 'bg-blue-600'
+                          }`} />
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-gray-900">{activity.message}</p>
-                            <p className="text-xs text-gray-500">{activity.time}</p>
+                            <p className="text-sm font-medium text-gray-900">{activity.title}</p>
+                            <p className="text-xs text-gray-600">{activity.description}</p>
+                            <p className="text-xs text-gray-500">
+                              {activity.date} {activity.time && `at ${activity.time}`}
+                            </p>
                           </div>
-                          <Badge variant={activity.status === 'pending' ? 'secondary' : 'default'}>
-                            {activity.status}
+                          <Badge variant={activity.type === 'appointment' ? 'default' : 'secondary'}>
+                            {activity.type === 'appointment' ? 'Appointment' : 'Order'}
                           </Badge>
                         </div>
                       ))
