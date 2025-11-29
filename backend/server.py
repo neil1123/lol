@@ -31,9 +31,7 @@ if not MONGO_URL:
     raise ValueError("MONGO_URL environment variable is required")
 
 print("Initializing MongoDB connection...", file=sys.stderr, flush=True)
-
-# Parse database name from connection string or use environment variable
-DB_NAME = os.environ.get('DB_NAME', 'doord')
+print(f"MONGO_URL format check: {MONGO_URL[:50]}...", file=sys.stderr, flush=True)
 
 # Create the MongoDB client
 try:
@@ -47,13 +45,25 @@ except Exception as e:
     print(f"ERROR creating MongoDB client: {e}", file=sys.stderr, flush=True)
     raise
 
-# Try to get default database from connection string, fall back to DB_NAME env var
+# Try to get default database from connection string
+# MongoDB Atlas connection strings include the database name after the last /
+# Format: mongodb+srv://user:pass@cluster.mongodb.net/DATABASE_NAME?options
 try:
     db = client.get_default_database()
     print(f"Using default database from connection string: {db.name}", file=sys.stderr, flush=True)
 except Exception as e:
-    print(f"No default database in connection string, using '{DB_NAME}': {e}", file=sys.stderr, flush=True)
-    db = client[DB_NAME]
+    # Parse database name from connection string
+    import re
+    # Try to extract database name from URL (after last / before ?)
+    match = re.search(r'/([^/?]+)(?:\?|$)', MONGO_URL.split('@')[-1] if '@' in MONGO_URL else MONGO_URL)
+    if match and match.group(1) and match.group(1) not in ['', 'test', 'admin']:
+        db_name = match.group(1)
+        print(f"Extracted database name from URL: {db_name}", file=sys.stderr, flush=True)
+    else:
+        # Use simple 'doord' as default - this is what Emergent typically provisions
+        db_name = 'doord'
+        print(f"Using default database name: {db_name}", file=sys.stderr, flush=True)
+    db = client[db_name]
 
 print(f"Database initialized: {db.name}", file=sys.stderr, flush=True)
 
