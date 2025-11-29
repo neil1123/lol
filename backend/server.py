@@ -1131,9 +1131,9 @@ async def health_check():
             "database": "connected",
             "db_name": db.name
         }
-    except Exception:
-        print(f"Health check failed: {e}", file=sys.stderr, flush=True)
-        return {"status": "unhealthy", "error": str(e)}
+    except Exception as health_err:
+        print(f"Health check failed: {health_err}", file=sys.stderr, flush=True)
+        return {"status": "unhealthy", "error": str(health_err)}
 
 # Main entry point
 if __name__ == "__main__":
