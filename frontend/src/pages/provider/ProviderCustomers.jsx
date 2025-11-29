@@ -151,7 +151,7 @@ const ProviderCustomers = () => {
               </Button>
               <Avatar className="h-8 w-8">
                 <AvatarFallback className="bg-blue-100 text-blue-600">
-                  ES
+                  {userInitials}
                 </AvatarFallback>
               </Avatar>
             </div>
