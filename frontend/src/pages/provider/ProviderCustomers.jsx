@@ -144,21 +144,6 @@ const ProviderCustomers = () => {
       }
     }
   };
-        notes: customerForm.notes
-      };
-      
-      setCustomers([...customers, newCustomer]);
-      setCustomerForm({
-        name: '',
-        email: '',
-        phone: '',
-        address: '',
-        totalSpent: '',
-        notes: ''
-      });
-      setShowCustomerForm(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
