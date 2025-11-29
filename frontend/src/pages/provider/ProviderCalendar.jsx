@@ -33,6 +33,36 @@ import '../../calendar-custom.css';
 // to the correct localizer.
 const localizer = momentLocalizer(moment);
 
+// Custom Calendar Toolbar Component
+const CustomToolbar = ({ label, onNavigate }) => (
+  <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="flex items-center gap-2">
+      <button 
+        type="button"
+        className="inline-flex items-center justify-center rounded-md text-sm font-medium border border-gray-200 bg-white hover:bg-gray-100 h-9 px-3"
+        onClick={() => onNavigate('PREV')}
+      >
+        <ChevronLeft className="h-4 w-4" />
+      </button>
+      <button 
+        type="button"
+        className="inline-flex items-center justify-center rounded-md text-sm font-medium border border-gray-200 bg-white hover:bg-gray-100 h-9 px-3"
+        onClick={() => onNavigate('TODAY')}
+      >
+        Today
+      </button>
+      <button 
+        type="button"
+        className="inline-flex items-center justify-center rounded-md text-sm font-medium border border-gray-200 bg-white hover:bg-gray-100 h-9 px-3"
+        onClick={() => onNavigate('NEXT')}
+      >
+        <ChevronRight className="h-4 w-4" />
+      </button>
+    </div>
+    <h3 className="text-lg font-semibold">{label}</h3>
+  </div>
+);
+
 const ProviderCalendar = () => {
   const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState(new Date());
