@@ -238,8 +238,8 @@ const ProviderCalendar = () => {
   // Auto-add customer when appointment is created
   const autoAddCustomer = async (customerData) => {
     try {
-      // Check if customer already exists (by name and phone)
-      const existingCustomers = JSON.parse(localStorage.getItem('providerCustomers') || '[]');
+      // Check if customer already exists via API
+      const existingCustomers = await apiService.getCustomers();
       
       const customerExists = existingCustomers.some(c => 
         c.name.toLowerCase() === customerData.name.toLowerCase() ||
@@ -247,23 +247,21 @@ const ProviderCalendar = () => {
       );
 
       if (!customerExists) {
-        const newCustomer = {
-          id: existingCustomers.length + 1,
+        const newCustomerData = {
           name: customerData.name,
           email: customerData.email || 'Not provided',
           phone: customerData.phone || 'N/A',
           address: customerData.address || 'N/A',
-          totalOrders: 1,
-          totalSpent: 0,
+          total_orders: 1,
+          total_spent: 0,
           rating: 0,
-          lastOrder: new Date().toISOString(),
+          last_order: new Date().toISOString(),
           status: 'active',
           notes: `Added from appointment: ${customerData.serviceType}`
         };
         
-        const updatedCustomers = [...existingCustomers, newCustomer];
-        localStorage.setItem('providerCustomers', JSON.stringify(updatedCustomers));
-        console.log('Customer automatically added:', newCustomer);
+        await apiService.createCustomer(newCustomerData);
+        console.log('Customer automatically added to database');
       }
     } catch (error) {
       console.error('Failed to auto-add customer:', error);
