@@ -41,7 +41,7 @@ try:
         connectTimeoutMS=10000,  # 10 second connection timeout
     )
     print("MongoDB client created successfully", file=sys.stderr, flush=True)
-except Exception as e:
+except Exception:
     print(f"ERROR creating MongoDB client: {e}", file=sys.stderr, flush=True)
     raise
 
@@ -51,7 +51,7 @@ except Exception as e:
 try:
     db = client.get_default_database()
     print(f"Using default database from connection string: {db.name}", file=sys.stderr, flush=True)
-except Exception as e:
+except Exception:
     # Parse database name from connection string
     import re
     # Try to extract database name from URL (after last / before ?)
@@ -103,7 +103,7 @@ async def create_indexes():
         await appointments_collection.create_index("provider_id")
         await ai_chats_collection.create_index("session_id")
         print("✅ All indexes created successfully", file=sys.stderr, flush=True)
-    except Exception as e:
+    except Exception:
         print(f"⚠️ Index creation warning (non-fatal): {e}", file=sys.stderr, flush=True)
 
 # Startup event - lightweight and fast
@@ -120,7 +120,7 @@ async def startup():
             print("✅ MongoDB connection verified", file=sys.stderr, flush=True)
         except asyncio.TimeoutError:
             print("⚠️ MongoDB ping timed out, but continuing startup...", file=sys.stderr, flush=True)
-        except Exception as e:
+        except Exception:
             print(f"⚠️ MongoDB ping failed: {e}, but continuing startup...", file=sys.stderr, flush=True)
         
         # Schedule index creation as background task (non-blocking)
@@ -128,7 +128,7 @@ async def startup():
         
         print("✅ Application startup complete", file=sys.stderr, flush=True)
         logging.info("✅ Application started successfully")
-    except Exception as e:
+    except Exception:
         print(f"❌ STARTUP ERROR: {e}", file=sys.stderr, flush=True)
         import traceback
         traceback.print_exc()
@@ -289,7 +289,7 @@ async def root():
             "status": "active",
             "database": f"MongoDB - {user_count} users registered"
         }
-    except Exception as e:
+    except Exception:
         return {
             "message": "Doord API - Database Error", 
             "status": "error",
@@ -348,7 +348,7 @@ async def register(user_data: UserCreate):
         }
     except HTTPException:
         raise
-    except Exception as e:
+    except Exception:
         print(f"Registration error: {e}", file=sys.stderr, flush=True)
         raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
 
@@ -1131,7 +1131,7 @@ async def health_check():
             "database": "connected",
             "db_name": db.name
         }
-    except Exception as e:
+    except Exception:
         print(f"Health check failed: {e}", file=sys.stderr, flush=True)
         return {"status": "unhealthy", "error": str(e)}
 
