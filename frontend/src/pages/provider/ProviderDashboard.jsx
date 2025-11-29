@@ -59,13 +59,6 @@ const ProviderDashboard = () => {
     weeklyRevenue: 0
   });
 
-  // Load user profile on component mount
-  useEffect(() => {
-    loadUserProfile();
-    loadDashboardData();
-    loadUpcomingActivities();
-  }, []);
-
   const loadUserProfile = async () => {
     try {
       const profile = await apiService.getUserProfile();
@@ -185,6 +178,14 @@ const ProviderDashboard = () => {
       console.error('Failed to load dashboard data:', error);
     }
   };
+
+  // Load user profile on component mount
+  useEffect(() => {
+    loadUserProfile();
+    loadDashboardData();
+    loadUpcomingActivities();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
