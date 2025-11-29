@@ -52,21 +52,39 @@ const ProviderCustomers = () => {
   const sidebarItems = STANDARD_PROVIDER_SIDEBAR;
 
   useEffect(() => {
-    // Load customers from localStorage for persistence, start with empty for fresh platform
-    const storedCustomers = localStorage.getItem('providerCustomers');
-    if (storedCustomers) {
-      setCustomers(JSON.parse(storedCustomers));
-    } else {
-      // Start with empty array for fresh platform
-      setCustomers([]);
-    }
-    // Load user profile
+    loadCustomers();
     loadUserProfile();
   }, []);
 
+  const loadCustomers = async () => {
+    try {
+      setLoading(true);
+      const customersData = await apiService.getCustomers();
+      // Map API response to component format
+      const mappedCustomers = customersData.map(c => ({
+        id: c.id,
+        name: c.name,
+        email: c.email || 'Not provided',
+        phone: c.phone || 'N/A',
+        address: c.address || 'N/A',
+        totalOrders: c.total_orders || 0,
+        totalSpent: c.total_spent || 0,
+        rating: c.rating || 0,
+        lastOrder: c.last_order,
+        status: c.status || 'active',
+        notes: c.notes || ''
+      }));
+      setCustomers(mappedCustomers);
+    } catch (error) {
+      console.error('Failed to load customers:', error);
+      setCustomers([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const loadUserProfile = async () => {
     try {
-      const apiService = (await import('../../services/api')).default;
       const profile = await apiService.getUserProfile();
       setUserProfile(profile);
       
