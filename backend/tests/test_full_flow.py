@@ -172,6 +172,10 @@ def test_homeowner_login_persistence():
         if not test_data['homeowner_email']:
             return log_test("Homeowner Login Persistence", False, "No homeowner email available")
         
+        # Add a small delay to ensure database write is complete
+        import time
+        time.sleep(1)
+        
         login_data = {
             "email": test_data['homeowner_email'],
             "password": "securepass123"
@@ -187,6 +191,8 @@ def test_homeowner_login_persistence():
         if response.status_code == 200:
             data = response.json()
             if "access_token" in data and data["user"]["user_type"] == "homeowner":
+                # Update token in case it changed
+                test_data['homeowner_token'] = data["access_token"]
                 return log_test("Homeowner Login Persistence", True, "Credentials persisted successfully")
             else:
                 return log_test("Homeowner Login Persistence", False, f"Invalid login response: {data}")
