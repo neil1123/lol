@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 """
-Doord Application Backend Testing - Full Flow Testing (Robust Version)
-Focus: Testing the specific flows mentioned in the review request with better error handling
+Doord Application Backend Testing - Full Flow Testing (Final Version)
+Focus: Testing the specific flows mentioned in the review request
 Base URL: https://doord.site/api
+
+This test verifies:
+1. Database persistence fixes (SQLite with WAL mode and FULL synchronous)
+2. Quotation endpoint fix (frontend uses /orders instead of /quotations)
+3. Order tab switching (manual orders go to "confirmed" status)
 """
 
 import requests
