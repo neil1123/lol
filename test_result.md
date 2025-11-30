@@ -1231,3 +1231,51 @@ agent_communication:
 - Bug #8-9: Notification badges for messages/orders
 - Bug #10: Calendar service type selection
 - Bug #11-13: Company profile and settings loading
+
+## Bug Fix Session - November 30, 2025 (SQLite Migration Recovery)
+
+### Critical Bug Fixed:
+1. **"User not found" error on all authenticated endpoints** - ROOT CAUSE: Missing `/api/auth/me` endpoint. The frontend's `api.js` called `/api/auth/me` but the backend only had `/api/me`. Added the missing endpoint to `server.py`.
+
+### Fixes Applied:
+
+**Backend Fixes:**
+- Added `/api/auth/me` endpoint in `server.py` (line ~413) - This was the critical missing endpoint causing all "User not found" errors
+
+**Frontend Fixes:**
+- Fixed homeowner profile settings showing dummy data ("John Smith", etc.) - Now loads actual user data from localStorage
+
+### Testing Results:
+- Backend testing: 17/17 tests passed (100% success rate)
+- Authentication: Homeowner/provider registration and login working
+- /api/auth/me endpoint: Working correctly
+- Provider operations: Orders, customers, appointments all functional
+- Order flow: Homeowner → Provider marketplace data flow working
+
+### Working Features Verified:
+- ✅ Homeowner sign in/sign up
+- ✅ Provider sign in/sign up
+- ✅ Session persistence (localStorage token storage)
+- ✅ Orders page loading for both homeowner and provider
+- ✅ Provider dashboard with stats
+- ✅ Provider orders with pending quotation requests
+- ✅ New Order form with services dropdown
+- ✅ Calendar with appointment creation
+- ✅ Customers page
+- ✅ Profile settings showing actual user data
+
+### Service Tags Clarification:
+- "Electrical" vs "Electrician" tags: Both correctly map to electrical services
+- Tags only show providers who have registered those specific services
+- If no providers have "Electrical" service registered, clicking the tag will show no results (expected behavior)
+
+### APIs Confirmed Working:
+- `/api/auth/register` - User registration
+- `/api/auth/login` - User login
+- `/api/auth/me` - Get current user (NEWLY ADDED)
+- `/api/me` - Get current user profile
+- `/api/providers` - List all providers
+- `/api/orders` - CRUD for orders
+- `/api/customers` - Provider customer management
+- `/api/appointments` - Provider appointment management
+- `/api/services` - Available services list (24 services)
