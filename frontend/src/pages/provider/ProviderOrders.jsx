@@ -414,7 +414,16 @@ const ProviderOrders = () => {
         scheduledDate: ''
       });
       setShowNewOrderForm(false);
-      loadOrders(); // Reload orders from database
+      
+      // Switch to confirmed tab for manual orders so user sees the new order
+      if (!editingQuote) {
+        setActiveTab('confirmed');
+      }
+      
+      await loadOrders(); // Reload orders from database
+      
+      // Show success message
+      alert('Order created successfully!');
       
     } catch (error) {
       console.error('Failed to create order:', error);
