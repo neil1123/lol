@@ -152,9 +152,14 @@ class ApiService {
 
   // ====== QUOTATIONS ======
   async sendQuotation(quotationData) {
-    return await this.request('/quotations', {
+    // Quotation requests are actually orders with status "pending_quotation"
+    // Use the /orders endpoint to create a quotation request
+    return await this.request('/orders', {
       method: 'POST',
-      body: JSON.stringify(quotationData),
+      body: JSON.stringify({
+        ...quotationData,
+        service: quotationData.service_type,
+      }),
     });
   }
 
