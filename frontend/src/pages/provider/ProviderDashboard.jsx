@@ -62,6 +62,9 @@ const ProviderDashboard = () => {
   const loadUserProfile = async () => {
     try {
       const profile = await apiService.getUserProfile();
+      if (!profile || !profile.id) {
+        throw new Error('Invalid profile data');
+      }
       setUserProfile(profile);
       
       // Set user initials from actual database data
@@ -73,10 +76,25 @@ const ProviderDashboard = () => {
       console.log('User profile loaded:', profile);
     } catch (error) {
       console.error('Failed to load user profile:', error);
-      // Fallback to localStorage if API fails
+      
+      // Check if it's an authentication error
+      if (error.message && (error.message.includes('not found') || error.message.includes('Not authenticated') || error.message.includes('401'))) {
+        // Clear invalid session and redirect to login
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
+        localStorage.removeItem('userType');
+        alert('Your session has expired. Please log in again.');
+        navigate('/homeservices/auth');
+        return;
+      }
+      
+      // Fallback to localStorage if API fails for other reasons
       const fallbackUser = JSON.parse(localStorage.getItem('user') || '{}');
-      if (fallbackUser.name) {
-        const initials = fallbackUser.name.split(' ').map(name => name[0]).join('').toUpperCase();
+      if (fallbackUser.id) {
+        setUserProfile(fallbackUser);
+        const initials = fallbackUser.name 
+          ? fallbackUser.name.split(' ').map(name => name[0]).join('').toUpperCase() 
+          : 'U';
         setUserInitials(initials);
       }
     }
