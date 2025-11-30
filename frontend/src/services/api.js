@@ -164,14 +164,16 @@ class ApiService {
   }
 
   async updateQuotation(orderId, updateData) {
-    return await this.request(`/quotations/${orderId}`, {
+    // Update the order's quotation fields
+    return await this.request(`/orders/${orderId}`, {
       method: 'PUT',
       body: JSON.stringify(updateData),
     });
   }
 
   async deleteQuotation(orderId) {
-    return await this.request(`/quotations/${orderId}`, {
+    // Delete the order (quotation request)
+    return await this.request(`/orders/${orderId}`, {
       method: 'DELETE',
     });
   }
