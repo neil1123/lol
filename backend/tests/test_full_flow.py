@@ -137,6 +137,10 @@ def test_provider_login_persistence():
         if not test_data['provider_email']:
             return log_test("Provider Login Persistence", False, "No provider email available")
         
+        # Add a small delay to ensure database write is complete
+        import time
+        time.sleep(1)
+        
         login_data = {
             "email": test_data['provider_email'],
             "password": "securepass123"
@@ -152,6 +156,8 @@ def test_provider_login_persistence():
         if response.status_code == 200:
             data = response.json()
             if "access_token" in data and data["user"]["user_type"] == "provider":
+                # Update token in case it changed
+                test_data['provider_token'] = data["access_token"]
                 return log_test("Provider Login Persistence", True, "Credentials persisted successfully")
             else:
                 return log_test("Provider Login Persistence", False, f"Invalid login response: {data}")
