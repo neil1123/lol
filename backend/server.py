@@ -342,6 +342,23 @@ async def root():
             "error": str(e)
         }
 
+# ====== ADMIN ENDPOINT (for clearing test data) ======
+
+@api_router.delete("/admin/reset-database/{secret_key}")
+async def reset_database(secret_key: str):
+    """Reset database - clear all test data"""
+    if secret_key != "doord-reset-2024-production":
+        raise HTTPException(status_code=403, detail="Invalid key")
+    
+    db = await get_db()
+    try:
+        for table in ['users', 'orders', 'messages', 'appointments', 'customers', 'ai_chats']:
+            await db.execute(f"DELETE FROM {table}")
+        await db.commit()
+        return {"status": "success", "message": "Database reset complete"}
+    finally:
+        await db.close()
+
 # ====== AUTH ENDPOINTS ======
 
 @api_router.post("/auth/register", response_model=Token)
