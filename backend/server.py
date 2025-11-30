@@ -139,7 +139,9 @@ async def init_db():
                 duration INTEGER,
                 notes TEXT,
                 status TEXT DEFAULT 'scheduled',
-                created_at TEXT
+                created_at TEXT,
+                order_id TEXT,
+                source TEXT DEFAULT 'manual'
             )
         ''')
         
