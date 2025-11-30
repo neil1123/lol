@@ -410,6 +410,17 @@ async def login(user_data: UserLogin):
     finally:
         await db.close()
 
+@api_router.get("/auth/me")
+async def get_auth_me(current_user: User = Depends(get_current_user)):
+    """Get current authenticated user - alias for /me used by frontend"""
+    db = await get_db()
+    try:
+        cursor = await db.execute("SELECT * FROM users WHERE id = ?", (current_user.id,))
+        user_row = await cursor.fetchone()
+        return user_to_response(row_to_dict(user_row))
+    finally:
+        await db.close()
+
 # ====== USER ENDPOINTS ======
 
 @api_router.get("/users/me")
