@@ -342,6 +342,26 @@ async def root():
             "error": str(e)
         }
 
+# ====== DEBUG ENDPOINT (TEMPORARY) ======
+@api_router.get("/debug/check-user/{email}")
+async def debug_check_user(email: str):
+    """Debug endpoint to check user data"""
+    db = await get_db()
+    try:
+        cursor = await db.execute("SELECT id, email, password_hash, user_type FROM users WHERE email = ?", (email,))
+        user_row = await cursor.fetchone()
+        if not user_row:
+            return {"found": False}
+        return {
+            "found": True,
+            "id": user_row[0],
+            "email": user_row[1],
+            "hash_starts_with": user_row[2][:20] if user_row[2] else None,
+            "user_type": user_row[3]
+        }
+    finally:
+        await db.close()
+
 # ====== AUTH ENDPOINTS ======
 
 @api_router.post("/auth/register", response_model=Token)
