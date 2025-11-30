@@ -322,7 +322,7 @@ api_router = APIRouter(prefix="/api")
 
 @api_router.get("/ping")
 async def ping():
-    return {"status": "ok", "message": "Backend is running", "database": "SQLite", "version": "v2.1-persistence-fix"}
+    return {"status": "ok", "message": "Backend is running", "database": "SQLite"}
 
 @api_router.get("/")
 async def root():
