@@ -1804,15 +1804,15 @@ const HomeownerDashboard = () => {
                   <CardContent className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium mb-2">Full Name *</label>
-                      <Input defaultValue="John Smith" placeholder="Enter your full name" />
+                      <Input defaultValue={JSON.parse(localStorage.getItem('user') || '{}').name || ''} placeholder="Enter your full name" />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2">Email Address *</label>
-                      <Input defaultValue="john.smith@example.com" type="email" placeholder="your.email@example.com" />
+                      <Input defaultValue={JSON.parse(localStorage.getItem('user') || '{}').email || ''} type="email" placeholder="your.email@example.com" />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2">Phone Number *</label>
-                      <Input defaultValue="+1 (555) 123-4567" placeholder="+1 (555) 123-4567" />
+                      <Input defaultValue={JSON.parse(localStorage.getItem('user') || '{}').phone || ''} placeholder="+1 (555) 123-4567" />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2">Date of Birth</label>
@@ -1832,7 +1832,7 @@ const HomeownerDashboard = () => {
                   <CardContent className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium mb-2">Property Address *</label>
-                      <Input defaultValue="123 Main Street, Halifax, NS B3H 1A1" placeholder="Enter your address" />
+                      <Input defaultValue={JSON.parse(localStorage.getItem('user') || '{}').address || ''} placeholder="Enter your address" />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-2">Property Type *</label>
