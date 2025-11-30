@@ -817,8 +817,8 @@ async def create_appointment(appointment_data: dict, current_user: User = Depend
         
         await db.execute('''
             INSERT INTO appointments (id, provider_id, customer_name, customer_phone, customer_email,
-                service_type, date, time, duration, notes, status, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                service_type, date, time, duration, notes, status, created_at, order_id, source)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
             appointment_id, current_user.id,
             appointment_data.get('customer_name'),
@@ -829,7 +829,9 @@ async def create_appointment(appointment_data: dict, current_user: User = Depend
             appointment_data.get('time'),
             appointment_data.get('duration', 60),
             appointment_data.get('notes'),
-            'scheduled', now
+            'scheduled', now,
+            appointment_data.get('order_id'),
+            appointment_data.get('source', 'manual')
         ))
         await db.commit()
         
