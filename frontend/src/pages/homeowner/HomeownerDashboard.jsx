@@ -85,12 +85,9 @@ const HomeownerDashboard = () => {
 
       const ordersData = await apiService.getOrders();
       
-      // Filter orders for this homeowner
-      const userOrders = ordersData.filter(order => 
-        order.homeowner_id === user.id || order.homeowner_email === user.email
-      );
-      
-      setOrders(userOrders);
+      // Backend already filters orders for the current user based on their token
+      // No need to filter again on frontend
+      setOrders(ordersData || []);
     } catch (error) {
       console.error('Failed to load orders:', error);
       setOrdersError('Failed to load orders. Please try again.');
