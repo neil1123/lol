@@ -41,6 +41,9 @@ app = FastAPI(title="Doord API", version="2.0.0")
 async def get_db():
     db = await aiosqlite.connect(DB_PATH)
     db.row_factory = aiosqlite.Row
+    # Enable WAL mode for better concurrency
+    await db.execute("PRAGMA journal_mode=WAL")
+    await db.execute("PRAGMA synchronous=NORMAL")
     return db
 
 # Initialize database tables
