@@ -348,7 +348,6 @@ async def root():
 
 @api_router.post("/auth/register", response_model=Token)
 async def register(user_data: UserCreate):
-    print(f"Starting registration for: {user_data.email}", file=sys.stderr, flush=True)
     db = await get_db()
     try:
         cursor = await db.execute("SELECT id FROM users WHERE email = ?", (user_data.email,))
@@ -360,7 +359,6 @@ async def register(user_data: UserCreate):
         user_id = str(uuid.uuid4())
         now = datetime.utcnow().isoformat()
         
-        print(f"Inserting user {user_id} into database...", file=sys.stderr, flush=True)
         await db.execute('''
             INSERT INTO users (id, email, password_hash, user_type, name, phone, address, 
                              business_name, services, description, location, specialties,
@@ -372,13 +370,10 @@ async def register(user_data: UserCreate):
             json.dumps(user_data.services or []), user_data.description, user_data.location,
             json.dumps(user_data.specialties or []), 5.0, 0, 0, now, now, 1, user_data.pm_code
         ))
-        print("Insert executed, committing...", file=sys.stderr, flush=True)
         await db.commit()
-        print("Commit successful!", file=sys.stderr, flush=True)
         
         cursor = await db.execute("SELECT * FROM users WHERE id = ?", (user_id,))
         user_row = await cursor.fetchone()
-        print(f"User fetched after commit: {user_row is not None}", file=sys.stderr, flush=True)
         user_dict = row_to_dict(user_row)
         
         access_token = create_access_token(data={"sub": user_id})
@@ -391,11 +386,9 @@ async def register(user_data: UserCreate):
     except HTTPException:
         raise
     except Exception as e:
-        print(f"Registration error: {e}", file=sys.stderr, flush=True)
         raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
     finally:
         await db.close()
-        print("Database connection closed", file=sys.stderr, flush=True)
 
 @api_router.post("/auth/login", response_model=Token)
 async def login(user_data: UserLogin):
