@@ -342,6 +342,24 @@ async def root():
             "error": str(e)
         }
 
+# ====== ADMIN ENDPOINTS (TEMPORARY) ======
+
+@api_router.post("/admin/clear-database")
+async def clear_database(secret: str):
+    """Clear all data - REMOVE THIS IN PRODUCTION"""
+    if secret != "production-clear-2024":
+        raise HTTPException(status_code=403, detail="Invalid secret")
+    
+    db = await get_db()
+    try:
+        tables = ['users', 'orders', 'messages', 'appointments', 'customers', 'ai_chats']
+        for table in tables:
+            await db.execute(f"DELETE FROM {table}")
+        await db.commit()
+        return {"message": "Database cleared successfully", "tables_cleared": tables}
+    finally:
+        await db.close()
+
 # ====== AUTH ENDPOINTS ======
 
 @api_router.post("/auth/register", response_model=Token)
