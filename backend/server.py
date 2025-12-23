@@ -594,7 +594,7 @@ async def tenant_join_pm(data: dict, current_user: User = Depends(get_current_us
     try:
         # Find the Property Manager with this code
         cursor = await db.execute(
-            "SELECT id, name, business_name FROM users WHERE pm_code = ? AND user_type = 'provider'",
+            "SELECT id, name, business_name, phone, email FROM users WHERE pm_code = ? AND user_type = 'property_manager'",
             (code,)
         )
         pm_row = await cursor.fetchone()
@@ -602,7 +602,7 @@ async def tenant_join_pm(data: dict, current_user: User = Depends(get_current_us
         if not pm_row:
             raise HTTPException(status_code=404, detail="Invalid code. Please check and try again.")
         
-        pm_id, pm_name, pm_business = pm_row
+        pm_id, pm_name, pm_business, pm_phone, pm_email = pm_row
         
         # Update tenant's property_manager_id
         await db.execute(
@@ -616,7 +616,9 @@ async def tenant_join_pm(data: dict, current_user: User = Depends(get_current_us
             "property_manager": {
                 "id": pm_id,
                 "name": pm_name,
-                "business_name": pm_business
+                "business_name": pm_business,
+                "phone": pm_phone,
+                "email": pm_email
             }
         }
     finally:
