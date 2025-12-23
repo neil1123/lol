@@ -34,6 +34,7 @@ import { Label } from '../../components/ui/label';
 import { serviceCategories } from '../../data/mockData';
 import apiService from '../../services/api';
 import NotificationBadge from '../../components/NotificationBadge';
+import ReportIssuesChat from '../../components/ReportIssuesChat';
 
 const HomeownerDashboard = () => {
   const navigate = useNavigate();
