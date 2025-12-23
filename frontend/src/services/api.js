@@ -281,6 +281,44 @@ class ApiService {
     return await this.request(`/providers/${providerId}/reviews`);
   }
 
+  // ====== AI ISSUE REPORTING ======
+  async summarizeIssue(data) {
+    return await this.request('/ai/summarize-issue', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async generateIssueSummary(data) {
+    return await this.request('/ai/generate-summary', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  // ====== REPORTED ISSUES ======
+  async createIssue(issueData) {
+    return await this.request('/issues', {
+      method: 'POST',
+      body: JSON.stringify(issueData),
+    });
+  }
+
+  async getIssues() {
+    return await this.request('/issues');
+  }
+
+  async getIssue(issueId) {
+    return await this.request(`/issues/${issueId}`);
+  }
+
+  async updateIssue(issueId, updateData) {
+    return await this.request(`/issues/${issueId}`, {
+      method: 'PUT',
+      body: JSON.stringify(updateData),
+    });
+  }
+
   // ====== PROPERTY MANAGER ======
   async getPropertyManagerTenants() {
     return await this.request('/property-manager/tenants');
