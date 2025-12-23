@@ -351,20 +351,20 @@ class ApiService {
   }
 
   async getPropertyManagerOrders() {
-    return await this.request('/issues');
+    return await this.request('/orders');
   }
 
   async approvePropertyManagerOrder(orderId) {
-    return await this.request(`/issues/${orderId}`, {
+    return await this.request(`/orders/${orderId}`, {
       method: 'PUT',
-      body: JSON.stringify({ status: 'in_progress' }),
+      body: JSON.stringify({ pm_approved: true, status: 'pending_quotation' }),
     });
   }
 
   async denyPropertyManagerOrder(orderId) {
-    return await this.request(`/issues/${orderId}`, {
+    return await this.request(`/orders/${orderId}`, {
       method: 'PUT',
-      body: JSON.stringify({ status: 'denied' }),
+      body: JSON.stringify({ pm_approved: false, status: 'denied' }),
     });
   }
 
