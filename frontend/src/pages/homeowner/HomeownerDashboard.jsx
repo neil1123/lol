@@ -35,6 +35,7 @@ import { serviceCategories } from '../../data/mockData';
 import apiService from '../../services/api';
 import NotificationBadge from '../../components/NotificationBadge';
 import ReportIssuesChat from '../../components/ReportIssuesChat';
+import TenantJoinPM from '../../components/TenantJoinPM';
 
 const HomeownerDashboard = () => {
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ const HomeownerDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedConversation, setSelectedConversation] = useState(null);
+  const [linkedPM, setLinkedPM] = useState(null);
   const [newMessage, setNewMessage] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
