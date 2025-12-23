@@ -1,0 +1,158 @@
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Building2, CheckCircle, UserPlus, Phone, Mail } from 'lucide-react';
+import apiService from '../services/api';
+
+const TenantJoinPM = ({ onJoined }) => {
+  const [code, setCode] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [joining, setJoining] = useState(false);
+  const [propertyManager, setPropertyManager] = useState(null);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    loadCurrentPM();
+  }, []);
+
+  const loadCurrentPM = async () => {
+    try {
+      const response = await apiService.getTenantPM();
+      setPropertyManager(response.property_manager);
+    } catch (error) {
+      console.error('Failed to load PM:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleJoin = async () => {
+    if (!code.trim()) {
+      setError('Please enter a code');
+      return;
+    }
+
+    setJoining(true);
+    setError('');
+
+    try {
+      const response = await apiService.tenantJoinPM(code.trim());
+      setPropertyManager(response.property_manager);
+      setCode('');
+      if (onJoined) {
+        onJoined(response.property_manager);
+      }
+    } catch (error) {
+      console.error('Join failed:', error);
+      setError(error.message || 'Invalid code. Please check and try again.');
+    } finally {
+      setJoining(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <Card>
+        <CardContent className="p-6 text-center">
+          <div className="animate-pulse">Loading...</div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Already connected to a PM
+  if (propertyManager) {
+    return (
+      <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-white">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <CheckCircle className="w-5 h-5 text-green-600" />
+            Connected to Property Manager
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                <Building2 className="w-6 h-6 text-green-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">
+                  {propertyManager.business_name || propertyManager.name}
+                </h3>
+                <p className="text-sm text-gray-500">{propertyManager.name}</p>
+              </div>
+            </div>
+            
+            {propertyManager.phone && (
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <Phone className="w-4 h-4" />
+                {propertyManager.phone}
+              </div>
+            )}
+            
+            {propertyManager.email && (
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <Mail className="w-4 h-4" />
+                {propertyManager.email}
+              </div>
+            )}
+            
+            <p className="text-xs text-gray-500 mt-3">
+              Your reported issues will be sent directly to this property manager.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Not connected - show join form
+  return (
+    <Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-white">
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <UserPlus className="w-5 h-5 text-orange-600" />
+          Connect to Property Manager
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <p className="text-sm text-gray-600">
+          Enter the code provided by your property manager to connect and start reporting issues.
+        </p>
+        
+        <div className="space-y-2">
+          <Input
+            value={code}
+            onChange={(e) => {
+              setCode(e.target.value.toUpperCase());
+              setError('');
+            }}
+            placeholder="Enter 6-digit code"
+            maxLength={6}
+            className="text-center text-2xl font-mono tracking-widest uppercase"
+          />
+          
+          {error && (
+            <p className="text-sm text-red-500 text-center">{error}</p>
+          )}
+        </div>
+        
+        <Button 
+          onClick={handleJoin}
+          disabled={joining || code.length < 6}
+          className="w-full bg-orange-600 hover:bg-orange-700"
+        >
+          {joining ? 'Connecting...' : 'Connect'}
+        </Button>
+        
+        <p className="text-xs text-gray-500 text-center">
+          Don't have a code? Contact your property manager.
+        </p>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default TenantJoinPM;
