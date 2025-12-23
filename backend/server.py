@@ -545,7 +545,7 @@ async def get_provider(provider_id: str):
 @api_router.post("/pm/generate-code")
 async def generate_pm_code(current_user: User = Depends(get_current_user)):
     """Generate a unique code for Property Manager that tenants can use to join"""
-    if current_user.user_type != "provider":
+    if current_user.user_type != "property_manager":
         raise HTTPException(status_code=403, detail="Only property managers can generate codes")
     
     db = await get_db()
@@ -569,7 +569,7 @@ async def generate_pm_code(current_user: User = Depends(get_current_user)):
 @api_router.get("/pm/my-code")
 async def get_my_pm_code(current_user: User = Depends(get_current_user)):
     """Get the Property Manager's current code"""
-    if current_user.user_type != "provider":
+    if current_user.user_type != "property_manager":
         raise HTTPException(status_code=403, detail="Only property managers can access this")
     
     db = await get_db()
