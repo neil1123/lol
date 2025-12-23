@@ -80,7 +80,8 @@ async def init_db():
                 created_at TEXT,
                 updated_at TEXT,
                 is_active INTEGER DEFAULT 1,
-                pm_code TEXT
+                pm_code TEXT,
+                property_manager_id TEXT
             )
         ''')
         
