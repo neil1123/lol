@@ -7,7 +7,7 @@ import requests
 import json
 
 # Backend URL from environment
-BACKEND_URL = "https://sqlite-rescue.preview.emergentagent.com/api"
+BACKEND_URL = "https://prop-issue-report.preview.emergentagent.com/api"
 
 def debug_message_sending():
     """Debug the message sending issue in workflow"""

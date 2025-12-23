@@ -12,7 +12,7 @@ import sys
 import uuid
 
 # Load environment variables
-BACKEND_URL = "https://sqlite-rescue.preview.emergentagent.com/api"
+BACKEND_URL = "https://prop-issue-report.preview.emergentagent.com/api"
 
 # Test data
 homeowner_token = None

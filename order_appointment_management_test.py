@@ -17,7 +17,7 @@ from datetime import datetime
 import sys
 
 # Backend URL from environment
-BACKEND_URL = "https://sqlite-rescue.preview.emergentagent.com/api"
+BACKEND_URL = "https://prop-issue-report.preview.emergentagent.com/api"
 
 # Global test data
 provider_token = None

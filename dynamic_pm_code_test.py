@@ -11,7 +11,7 @@ import sys
 from datetime import datetime
 
 # Load environment variables
-BACKEND_URL = "https://sqlite-rescue.preview.emergentagent.com/api"
+BACKEND_URL = "https://prop-issue-report.preview.emergentagent.com/api"
 
 # Global test data
 pm_tokens = {}

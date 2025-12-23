@@ -16,7 +16,7 @@ import uuid
 from datetime import datetime
 
 # Backend URL
-BACKEND_URL = "https://sqlite-rescue.preview.emergentagent.com/api"
+BACKEND_URL = "https://prop-issue-report.preview.emergentagent.com/api"
 
 # Global test data
 pm_token = None
