@@ -180,6 +180,31 @@ async def init_db():
             )
         ''')
         
+        # Reported Issues table (for tenant issue reporting)
+        await db.execute('''
+            CREATE TABLE IF NOT EXISTS reported_issues (
+                id TEXT PRIMARY KEY,
+                tenant_id TEXT,
+                tenant_name TEXT,
+                tenant_email TEXT,
+                tenant_phone TEXT,
+                property_manager_id TEXT,
+                unit_number TEXT,
+                issue_category TEXT,
+                urgency_level TEXT,
+                description TEXT,
+                ai_summary TEXT,
+                best_time TEXT,
+                permission_to_enter TEXT,
+                photos TEXT,
+                status TEXT DEFAULT 'pending',
+                created_at TEXT,
+                updated_at TEXT,
+                resolved_at TEXT,
+                resolution_notes TEXT
+            )
+        ''')
+        
         # Create indexes
         await db.execute('CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)')
         await db.execute('CREATE INDEX IF NOT EXISTS idx_users_type ON users(user_type)')
