@@ -12,6 +12,10 @@ import os
 import sys
 import logging
 import json
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Print startup message
 print("DOORD SERVER LOADING - SQLite Version", file=sys.stderr, flush=True)
