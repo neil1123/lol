@@ -1062,6 +1062,10 @@ const HomeownerDashboard = () => {
                 </div>
               </div>
 
+              {/* Tenant Join PM Section */}
+              <div className="mb-8">
+                <TenantJoinPM />
+              </div>
               {/* Featured Services Section */}
               <div className="mb-8">
                 {/* Desktop View */}
