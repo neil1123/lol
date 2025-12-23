@@ -317,7 +317,13 @@ const PropertyManagerOrders = () => {
           <Card>
             <CardContent className="p-3 sm:p-6">
               <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-3 text-xs sm:text-sm">
+                <TabsList className="grid w-full grid-cols-4 text-xs sm:text-sm">
+                  <TabsTrigger value="issue-reports" className="flex items-center space-x-1">
+                    <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <span className="hidden sm:inline">Issues</span>
+                    <span className="sm:hidden">({pendingIssues.length})</span>
+                    <span className="hidden sm:inline">({pendingIssues.length})</span>
+                  </TabsTrigger>
                   <TabsTrigger value="pending-approval" className="flex items-center space-x-1">
                     <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
                     <span className="hidden sm:inline">Pending</span>
@@ -337,6 +343,68 @@ const PropertyManagerOrders = () => {
                     <span className="hidden sm:inline">({completedOrders.length})</span>
                   </TabsTrigger>
                 </TabsList>
+
+                <TabsContent value="issue-reports" className="mt-4 sm:mt-6">
+                  {pendingIssues.length === 0 ? (
+                    <div className="text-center py-6 sm:py-8">
+                      <Clock className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-500 text-sm sm:text-base">No pending issue reports</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {pendingIssues.map((issue) => (
+                        <Card key={issue.id} className="border-l-4 border-l-orange-500">
+                          <CardContent className="p-4 sm:p-6">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 space-y-2 sm:space-y-0">
+                              <div className="flex-1 min-w-0">
+                                <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+                                  {issue.issue_category || 'Issue Report'}
+                                </h3>
+                                <p className="text-sm text-gray-600 truncate">Tenant: {issue.tenant_name}</p>
+                                {issue.unit_number && (
+                                  <p className="text-sm text-gray-600">Unit: {issue.unit_number}</p>
+                                )}
+                              </div>
+                              <div className="text-left sm:text-right flex-shrink-0">
+                                <Badge className={
+                                  issue.urgency_level === 'emergency' ? 'bg-red-100 text-red-800' :
+                                  issue.urgency_level === 'urgent' ? 'bg-orange-100 text-orange-800' :
+                                  'bg-yellow-100 text-yellow-800'
+                                }>
+                                  {issue.urgency_level || 'Normal'}
+                                </Badge>
+                                <p className="text-xs text-gray-500 mt-1">
+                                  {formatDate(issue.created_at)}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="mb-4">
+                              <h4 className="font-medium text-gray-900 mb-2 text-sm sm:text-base">Description:</h4>
+                              <p className="text-gray-700 text-sm sm:text-base">{issue.description}</p>
+                            </div>
+
+                            {issue.ai_summary && (
+                              <div className="bg-blue-50 p-3 rounded-lg mb-4">
+                                <h4 className="font-medium text-blue-900 mb-1 text-sm">AI Summary:</h4>
+                                <p className="text-sm text-blue-800">{issue.ai_summary}</p>
+                              </div>
+                            )}
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-600">
+                              {issue.best_time && (
+                                <div><span className="font-medium">Best Time:</span> {issue.best_time}</div>
+                              )}
+                              {issue.permission_to_enter && (
+                                <div><span className="font-medium">Entry Permission:</span> {issue.permission_to_enter}</div>
+                              )}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                </TabsContent>
 
                 <TabsContent value="pending-approval" className="mt-4 sm:mt-6">
                   {pendingApprovalOrders.length === 0 ? (
