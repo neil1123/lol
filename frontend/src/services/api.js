@@ -370,12 +370,9 @@ class ApiService {
   }
 
   async getPropertyManagerProperties() {
-    // Properties management endpoint
-    return await this.request('/pm/properties');
-  }
-
-  async getPropertyManagerProperties() {
-    return await this.request('/property-manager/properties');
+    // Properties management endpoint - for now return empty
+    // TODO: Implement properties management
+    return { properties: [] };
   }
 }
 
