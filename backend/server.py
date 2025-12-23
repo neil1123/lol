@@ -530,6 +530,156 @@ async def get_provider(provider_id: str):
     finally:
         await db.close()
 
+# ====== PROPERTY MANAGER CODE SYSTEM ======
+
+@api_router.post("/pm/generate-code")
+async def generate_pm_code(current_user: User = Depends(get_current_user)):
+    """Generate a unique code for Property Manager that tenants can use to join"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only property managers can generate codes")
+    
+    db = await get_db()
+    try:
+        # Generate a 6-character alphanumeric code
+        import random
+        import string
+        code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+        
+        # Update the PM's code
+        await db.execute(
+            "UPDATE users SET pm_code = ?, updated_at = ? WHERE id = ?",
+            (code, datetime.utcnow().isoformat(), current_user.id)
+        )
+        await db.commit()
+        
+        return {"code": code, "message": "Code generated successfully"}
+    finally:
+        await db.close()
+
+@api_router.get("/pm/my-code")
+async def get_my_pm_code(current_user: User = Depends(get_current_user)):
+    """Get the Property Manager's current code"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only property managers can access this")
+    
+    db = await get_db()
+    try:
+        cursor = await db.execute("SELECT pm_code FROM users WHERE id = ?", (current_user.id,))
+        row = await cursor.fetchone()
+        return {"code": row[0] if row and row[0] else None}
+    finally:
+        await db.close()
+
+@api_router.post("/tenant/join-pm")
+async def tenant_join_pm(data: dict, current_user: User = Depends(get_current_user)):
+    """Tenant joins a Property Manager using their code"""
+    if current_user.user_type != "homeowner":
+        raise HTTPException(status_code=403, detail="Only tenants can join property managers")
+    
+    code = data.get("code", "").strip().upper()
+    if not code:
+        raise HTTPException(status_code=400, detail="Code is required")
+    
+    db = await get_db()
+    try:
+        # Find the Property Manager with this code
+        cursor = await db.execute(
+            "SELECT id, name, business_name FROM users WHERE pm_code = ? AND user_type = 'provider'",
+            (code,)
+        )
+        pm_row = await cursor.fetchone()
+        
+        if not pm_row:
+            raise HTTPException(status_code=404, detail="Invalid code. Please check and try again.")
+        
+        pm_id, pm_name, pm_business = pm_row
+        
+        # Update tenant's property_manager_id
+        await db.execute(
+            "UPDATE users SET property_manager_id = ?, updated_at = ? WHERE id = ?",
+            (pm_id, datetime.utcnow().isoformat(), current_user.id)
+        )
+        await db.commit()
+        
+        return {
+            "message": "Successfully joined!",
+            "property_manager": {
+                "id": pm_id,
+                "name": pm_name,
+                "business_name": pm_business
+            }
+        }
+    finally:
+        await db.close()
+
+@api_router.get("/tenant/my-pm")
+async def get_tenant_pm(current_user: User = Depends(get_current_user)):
+    """Get the tenant's linked Property Manager"""
+    if current_user.user_type != "homeowner":
+        raise HTTPException(status_code=403, detail="Only tenants can access this")
+    
+    db = await get_db()
+    try:
+        cursor = await db.execute(
+            "SELECT property_manager_id FROM users WHERE id = ?",
+            (current_user.id,)
+        )
+        row = await cursor.fetchone()
+        
+        if not row or not row[0]:
+            return {"property_manager": None}
+        
+        # Get PM details
+        cursor = await db.execute(
+            "SELECT id, name, business_name, phone, email FROM users WHERE id = ?",
+            (row[0],)
+        )
+        pm_row = await cursor.fetchone()
+        
+        if not pm_row:
+            return {"property_manager": None}
+        
+        return {
+            "property_manager": {
+                "id": pm_row[0],
+                "name": pm_row[1],
+                "business_name": pm_row[2],
+                "phone": pm_row[3],
+                "email": pm_row[4]
+            }
+        }
+    finally:
+        await db.close()
+
+@api_router.get("/pm/tenants")
+async def get_pm_tenants(current_user: User = Depends(get_current_user)):
+    """Get all tenants linked to this Property Manager"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only property managers can access this")
+    
+    db = await get_db()
+    try:
+        cursor = await db.execute(
+            "SELECT id, name, email, phone, address, created_at FROM users WHERE property_manager_id = ? AND user_type = 'homeowner'",
+            (current_user.id,)
+        )
+        rows = await cursor.fetchall()
+        
+        tenants = []
+        for row in rows:
+            tenants.append({
+                "id": row[0],
+                "name": row[1],
+                "email": row[2],
+                "phone": row[3],
+                "address": row[4],
+                "joined_at": row[5]
+            })
+        
+        return tenants
+    finally:
+        await db.close()
+
 @api_router.put("/providers/services")
 async def update_provider_services(services: List[str], current_user: User = Depends(get_current_user)):
     db = await get_db()
