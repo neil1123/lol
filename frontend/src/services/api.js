@@ -351,6 +351,7 @@ class ApiService {
   }
 
   async getPropertyManagerOrders() {
+    // PM Orders endpoint returns normal orders
     return await this.request('/orders');
   }
 
@@ -366,6 +367,11 @@ class ApiService {
       method: 'PUT',
       body: JSON.stringify({ pm_approved: false, status: 'denied' }),
     });
+  }
+
+  async getPropertyManagerProperties() {
+    // Properties management endpoint
+    return await this.request('/pm/properties');
   }
 
   async getPropertyManagerProperties() {
