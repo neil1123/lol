@@ -319,24 +319,52 @@ class ApiService {
     });
   }
 
+  // ====== PM CODE SYSTEM ======
+  async generatePMCode() {
+    return await this.request('/pm/generate-code', {
+      method: 'POST',
+    });
+  }
+
+  async getMyPMCode() {
+    return await this.request('/pm/my-code');
+  }
+
+  async tenantJoinPM(code) {
+    return await this.request('/tenant/join-pm', {
+      method: 'POST',
+      body: JSON.stringify({ code }),
+    });
+  }
+
+  async getTenantPM() {
+    return await this.request('/tenant/my-pm');
+  }
+
+  async getPMTenants() {
+    return await this.request('/pm/tenants');
+  }
+
   // ====== PROPERTY MANAGER ======
   async getPropertyManagerTenants() {
-    return await this.request('/property-manager/tenants');
+    return await this.request('/pm/tenants');
   }
 
   async getPropertyManagerOrders() {
-    return await this.request('/property-manager/orders');
+    return await this.request('/issues');
   }
 
   async approvePropertyManagerOrder(orderId) {
-    return await this.request(`/property-manager/orders/${orderId}/approve`, {
+    return await this.request(`/issues/${orderId}`, {
       method: 'PUT',
+      body: JSON.stringify({ status: 'in_progress' }),
     });
   }
 
   async denyPropertyManagerOrder(orderId) {
-    return await this.request(`/property-manager/orders/${orderId}/deny`, {
+    return await this.request(`/issues/${orderId}`, {
       method: 'PUT',
+      body: JSON.stringify({ status: 'denied' }),
     });
   }
 
