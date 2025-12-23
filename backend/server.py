@@ -215,6 +215,15 @@ async def init_db():
         await db.execute('CREATE INDEX IF NOT EXISTS idx_appointments_provider ON appointments(provider_id)')
         await db.execute('CREATE INDEX IF NOT EXISTS idx_customers_provider ON customers(provider_id)')
         
+        # Add property_manager_id column if it doesn't exist (migration)
+        try:
+            await db.execute('ALTER TABLE users ADD COLUMN property_manager_id TEXT')
+            await db.commit()
+            print("Added property_manager_id column to users table", file=sys.stderr, flush=True)
+        except Exception as e:
+            # Column already exists
+            pass
+        
         await db.commit()
         print("SQLite database initialized successfully", file=sys.stderr, flush=True)
     except Exception as e:
