@@ -1739,51 +1739,13 @@ const HomeownerDashboard = () => {
 
           {/* Reports & Issues Section */}
           {activeTab === 'reports' && (
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Reports & Issues</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Report an Issue</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Issue Type</label>
-                      <select className="w-full p-2 border rounded-lg">
-                        <option>Service Quality</option>
-                        <option>Payment Issue</option>
-                        <option>Provider No-Show</option>
-                        <option>Billing Dispute</option>
-                        <option>Other</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Description</label>
-                      <textarea 
-                        className="w-full p-2 border rounded-lg h-24" 
-                        placeholder="Please describe the issue..."
-                      ></textarea>
-                    </div>
-                    <Button className="w-full">Submit Report</Button>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Recent Reports</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center py-8">
-                      <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                      <h4 className="font-semibold text-gray-600 mb-2">No Reports Yet</h4>
-                      <p className="text-sm text-gray-500">
-                        You haven't submitted any reports or issues yet.
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
+            <ReportIssuesChat 
+              propertyManagers={[]}
+              onIssueSubmitted={() => {
+                // Refresh issues list if needed
+                console.log('Issue submitted');
+              }}
+            />
           )}
 
           {/* Settings Section */}
