@@ -666,7 +666,7 @@ async def get_tenant_pm(current_user: User = Depends(get_current_user)):
 @api_router.get("/pm/tenants")
 async def get_pm_tenants(current_user: User = Depends(get_current_user)):
     """Get all tenants linked to this Property Manager"""
-    if current_user.user_type != "provider":
+    if current_user.user_type != "property_manager":
         raise HTTPException(status_code=403, detail="Only property managers can access this")
     
     db = await get_db()
