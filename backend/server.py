@@ -1023,6 +1023,226 @@ async def get_notification_count(current_user: User = Depends(get_current_user))
     finally:
         await db.close()
 
+# ====== AI ISSUE REPORTING ENDPOINTS ======
+
+@api_router.post("/ai/summarize-issue")
+async def summarize_issue(data: dict, current_user: User = Depends(get_current_user)):
+    """Use Gemini AI to summarize a tenant's issue description"""
+    try:
+        from emergentintegrations.llm.chat import LlmChat, UserMessage
+        
+        api_key = os.environ.get('EMERGENT_LLM_KEY')
+        if not api_key:
+            raise HTTPException(status_code=500, detail="AI service not configured")
+        
+        session_id = f"issue_{current_user.id}_{uuid.uuid4().hex[:8]}"
+        
+        chat = LlmChat(
+            api_key=api_key,
+            session_id=session_id,
+            system_message="""You are a helpful property management assistant. Your job is to:
+1. Listen to tenant issue descriptions
+2. Ask clarifying questions if needed
+3. Create a clear, concise summary of the issue for the property manager
+
+Be professional, empathetic, and efficient. Focus on understanding:
+- What is the problem?
+- Where is it located?
+- How urgent is it?
+- When did it start?
+
+Keep your responses brief and helpful."""
+        ).with_model("gemini", "gemini-2.5-flash")
+        
+        user_message = UserMessage(text=data.get('message', ''))
+        response = await chat.send_message(user_message)
+        
+        return {
+            "response": response,
+            "session_id": session_id
+        }
+    except Exception as e:
+        print(f"AI summarize error: {e}", file=sys.stderr)
+        raise HTTPException(status_code=500, detail=f"AI service error: {str(e)}")
+
+@api_router.post("/ai/generate-summary")
+async def generate_summary(data: dict, current_user: User = Depends(get_current_user)):
+    """Generate a final summary of the issue for property manager"""
+    try:
+        from emergentintegrations.llm.chat import LlmChat, UserMessage
+        
+        api_key = os.environ.get('EMERGENT_LLM_KEY')
+        if not api_key:
+            raise HTTPException(status_code=500, detail="AI service not configured")
+        
+        # Extract data
+        description = data.get('description', '')
+        form_data = data.get('form_data', {})
+        
+        summary_prompt = f"""Based on the following tenant issue report, create a clear and professional summary for the property manager:
+
+TENANT'S DESCRIPTION:
+{description}
+
+FORM DETAILS:
+- Unit/Apartment: {form_data.get('unit_number', 'Not provided')}
+- Issue Category: {form_data.get('issue_category', 'Not specified')}
+- Urgency Level: {form_data.get('urgency_level', 'Not specified')}
+- Best Time for Visit: {form_data.get('best_time', 'Not specified')}
+- Permission to Enter: {form_data.get('permission_to_enter', 'Not specified')}
+- Additional Notes: {form_data.get('additional_notes', 'None')}
+
+Please provide:
+1. A brief title for this issue (max 10 words)
+2. A summary paragraph (2-3 sentences)
+3. Recommended priority level (Emergency/High/Medium/Low)
+4. Suggested next steps for property manager"""
+
+        chat = LlmChat(
+            api_key=api_key,
+            session_id=f"summary_{uuid.uuid4().hex[:8]}",
+            system_message="You are a property management assistant. Generate clear, professional summaries of maintenance issues."
+        ).with_model("gemini", "gemini-2.5-flash")
+        
+        user_message = UserMessage(text=summary_prompt)
+        response = await chat.send_message(user_message)
+        
+        return {"summary": response}
+    except Exception as e:
+        print(f"AI summary error: {e}", file=sys.stderr)
+        raise HTTPException(status_code=500, detail=f"AI service error: {str(e)}")
+
+# ====== REPORTED ISSUES ENDPOINTS ======
+
+@api_router.post("/issues")
+async def create_issue(issue_data: dict, current_user: User = Depends(get_current_user)):
+    """Create a new reported issue from tenant"""
+    db = await get_db()
+    try:
+        issue_id = str(uuid.uuid4())
+        now = datetime.utcnow().isoformat()
+        
+        await db.execute('''
+            INSERT INTO reported_issues (
+                id, tenant_id, tenant_name, tenant_email, tenant_phone,
+                property_manager_id, unit_number, issue_category, urgency_level,
+                description, ai_summary, best_time, permission_to_enter, photos,
+                status, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            issue_id,
+            current_user.id,
+            issue_data.get('tenant_name', current_user.name),
+            issue_data.get('tenant_email', current_user.email),
+            issue_data.get('tenant_phone', current_user.phone),
+            issue_data.get('property_manager_id'),
+            issue_data.get('unit_number'),
+            issue_data.get('issue_category'),
+            issue_data.get('urgency_level'),
+            issue_data.get('description'),
+            issue_data.get('ai_summary'),
+            issue_data.get('best_time'),
+            issue_data.get('permission_to_enter'),
+            json.dumps(issue_data.get('photos', [])),
+            'pending',
+            now, now
+        ))
+        await db.commit()
+        
+        return {
+            "message": "Issue reported successfully",
+            "issue_id": issue_id
+        }
+    finally:
+        await db.close()
+
+@api_router.get("/issues")
+async def get_issues(current_user: User = Depends(get_current_user)):
+    """Get issues - for tenants (their issues) or property managers (all assigned issues)"""
+    db = await get_db()
+    try:
+        if current_user.user_type == "homeowner":
+            # Tenant sees their own issues
+            cursor = await db.execute('''
+                SELECT * FROM reported_issues 
+                WHERE tenant_id = ?
+                ORDER BY created_at DESC
+            ''', (current_user.id,))
+        else:
+            # Property manager sees issues assigned to them
+            cursor = await db.execute('''
+                SELECT * FROM reported_issues 
+                WHERE property_manager_id = ?
+                ORDER BY created_at DESC
+            ''', (current_user.id,))
+        
+        rows = await cursor.fetchall()
+        issues = []
+        for row in rows:
+            issue = row_to_dict(row)
+            if issue.get('photos'):
+                issue['photos'] = parse_json_field(issue['photos'])
+            issues.append(issue)
+        
+        return issues
+    finally:
+        await db.close()
+
+@api_router.get("/issues/{issue_id}")
+async def get_issue(issue_id: str, current_user: User = Depends(get_current_user)):
+    """Get a specific issue"""
+    db = await get_db()
+    try:
+        cursor = await db.execute(
+            "SELECT * FROM reported_issues WHERE id = ?",
+            (issue_id,)
+        )
+        row = await cursor.fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="Issue not found")
+        
+        issue = row_to_dict(row)
+        if issue.get('photos'):
+            issue['photos'] = parse_json_field(issue['photos'])
+        
+        return issue
+    finally:
+        await db.close()
+
+@api_router.put("/issues/{issue_id}")
+async def update_issue(issue_id: str, issue_data: dict, current_user: User = Depends(get_current_user)):
+    """Update an issue status or add resolution notes"""
+    db = await get_db()
+    try:
+        now = datetime.utcnow().isoformat()
+        
+        update_fields = ["updated_at = ?"]
+        values = [now]
+        
+        if 'status' in issue_data:
+            update_fields.append("status = ?")
+            values.append(issue_data['status'])
+            if issue_data['status'] == 'resolved':
+                update_fields.append("resolved_at = ?")
+                values.append(now)
+        
+        if 'resolution_notes' in issue_data:
+            update_fields.append("resolution_notes = ?")
+            values.append(issue_data['resolution_notes'])
+        
+        values.append(issue_id)
+        
+        await db.execute(f'''
+            UPDATE reported_issues 
+            SET {', '.join(update_fields)}
+            WHERE id = ?
+        ''', tuple(values))
+        await db.commit()
+        
+        return {"message": "Issue updated successfully"}
+    finally:
+        await db.close()
+
 # ====== HEALTH CHECK ======
 
 @app.get("/health")
