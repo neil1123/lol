@@ -6,6 +6,7 @@ import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Search, ArrowRight } from 'lucide-react';
 import apiService from '../../services/api';
+import PMCodeCard from '../../components/PMCodeCard';
 
 const PropertyManagerDashboard = () => {
   const [user, setUser] = useState(null);
@@ -235,6 +236,11 @@ const PropertyManagerDashboard = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* PM Code Card */}
+          <div className="mb-6 sm:mb-8">
+            <PMCodeCard />
           </div>
 
           {/* Stats Cards */}
