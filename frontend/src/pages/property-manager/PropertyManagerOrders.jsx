@@ -10,6 +10,7 @@ import apiService from '../../services/api';
 const PropertyManagerOrders = () => {
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
+  const [issues, setIssues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processingOrder, setProcessingOrder] = useState(null);
   const [activeTab, setActiveTab] = useState('pending-approval');
@@ -42,8 +43,12 @@ const PropertyManagerOrders = () => {
   const loadOrders = async () => {
     try {
       setLoading(true);
-      const ordersData = await apiService.getPropertyManagerOrders();
+      const [ordersData, issuesData] = await Promise.all([
+        apiService.getPropertyManagerOrders(),
+        apiService.getIssues()
+      ]);
       setOrders(ordersData);
+      setIssues(issuesData || []);
     } catch (error) {
       console.error('Error loading orders:', error);
     } finally {
@@ -92,6 +97,10 @@ const PropertyManagerOrders = () => {
   const completedOrders = orders.filter(order => 
     order.status === 'completed' || order.status === 'denied'
   );
+
+  // Filter issues
+  const pendingIssues = issues.filter(issue => issue.status === 'pending');
+  const pendingQuotes = orders.filter(order => order.status === 'quoted');
 
   const getStatusColor = (status, pmApproved) => {
     if (status === 'pending_pm_approval') return 'bg-yellow-100 text-yellow-800';
@@ -279,6 +288,29 @@ const PropertyManagerOrders = () => {
           <div className="mb-4 sm:mb-6">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">Order Management</h2>
             <p className="text-gray-600 text-sm sm:text-base">Review and approve tenant service requests</p>
+          </div>
+
+          {/* Summary Cards - Issue reports and Quotes */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setActiveTab('issue-reports')}>
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">Issue reports</h3>
+                <div className="flex items-center space-x-2">
+                  <Clock className="h-5 w-5 text-yellow-600" />
+                  <span className="text-sm text-gray-600">Pending ({pendingIssues.length})</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setActiveTab('active-orders')}>
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">Quotes</h3>
+                <div className="flex items-center space-x-2">
+                  <Clock className="h-5 w-5 text-yellow-600" />
+                  <span className="text-sm text-gray-600">Pending ({pendingQuotes.length})</span>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Orders Tabs */}
