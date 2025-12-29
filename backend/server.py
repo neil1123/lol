@@ -1579,16 +1579,6 @@ async def update_issue_status(
     finally:
         await db.close()
 
-
-        
-        issue = row_to_dict(row)
-        if issue.get('photos'):
-            issue['photos'] = parse_json_field(issue['photos'])
-        
-        return issue
-    finally:
-        await db.close()
-
 @api_router.put("/issues/{issue_id}")
 async def update_issue(issue_id: str, issue_data: dict, current_user: User = Depends(get_current_user)):
     """Update an issue status or add resolution notes"""
