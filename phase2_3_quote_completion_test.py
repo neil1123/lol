@@ -634,14 +634,13 @@ def test_phase3_provider_completes_service():
         return False
     
     try:
-        # Provider completes the service
+        # Provider completes the service using the specific completion endpoint
         completion_data = {
-            "status": "completed",
             "completion_notes": "Kitchen sink blockage cleared successfully. Dishwasher connection inspected and working properly. Drainage system tested - all functioning normally."
         }
         
         headers = {"Authorization": f"Bearer {provider_token}"}
-        response = requests.put(f"{BACKEND_URL}/orders/{pm_sourced_order_id}", 
+        response = requests.put(f"{BACKEND_URL}/orders/{pm_sourced_order_id}/complete", 
                               json=completion_data, headers=headers, timeout=30)
         
         if response.status_code == 200:
