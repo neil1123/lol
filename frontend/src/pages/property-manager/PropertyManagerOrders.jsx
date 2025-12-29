@@ -661,6 +661,63 @@ const PropertyManagerOrders = () => {
           onSuccess={handleSendSuccess}
         />
       )}
+
+      {/* Resolve Issue Modal */}
+      {showResolveModal && resolvingIssue && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg w-full max-w-lg">
+            <div className="bg-green-600 text-white p-4 flex justify-between items-center rounded-t-lg">
+              <h2 className="text-xl font-bold">Resolve Issue</h2>
+              <button 
+                onClick={() => setShowResolveModal(false)} 
+                className="hover:bg-green-700 p-1 rounded"
+              >
+                <XCircle className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <div className="mb-4">
+                <h3 className="font-semibold text-lg mb-2">{resolvingIssue.issue_category}</h3>
+                <p className="text-sm text-gray-600">Tenant: {resolvingIssue.tenant_name}</p>
+                {resolvingIssue.unit_number && (
+                  <p className="text-sm text-gray-600">Unit: {resolvingIssue.unit_number}</p>
+                )}
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Resolution Notes *
+                </label>
+                <textarea
+                  value={resolutionNotes}
+                  onChange={(e) => setResolutionNotes(e.target.value)}
+                  placeholder="Describe how the issue was resolved..."
+                  className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  rows="4"
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowResolveModal(false)}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={confirmResolveIssue}
+                  className="flex-1 bg-green-600 hover:bg-green-700"
+                >
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                  Mark as Resolved
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
