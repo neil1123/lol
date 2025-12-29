@@ -1111,9 +1111,22 @@ const ProviderOrders = () => {
                   <Card key={order.id} className="border-l-4 border-l-yellow-500">
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <div>
+                        <div className="flex-1">
+                          {/* Show PM badge if order came from Property Manager */}
+                          {order.source_issue_id && (
+                            <Badge className="bg-blue-100 text-blue-800 mb-2 inline-flex items-center">
+                              <Building2 className="h-3 w-3 mr-1" />
+                              From Property Manager
+                            </Badge>
+                          )}
                           <CardTitle className="text-lg">{order.homeowner_name}</CardTitle>
                           <p className="text-sm text-gray-600">{order.service_type}</p>
+                          {order.property_manager_id && (
+                            <p className="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                              <User className="h-3 w-3" />
+                              Managed by PM
+                            </p>
+                          )}
                         </div>
                         <div className="flex items-center space-x-2">
                           <Badge className={getPriorityColor(order.urgency || order.priority)}>
@@ -1195,9 +1208,22 @@ const ProviderOrders = () => {
                   <Card key={order.id} className="border-l-4 border-l-blue-500">
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <div>
+                        <div className="flex-1">
+                          {/* Show PM badge if order came from Property Manager */}
+                          {order.source_issue_id && (
+                            <Badge className="bg-blue-100 text-blue-800 mb-2 inline-flex items-center">
+                              <Building2 className="h-3 w-3 mr-1" />
+                              From Property Manager
+                            </Badge>
+                          )}
                           <CardTitle className="text-lg">{order.homeowner_name}</CardTitle>
                           <p className="text-sm text-gray-600">{order.service_type}</p>
+                          {order.property_manager_id && (
+                            <p className="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                              <User className="h-3 w-3" />
+                              Managed by PM
+                            </p>
+                          )}
                         </div>
                         <div className="text-right">
                           <div className="text-2xl font-bold text-blue-600">
@@ -1269,9 +1295,22 @@ const ProviderOrders = () => {
                   <Card key={order.id} className="border-l-4 border-l-green-500">
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <div>
+                        <div className="flex-1">
+                          {/* Show PM badge if order came from Property Manager */}
+                          {order.source_issue_id && (
+                            <Badge className="bg-blue-100 text-blue-800 mb-2 inline-flex items-center">
+                              <Building2 className="h-3 w-3 mr-1" />
+                              From Property Manager
+                            </Badge>
+                          )}
                           <CardTitle className="text-lg">{order.homeowner_name}</CardTitle>
                           <p className="text-sm text-gray-600">{order.service_type}</p>
+                          {order.property_manager_id && (
+                            <p className="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                              <User className="h-3 w-3" />
+                              Managed by PM
+                            </p>
+                          )}
                         </div>
                         <div className="text-right">
                           <div className="text-2xl font-bold text-green-600">
@@ -1344,9 +1383,22 @@ const ProviderOrders = () => {
                   <Card key={order.id} className="border-l-4 border-l-purple-500">
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <div>
+                        <div className="flex-1">
+                          {/* Show PM badge if order came from Property Manager */}
+                          {order.source_issue_id && (
+                            <Badge className="bg-blue-100 text-blue-800 mb-2 inline-flex items-center">
+                              <Building2 className="h-3 w-3 mr-1" />
+                              From Property Manager
+                            </Badge>
+                          )}
                           <CardTitle className="text-lg">{order.homeowner_name}</CardTitle>
                           <p className="text-sm text-gray-600">{order.service_type}</p>
+                          {order.property_manager_id && (
+                            <p className="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                              <User className="h-3 w-3" />
+                              Managed by PM
+                            </p>
+                          )}
                         </div>
                         <div className="text-right">
                           <div className="text-2xl font-bold text-purple-600">
@@ -1397,9 +1449,22 @@ const ProviderOrders = () => {
                   <Card key={order.id} className="border-l-4 border-l-green-500">
                     <CardHeader>
                       <div className="flex items-center justify-between">
-                        <div>
+                        <div className="flex-1">
+                          {/* Show PM badge if order came from Property Manager */}
+                          {order.source_issue_id && (
+                            <Badge className="bg-blue-100 text-blue-800 mb-2 inline-flex items-center">
+                              <Building2 className="h-3 w-3 mr-1" />
+                              From Property Manager
+                            </Badge>
+                          )}
                           <CardTitle className="text-lg">{order.homeowner_name}</CardTitle>
                           <p className="text-sm text-gray-600">{order.service_type}</p>
+                          {order.property_manager_id && (
+                            <p className="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                              <User className="h-3 w-3" />
+                              Managed by PM
+                            </p>
+                          )}
                         </div>
                         <div className="text-right">
                           <div className="text-2xl font-bold text-green-600">
