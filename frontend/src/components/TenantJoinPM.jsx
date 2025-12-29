@@ -7,6 +7,8 @@ import apiService from '../services/api';
 
 const TenantJoinPM = ({ onJoined }) => {
   const [code, setCode] = useState('');
+  const [propertyAddress, setPropertyAddress] = useState('');
+  const [unitNumber, setUnitNumber] = useState('');
   const [loading, setLoading] = useState(true);
   const [joining, setJoining] = useState(false);
   const [propertyManager, setPropertyManager] = useState(null);
@@ -33,13 +35,20 @@ const TenantJoinPM = ({ onJoined }) => {
       return;
     }
 
+    if (!propertyAddress.trim()) {
+      setError('Please enter your property address');
+      return;
+    }
+
     setJoining(true);
     setError('');
 
     try {
-      const response = await apiService.tenantJoinPM(code.trim());
+      const response = await apiService.tenantJoinPM(code.trim(), propertyAddress, unitNumber);
       setPropertyManager(response.property_manager);
       setCode('');
+      setPropertyAddress('');
+      setUnitNumber('');
       if (onJoined) {
         onJoined(response.property_manager);
       }
