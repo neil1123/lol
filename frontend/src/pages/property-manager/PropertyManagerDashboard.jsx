@@ -193,6 +193,52 @@ const PropertyManagerDashboard = () => {
                 
                 <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto">
                   Manage and book services for all your properties and tenants
+
+
+          {/* Properties List */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Properties</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {properties.length === 0 ? (
+                <p className="text-gray-500 text-center py-4">No properties yet</p>
+              ) : (
+                <div className="space-y-4">
+                  {properties.map((property, index) => (
+                    <Card key={index} className="border">
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between mb-2">
+                          <div>
+                            <h4 className="font-semibold text-gray-900">{property.address}</h4>
+                            <p className="text-sm text-gray-600">{property.tenant_count} Tenant{property.tenant_count !== 1 ? 's' : ''}</p>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-3 space-y-2">
+                          {property.tenants.map((tenant) => (
+                            <div key={tenant.id} className="flex items-center justify-between bg-gray-50 p-2 rounded">
+                              <div>
+                                <p className="text-sm font-medium">{tenant.name}</p>
+                                <p className="text-xs text-gray-600">{tenant.unit_number}</p>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-xs text-gray-600">{tenant.email}</p>
+                                {tenant.phone && (
+                                  <p className="text-xs text-gray-600">{tenant.phone}</p>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
                 </p>
 
                 {/* Search Bar */}
