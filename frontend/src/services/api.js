@@ -370,7 +370,7 @@ class ApiService {
   }
 
   // ====== PM ISSUE MANAGEMENT ======
-  async sendIssueTo Provider(issueId, providerId, propertyAddress = '') {
+  async sendIssueToProvider(issueId, providerId, propertyAddress = '') {
     return await this.request(`/pm/issues/${issueId}/send-to-provider`, {
       method: 'POST',
       body: JSON.stringify({ 
