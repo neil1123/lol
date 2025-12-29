@@ -589,6 +589,21 @@ const ProviderOrders = () => {
     }
   };
 
+  const handleCompleteOrder = async (order) => {
+    const completionNotes = prompt('Add completion notes (optional):');
+    if (completionNotes === null) return; // User cancelled
+    
+    try {
+      await apiService.completeOrder(order.id, completionNotes);
+      alert('Order marked as completed!');
+      loadOrders();
+    } catch (error) {
+      console.error('Failed to complete order:', error);
+      alert('Failed to complete order. Please try again.');
+    }
+  };
+
+
   const getStatusColor = (status) => {
     switch (status) {
       case 'pending_quotation':
