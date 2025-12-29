@@ -1746,8 +1746,15 @@ const HomeownerDashboard = () => {
             </div>
           )}
 
+          {/* My Issues Section */}
+          {activeTab === 'issues' && (
+            <div className="space-y-6">
+              <TenantMyIssues />
+            </div>
+          )}
+
           {/* Reports & Issues Section */}
-          {activeTab === 'reports' && (
+          {activeTab === 'report-issues' && (
             <ReportIssuesChat 
               propertyManagers={[]}
               onIssueSubmitted={() => {
