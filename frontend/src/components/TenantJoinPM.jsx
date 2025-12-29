@@ -131,17 +131,44 @@ const TenantJoinPM = ({ onJoined }) => {
           Enter the code provided by your property manager to connect and start reporting issues.
         </p>
         
-        <div className="space-y-2">
-          <Input
-            value={code}
-            onChange={(e) => {
-              setCode(e.target.value.toUpperCase());
-              setError('');
-            }}
-            placeholder="Enter 6-digit code"
-            maxLength={6}
-            className="text-center text-2xl font-mono tracking-widest uppercase"
-          />
+        <div className="space-y-3">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              PM Code *
+            </label>
+            <Input
+              value={code}
+              onChange={(e) => {
+                setCode(e.target.value.toUpperCase());
+                setError('');
+              }}
+              placeholder="Enter 6-digit code"
+              maxLength={6}
+              className="text-center text-2xl font-mono tracking-widest uppercase"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Property Address *
+            </label>
+            <Input
+              value={propertyAddress}
+              onChange={(e) => setPropertyAddress(e.target.value)}
+              placeholder="123 Main St, City, State ZIP"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Unit Number (Optional)
+            </label>
+            <Input
+              value={unitNumber}
+              onChange={(e) => setUnitNumber(e.target.value)}
+              placeholder="Apt 101, Unit A, etc."
+            />
+          </div>
           
           {error && (
             <p className="text-sm text-red-500 text-center">{error}</p>
