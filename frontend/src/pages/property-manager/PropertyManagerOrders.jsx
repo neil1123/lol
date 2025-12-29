@@ -4,8 +4,9 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/ca
 import { Badge } from '../../components/ui/badge';
 import { Button } from '../../components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
-import { CheckCircle, XCircle, Clock, Eye, Calendar } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, Eye, Calendar, Send, User } from 'lucide-react';
 import apiService from '../../services/api';
+import SendToProviderModal from '../../components/SendToProviderModal';
 
 const PropertyManagerOrders = () => {
   const [user, setUser] = useState(null);
@@ -14,6 +15,8 @@ const PropertyManagerOrders = () => {
   const [loading, setLoading] = useState(true);
   const [processingOrder, setProcessingOrder] = useState(null);
   const [activeTab, setActiveTab] = useState('pending-approval');
+  const [selectedIssue, setSelectedIssue] = useState(null);
+  const [showSendModal, setShowSendModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -134,6 +137,15 @@ const PropertyManagerOrders = () => {
     } catch {
       return 'Invalid Date';
     }
+  };
+
+  const handleSendToProvider = (issue) => {
+    setSelectedIssue(issue);
+    setShowSendModal(true);
+  };
+
+  const handleSendSuccess = () => {
+    loadOrders(); // Reload data after sending
   };
 
   const renderOrderCard = (order, showApprovalButtons = false) => (
