@@ -1392,6 +1392,14 @@ async def get_issue(issue_id: str, current_user: User = Depends(get_current_user
         row = await cursor.fetchone()
         if not row:
             raise HTTPException(status_code=404, detail="Issue not found")
+        
+        issue = row_to_dict(row)
+        if issue.get('photos'):
+            issue['photos'] = parse_json_field(issue['photos'])
+        
+        return issue
+    finally:
+        await db.close()
 
 # ====== PM ISSUE MANAGEMENT ENDPOINTS ======
 
