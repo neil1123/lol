@@ -37,6 +37,7 @@ import apiService from '../../services/api';
 import NotificationBadge from '../../components/NotificationBadge';
 import ReportIssuesChat from '../../components/ReportIssuesChat';
 import TenantJoinPM from '../../components/TenantJoinPM';
+import TenantMyIssues from '../../components/TenantMyIssues';
 
 const HomeownerDashboard = () => {
   const navigate = useNavigate();
