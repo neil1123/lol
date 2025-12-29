@@ -1436,7 +1436,7 @@ const ProviderOrders = () => {
                         </div>
                         
                         <div className="flex flex-col sm:flex-row gap-2 sm:space-x-3 sm:gap-0">
-                          <Button onClick={() => handleUpdateOrderStatus(order.id, 'completed')} className="w-full sm:w-auto">
+                          <Button onClick={() => handleCompleteOrder(order)} className="w-full sm:w-auto bg-green-600 hover:bg-green-700">
                             <CheckCircle className="h-4 w-4 mr-2" />
                             <span className="hidden sm:inline">Mark Complete</span>
                             <span className="sm:hidden">Complete</span>
