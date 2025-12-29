@@ -1392,6 +1392,186 @@ async def get_issue(issue_id: str, current_user: User = Depends(get_current_user
         row = await cursor.fetchone()
         if not row:
             raise HTTPException(status_code=404, detail="Issue not found")
+
+# ====== PM ISSUE MANAGEMENT ENDPOINTS ======
+
+@api_router.post("/pm/issues/{issue_id}/send-to-provider")
+async def send_issue_to_provider(
+    issue_id: str,
+    data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Property Manager sends an issue to a service provider by creating an order"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can send issues to providers")
+    
+    provider_id = data.get("provider_id")
+    if not provider_id:
+        raise HTTPException(status_code=400, detail="Provider ID is required")
+    
+    db = await get_db()
+    try:
+        # Get the issue
+        cursor = await db.execute(
+            "SELECT * FROM reported_issues WHERE id = ? AND property_manager_id = ?",
+            (issue_id, current_user.id)
+        )
+        issue_row = await cursor.fetchone()
+        
+        if not issue_row:
+            raise HTTPException(status_code=404, detail="Issue not found")
+        
+        issue = row_to_dict(issue_row)
+        
+        # Get provider details
+        cursor = await db.execute(
+            "SELECT id, name, business_name, email, phone FROM users WHERE id = ? AND user_type = 'provider'",
+            (provider_id,)
+        )
+        provider_row = await cursor.fetchone()
+        
+        if not provider_row:
+            raise HTTPException(status_code=404, detail="Service provider not found")
+        
+        provider_id, provider_name, provider_business, provider_email, provider_phone = provider_row
+        provider_display_name = provider_business or provider_name
+        
+        # Create order from issue
+        order_id = str(uuid.uuid4())
+        now = datetime.utcnow().isoformat()
+        
+        # Map issue category to service type
+        service_type = issue.get('issue_category', 'General Service')
+        
+        await db.execute('''
+            INSERT INTO orders (
+                id, homeowner_id, provider_id, homeowner_name, homeowner_email,
+                homeowner_phone, homeowner_address, provider_name, service_type,
+                description, status, request_date, urgency, created_at, updated_at,
+                source_issue_id, property_manager_id, pm_approved
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            order_id,
+            issue.get('tenant_id'),
+            provider_id,
+            issue.get('tenant_name'),
+            issue.get('tenant_email'),
+            issue.get('tenant_phone'),
+            data.get('property_address', ''),  # Can be provided by PM
+            provider_display_name,
+            service_type,
+            f"Issue Report: {issue.get('description', '')}\n\nAI Summary: {issue.get('ai_summary', '')}",
+            'pending_quotation',
+            now,
+            issue.get('urgency_level', 'normal'),
+            now,
+            now,
+            issue_id,
+            current_user.id,
+            1  # Pre-approved by PM
+        ))
+        
+        # Update issue with provider assignment
+        await db.execute('''
+            UPDATE reported_issues
+            SET assigned_provider_id = ?,
+                assigned_provider_name = ?,
+                linked_order_id = ?,
+                status = 'sent_to_provider',
+                updated_at = ?
+            WHERE id = ?
+        ''', (provider_id, provider_display_name, order_id, now, issue_id))
+        
+        await db.commit()
+        
+        return {
+            "message": "Issue sent to service provider successfully",
+            "order_id": order_id,
+            "provider_name": provider_display_name
+        }
+    finally:
+        await db.close()
+
+@api_router.put("/pm/issues/{issue_id}/notes")
+async def add_pm_notes_to_issue(
+    issue_id: str,
+    data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Property Manager adds notes to an issue"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can add notes")
+    
+    notes = data.get("notes", "")
+    if not notes:
+        raise HTTPException(status_code=400, detail="Notes are required")
+    
+    db = await get_db()
+    try:
+        now = datetime.utcnow().isoformat()
+        
+        await db.execute('''
+            UPDATE reported_issues
+            SET pm_notes = ?,
+                updated_at = ?
+            WHERE id = ? AND property_manager_id = ?
+        ''', (notes, now, issue_id, current_user.id))
+        
+        await db.commit()
+        
+        return {"message": "Notes added successfully"}
+    finally:
+        await db.close()
+
+@api_router.put("/pm/issues/{issue_id}/status")
+async def update_issue_status(
+    issue_id: str,
+    data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Update issue status - can be called by PM or system"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can update issue status")
+    
+    status = data.get("status")
+    resolution_notes = data.get("resolution_notes", "")
+    
+    if not status:
+        raise HTTPException(status_code=400, detail="Status is required")
+    
+    valid_statuses = ['pending', 'reviewing', 'sent_to_provider', 'in_progress', 'resolved', 'cancelled']
+    if status not in valid_statuses:
+        raise HTTPException(status_code=400, detail=f"Invalid status. Must be one of: {', '.join(valid_statuses)}")
+    
+    db = await get_db()
+    try:
+        now = datetime.utcnow().isoformat()
+        
+        update_fields = ["status = ?", "updated_at = ?"]
+        values = [status, now]
+        
+        if status == 'resolved':
+            update_fields.append("resolved_at = ?")
+            values.append(now)
+            if resolution_notes:
+                update_fields.append("resolution_notes = ?")
+                values.append(resolution_notes)
+        
+        values.extend([issue_id, current_user.id])
+        
+        await db.execute(f'''
+            UPDATE reported_issues
+            SET {', '.join(update_fields)}
+            WHERE id = ? AND property_manager_id = ?
+        ''', tuple(values))
+        
+        await db.commit()
+        
+        return {"message": "Issue status updated successfully"}
+    finally:
+        await db.close()
+
+
         
         issue = row_to_dict(row)
         if issue.get('photos'):
