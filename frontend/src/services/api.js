@@ -330,11 +330,19 @@ class ApiService {
     return await this.request('/pm/my-code');
   }
 
-  async tenantJoinPM(code) {
+  async tenantJoinPM(code, propertyAddress = '', unitNumber = '') {
     return await this.request('/tenant/join-pm', {
       method: 'POST',
-      body: JSON.stringify({ code }),
+      body: JSON.stringify({ 
+        code,
+        property_address: propertyAddress,
+        unit_number: unitNumber
+      }),
     });
+  }
+
+  async getPMProperties() {
+    return await this.request('/pm/properties');
   }
 
   async getTenantPM() {
