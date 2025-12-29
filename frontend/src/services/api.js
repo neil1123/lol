@@ -390,6 +390,40 @@ class ApiService {
   async updateIssueStatus(issueId, status, resolutionNotes = '') {
     return await this.request(`/pm/issues/${issueId}/status`, {
       method: 'PUT',
+
+  // ====== PM QUOTE MANAGEMENT ======
+  async approveQuote(orderId) {
+    return await this.request(`/pm/orders/${orderId}/approve-quote`, {
+      method: 'PUT',
+    });
+  }
+
+  async rejectQuote(orderId, reason) {
+    return await this.request(`/pm/orders/${orderId}/reject-quote`, {
+      method: 'PUT',
+      body: JSON.stringify({ reason }),
+    });
+  }
+
+  async getPMQuotes() {
+    return await this.request('/pm/quotes');
+  }
+
+  // ====== COMPLETION & RESOLUTION ======
+  async completeOrder(orderId, completionNotes = '') {
+    return await this.request(`/orders/${orderId}/complete`, {
+      method: 'PUT',
+      body: JSON.stringify({ completion_notes: completionNotes }),
+    });
+  }
+
+  async resolveIssue(issueId, resolutionNotes) {
+    return await this.request(`/pm/issues/${issueId}/resolve`, {
+      method: 'PUT',
+      body: JSON.stringify({ resolution_notes: resolutionNotes }),
+    });
+  }
+
       body: JSON.stringify({ status, resolution_notes: resolutionNotes }),
     });
   }
