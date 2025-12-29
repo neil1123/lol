@@ -678,12 +678,11 @@ def test_pm_resolves_issue():
     
     try:
         resolution_data = {
-            "status": "resolved",
             "resolution_notes": "Plumbing issue resolved successfully. Kitchen sink blockage cleared by Test Home Services. Tenant confirmed everything is working properly. No further action needed."
         }
         
         headers = {"Authorization": f"Bearer {property_manager_token}"}
-        response = requests.put(f"{BACKEND_URL}/pm/issues/{test_issue_id}/status", 
+        response = requests.put(f"{BACKEND_URL}/pm/issues/{test_issue_id}/resolve", 
                               json=resolution_data, headers=headers, timeout=30)
         
         if response.status_code == 200:
