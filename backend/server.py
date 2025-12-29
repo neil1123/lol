@@ -81,7 +81,9 @@ async def init_db():
                 updated_at TEXT,
                 is_active INTEGER DEFAULT 1,
                 pm_code TEXT,
-                property_manager_id TEXT
+                property_manager_id TEXT,
+                property_address TEXT,
+                unit_number TEXT
             )
         ''')
         
@@ -228,7 +230,15 @@ async def init_db():
             await db.commit()
             print("Added property_manager_id column to users table", file=sys.stderr, flush=True)
         except Exception as e:
-            # Column already exists
+            pass
+        
+        # Add property information columns (migration)
+        try:
+            await db.execute('ALTER TABLE users ADD COLUMN property_address TEXT')
+            await db.execute('ALTER TABLE users ADD COLUMN unit_number TEXT')
+            await db.commit()
+            print("Added property columns to users table", file=sys.stderr, flush=True)
+        except Exception as e:
             pass
         
         # Add new columns to orders table (migration)
