@@ -390,6 +390,9 @@ class ApiService {
   async updateIssueStatus(issueId, status, resolutionNotes = '') {
     return await this.request(`/pm/issues/${issueId}/status`, {
       method: 'PUT',
+      body: JSON.stringify({ status, resolution_notes: resolutionNotes }),
+    });
+  }
 
   // ====== PM QUOTE MANAGEMENT ======
   async approveQuote(orderId) {
