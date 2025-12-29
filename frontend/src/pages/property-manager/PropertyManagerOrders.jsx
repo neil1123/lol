@@ -376,6 +376,16 @@ const PropertyManagerOrders = () => {
                                 {issue.unit_number && (
                                   <p className="text-sm text-gray-600">Unit: {issue.unit_number}</p>
                                 )}
+                                
+                                {/* Show assigned provider if exists */}
+                                {issue.assigned_provider_name && (
+                                  <div className="flex items-center gap-2 mt-2">
+                                    <User className="h-4 w-4 text-blue-600" />
+                                    <span className="text-sm text-blue-600 font-medium">
+                                      Assigned to: {issue.assigned_provider_name}
+                                    </span>
+                                  </div>
+                                )}
                               </div>
                               <div className="text-left sm:text-right flex-shrink-0">
                                 <Badge className={
@@ -403,7 +413,7 @@ const PropertyManagerOrders = () => {
                               </div>
                             )}
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-600">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-600 mb-4">
                               {issue.best_time && (
                                 <div><span className="font-medium">Best Time:</span> {issue.best_time}</div>
                               )}
@@ -411,6 +421,25 @@ const PropertyManagerOrders = () => {
                                 <div><span className="font-medium">Entry Permission:</span> {issue.permission_to_enter}</div>
                               )}
                             </div>
+
+                            {/* Action Buttons */}
+                            {!issue.assigned_provider_id ? (
+                              <div className="pt-4 border-t">
+                                <Button
+                                  onClick={() => handleSendToProvider(issue)}
+                                  className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700"
+                                >
+                                  <Send className="h-4 w-4 mr-2" />
+                                  Send to Service Provider
+                                </Button>
+                              </div>
+                            ) : (
+                              <div className="pt-4 border-t">
+                                <p className="text-sm text-green-600 font-medium">
+                                  ✓ Sent to provider - Awaiting quote
+                                </p>
+                              </div>
+                            )}
                           </CardContent>
                         </Card>
                       ))}
