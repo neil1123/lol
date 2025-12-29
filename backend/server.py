@@ -1591,6 +1591,228 @@ async def update_issue(issue_id: str, issue_data: dict, current_user: User = Dep
         
         if 'status' in issue_data:
             update_fields.append("status = ?")
+
+
+# ====== PM QUOTE MANAGEMENT ENDPOINTS ======
+
+@api_router.put("/pm/orders/{order_id}/approve-quote")
+async def pm_approve_quote(
+    order_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Property Manager approves a quote from a provider"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can approve quotes")
+    
+    db = await get_db()
+    try:
+        # Get the order
+        cursor = await db.execute(
+            "SELECT * FROM orders WHERE id = ? AND property_manager_id = ?",
+            (order_id, current_user.id)
+        )
+        order_row = await cursor.fetchone()
+        
+        if not order_row:
+            raise HTTPException(status_code=404, detail="Order not found or not assigned to you")
+        
+        order = row_to_dict(order_row)
+        
+        # Update order status to confirmed
+        now = datetime.utcnow().isoformat()
+        await db.execute('''
+            UPDATE orders
+            SET status = 'confirmed',
+                pm_approved = 1,
+                updated_at = ?
+            WHERE id = ?
+        ''', (now, order_id))
+        
+        # If this order came from an issue, update issue status
+        if order.get('source_issue_id'):
+            await db.execute('''
+                UPDATE reported_issues
+                SET status = 'in_progress',
+                    updated_at = ?
+                WHERE id = ?
+            ''', (now, order['source_issue_id']))
+        
+        await db.commit()
+        
+        return {
+            "message": "Quote approved successfully",
+            "order_id": order_id,
+            "new_status": "confirmed"
+        }
+    finally:
+        await db.close()
+
+@api_router.put("/pm/orders/{order_id}/reject-quote")
+async def pm_reject_quote(
+    order_id: str,
+    data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Property Manager rejects a quote from a provider"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can reject quotes")
+    
+    rejection_reason = data.get("reason", "")
+    
+    db = await get_db()
+    try:
+        # Get the order
+        cursor = await db.execute(
+            "SELECT * FROM orders WHERE id = ? AND property_manager_id = ?",
+            (order_id, current_user.id)
+        )
+        order_row = await cursor.fetchone()
+        
+        if not order_row:
+            raise HTTPException(status_code=404, detail="Order not found or not assigned to you")
+        
+        order = row_to_dict(order_row)
+        
+        # Update order - set back to pending quotation
+        now = datetime.utcnow().isoformat()
+        await db.execute('''
+            UPDATE orders
+            SET status = 'pending_quotation',
+                pm_approved = 0,
+                updated_at = ?
+            WHERE id = ?
+        ''', (now, order_id))
+        
+        # Add rejection note to PM notes if order is from issue
+        if order.get('source_issue_id') and rejection_reason:
+            await db.execute('''
+                UPDATE reported_issues
+                SET pm_notes = COALESCE(pm_notes, '') || ?
+                WHERE id = ?
+            ''', (f"\n[Quote Rejected] {rejection_reason}", order['source_issue_id']))
+        
+        await db.commit()
+        
+        return {
+            "message": "Quote rejected. Provider will be notified to submit a new quote.",
+            "order_id": order_id
+        }
+    finally:
+        await db.close()
+
+@api_router.get("/pm/quotes")
+async def get_pm_quotes(current_user: User = Depends(get_current_user)):
+    """Get all quotes for Property Manager to review"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can view quotes")
+    
+    db = await get_db()
+    try:
+        cursor = await db.execute('''
+            SELECT * FROM orders 
+            WHERE property_manager_id = ? 
+            AND status = 'quoted'
+            ORDER BY created_at DESC
+        ''', (current_user.id,))
+        
+        rows = await cursor.fetchall()
+        quotes = [row_to_dict(row) for row in rows]
+        
+        return quotes
+    finally:
+        await db.close()
+
+# ====== COMPLETION & RESOLUTION ENDPOINTS ======
+
+@api_router.put("/orders/{order_id}/complete")
+async def provider_complete_order(
+    order_id: str,
+    data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Provider marks an order as completed"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can complete orders")
+    
+    completion_notes = data.get("completion_notes", "")
+    
+    db = await get_db()
+    try:
+        # Get the order
+        cursor = await db.execute(
+            "SELECT * FROM orders WHERE id = ? AND provider_id = ?",
+            (order_id, current_user.id)
+        )
+        order_row = await cursor.fetchone()
+        
+        if not order_row:
+            raise HTTPException(status_code=404, detail="Order not found")
+        
+        order = row_to_dict(order_row)
+        
+        # Update order status
+        now = datetime.utcnow().isoformat()
+        await db.execute('''
+            UPDATE orders
+            SET status = 'completed',
+                updated_at = ?
+            WHERE id = ?
+        ''', (now, order_id))
+        
+        # If order is from an issue, update issue to awaiting PM review
+        if order.get('source_issue_id'):
+            await db.execute('''
+                UPDATE reported_issues
+                SET status = 'in_progress',
+                    pm_notes = COALESCE(pm_notes, '') || ?,
+                    updated_at = ?
+                WHERE id = ?
+            ''', (f"\n[Provider Update] Service completed. {completion_notes}", now, order['source_issue_id']))
+        
+        await db.commit()
+        
+        return {
+            "message": "Order marked as completed",
+            "order_id": order_id
+        }
+    finally:
+        await db.close()
+
+@api_router.put("/pm/issues/{issue_id}/resolve")
+async def pm_resolve_issue(
+    issue_id: str,
+    data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Property Manager marks an issue as resolved"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can resolve issues")
+    
+    resolution_notes = data.get("resolution_notes", "")
+    
+    db = await get_db()
+    try:
+        now = datetime.utcnow().isoformat()
+        
+        await db.execute('''
+            UPDATE reported_issues
+            SET status = 'resolved',
+                resolved_at = ?,
+                resolution_notes = ?,
+                updated_at = ?
+            WHERE id = ? AND property_manager_id = ?
+        ''', (now, resolution_notes, now, issue_id, current_user.id))
+        
+        await db.commit()
+        
+        return {
+            "message": "Issue resolved successfully",
+            "issue_id": issue_id
+        }
+    finally:
+        await db.close()
+
+
             values.append(issue_data['status'])
             if issue_data['status'] == 'resolved':
                 update_fields.append("resolved_at = ?")
