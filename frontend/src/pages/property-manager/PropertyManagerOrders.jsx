@@ -12,11 +12,15 @@ const PropertyManagerOrders = () => {
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
   const [issues, setIssues] = useState([]);
+  const [quotes, setQuotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processingOrder, setProcessingOrder] = useState(null);
   const [activeTab, setActiveTab] = useState('pending-approval');
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [showSendModal, setShowSendModal] = useState(false);
+  const [showResolveModal, setShowResolveModal] = useState(false);
+  const [resolvingIssue, setResolvingIssue] = useState(null);
+  const [resolutionNotes, setResolutionNotes] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,12 +50,14 @@ const PropertyManagerOrders = () => {
   const loadOrders = async () => {
     try {
       setLoading(true);
-      const [ordersData, issuesData] = await Promise.all([
+      const [ordersData, issuesData, quotesData] = await Promise.all([
         apiService.getPropertyManagerOrders(),
-        apiService.getIssues()
+        apiService.getIssues(),
+        apiService.getPMQuotes()
       ]);
       setOrders(ordersData);
       setIssues(issuesData || []);
+      setQuotes(quotesData || []);
     } catch (error) {
       console.error('Error loading orders:', error);
     } finally {
@@ -102,8 +108,11 @@ const PropertyManagerOrders = () => {
   );
 
   // Filter issues
-  const pendingIssues = issues.filter(issue => issue.status === 'pending');
-  const pendingQuotes = orders.filter(order => order.status === 'quoted');
+  const pendingIssues = issues.filter(issue => 
+    issue.status !== 'resolved' && issue.status !== 'cancelled'
+  );
+  const inProgressIssues = issues.filter(issue => issue.status === 'in_progress');
+  const resolvedIssues = issues.filter(issue => issue.status === 'resolved');
 
   const getStatusColor = (status, pmApproved) => {
     if (status === 'pending_pm_approval') return 'bg-yellow-100 text-yellow-800';
@@ -146,6 +155,64 @@ const PropertyManagerOrders = () => {
 
   const handleSendSuccess = () => {
     loadOrders(); // Reload data after sending
+  };
+
+  const handleApproveQuote = async (orderId) => {
+    if (!window.confirm('Are you sure you want to approve this quote?')) return;
+    
+    try {
+      setProcessingOrder(orderId);
+      await apiService.approveQuote(orderId);
+      alert('Quote approved successfully!');
+      loadOrders();
+    } catch (error) {
+      console.error('Failed to approve quote:', error);
+      alert('Failed to approve quote. Please try again.');
+    } finally {
+      setProcessingOrder(null);
+    }
+  };
+
+  const handleRejectQuote = async (orderId) => {
+    const reason = prompt('Please provide a reason for rejection:');
+    if (!reason) return;
+    
+    try {
+      setProcessingOrder(orderId);
+      await apiService.rejectQuote(orderId, reason);
+      alert('Quote rejected. Provider will be notified.');
+      loadOrders();
+    } catch (error) {
+      console.error('Failed to reject quote:', error);
+      alert('Failed to reject quote. Please try again.');
+    } finally {
+      setProcessingOrder(null);
+    }
+  };
+
+  const handleResolveIssue = (issue) => {
+    setResolvingIssue(issue);
+    setResolutionNotes('');
+    setShowResolveModal(true);
+  };
+
+  const confirmResolveIssue = async () => {
+    if (!resolutionNotes.trim()) {
+      alert('Please provide resolution notes');
+      return;
+    }
+    
+    try {
+      await apiService.resolveIssue(resolvingIssue.id, resolutionNotes);
+      alert('Issue marked as resolved!');
+      setShowResolveModal(false);
+      setResolvingIssue(null);
+      setResolutionNotes('');
+      loadOrders();
+    } catch (error) {
+      console.error('Failed to resolve issue:', error);
+      alert('Failed to resolve issue. Please try again.');
+    }
   };
 
   const renderOrderCard = (order, showApprovalButtons = false) => (
