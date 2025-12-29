@@ -427,11 +427,6 @@ class ApiService {
     });
   }
 
-      body: JSON.stringify({ status, resolution_notes: resolutionNotes }),
-    });
-  }
-
-
   async getPropertyManagerProperties() {
     // Properties management endpoint - for now return empty
     // TODO: Implement properties management
