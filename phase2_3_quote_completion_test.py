@@ -785,10 +785,9 @@ def test_database_verification():
         return False
     
     try:
-        headers = {"Authorization": f"Bearer {property_manager_token}"}
-        
-        # Verify final order state
-        response = requests.get(f"{BACKEND_URL}/orders", headers=headers, timeout=30)
+        # Verify final order state using provider token (since orders are user-specific)
+        provider_headers = {"Authorization": f"Bearer {provider_token}"}
+        response = requests.get(f"{BACKEND_URL}/orders", headers=provider_headers, timeout=30)
         if response.status_code == 200:
             orders = response.json()
             order_found = False
@@ -814,11 +813,15 @@ def test_database_verification():
                     break
             
             if not order_found:
-                print("❌ Order not found in database")
+                print("❌ Order not found in provider's orders")
                 return False
+        else:
+            print(f"❌ Failed to get provider orders: {response.status_code}")
+            return False
         
         # Verify final issue state
-        response = requests.get(f"{BACKEND_URL}/issues/{test_issue_id}", headers=headers, timeout=30)
+        pm_headers = {"Authorization": f"Bearer {property_manager_token}"}
+        response = requests.get(f"{BACKEND_URL}/issues/{test_issue_id}", headers=pm_headers, timeout=30)
         if response.status_code == 200:
             issue = response.json()
             
@@ -847,6 +850,9 @@ def test_database_verification():
             else:
                 print("❌ Issue resolution_notes missing")
                 return False
+        else:
+            print(f"❌ Failed to get issue details: {response.status_code}")
+            return False
         
         print("✅ Database state verification completed successfully")
         return True
