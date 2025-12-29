@@ -1591,7 +1591,24 @@ async def update_issue(issue_id: str, issue_data: dict, current_user: User = Dep
         
         if 'status' in issue_data:
             update_fields.append("status = ?")
-
+            values.append(issue_data['status'])
+        
+        if 'resolution_notes' in issue_data:
+            update_fields.append("resolution_notes = ?")
+            values.append(issue_data['resolution_notes'])
+        
+        values.append(issue_id)
+        
+        await db.execute(f'''
+            UPDATE reported_issues
+            SET {', '.join(update_fields)}
+            WHERE id = ?
+        ''', tuple(values))
+        await db.commit()
+        
+        return {"message": "Issue updated successfully"}
+    finally:
+        await db.close()
 
 # ====== PM QUOTE MANAGEMENT ENDPOINTS ======
 
