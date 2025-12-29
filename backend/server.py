@@ -113,7 +113,10 @@ async def init_db():
                 quotation_details TEXT,
                 quotation_valid_until TEXT,
                 created_at TEXT,
-                updated_at TEXT
+                updated_at TEXT,
+                source_issue_id TEXT,
+                property_manager_id TEXT,
+                pm_approved INTEGER DEFAULT 1
             )
         ''')
         
@@ -202,7 +205,11 @@ async def init_db():
                 created_at TEXT,
                 updated_at TEXT,
                 resolved_at TEXT,
-                resolution_notes TEXT
+                resolution_notes TEXT,
+                assigned_provider_id TEXT,
+                assigned_provider_name TEXT,
+                linked_order_id TEXT,
+                pm_notes TEXT
             )
         ''')
         
@@ -222,6 +229,29 @@ async def init_db():
             print("Added property_manager_id column to users table", file=sys.stderr, flush=True)
         except Exception as e:
             # Column already exists
+            pass
+        
+        # Add new columns to orders table (migration)
+        try:
+            await db.execute('ALTER TABLE orders ADD COLUMN source_issue_id TEXT')
+            await db.execute('ALTER TABLE orders ADD COLUMN property_manager_id TEXT')
+            await db.execute('ALTER TABLE orders ADD COLUMN pm_approved INTEGER DEFAULT 1')
+            await db.commit()
+            print("Added new columns to orders table", file=sys.stderr, flush=True)
+        except Exception as e:
+            # Columns already exist
+            pass
+        
+        # Add new columns to reported_issues table (migration)
+        try:
+            await db.execute('ALTER TABLE reported_issues ADD COLUMN assigned_provider_id TEXT')
+            await db.execute('ALTER TABLE reported_issues ADD COLUMN assigned_provider_name TEXT')
+            await db.execute('ALTER TABLE reported_issues ADD COLUMN linked_order_id TEXT')
+            await db.execute('ALTER TABLE reported_issues ADD COLUMN pm_notes TEXT')
+            await db.commit()
+            print("Added new columns to reported_issues table", file=sys.stderr, flush=True)
+        except Exception as e:
+            # Columns already exist
             pass
         
         await db.commit()
