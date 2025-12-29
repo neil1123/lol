@@ -369,6 +369,32 @@ class ApiService {
     });
   }
 
+  // ====== PM ISSUE MANAGEMENT ======
+  async sendIssueTo Provider(issueId, providerId, propertyAddress = '') {
+    return await this.request(`/pm/issues/${issueId}/send-to-provider`, {
+      method: 'POST',
+      body: JSON.stringify({ 
+        provider_id: providerId,
+        property_address: propertyAddress 
+      }),
+    });
+  }
+
+  async addPMNotesToIssue(issueId, notes) {
+    return await this.request(`/pm/issues/${issueId}/notes`, {
+      method: 'PUT',
+      body: JSON.stringify({ notes }),
+    });
+  }
+
+  async updateIssueStatus(issueId, status, resolutionNotes = '') {
+    return await this.request(`/pm/issues/${issueId}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status, resolution_notes: resolutionNotes }),
+    });
+  }
+
+
   async getPropertyManagerProperties() {
     // Properties management endpoint - for now return empty
     // TODO: Implement properties management
