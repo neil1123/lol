@@ -490,6 +490,18 @@ const PropertyManagerOrders = () => {
           </Card>
         </div>
       </main>
+
+      {/* Send to Provider Modal */}
+      {showSendModal && selectedIssue && (
+        <SendToProviderModal
+          issue={selectedIssue}
+          onClose={() => {
+            setShowSendModal(false);
+            setSelectedIssue(null);
+          }}
+          onSuccess={handleSendSuccess}
+        />
+      )}
     </div>
   );
 };
