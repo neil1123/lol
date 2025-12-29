@@ -381,12 +381,12 @@ const PropertyManagerOrders = () => {
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setActiveTab('active-orders')}>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setActiveTab('quotes')}>
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold text-gray-700 mb-2">Quotes</h3>
                 <div className="flex items-center space-x-2">
                   <Clock className="h-5 w-5 text-yellow-600" />
-                  <span className="text-sm text-gray-600">Pending ({pendingQuotes.length})</span>
+                  <span className="text-sm text-gray-600">Pending ({quotes.length})</span>
                 </div>
               </CardContent>
             </Card>
@@ -396,12 +396,18 @@ const PropertyManagerOrders = () => {
           <Card>
             <CardContent className="p-3 sm:p-6">
               <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-4 text-xs sm:text-sm">
+                <TabsList className="grid w-full grid-cols-5 text-xs sm:text-sm">
                   <TabsTrigger value="issue-reports" className="flex items-center space-x-1">
                     <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
                     <span className="hidden sm:inline">Issues</span>
                     <span className="sm:hidden">({pendingIssues.length})</span>
                     <span className="hidden sm:inline">({pendingIssues.length})</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="quotes" className="flex items-center space-x-1">
+                    <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <span className="hidden sm:inline">Quotes</span>
+                    <span className="sm:hidden">({quotes.length})</span>
+                    <span className="hidden sm:inline">({quotes.length})</span>
                   </TabsTrigger>
                   <TabsTrigger value="pending-approval" className="flex items-center space-x-1">
                     <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
