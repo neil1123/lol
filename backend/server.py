@@ -1830,29 +1830,6 @@ async def pm_resolve_issue(
         await db.close()
 
 
-            values.append(issue_data['status'])
-            if issue_data['status'] == 'resolved':
-                update_fields.append("resolved_at = ?")
-                values.append(now)
-        
-        if 'resolution_notes' in issue_data:
-            update_fields.append("resolution_notes = ?")
-            values.append(issue_data['resolution_notes'])
-        
-        values.append(issue_id)
-        
-        await db.execute(f'''
-            UPDATE reported_issues 
-            SET {', '.join(update_fields)}
-            WHERE id = ?
-        ''', tuple(values))
-        await db.commit()
-        
-        return {"message": "Issue updated successfully"}
-    finally:
-        await db.close()
-
-# ====== HEALTH CHECK ======
 
 @app.get("/health")
 async def health_check():
