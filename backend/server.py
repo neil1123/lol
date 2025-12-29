@@ -707,6 +707,62 @@ async def get_tenant_pm(current_user: User = Depends(get_current_user)):
                 "phone": pm_row[3],
                 "email": pm_row[4]
             }
+
+
+@api_router.get("/pm/properties")
+async def get_pm_properties(current_user: User = Depends(get_current_user)):
+    """Get all properties managed by this Property Manager"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can access this")
+    
+    db = await get_db()
+    try:
+        cursor = await db.execute('''
+            SELECT id, name, email, phone, property_address, unit_number, created_at
+            FROM users 
+            WHERE property_manager_id = ? AND user_type = 'homeowner'
+            ORDER BY property_address, unit_number
+        ''', (current_user.id,))
+        
+        rows = await cursor.fetchall()
+        
+        # Group tenants by property address
+        properties_dict = {}
+        for row in rows:
+            tenant_id, name, email, phone, prop_addr, unit, created_at = row
+            
+            # Use address or "Unspecified" as key
+            address_key = prop_addr or "Address Not Provided"
+            
+            if address_key not in properties_dict:
+                properties_dict[address_key] = {
+                    "address": prop_addr or "Not provided",
+                    "tenants": []
+                }
+            
+            properties_dict[address_key]["tenants"].append({
+                "id": tenant_id,
+                "name": name,
+                "email": email,
+                "phone": phone,
+                "unit_number": unit or "N/A",
+                "joined_date": created_at
+            })
+        
+        # Convert to list format
+        properties = [
+            {
+                "address": addr,
+                "tenant_count": len(data["tenants"]),
+                "tenants": data["tenants"]
+            }
+            for addr, data in properties_dict.items()
+        ]
+        
+        return properties
+    finally:
+        await db.close()
+
         }
     finally:
         await db.close()
