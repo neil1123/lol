@@ -627,6 +627,9 @@ async def tenant_join_pm(data: dict, current_user: User = Depends(get_current_us
         raise HTTPException(status_code=403, detail="Only tenants can join property managers")
     
     code = data.get("code", "").strip().upper()
+    property_address = data.get("property_address", "")
+    unit_number = data.get("unit_number", "")
+    
     if not code:
         raise HTTPException(status_code=400, detail="Code is required")
     
@@ -644,10 +647,15 @@ async def tenant_join_pm(data: dict, current_user: User = Depends(get_current_us
         
         pm_id, pm_name, pm_business, pm_phone, pm_email = pm_row
         
-        # Update tenant's property_manager_id
+        # Update tenant's property_manager_id and property info
         await db.execute(
-            "UPDATE users SET property_manager_id = ?, updated_at = ? WHERE id = ?",
-            (pm_id, datetime.utcnow().isoformat(), current_user.id)
+            """UPDATE users 
+               SET property_manager_id = ?, 
+                   property_address = ?, 
+                   unit_number = ?, 
+                   updated_at = ? 
+               WHERE id = ?""",
+            (pm_id, property_address, unit_number, datetime.utcnow().isoformat(), current_user.id)
         )
         await db.commit()
         
