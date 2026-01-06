@@ -17,6 +17,7 @@ const PropertyManagerDashboard = () => {
     pendingApprovals: 0,
     activeOrders: 0
   });
+  const [properties, setProperties] = useState([]);
   const [pendingOrders, setPendingOrders] = useState([]);
   const [recentActivity, setRecentActivity] = useState([]);
   const [tenants, setTenants] = useState([]);
