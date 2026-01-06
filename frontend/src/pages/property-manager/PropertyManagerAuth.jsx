@@ -28,17 +28,22 @@ const PropertyManagerAuth = () => {
       if (isLogin) {
         response = await apiService.login(formData.email, formData.password);
       } else {
-        // Validate required fields for registration
-        if (!formData.pm_code.trim()) {
-          setError('Please provide a tenant onboarding code');
-          setLoading(false);
-          return;
+        // Registration - pm_code is optional during registration
+        const userData = {
+          email: formData.email,
+          password: formData.password,
+          name: formData.name,
+          phone: formData.phone,
+          address: formData.address,
+          user_type: 'property_manager',
+          business_name: formData.name // Use name as business_name if not provided
+        };
+        
+        // Add pm_code only if provided
+        if (formData.pm_code && formData.pm_code.trim()) {
+          userData.pm_code = formData.pm_code.trim().toUpperCase();
         }
         
-        const userData = {
-          ...formData,
-          user_type: 'property_manager'
-        };
         response = await apiService.register(userData);
       }
 
