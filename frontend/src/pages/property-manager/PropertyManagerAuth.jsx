@@ -180,12 +180,11 @@ const PropertyManagerAuth = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="pm_code" className="text-sm font-medium">Tenant Onboarding Code</Label>
+                    <Label htmlFor="pm_code" className="text-sm font-medium">Tenant Onboarding Code (Optional)</Label>
                     <input
                       id="pm_code"
                       name="pm_code"
                       type="text"
-                      required
                       value={formData.pm_code}
                       onChange={handleChange}
                       className="mt-1 block w-full px-3 py-2 text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
