@@ -707,7 +707,9 @@ async def get_tenant_pm(current_user: User = Depends(get_current_user)):
                 "phone": pm_row[3],
                 "email": pm_row[4]
             }
-
+        }
+    finally:
+        await db.close()
 
 @api_router.get("/pm/properties")
 async def get_pm_properties(current_user: User = Depends(get_current_user)):
