@@ -441,13 +441,15 @@ async def register(user_data: UserCreate):
         await db.execute('''
             INSERT INTO users (id, email, password_hash, user_type, name, phone, address, 
                              business_name, services, description, location, specialties,
-                             rating, reviews, completed_jobs, created_at, updated_at, is_active, pm_code)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                             rating, reviews, completed_jobs, created_at, updated_at, is_active, pm_code,
+                             property_manager_id, property_address, unit_number)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
             user_id, user_data.email, password_hash, user_data.user_type,
             user_data.name, user_data.phone, user_data.address, user_data.business_name,
             json.dumps(user_data.services or []), user_data.description, user_data.location,
-            json.dumps(user_data.specialties or []), 5.0, 0, 0, now, now, 1, user_data.pm_code
+            json.dumps(user_data.specialties or []), 5.0, 0, 0, now, now, 1, user_data.pm_code,
+            None, None, None  # property_manager_id, property_address, unit_number
         ))
         await db.commit()
         
