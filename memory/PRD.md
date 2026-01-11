@@ -1,18 +1,48 @@
 # Doord - Property Management Application
 
 ## Original Problem Statement
-Build a full-stack application for Property Managers and Tenants. The core workflow involves:
-1. Tenant reporting an issue
+Build a full-stack application for Property Managers, Tenants, and Service Providers. Core workflow:
+1. Tenant reports an issue
 2. Property manager reviews and forwards to a service provider
 3. Service provider provides quote and completes work
+4. PM schedules service and tracks completion
 
-## Key Features
-1. **User Roles & Linking**: Separate dashboards for Tenants, Property Managers, and Service Providers
-2. **PM Code System**: Tenants can link to a Property Manager using a unique 6-character code
-3. **AI-Powered Issue Reporting**: Tenants report issues via simple prompt that transitions to structured form
-4. **End-to-End Issue Resolution Flow**: Tenant → PM → Service Provider workflow
-5. **Property Tracking**: Capture and display tenant property addresses
-6. **Quick Send to Provider**: One-click sending of issues to service providers (NEW)
+## Key Features Implemented
+
+### Core Features (Completed)
+1. **User Roles & Authentication**: Separate dashboards for Tenants, Property Managers, and Service Providers
+2. **PM Code System**: Tenants link to PM using unique 6-character code
+3. **AI-Powered Issue Reporting**: Simple prompt → AI summary → structured form
+4. **Quick Send to Provider**: One-click sending of issues to service providers
+
+### P2 Features (Completed - Jan 11, 2026)
+1. **Quote Management UI**: 
+   - PM can view pending quotes from providers
+   - "Approve & Schedule" and "Reject" buttons
+   - Quote details: amount, duration, validity
+   
+2. **Calendar Integration**:
+   - Month and List view modes
+   - Shows scheduled services with date/time
+   - Click on date to see events
+   - Automatic event creation when scheduling
+
+3. **Service Scheduling**:
+   - PM schedules service after approving quote
+   - Date and time picker
+   - Creates appointment record
+
+### P3 Features (Completed - Jan 11, 2026)
+1. **Issue Classification**:
+   - Small/Medium/Big categories
+   - Visual badges on issues
+   - One-click classification buttons
+   - Issues grouped by size API
+
+2. **Backend Refactoring**:
+   - Created `/app/backend/models/schemas.py` with Pydantic models
+   - Added new database columns: `issue_size`, `scheduled_date`, `scheduled_time`, `estimated_duration`
+   - New API endpoints for classification, quotes, calendar
 
 ## Tech Stack
 - **Frontend**: React, Tailwind CSS, Shadcn UI
@@ -20,41 +50,6 @@ Build a full-stack application for Property Managers and Tenants. The core workf
 - **Database**: SQLite
 - **Authentication**: JWT
 - **AI**: Google Gemini (via Emergent LLM Key)
-
-## What's Been Implemented (as of Jan 11, 2026)
-
-### Completed - Tested & Verified ✅
-- [x] User authentication (registration/login) for all roles
-- [x] Property Manager dashboard with code generation
-- [x] Tenant linking via PM code (both during registration and after)
-- [x] Property information capture during tenant linking
-- [x] PM Dashboard showing linked tenants and properties
-- [x] Tenant dashboard with "My Issues" tab
-- [x] Service Provider dashboard for orders/quotes
-- [x] Report Issues flow with AI-powered summary (simple prompt → form → summary)
-- [x] **Quick Send to Provider** - One-click provider assignment from PM Orders page
-
-### Quick Send to Provider Feature (NEW - Jan 11, 2026)
-- **Component**: `/app/frontend/src/components/QuickSendToProvider.jsx`
-- **Flow**:
-  1. PM views pending issues in Orders page
-  2. Dropdown shows available providers (auto-sorted by relevance)
-  3. "Match" badge shows for providers whose services match issue category
-  4. One-click "Send Now" button sends issue to provider
-  5. Issue status updates to "sent_to_provider"
-  6. Order created with "pending_quotation" status
-- **Backend**: `POST /api/pm/issues/{issue_id}/send-to-provider`
-
-### Test Results (Jan 11, 2026)
-- Backend: 100% pass rate (8/8 tests passed)
-- Frontend: 100% all Quick Send UI flows working
-- Test file: `/app/tests/test_quick_send_provider.py`
-
-### Test Credentials
-- PM: e2e_pm_1768106090@test.com / test123
-- Tenant: e2e_tenant_1768106091@test.com / test123
-- PM Code: G1N3V6
-- Service Providers: Bob's Home Services, Test Home Services
 
 ## API Endpoints
 
@@ -65,81 +60,101 @@ Build a full-stack application for Property Managers and Tenants. The core workf
 ### Property Manager
 - `POST /api/pm/generate-code` - Generate PM invite code
 - `GET /api/pm/tenants` - Get PM's linked tenants
-- `GET /api/pm/properties` - Get PM's properties with tenant info
-- `POST /api/pm/issues/{issue_id}/send-to-provider` - **NEW** Quick Send to provider
+- `GET /api/pm/properties` - Get PM's properties
+- `POST /api/pm/issues/{id}/send-to-provider` - Quick Send to provider
+- `PUT /api/pm/issues/{id}/classify` - Classify issue size (P3)
+- `GET /api/pm/issues/by-size` - Get issues grouped by size (P3)
+- `GET /api/pm/quotes` - Get quotes to review (P2)
+- `PUT /api/pm/orders/{id}/approve-quote` - Approve quote
+- `PUT /api/pm/orders/{id}/reject-quote` - Reject quote
+- `PUT /api/pm/orders/{id}/schedule` - Schedule service (P2)
+- `GET /api/pm/calendar` - Get calendar events (P2)
+
+### Service Provider
+- `GET /api/provider/orders` - Get assigned orders
+- `POST /api/provider/orders/{id}/submit-quote` - Submit quote (P2)
 
 ### Tenant
-- `POST /api/tenant/join-pm` - Tenant joins PM using code
-- `POST /api/issues` - Create issue report
-- `GET /api/issues` - Get issues for user
+- `POST /api/tenant/join-pm` - Join PM using code
+- `POST /api/issues` - Report issue
+- `GET /api/issues` - Get issues
 
 ### AI
 - `POST /api/ai/summarize-issue` - AI chat for issue description
-- `POST /api/ai/generate-summary` - Generate final AI summary
 
-### Orders & Quotes
-- `GET /api/orders` - Get orders
-- `PUT /api/pm/orders/{order_id}/approve-quote` - PM approves quote
-- `PUT /api/pm/orders/{order_id}/reject-quote` - PM rejects quote
+## New Components (P2/P3)
 
-## Database Schema (SQLite)
-- **users**: id, email, password_hash, user_type, name, phone, address, business_name, pm_code, property_manager_id, property_address, unit_number
-- **reported_issues**: id, tenant_id, property_manager_id, description, ai_summary, status, issue_category, urgency_level, assigned_provider_id, assigned_provider_name, linked_order_id
-- **orders**: id, homeowner_id, provider_id, service_type, status, source_issue_id, property_manager_id, pm_approved
+### Frontend
+- `/app/frontend/src/components/PMCalendar.jsx` - Calendar with month/list views
+- `/app/frontend/src/components/IssueSizeClassifier.jsx` - Issue size buttons
+- `/app/frontend/src/components/ScheduleServiceModal.jsx` - Scheduling modal
+- `/app/frontend/src/components/SubmitQuoteModal.jsx` - Provider quote submission
 
-## Upcoming Tasks (P2)
+### Backend
+- `/app/backend/models/schemas.py` - Pydantic models for all requests/responses
 
-### Quote Management UI
-- Build out the "Quotes" tab on PM Orders page
-- Allow PM to review, accept, or reject quotes from providers
-- Service Provider submits quotes via their dashboard
+## Database Schema Updates (P2/P3)
 
-### Calendar Integration
-- Add calendar view for scheduling services
-- Based on approved quotes
+### reported_issues table
+- Added `issue_size` column (TEXT, default "medium")
 
-## Future/Backlog Tasks
+### orders table
+- Added `scheduled_date` column (TEXT)
+- Added `scheduled_time` column (TEXT)
+- Added `estimated_duration` column (TEXT)
 
-### Issue Classification (P3)
-- Categorize issues as "Small" vs "Big"
-- Different workflows for each type
+## Test Results (Jan 11, 2026)
+- Backend P2/P3 tests: 18/19 passed (95% pass rate)
+- Issue classification: ✅
+- Quote submission: ✅
+- Calendar: ✅
+- Scheduling: ✅
 
-### Template Response System (P3)
-- Pre-built responses for common issues
-- PM can quickly respond to tenants
-
-### UI Updates (P3)
-- Change "Homeowner" → "Tenant" throughout app
-- Consistent terminology
-
-### Backend Refactoring (P3)
-- Split server.py into routers/models/services
-- Better code organization for maintainability
+## Test Credentials
+- PM: `e2e_pm_1768106090@test.com` / `test123`
+- Tenant: `e2e_tenant_1768106091@test.com` / `test123`
+- PM Code: `G1N3V6`
 
 ## Files Structure
 ```
 /app
 ├── backend/
-│   ├── server.py           <- Monolithic backend (needs refactoring)
-│   ├── doord.db            <- SQLite database
+│   ├── server.py
+│   ├── models/
+│   │   ├── __init__.py
+│   │   └── schemas.py        # NEW: Pydantic models
+│   ├── doord.db
 │   └── requirements.txt
 ├── frontend/src/
 │   ├── components/
-│   │   ├── QuickSendToProvider.jsx  <- NEW: One-click send component
-│   │   ├── SendToProviderModal.jsx  <- Advanced send options
-│   │   ├── ReportIssuesChat.jsx     <- Tenant issue reporting
-│   │   └── PMCodeCard.jsx
+│   │   ├── PMCalendar.jsx           # NEW: P2
+│   │   ├── IssueSizeClassifier.jsx  # NEW: P3
+│   │   ├── ScheduleServiceModal.jsx # NEW: P2
+│   │   ├── SubmitQuoteModal.jsx     # NEW: P2
+│   │   ├── QuickSendToProvider.jsx
+│   │   └── ...
 │   ├── pages/
-│   │   ├── property-manager/
-│   │   │   ├── PropertyManagerOrders.jsx  <- UPDATED: With Quick Send
-│   │   │   ├── PropertyManagerDashboard.jsx
-│   │   │   └── PropertyManagerAuth.jsx
-│   │   └── homeowner/
+│   │   └── property-manager/
+│   │       └── PropertyManagerOrders.jsx  # UPDATED: 5 tabs
 │   └── services/
-│       └── api.js
-├── tests/
-│   └── test_quick_send_provider.py  <- NEW: Quick Send tests
+│       └── api.js                    # UPDATED: New API methods
 └── test_reports/
-    ├── iteration_1.json
-    └── iteration_2.json
+    └── pytest/
+        └── p2_p3_results.xml
 ```
+
+## Future/Backlog Tasks
+
+### P4 - UI/UX Updates
+- Change "Homeowner" → "Tenant" throughout app
+- Improve mobile responsiveness
+- Add notifications for new quotes
+
+### P4 - Template Response System
+- Pre-built responses for common issues
+- PM can quickly respond to tenants
+
+### P5 - Backend Refactoring (Further)
+- Split server.py into proper routers
+- Add unit tests for all endpoints
+- API documentation with OpenAPI
