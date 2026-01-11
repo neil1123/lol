@@ -438,6 +438,42 @@ class ApiService {
   async getPropertyManagerProperties() {
     return await this.request('/pm/properties');
   }
+
+  // ====== PROVIDER QUOTE SUBMISSION ======
+  async submitQuote(orderId, quoteData) {
+    return await this.request(`/provider/orders/${orderId}/submit-quote`, {
+      method: 'POST',
+      body: JSON.stringify(quoteData),
+    });
+  }
+
+  async getProviderOrders() {
+    return await this.request('/provider/orders');
+  }
+
+  // ====== CALENDAR & SCHEDULING ======
+  async scheduleService(orderId, scheduleData) {
+    return await this.request(`/pm/orders/${orderId}/schedule`, {
+      method: 'PUT',
+      body: JSON.stringify(scheduleData),
+    });
+  }
+
+  async getPMCalendar() {
+    return await this.request('/pm/calendar');
+  }
+
+  // ====== ISSUE CLASSIFICATION ======
+  async classifyIssue(issueId, issueSize) {
+    return await this.request(`/pm/issues/${issueId}/classify`, {
+      method: 'PUT',
+      body: JSON.stringify({ issue_size: issueSize }),
+    });
+  }
+
+  async getIssuesBySize() {
+    return await this.request('/pm/issues/by-size');
+  }
 }
 
 // Create and export singleton instance
