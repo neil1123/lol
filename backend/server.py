@@ -1938,7 +1938,295 @@ async def pm_resolve_issue(
     finally:
         await db.close()
 
+# ====== PROVIDER QUOTE SUBMISSION ======
 
+@api_router.post("/provider/orders/{order_id}/submit-quote")
+async def provider_submit_quote(
+    order_id: str,
+    data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Service Provider submits a quote for an order"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only service providers can submit quotes")
+    
+    quotation_amount = data.get("quotation_amount")
+    if not quotation_amount:
+        raise HTTPException(status_code=400, detail="Quotation amount is required")
+    
+    db = await get_db()
+    try:
+        # Get the order and verify it belongs to this provider
+        cursor = await db.execute(
+            "SELECT * FROM orders WHERE id = ? AND provider_id = ?",
+            (order_id, current_user.id)
+        )
+        order_row = await cursor.fetchone()
+        
+        if not order_row:
+            raise HTTPException(status_code=404, detail="Order not found or not assigned to you")
+        
+        order = row_to_dict(order_row)
+        
+        if order.get('status') not in ['pending_quotation', 'quoted']:
+            raise HTTPException(status_code=400, detail=f"Cannot submit quote for order with status: {order.get('status')}")
+        
+        now = datetime.utcnow().isoformat()
+        
+        # Update order with quote
+        await db.execute('''
+            UPDATE orders
+            SET quotation_amount = ?,
+                quotation_details = ?,
+                quotation_valid_until = ?,
+                estimated_duration = ?,
+                status = 'quoted',
+                updated_at = ?
+            WHERE id = ?
+        ''', (
+            float(quotation_amount),
+            data.get("quotation_details", ""),
+            data.get("quotation_valid_until"),
+            data.get("estimated_duration"),
+            now,
+            order_id
+        ))
+        
+        await db.commit()
+        
+        return {
+            "message": "Quote submitted successfully",
+            "order_id": order_id,
+            "quotation_amount": quotation_amount,
+            "status": "quoted"
+        }
+    finally:
+        await db.close()
+
+@api_router.get("/provider/orders")
+async def get_provider_orders(current_user: User = Depends(get_current_user)):
+    """Get all orders assigned to this provider"""
+    if current_user.user_type != "provider":
+        raise HTTPException(status_code=403, detail="Only providers can access this")
+    
+    db = await get_db()
+    try:
+        cursor = await db.execute('''
+            SELECT * FROM orders 
+            WHERE provider_id = ?
+            ORDER BY created_at DESC
+        ''', (current_user.id,))
+        
+        rows = await cursor.fetchall()
+        orders = []
+        for row in rows:
+            order = row_to_dict(row)
+            order['services'] = parse_json_field(order.get('services'))
+            orders.append(order)
+        
+        return orders
+    finally:
+        await db.close()
+
+# ====== CALENDAR & SCHEDULING ENDPOINTS ======
+
+@api_router.put("/pm/orders/{order_id}/schedule")
+async def pm_schedule_service(
+    order_id: str,
+    data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Property Manager schedules a service after approving quote"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can schedule services")
+    
+    scheduled_date = data.get("scheduled_date")
+    scheduled_time = data.get("scheduled_time")
+    
+    if not scheduled_date or not scheduled_time:
+        raise HTTPException(status_code=400, detail="Scheduled date and time are required")
+    
+    db = await get_db()
+    try:
+        # Get the order
+        cursor = await db.execute(
+            "SELECT * FROM orders WHERE id = ? AND property_manager_id = ?",
+            (order_id, current_user.id)
+        )
+        order_row = await cursor.fetchone()
+        
+        if not order_row:
+            raise HTTPException(status_code=404, detail="Order not found")
+        
+        order = row_to_dict(order_row)
+        
+        now = datetime.utcnow().isoformat()
+        
+        # Update order with schedule
+        await db.execute('''
+            UPDATE orders
+            SET scheduled_date = ?,
+                scheduled_time = ?,
+                status = 'scheduled',
+                updated_at = ?
+            WHERE id = ?
+        ''', (scheduled_date, scheduled_time, now, order_id))
+        
+        # Create appointment record
+        appointment_id = str(uuid.uuid4())
+        await db.execute('''
+            INSERT INTO appointments (
+                id, provider_id, customer_name, customer_phone, customer_email,
+                service_type, date, time, duration, notes, status, created_at, order_id, source
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            appointment_id,
+            order.get('provider_id'),
+            order.get('homeowner_name'),
+            order.get('homeowner_phone'),
+            order.get('homeowner_email'),
+            order.get('service_type'),
+            scheduled_date,
+            scheduled_time,
+            int(order.get('estimated_duration', '60').replace(' hours', '').replace(' hour', '').replace(' mins', '').replace(' min', '') or 60),
+            f"Scheduled by PM. Order: {order_id}",
+            'scheduled',
+            now,
+            order_id,
+            'pm_scheduled'
+        ))
+        
+        await db.commit()
+        
+        return {
+            "message": "Service scheduled successfully",
+            "order_id": order_id,
+            "appointment_id": appointment_id,
+            "scheduled_date": scheduled_date,
+            "scheduled_time": scheduled_time
+        }
+    finally:
+        await db.close()
+
+@api_router.get("/pm/calendar")
+async def get_pm_calendar(current_user: User = Depends(get_current_user)):
+    """Get all scheduled appointments for PM's properties"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can access this")
+    
+    db = await get_db()
+    try:
+        # Get scheduled orders
+        cursor = await db.execute('''
+            SELECT o.*, a.id as appointment_id, a.status as appointment_status
+            FROM orders o
+            LEFT JOIN appointments a ON o.id = a.order_id
+            WHERE o.property_manager_id = ?
+            AND o.scheduled_date IS NOT NULL
+            ORDER BY o.scheduled_date, o.scheduled_time
+        ''', (current_user.id,))
+        
+        rows = await cursor.fetchall()
+        events = []
+        for row in rows:
+            event = row_to_dict(row)
+            events.append({
+                "id": event.get('id'),
+                "title": f"{event.get('service_type')} - {event.get('homeowner_name')}",
+                "date": event.get('scheduled_date'),
+                "time": event.get('scheduled_time'),
+                "provider_name": event.get('provider_name'),
+                "tenant_name": event.get('homeowner_name'),
+                "status": event.get('status'),
+                "quotation_amount": event.get('quotation_amount'),
+                "appointment_id": event.get('appointment_id')
+            })
+        
+        return events
+    finally:
+        await db.close()
+
+# ====== ISSUE CLASSIFICATION (P3) ======
+
+@api_router.put("/pm/issues/{issue_id}/classify")
+async def classify_issue(
+    issue_id: str,
+    data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Property Manager classifies issue as small/medium/big"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can classify issues")
+    
+    issue_size = data.get("issue_size")
+    if issue_size not in ['small', 'medium', 'big']:
+        raise HTTPException(status_code=400, detail="issue_size must be 'small', 'medium', or 'big'")
+    
+    db = await get_db()
+    try:
+        now = datetime.utcnow().isoformat()
+        
+        await db.execute('''
+            UPDATE reported_issues
+            SET issue_size = ?,
+                updated_at = ?
+            WHERE id = ? AND property_manager_id = ?
+        ''', (issue_size, now, issue_id, current_user.id))
+        
+        await db.commit()
+        
+        return {
+            "message": f"Issue classified as {issue_size}",
+            "issue_id": issue_id,
+            "issue_size": issue_size
+        }
+    finally:
+        await db.close()
+
+@api_router.get("/pm/issues/by-size")
+async def get_issues_by_size(current_user: User = Depends(get_current_user)):
+    """Get issues grouped by size classification"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can access this")
+    
+    db = await get_db()
+    try:
+        cursor = await db.execute('''
+            SELECT * FROM reported_issues 
+            WHERE property_manager_id = ?
+            AND status != 'resolved'
+            ORDER BY 
+                CASE issue_size 
+                    WHEN 'big' THEN 1 
+                    WHEN 'medium' THEN 2 
+                    WHEN 'small' THEN 3 
+                    ELSE 2 
+                END,
+                CASE urgency_level 
+                    WHEN 'emergency' THEN 1 
+                    WHEN 'urgent' THEN 2 
+                    ELSE 3 
+                END,
+                created_at DESC
+        ''', (current_user.id,))
+        
+        rows = await cursor.fetchall()
+        
+        issues_by_size = {
+            "big": [],
+            "medium": [],
+            "small": []
+        }
+        
+        for row in rows:
+            issue = row_to_dict(row)
+            size = issue.get('issue_size') or 'medium'
+            if size in issues_by_size:
+                issues_by_size[size].append(issue)
+        
+        return issues_by_size
+    finally:
+        await db.close()
 
 @app.get("/health")
 async def health_check():
