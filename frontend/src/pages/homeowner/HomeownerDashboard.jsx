@@ -487,7 +487,8 @@ const HomeownerDashboard = () => {
 
   const sidebarItems = [
     { id: 'home', label: 'Home', icon: Home, active: true },
-    { id: 'reports', label: 'Report Issues', icon: AlertTriangle, active: false },
+    { id: 'issues', label: 'My Issues', icon: FileText, active: false },
+    { id: 'report-issues', label: 'Report Issues', icon: AlertTriangle, active: false },
     { id: 'orders', label: 'Orders', icon: ShoppingCart, active: false, badge: notifications.orders > 0 ? notifications.orders : null },
     { id: 'book-service', label: 'Book service', icon: Calendar, active: false },
     { id: 'settings', label: 'Settings', icon: Settings, active: false },

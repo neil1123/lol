@@ -438,6 +438,22 @@ async def register(user_data: UserCreate):
         user_id = str(uuid.uuid4())
         now = datetime.utcnow().isoformat()
         
+        # Check if tenant is signing up with PM code
+        pm_id = None
+        property_address = None
+        unit_number = None
+        
+        if user_data.pm_code and user_data.user_type == 'homeowner':
+            # Find PM by code
+            cursor = await db.execute(
+                "SELECT id FROM users WHERE pm_code = ? AND user_type = 'property_manager'",
+                (user_data.pm_code.strip().upper(),)
+            )
+            pm_row = await cursor.fetchone()
+            if pm_row:
+                pm_id = pm_row[0]
+                property_address = user_data.address  # Use signup address
+        
         await db.execute('''
             INSERT INTO users (id, email, password_hash, user_type, name, phone, address, 
                              business_name, services, description, location, specialties,
@@ -448,8 +464,9 @@ async def register(user_data: UserCreate):
             user_id, user_data.email, password_hash, user_data.user_type,
             user_data.name, user_data.phone, user_data.address, user_data.business_name,
             json.dumps(user_data.services or []), user_data.description, user_data.location,
-            json.dumps(user_data.specialties or []), 5.0, 0, 0, now, now, 1, user_data.pm_code,
-            None, None, None  # property_manager_id, property_address, unit_number
+            json.dumps(user_data.specialties or []), 5.0, 0, 0, now, now, 1, 
+            user_data.pm_code if user_data.user_type == 'property_manager' else None,  # Only PMs get pm_code
+            pm_id, property_address, unit_number  # Link tenant to PM if code provided
         ))
         await db.commit()
         
