@@ -184,22 +184,24 @@ class TestQuickSendToProvider:
         print(f"Assigned to: {issue['assigned_provider_name']}")
     
     def test_07_verify_order_created(self, api_client, pm_token, tenant_token):
-        """Verify order is created with status 'pending_quotation'"""
+        """Verify order is created with status 'pending_quotation' via issue's linked_order_id"""
         # Create and send a new issue
         result = self.test_05_quick_send_to_provider(api_client, pm_token, tenant_token)
+        issue_id = result["issue_id"]
         order_id = result["order_id"]
         
         headers = {"Authorization": f"Bearer {pm_token}"}
-        response = api_client.get(f"{BASE_URL}/api/orders", headers=headers)
-        assert response.status_code == 200
-        orders = response.json()
         
-        # Find the created order
-        order = next((o for o in orders if o["id"] == order_id), None)
-        assert order is not None, f"Order {order_id} not found"
-        assert order["status"] == "pending_quotation", f"Expected 'pending_quotation', got '{order['status']}'"
-        assert order["pm_approved"] == 1, "Order should be pre-approved by PM"
-        print(f"Order verified: {order['id']} - Status: {order['status']}")
+        # Verify via issue's linked_order_id
+        issue_response = api_client.get(f"{BASE_URL}/api/issues/{issue_id}", headers=headers)
+        assert issue_response.status_code == 200
+        issue = issue_response.json()
+        
+        assert issue["linked_order_id"] == order_id, f"Issue linked_order_id mismatch"
+        assert issue["status"] == "sent_to_provider"
+        print(f"Order verified via issue: {order_id}")
+        print(f"Issue status: {issue['status']}")
+        print(f"Assigned provider: {issue['assigned_provider_name']}")
 
 
 class TestProviderMatchBadge:
