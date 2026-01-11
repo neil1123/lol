@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Backend URL from environment
-BACKEND_URL = "https://propertyfix-4.preview.emergentagent.com/api"
+BACKEND_URL = "https://tenantfix-1.preview.emergentagent.com/api"
 
 # Global test data
 provider_token = None

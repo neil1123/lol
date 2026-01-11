@@ -16,7 +16,7 @@ import sys
 import uuid
 
 # Load environment variables
-BACKEND_URL = "https://propertyfix-4.preview.emergentagent.com/api"
+BACKEND_URL = "https://tenantfix-1.preview.emergentagent.com/api"
 
 # Global variables to store test data
 provider_token = None

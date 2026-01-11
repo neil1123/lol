@@ -9,7 +9,7 @@ import os
 import uuid
 import time
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://propertyfix-4.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://tenantfix-1.preview.emergentagent.com')
 
 class TestAuthAndPMCode:
     """Test PM and Tenant authentication flows with PM code linking"""

@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Base URL from review request
-BASE_URL = "https://propertyfix-4.preview.emergentagent.com/api"
+BASE_URL = "https://tenantfix-1.preview.emergentagent.com/api"
 
 class DoordAPITester:
     def __init__(self):

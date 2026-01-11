@@ -8,7 +8,7 @@ import requests
 import json
 import uuid
 
-BACKEND_URL = "https://propertyfix-4.preview.emergentagent.com/api"
+BACKEND_URL = "https://tenantfix-1.preview.emergentagent.com/api"
 
 def test_with_provided_credentials():
     """Test review system with provided test credentials"""
