@@ -9,18 +9,20 @@ class ApiService {
     console.log('API Base URL:', this.baseURL);
   }
 
-  // Get auth token from localStorage
+  // Get auth token from localStorage (check both keys for backward compatibility)
   getAuthToken() {
-    return localStorage.getItem('authToken');
+    return localStorage.getItem('token') || localStorage.getItem('authToken');
   }
 
   // Set auth token
   setAuthToken(token) {
+    localStorage.setItem('token', token);
     localStorage.setItem('authToken', token);
   }
 
   // Remove auth token
   removeAuthToken() {
+    localStorage.removeItem('token');
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
   }
