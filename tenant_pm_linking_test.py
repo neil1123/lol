@@ -12,7 +12,7 @@ import sys
 import uuid
 
 # Load environment variables
-BACKEND_URL = "https://prop-issue-report.preview.emergentagent.com/api"
+BACKEND_URL = "https://propertyfix-4.preview.emergentagent.com/api"
 
 # Global variables to store test data
 property_manager_token = None

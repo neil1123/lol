@@ -7,7 +7,7 @@ Verify the specific test accounts work as mentioned in review request
 import requests
 import json
 
-BACKEND_URL = "https://prop-issue-report.preview.emergentagent.com/api"
+BACKEND_URL = "https://propertyfix-4.preview.emergentagent.com/api"
 
 def test_specific_accounts():
     """Test the specific accounts mentioned in review request"""
