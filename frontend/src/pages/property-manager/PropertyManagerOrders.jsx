@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/card';
+import { Card, CardContent } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Button } from '../../components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
-import { CheckCircle, XCircle, Clock, Eye, Calendar, Send, User } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, Eye, Send, User, Zap } from 'lucide-react';
 import apiService from '../../services/api';
 import SendToProviderModal from '../../components/SendToProviderModal';
+import QuickSendToProvider from '../../components/QuickSendToProvider';
 
 const PropertyManagerOrders = () => {
   const [user, setUser] = useState(null);
@@ -15,7 +16,7 @@ const PropertyManagerOrders = () => {
   const [quotes, setQuotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processingOrder, setProcessingOrder] = useState(null);
-  const [activeTab, setActiveTab] = useState('pending-approval');
+  const [activeTab, setActiveTab] = useState('issue-reports');
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [showSendModal, setShowSendModal] = useState(false);
   const [showResolveModal, setShowResolveModal] = useState(false);
@@ -24,7 +25,6 @@ const PropertyManagerOrders = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check authentication
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
     
@@ -69,7 +69,7 @@ const PropertyManagerOrders = () => {
     try {
       setProcessingOrder(orderId);
       await apiService.approvePropertyManagerOrder(orderId);
-      await loadOrders(); // Reload orders
+      await loadOrders();
       alert('Order approved successfully!');
     } catch (error) {
       console.error('Error approving order:', error);
@@ -83,7 +83,7 @@ const PropertyManagerOrders = () => {
     try {
       setProcessingOrder(orderId);
       await apiService.denyPropertyManagerOrder(orderId);
-      await loadOrders(); // Reload orders
+      await loadOrders();
       alert('Order denied.');
     } catch (error) {
       console.error('Error denying order:', error);
@@ -94,15 +94,11 @@ const PropertyManagerOrders = () => {
   };
 
   // Filter orders by status
-  const pendingApprovalOrders = orders.filter(order => 
-    order.status === 'pending_pm_approval'
-  );
-  
+  const pendingApprovalOrders = orders.filter(order => order.status === 'pending_pm_approval');
   const activeOrders = orders.filter(order => 
     ['pending_quotation', 'quoted', 'accepted', 'confirmed'].includes(order.status) && 
     order.pm_approved !== false
   );
-  
   const completedOrders = orders.filter(order => 
     order.status === 'completed' || order.status === 'denied'
   );
@@ -111,7 +107,6 @@ const PropertyManagerOrders = () => {
   const pendingIssues = issues.filter(issue => 
     issue.status !== 'resolved' && issue.status !== 'cancelled'
   );
-  const inProgressIssues = issues.filter(issue => issue.status === 'in_progress');
   const resolvedIssues = issues.filter(issue => issue.status === 'resolved');
 
   const getStatusColor = (status, pmApproved) => {
@@ -154,7 +149,7 @@ const PropertyManagerOrders = () => {
   };
 
   const handleSendSuccess = () => {
-    loadOrders(); // Reload data after sending
+    loadOrders();
   };
 
   const handleApproveQuote = async (orderId) => {
@@ -216,13 +211,13 @@ const PropertyManagerOrders = () => {
   };
 
   const renderOrderCard = (order, showApprovalButtons = false) => (
-    <Card key={order.id} className="mb-3 sm:mb-6">
+    <Card key={order.id} className="mb-3 sm:mb-6" data-testid={`order-card-${order.id}`}>
       <CardContent className="p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 space-y-2 sm:space-y-0">
           <div className="flex-1 min-w-0">
             <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">{order.service_type}</h3>
             <p className="text-sm text-gray-600 truncate">
-              {order.requester_type === 'tenant' ? 'Tenant' : 'Requestor'}: {order.homeowner_name}
+              Tenant: {order.homeowner_name}
             </p>
             <p className="text-sm text-gray-600 truncate">Provider: {order.provider_name}</p>
             <p className="text-sm text-gray-600 truncate">Property: {order.property_address || order.homeowner_address}</p>
@@ -267,39 +262,19 @@ const PropertyManagerOrders = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 text-sm text-gray-600 mb-4">
-          {order.budget && (
-            <div><span className="font-medium">Budget:</span> {order.budget}</div>
-          )}
-          {order.urgency && (
-            <div><span className="font-medium">Urgency:</span> {order.urgency}</div>
-          )}
-          {order.preferred_date && (
-            <div><span className="font-medium">Preferred Date:</span> {order.preferred_date}</div>
-          )}
-          {order.preferred_time && (
-            <div><span className="font-medium">Preferred Time:</span> {order.preferred_time}</div>
-          )}
-        </div>
-
-        {/* Approval Buttons for Pending Orders */}
         {showApprovalButtons && order.status === 'pending_pm_approval' && (
           <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 pt-4 border-t">
             <Button
               onClick={() => handleApproveOrder(order.id)}
               disabled={processingOrder === order.id}
               className="flex-1 bg-green-600 hover:bg-green-700 text-white text-sm"
+              data-testid={`approve-order-${order.id}`}
             >
-              {processingOrder === order.id ? (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Approving...
-                </div>
-              ) : (
-                <div className="flex items-center justify-center">
+              {processingOrder === order.id ? 'Approving...' : (
+                <>
                   <CheckCircle className="h-4 w-4 mr-2" />
                   Approve Request
-                </div>
+                </>
               )}
             </Button>
             <Button
@@ -307,17 +282,13 @@ const PropertyManagerOrders = () => {
               disabled={processingOrder === order.id}
               variant="destructive"
               className="flex-1 text-sm"
+              data-testid={`deny-order-${order.id}`}
             >
-              {processingOrder === order.id ? (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Denying...
-                </div>
-              ) : (
-                <div className="flex items-center justify-center">
+              {processingOrder === order.id ? 'Denying...' : (
+                <>
                   <XCircle className="h-4 w-4 mr-2" />
                   Deny Request
-                </div>
+                </>
               )}
             </Button>
           </div>
@@ -338,7 +309,7 @@ const PropertyManagerOrders = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" data-testid="pm-orders-page">
       {/* Header */}
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -352,6 +323,7 @@ const PropertyManagerOrders = () => {
                 variant="ghost"
                 onClick={() => navigate('/property-manager/dashboard')}
                 className="text-sm"
+                data-testid="back-to-dashboard-btn"
               >
                 Back to Dashboard
               </Button>
@@ -366,27 +338,51 @@ const PropertyManagerOrders = () => {
         <div>
           <div className="mb-4 sm:mb-6">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">Order Management</h2>
-            <p className="text-gray-600 text-sm sm:text-base">Review and approve tenant service requests</p>
+            <p className="text-gray-600 text-sm sm:text-base">Review tenant issues and manage service requests</p>
           </div>
 
-          {/* Summary Cards - Issue reports and Quotes */}
+          {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setActiveTab('issue-reports')}>
+            <Card 
+              className="cursor-pointer hover:shadow-lg transition-shadow border-l-4 border-l-orange-500" 
+              onClick={() => setActiveTab('issue-reports')}
+              data-testid="issues-summary-card"
+            >
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">Issue reports</h3>
-                <div className="flex items-center space-x-2">
-                  <Clock className="h-5 w-5 text-yellow-600" />
-                  <span className="text-sm text-gray-600">Pending ({pendingIssues.length})</span>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">Tenant Issues</h3>
+                    <div className="flex items-center space-x-2">
+                      <Zap className="h-5 w-5 text-orange-500" />
+                      <span className="text-2xl font-bold text-orange-600">{pendingIssues.length}</span>
+                      <span className="text-sm text-gray-500">pending</span>
+                    </div>
+                  </div>
+                  <div className="text-orange-500">
+                    <Send className="h-8 w-8" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setActiveTab('quotes')}>
+            <Card 
+              className="cursor-pointer hover:shadow-lg transition-shadow border-l-4 border-l-blue-500" 
+              onClick={() => setActiveTab('quotes')}
+              data-testid="quotes-summary-card"
+            >
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">Quotes</h3>
-                <div className="flex items-center space-x-2">
-                  <Clock className="h-5 w-5 text-yellow-600" />
-                  <span className="text-sm text-gray-600">Pending ({quotes.length})</span>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">Provider Quotes</h3>
+                    <div className="flex items-center space-x-2">
+                      <Eye className="h-5 w-5 text-blue-500" />
+                      <span className="text-2xl font-bold text-blue-600">{quotes.length}</span>
+                      <span className="text-sm text-gray-500">to review</span>
+                    </div>
+                  </div>
+                  <div className="text-blue-500">
+                    <CheckCircle className="h-8 w-8" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -396,142 +392,62 @@ const PropertyManagerOrders = () => {
           <Card>
             <CardContent className="p-3 sm:p-6">
               <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-5 text-xs sm:text-sm">
-                  <TabsTrigger value="issue-reports" className="flex items-center space-x-1">
-                    <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
-                    <span className="hidden sm:inline">Issues</span>
-                    <span className="sm:hidden">({pendingIssues.length})</span>
-                    <span className="hidden sm:inline">({pendingIssues.length})</span>
+                <TabsList className="grid w-full grid-cols-4 text-xs sm:text-sm">
+                  <TabsTrigger value="issue-reports" className="flex items-center space-x-1" data-testid="issues-tab">
+                    <Zap className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <span>Issues ({pendingIssues.length})</span>
                   </TabsTrigger>
-                  <TabsTrigger value="quotes" className="flex items-center space-x-1">
+                  <TabsTrigger value="quotes" className="flex items-center space-x-1" data-testid="quotes-tab">
                     <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
-                    <span className="hidden sm:inline">Quotes</span>
-                    <span className="sm:hidden">({quotes.length})</span>
-                    <span className="hidden sm:inline">({quotes.length})</span>
+                    <span>Quotes ({quotes.length})</span>
                   </TabsTrigger>
-                  <TabsTrigger value="pending-approval" className="flex items-center space-x-1">
+                  <TabsTrigger value="active-orders" className="flex items-center space-x-1" data-testid="active-orders-tab">
                     <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
-                    <span className="hidden sm:inline">Pending</span>
-                    <span className="sm:hidden">({pendingApprovalOrders.length})</span>
-                    <span className="hidden sm:inline">({pendingApprovalOrders.length})</span>
+                    <span>Active ({activeOrders.length})</span>
                   </TabsTrigger>
-                  <TabsTrigger value="active-orders" className="flex items-center space-x-1">
-                    <Eye className="h-3 w-3 sm:h-4 sm:w-4" />
-                    <span className="hidden sm:inline">Active</span>
-                    <span className="sm:hidden">({activeOrders.length})</span>
-                    <span className="hidden sm:inline">({activeOrders.length})</span>
-                  </TabsTrigger>
-                  <TabsTrigger value="completed-orders" className="flex items-center space-x-1">
+                  <TabsTrigger value="completed-orders" className="flex items-center space-x-1" data-testid="completed-orders-tab">
                     <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4" />
-                    <span className="hidden sm:inline">Completed</span>
-                    <span className="sm:hidden">({completedOrders.length})</span>
-                    <span className="hidden sm:inline">({completedOrders.length})</span>
+                    <span>Done ({completedOrders.length})</span>
                   </TabsTrigger>
                 </TabsList>
 
+                {/* Issue Reports Tab - WITH QUICK SEND */}
                 <TabsContent value="issue-reports" className="mt-4 sm:mt-6">
                   {pendingIssues.length === 0 ? (
                     <div className="text-center py-6 sm:py-8">
-                      <Clock className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-500 text-sm sm:text-base">No pending issue reports</p>
+                      <CheckCircle className="h-12 w-12 text-green-400 mx-auto mb-4" />
+                      <p className="text-gray-500 text-base">No pending issues - all caught up!</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
                       {pendingIssues.map((issue) => (
-                        <Card key={issue.id} className="border-l-4 border-l-orange-500">
+                        <Card 
+                          key={issue.id} 
+                          className={`border-l-4 ${
+                            issue.urgency_level === 'emergency' ? 'border-l-red-500' :
+                            issue.urgency_level === 'urgent' ? 'border-l-orange-500' :
+                            'border-l-yellow-500'
+                          }`}
+                          data-testid={`issue-card-${issue.id}`}
+                        >
                           <CardContent className="p-4 sm:p-6">
+                            {/* Issue Header */}
                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 space-y-2 sm:space-y-0">
                               <div className="flex-1 min-w-0">
                                 <h3 className="text-base sm:text-lg font-semibold text-gray-900">
                                   {issue.issue_category || 'Issue Report'}
                                 </h3>
-                                <p className="text-sm text-gray-600 truncate">Tenant: {issue.tenant_name}</p>
+                                <p className="text-sm text-gray-600">Tenant: {issue.tenant_name}</p>
                                 {issue.unit_number && (
                                   <p className="text-sm text-gray-600">Unit: {issue.unit_number}</p>
                                 )}
                                 
-                                {/* Show assigned provider if exists */}
                                 {issue.assigned_provider_name && (
                                   <div className="flex items-center gap-2 mt-2">
                                     <User className="h-4 w-4 text-blue-600" />
                                     <span className="text-sm text-blue-600 font-medium">
                                       Assigned to: {issue.assigned_provider_name}
                                     </span>
-
-
-                <TabsContent value="quotes" className="mt-4 sm:mt-6">
-                  {quotes.length === 0 ? (
-                    <div className="text-center py-6 sm:py-8">
-                      <Eye className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-500 text-sm sm:text-base">No pending quotes</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {quotes.map((quote) => (
-                        <Card key={quote.id} className="border-l-4 border-l-blue-500">
-                          <CardContent className="p-4 sm:p-6">
-                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 space-y-2 sm:space-y-0">
-                              <div className="flex-1">
-                                <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-                                  {quote.service_type}
-                                </h3>
-                                <p className="text-sm text-gray-600">Tenant: {quote.homeowner_name}</p>
-                                <p className="text-sm text-gray-600">Provider: {quote.provider_name}</p>
-                                {quote.source_issue_id && (
-                                  <Badge className="mt-2 bg-blue-100 text-blue-800">
-                                    From Issue Report
-                                  </Badge>
-                                )}
-                              </div>
-                              <div className="text-left sm:text-right">
-                                <div className="text-2xl font-bold text-blue-600">
-                                  ${quote.quotation_amount}
-                                </div>
-                                <p className="text-xs text-gray-500 mt-1">
-                                  {formatDate(quote.created_at)}
-                                </p>
-                              </div>
-                            </div>
-
-                            <div className="mb-4">
-                              <h4 className="font-medium text-gray-900 mb-2 text-sm sm:text-base">Quote Details:</h4>
-                              <p className="text-gray-700 text-sm sm:text-base">
-                                {quote.quotation_details || 'No details provided'}
-                              </p>
-                            </div>
-
-                            {quote.quotation_valid_until && (
-                              <div className="mb-4 text-sm text-gray-600">
-                                <span className="font-medium">Valid Until:</span> {formatDate(quote.quotation_valid_until)}
-                              </div>
-                            )}
-
-                            <div className="pt-4 border-t flex flex-col sm:flex-row gap-2">
-                              <Button
-                                onClick={() => handleApproveQuote(quote.id)}
-                                disabled={processingOrder === quote.id}
-                                className="flex-1 bg-green-600 hover:bg-green-700"
-                              >
-                                <CheckCircle className="h-4 w-4 mr-2" />
-                                {processingOrder === quote.id ? 'Processing...' : 'Approve Quote'}
-                              </Button>
-                              <Button
-                                onClick={() => handleRejectQuote(quote.id)}
-                                disabled={processingOrder === quote.id}
-                                variant="outline"
-                                className="flex-1 border-red-600 text-red-600 hover:bg-red-50"
-                              >
-                                <XCircle className="h-4 w-4 mr-2" />
-                                Reject
-                              </Button>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  )}
-                </TabsContent>
-
                                   </div>
                                 )}
                               </div>
@@ -549,11 +465,12 @@ const PropertyManagerOrders = () => {
                               </div>
                             </div>
 
+                            {/* Issue Description */}
                             <div className="mb-4">
-                              <h4 className="font-medium text-gray-900 mb-2 text-sm sm:text-base">Description:</h4>
                               <p className="text-gray-700 text-sm sm:text-base">{issue.description}</p>
                             </div>
 
+                            {/* AI Summary */}
                             {issue.ai_summary && (
                               <div className="bg-blue-50 p-3 rounded-lg mb-4">
                                 <h4 className="font-medium text-blue-900 mb-1 text-sm">AI Summary:</h4>
@@ -561,6 +478,7 @@ const PropertyManagerOrders = () => {
                               </div>
                             )}
 
+                            {/* Additional Details */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-600 mb-4">
                               {issue.best_time && (
                                 <div><span className="font-medium">Best Time:</span> {issue.best_time}</div>
@@ -570,34 +488,44 @@ const PropertyManagerOrders = () => {
                               )}
                             </div>
 
-                            {/* Action Buttons */}
-                            {!issue.assigned_provider_id ? (
-                              <div className="pt-4 border-t">
-                                <Button
-                                  onClick={() => handleSendToProvider(issue)}
-                                  className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700"
-                                >
-                                  <Send className="h-4 w-4 mr-2" />
-                                  Send to Service Provider
-                                </Button>
-                              </div>
-                            ) : issue.status === 'in_progress' ? (
-                              <div className="pt-4 border-t flex gap-2">
+                            {/* QUICK SEND ACTION - SUPER EASY! */}
+                            <div className="pt-4 border-t">
+                              {!issue.assigned_provider_id ? (
+                                <div className="space-y-3">
+                                  <div className="flex items-center gap-2 text-sm text-gray-700 font-medium">
+                                    <Zap className="h-4 w-4 text-orange-500" />
+                                    <span>Quick Send to Provider</span>
+                                  </div>
+                                  <QuickSendToProvider 
+                                    issue={issue} 
+                                    onSuccess={handleSendSuccess} 
+                                  />
+                                  <div className="text-center">
+                                    <button
+                                      onClick={() => handleSendToProvider(issue)}
+                                      className="text-xs text-gray-500 hover:text-blue-600 underline"
+                                      data-testid={`advanced-send-${issue.id}`}
+                                    >
+                                      or use advanced options
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : issue.status === 'in_progress' ? (
                                 <Button
                                   onClick={() => handleResolveIssue(issue)}
-                                  className="flex-1 sm:flex-none bg-green-600 hover:bg-green-700"
+                                  className="w-full sm:w-auto bg-green-600 hover:bg-green-700"
+                                  data-testid={`resolve-issue-${issue.id}`}
                                 >
                                   <CheckCircle className="h-4 w-4 mr-2" />
                                   Mark as Resolved
                                 </Button>
-                              </div>
-                            ) : (
-                              <div className="pt-4 border-t">
-                                <p className="text-sm text-green-600 font-medium">
-                                  ✓ Sent to provider - Awaiting quote
-                                </p>
-                              </div>
-                            )}
+                              ) : (
+                                <div className="flex items-center gap-2 text-green-600 font-medium">
+                                  <CheckCircle className="h-5 w-5" />
+                                  <span>Sent to {issue.assigned_provider_name} - Awaiting quote</span>
+                                </div>
+                              )}
+                            </div>
                           </CardContent>
                         </Card>
                       ))}
@@ -605,24 +533,88 @@ const PropertyManagerOrders = () => {
                   )}
                 </TabsContent>
 
-                <TabsContent value="pending-approval" className="mt-4 sm:mt-6">
-                  {pendingApprovalOrders.length === 0 ? (
+                {/* Quotes Tab */}
+                <TabsContent value="quotes" className="mt-4 sm:mt-6">
+                  {quotes.length === 0 ? (
                     <div className="text-center py-6 sm:py-8">
-                      <Clock className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-500 text-sm sm:text-base">No orders pending approval</p>
+                      <Eye className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-500 text-base">No pending quotes</p>
                     </div>
                   ) : (
-                    <div className="space-y-3 sm:space-y-4">
-                      {pendingApprovalOrders.map(order => renderOrderCard(order, true))}
+                    <div className="space-y-4">
+                      {quotes.map((quote) => (
+                        <Card key={quote.id} className="border-l-4 border-l-purple-500" data-testid={`quote-card-${quote.id}`}>
+                          <CardContent className="p-4 sm:p-6">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 space-y-2 sm:space-y-0">
+                              <div className="flex-1">
+                                <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+                                  {quote.service_type}
+                                </h3>
+                                <p className="text-sm text-gray-600">Tenant: {quote.homeowner_name}</p>
+                                <p className="text-sm text-gray-600">Provider: {quote.provider_name}</p>
+                                {quote.source_issue_id && (
+                                  <Badge className="mt-2 bg-blue-100 text-blue-800">
+                                    From Issue Report
+                                  </Badge>
+                                )}
+                              </div>
+                              <div className="text-left sm:text-right">
+                                <div className="text-2xl font-bold text-purple-600">
+                                  ${quote.quotation_amount}
+                                </div>
+                                <p className="text-xs text-gray-500 mt-1">
+                                  {formatDate(quote.created_at)}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="mb-4">
+                              <h4 className="font-medium text-gray-900 mb-2 text-sm">Quote Details:</h4>
+                              <p className="text-gray-700 text-sm">
+                                {quote.quotation_details || 'No details provided'}
+                              </p>
+                            </div>
+
+                            {quote.quotation_valid_until && (
+                              <div className="mb-4 text-sm text-gray-600">
+                                <span className="font-medium">Valid Until:</span> {formatDate(quote.quotation_valid_until)}
+                              </div>
+                            )}
+
+                            <div className="pt-4 border-t flex flex-col sm:flex-row gap-2">
+                              <Button
+                                onClick={() => handleApproveQuote(quote.id)}
+                                disabled={processingOrder === quote.id}
+                                className="flex-1 bg-green-600 hover:bg-green-700"
+                                data-testid={`approve-quote-${quote.id}`}
+                              >
+                                <CheckCircle className="h-4 w-4 mr-2" />
+                                {processingOrder === quote.id ? 'Processing...' : 'Approve Quote'}
+                              </Button>
+                              <Button
+                                onClick={() => handleRejectQuote(quote.id)}
+                                disabled={processingOrder === quote.id}
+                                variant="outline"
+                                className="flex-1 border-red-600 text-red-600 hover:bg-red-50"
+                                data-testid={`reject-quote-${quote.id}`}
+                              >
+                                <XCircle className="h-4 w-4 mr-2" />
+                                Reject
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
                     </div>
                   )}
                 </TabsContent>
 
+                {/* Active Orders Tab */}
                 <TabsContent value="active-orders" className="mt-4 sm:mt-6">
                   {activeOrders.length === 0 ? (
                     <div className="text-center py-6 sm:py-8">
-                      <Eye className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-500 text-sm sm:text-base">No active orders</p>
+                      <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-500 text-base">No active orders</p>
                     </div>
                   ) : (
                     <div className="space-y-3 sm:space-y-4">
@@ -631,11 +623,12 @@ const PropertyManagerOrders = () => {
                   )}
                 </TabsContent>
 
+                {/* Completed Orders Tab */}
                 <TabsContent value="completed-orders" className="mt-4 sm:mt-6">
                   {completedOrders.length === 0 ? (
                     <div className="text-center py-6 sm:py-8">
-                      <CheckCircle className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-500 text-sm sm:text-base">No completed orders</p>
+                      <CheckCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-500 text-base">No completed orders</p>
                     </div>
                   ) : (
                     <div className="space-y-3 sm:space-y-4">
@@ -649,7 +642,7 @@ const PropertyManagerOrders = () => {
         </div>
       </main>
 
-      {/* Send to Provider Modal */}
+      {/* Send to Provider Modal (Advanced Options) */}
       {showSendModal && selectedIssue && (
         <SendToProviderModal
           issue={selectedIssue}
@@ -670,6 +663,7 @@ const PropertyManagerOrders = () => {
               <button 
                 onClick={() => setShowResolveModal(false)} 
                 className="hover:bg-green-700 p-1 rounded"
+                data-testid="close-resolve-modal"
               >
                 <XCircle className="h-6 w-6" />
               </button>
@@ -694,6 +688,7 @@ const PropertyManagerOrders = () => {
                   placeholder="Describe how the issue was resolved..."
                   className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   rows="4"
+                  data-testid="resolution-notes-input"
                 />
               </div>
 
@@ -708,6 +703,7 @@ const PropertyManagerOrders = () => {
                 <Button
                   onClick={confirmResolveIssue}
                   className="flex-1 bg-green-600 hover:bg-green-700"
+                  data-testid="confirm-resolve-btn"
                 >
                   <CheckCircle className="h-4 w-4 mr-2" />
                   Mark as Resolved
