@@ -64,12 +64,16 @@ const PropertyManagerDashboard = () => {
         apiService.getPropertyManagerProperties()
       ]);
 
+      // Store the properties data
+      const propertiesData = Array.isArray(properties) ? properties : [];
+      setProperties(propertiesData);
+
       // Calculate stats
       const pendingApprovalOrders = orders.filter(order => order.status === 'pending_pm_approval');
       const activeOrders = orders.filter(order => ['pending_quotation', 'quoted', 'accepted', 'confirmed'].includes(order.status));
       
       setStats({
-        totalProperties: properties.properties?.length || 0,
+        totalProperties: propertiesData.length,
         totalTenants: tenants.length,
         pendingApprovals: pendingApprovalOrders.length,
         activeOrders: activeOrders.length

@@ -784,6 +784,7 @@ async def get_pm_properties(current_user: User = Depends(get_current_user)):
     finally:
         await db.close()
 
+@api_router.get("/pm/tenants")
 async def get_pm_tenants(current_user: User = Depends(get_current_user)):
     """Get all tenants linked to this Property Manager"""
     if current_user.user_type != "property_manager":
