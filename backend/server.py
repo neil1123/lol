@@ -264,6 +264,24 @@ async def init_db():
             # Columns already exist
             pass
         
+        # Add issue_size column for issue classification (P3 feature)
+        try:
+            await db.execute('ALTER TABLE reported_issues ADD COLUMN issue_size TEXT DEFAULT "medium"')
+            await db.commit()
+            print("Added issue_size column to reported_issues table", file=sys.stderr, flush=True)
+        except Exception as e:
+            pass
+        
+        # Add scheduling columns to orders table
+        try:
+            await db.execute('ALTER TABLE orders ADD COLUMN scheduled_date TEXT')
+            await db.execute('ALTER TABLE orders ADD COLUMN scheduled_time TEXT')
+            await db.execute('ALTER TABLE orders ADD COLUMN estimated_duration TEXT')
+            await db.commit()
+            print("Added scheduling columns to orders table", file=sys.stderr, flush=True)
+        except Exception as e:
+            pass
+        
         await db.commit()
         print("SQLite database initialized successfully", file=sys.stderr, flush=True)
     except Exception as e:
