@@ -26,7 +26,7 @@ const PropertyManagerAuth = () => {
     try {
       let response;
       if (isLogin) {
-        response = await apiService.login(formData.email, formData.password);
+        response = await apiService.login({ email: formData.email, password: formData.password });
       } else {
         // Registration - pm_code is optional during registration
         const userData = {
