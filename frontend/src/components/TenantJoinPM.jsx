@@ -57,12 +57,25 @@ const TenantJoinPM = ({ onJoined }) => {
       setCode('');
       setPropertyAddress('');
       setUnitNumber('');
+      
+      // Update localStorage with new PM info
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      user.property_manager_id = response.property_manager?.id;
+      user.user_type = 'tenant';
+      localStorage.setItem('user', JSON.stringify(user));
+      
       if (onJoined) {
         onJoined(response.property_manager);
       }
     } catch (error) {
       console.error('Join failed:', error);
-      setError(error.message || 'Invalid code. Please check and try again.');
+      if (error.message?.includes('fetch')) {
+        setError('Connection error. Please check your internet and try again.');
+      } else if (error.message?.includes('401') || error.message?.includes('403')) {
+        setError('Session expired. Please refresh the page and try again.');
+      } else {
+        setError(error.message || 'Invalid code. Please check and try again.');
+      }
     } finally {
       setJoining(false);
     }
