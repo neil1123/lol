@@ -97,13 +97,8 @@ const HomeownerAuth = () => {
 
       const response = await apiService.register(registrationData);
       
-      // Navigate based on user type
-      const userType = response.user.user_type;
-      if (userType === 'tenant') {
-        navigate('/tenant/dashboard');
-      } else {
-        navigate('/homeowners/dashboard');
-      }
+      // Always navigate to homeowners dashboard (tenant functionality is integrated there)
+      navigate('/homeowners/dashboard');
       
       setIsLoading(false);
     } catch (error) {
