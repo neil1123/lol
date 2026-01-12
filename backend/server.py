@@ -664,7 +664,8 @@ async def get_my_pm_code(current_user: User = Depends(get_current_user)):
 @api_router.post("/tenant/join-pm")
 async def tenant_join_pm(data: dict, current_user: User = Depends(get_current_user)):
     """Tenant joins a Property Manager using their code"""
-    if current_user.user_type != "homeowner":
+    # Allow both 'homeowner' and 'tenant' user types
+    if current_user.user_type not in ["homeowner", "tenant"]:
         raise HTTPException(status_code=403, detail="Only tenants can join property managers")
     
     code = data.get("code", "").strip().upper()
@@ -688,12 +689,13 @@ async def tenant_join_pm(data: dict, current_user: User = Depends(get_current_us
         
         pm_id, pm_name, pm_business, pm_phone, pm_email = pm_row
         
-        # Update tenant's property_manager_id and property info
+        # Update tenant's property_manager_id, property info, and change user_type to tenant
         await db.execute(
             """UPDATE users 
                SET property_manager_id = ?, 
                    property_address = ?, 
-                   unit_number = ?, 
+                   unit_number = ?,
+                   user_type = 'tenant',
                    updated_at = ? 
                WHERE id = ?""",
             (pm_id, property_address, unit_number, datetime.utcnow().isoformat(), current_user.id)
