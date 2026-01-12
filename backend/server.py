@@ -460,6 +460,7 @@ async def register(user_data: UserCreate):
         pm_id = None
         property_address = None
         unit_number = None
+        actual_user_type = user_data.user_type
         
         if user_data.pm_code and user_data.user_type == 'homeowner':
             # Find PM by code
@@ -471,6 +472,9 @@ async def register(user_data: UserCreate):
             if pm_row:
                 pm_id = pm_row[0]
                 property_address = user_data.address  # Use signup address
+                actual_user_type = 'tenant'  # Change to tenant if PM code is valid
+            else:
+                raise HTTPException(status_code=400, detail="Invalid property manager code")
         
         await db.execute('''
             INSERT INTO users (id, email, password_hash, user_type, name, phone, address, 
@@ -479,7 +483,7 @@ async def register(user_data: UserCreate):
                              property_manager_id, property_address, unit_number)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
-            user_id, user_data.email, password_hash, user_data.user_type,
+            user_id, user_data.email, password_hash, actual_user_type,
             user_data.name, user_data.phone, user_data.address, user_data.business_name,
             json.dumps(user_data.services or []), user_data.description, user_data.location,
             json.dumps(user_data.specialties or []), 5.0, 0, 0, now, now, 1, 
