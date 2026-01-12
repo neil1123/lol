@@ -43,11 +43,12 @@ const HomeownerAuth = () => {
       
       // Check user type and navigate accordingly
       const userType = response.user.user_type;
+      const hasPM = response.user.property_manager_id;
       
-      if (userType === 'homeowner') {
+      if (userType === 'homeowner' || userType === 'tenant') {
+        // Both homeowners and tenants go to homeowner dashboard
+        // The dashboard will show PM connection status
         navigate('/homeowners/dashboard');
-      } else if (userType === 'tenant') {
-        navigate('/tenant/dashboard');
       } else if (userType === 'provider') {
         // If a provider tries to login through homeowner auth, redirect to provider dashboard
         navigate('/homeservices/dashboard');
