@@ -139,12 +139,15 @@ const TenantJoinPM = ({ onJoined }) => {
             <Input
               value={code}
               onChange={(e) => {
-                setCode(e.target.value.toUpperCase());
+                // Allow alphanumeric characters
+                const value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                setCode(value);
                 setError('');
               }}
-              placeholder="Enter 6-digit code"
-              maxLength={6}
+              placeholder="Enter code (e.g., ABC123)"
+              maxLength={10}
               className="text-center text-2xl font-mono tracking-widest uppercase"
+              data-testid="pm-code-input"
             />
           </div>
 
