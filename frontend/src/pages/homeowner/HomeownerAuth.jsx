@@ -307,10 +307,15 @@ const HomeownerAuth = () => {
                       <Input
                         id="pmCode"
                         type="text"
-                        placeholder="Enter your Property Manager's code"
+                        placeholder="Enter your PM's code (e.g., ABC123)"
                         value={signUpData.pmCode}
-                        onChange={(e) => setSignUpData({...signUpData, pmCode: e.target.value})}
-                        className="bg-white"
+                        onChange={(e) => setSignUpData({
+                          ...signUpData, 
+                          pmCode: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '')
+                        })}
+                        className="bg-white uppercase font-mono"
+                        maxLength={10}
+                        data-testid="pm-code-signup"
                       />
                     </div>
                     
