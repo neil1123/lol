@@ -180,8 +180,9 @@ const TenantJoinPM = ({ onJoined }) => {
         
         <Button 
           onClick={handleJoin}
-          disabled={joining || code.length < 6}
+          disabled={joining || code.length < 4}
           className="w-full bg-orange-600 hover:bg-orange-700"
+          data-testid="connect-pm-btn"
         >
           {joining ? 'Connecting...' : 'Connect'}
         </Button>
