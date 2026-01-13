@@ -461,9 +461,15 @@ async def register(user_data: UserCreate):
         property_address = None
         unit_number = None
         actual_user_type = user_data.user_type
+        pm_code_to_save = None
         
-        if user_data.pm_code and user_data.user_type == 'homeowner':
-            # Find PM by code
+        if user_data.user_type == 'property_manager':
+            # Generate a unique PM code for new property managers
+            import random
+            import string
+            pm_code_to_save = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+        elif user_data.pm_code and user_data.user_type == 'homeowner':
+            # Find PM by code for tenant registration
             cursor = await db.execute(
                 "SELECT id FROM users WHERE pm_code = ? AND user_type = 'property_manager'",
                 (user_data.pm_code.strip().upper(),)
@@ -487,7 +493,7 @@ async def register(user_data: UserCreate):
             user_data.name, user_data.phone, user_data.address, user_data.business_name,
             json.dumps(user_data.services or []), user_data.description, user_data.location,
             json.dumps(user_data.specialties or []), 5.0, 0, 0, now, now, 1, 
-            user_data.pm_code if user_data.user_type == 'property_manager' else None,  # Only PMs get pm_code
+            pm_code_to_save,  # Auto-generated code for PMs
             pm_id, property_address, unit_number  # Link tenant to PM if code provided
         ))
         await db.commit()
