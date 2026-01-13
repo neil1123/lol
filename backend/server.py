@@ -817,8 +817,9 @@ async def get_pm_tenants(current_user: User = Depends(get_current_user)):
     
     db = await get_db()
     try:
+        # Include both 'homeowner' and 'tenant' user types (for backwards compatibility)
         cursor = await db.execute(
-            "SELECT id, name, email, phone, address, created_at FROM users WHERE property_manager_id = ? AND user_type = 'homeowner'",
+            "SELECT id, name, email, phone, address, property_address, unit_number, created_at FROM users WHERE property_manager_id = ? AND user_type IN ('homeowner', 'tenant')",
             (current_user.id,)
         )
         rows = await cursor.fetchall()
@@ -831,7 +832,9 @@ async def get_pm_tenants(current_user: User = Depends(get_current_user)):
                 "email": row[2],
                 "phone": row[3],
                 "address": row[4],
-                "joined_at": row[5]
+                "property_address": row[5],
+                "unit_number": row[6],
+                "joined_at": row[7]
             })
         
         return tenants
