@@ -456,7 +456,7 @@ async def register(user_data: UserCreate):
         user_id = str(uuid.uuid4())
         now = datetime.utcnow().isoformat()
         
-        # Check if tenant is signing up with PM code
+        # Handle PM code
         pm_id = None
         property_address = None
         unit_number = None
@@ -464,12 +464,22 @@ async def register(user_data: UserCreate):
         pm_code_to_save = None
         
         if user_data.user_type == 'property_manager':
-            # Generate a unique PM code for new property managers
-            import random
-            import string
-            pm_code_to_save = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+            # PM creates their own code - validate it's provided and unique
+            if user_data.pm_code:
+                pm_code_to_save = user_data.pm_code.strip().upper()
+                
+                # Check if code is already used by another PM
+                cursor = await db.execute(
+                    "SELECT id FROM users WHERE pm_code = ? AND user_type = 'property_manager'",
+                    (pm_code_to_save,)
+                )
+                existing_code = await cursor.fetchone()
+                if existing_code:
+                    raise HTTPException(status_code=400, detail="This code is already taken. Please choose a different code.")
+            # If no code provided, PM can generate one later from dashboard
+            
         elif user_data.pm_code and user_data.user_type == 'homeowner':
-            # Find PM by code for tenant registration
+            # Tenant signing up with PM code
             cursor = await db.execute(
                 "SELECT id FROM users WHERE pm_code = ? AND user_type = 'property_manager'",
                 (user_data.pm_code.strip().upper(),)
@@ -477,8 +487,8 @@ async def register(user_data: UserCreate):
             pm_row = await cursor.fetchone()
             if pm_row:
                 pm_id = pm_row[0]
-                property_address = user_data.address  # Use signup address
-                actual_user_type = 'tenant'  # Change to tenant if PM code is valid
+                property_address = user_data.address
+                actual_user_type = 'tenant'
             else:
                 raise HTTPException(status_code=400, detail="Invalid property manager code")
         
@@ -493,8 +503,8 @@ async def register(user_data: UserCreate):
             user_data.name, user_data.phone, user_data.address, user_data.business_name,
             json.dumps(user_data.services or []), user_data.description, user_data.location,
             json.dumps(user_data.specialties or []), 5.0, 0, 0, now, now, 1, 
-            pm_code_to_save,  # Auto-generated code for PMs
-            pm_id, property_address, unit_number  # Link tenant to PM if code provided
+            pm_code_to_save,
+            pm_id, property_address, unit_number
         ))
         await db.commit()
         
