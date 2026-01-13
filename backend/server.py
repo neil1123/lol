@@ -647,10 +647,20 @@ async def generate_pm_code(current_user: User = Depends(get_current_user)):
     
     db = await get_db()
     try:
-        # Generate a 6-character alphanumeric code
         import random
         import string
-        code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+        
+        # Try to generate a unique code (up to 10 attempts)
+        for _ in range(10):
+            code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+            
+            # Check if code is already used
+            cursor = await db.execute(
+                "SELECT id FROM users WHERE pm_code = ? AND id != ?",
+                (code, current_user.id)
+            )
+            if not await cursor.fetchone():
+                break
         
         # Update the PM's code
         await db.execute(
@@ -660,6 +670,37 @@ async def generate_pm_code(current_user: User = Depends(get_current_user)):
         await db.commit()
         
         return {"code": code, "message": "Code generated successfully"}
+    finally:
+        await db.close()
+
+@api_router.post("/pm/set-code")
+async def set_pm_code(data: dict, current_user: User = Depends(get_current_user)):
+    """Set a custom code for Property Manager"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can set codes")
+    
+    code = data.get("code", "").strip().upper()
+    if not code or len(code) < 4:
+        raise HTTPException(status_code=400, detail="Code must be at least 4 characters")
+    
+    db = await get_db()
+    try:
+        # Check if code is already used by another PM
+        cursor = await db.execute(
+            "SELECT id FROM users WHERE pm_code = ? AND id != ? AND user_type = 'property_manager'",
+            (code, current_user.id)
+        )
+        if await cursor.fetchone():
+            raise HTTPException(status_code=400, detail="This code is already taken. Please choose a different code.")
+        
+        # Update the PM's code
+        await db.execute(
+            "UPDATE users SET pm_code = ?, updated_at = ? WHERE id = ?",
+            (code, datetime.utcnow().isoformat(), current_user.id)
+        )
+        await db.commit()
+        
+        return {"code": code, "message": "Code set successfully"}
     finally:
         await db.close()
 
