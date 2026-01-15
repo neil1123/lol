@@ -93,11 +93,17 @@ const ReportIssuesChat = ({ onIssueSubmitted }) => {
     setError('');
 
     try {
-      // Try to get AI suggestions for category/urgency
-      const response = await apiService.summarizeIssue({ message: issueDescription });
+      // Try to get AI suggestions for category/urgency (with timeout)
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('AI processing timeout')), 8000)
+      );
+      
+      const apiPromise = apiService.summarizeIssue({ message: issueDescription });
+      
+      const response = await Promise.race([apiPromise, timeoutPromise]);
       
       // Parse AI response for suggestions
-      if (response.response) {
+      if (response && response.response) {
         setAiSuggestion(response.response);
         
         // Try to auto-detect category from description
@@ -123,6 +129,13 @@ const ReportIssuesChat = ({ onIssueSubmitted }) => {
       setStep(2);
     } catch (error) {
       console.error('AI processing error:', error);
+      // Auto-detect from keywords even without AI
+      const descLower = issueDescription.toLowerCase();
+      if (descLower.includes('water') || descLower.includes('leak') || descLower.includes('plumb')) {
+        setFormData(prev => ({ ...prev, issue_category: 'plumbing' }));
+      } else if (descLower.includes('electric') || descLower.includes('power')) {
+        setFormData(prev => ({ ...prev, issue_category: 'electrical' }));
+      }
       // Continue to form even if AI fails
       setStep(2);
     } finally {
