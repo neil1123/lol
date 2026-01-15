@@ -20,19 +20,23 @@ const TenantJoinPM = ({ onJoined }) => {
 
   const loadCurrentPM = async () => {
     try {
-      // Always try to get PM from API (most reliable)
-      const response = await apiService.getTenantPM();
-      if (response.property_manager) {
-        setPropertyManager(response.property_manager);
-        
-        // Update localStorage with PM info
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        user.property_manager_id = response.property_manager.id;
-        localStorage.setItem('user', JSON.stringify(user));
+      // First check localStorage for cached PM info
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (user.property_manager_id) {
+        // Try to get full PM details from API
+        try {
+          const response = await apiService.getTenantPM();
+          if (response.property_manager) {
+            setPropertyManager(response.property_manager);
+          }
+        } catch (apiError) {
+          console.error('API error getting PM details:', apiError);
+          // If API fails but we have PM ID, show basic connected state
+          setPropertyManager({ id: user.property_manager_id, name: 'Property Manager' });
+        }
       }
     } catch (error) {
       console.error('Failed to load PM:', error);
-      // User is not connected to any PM yet
     } finally {
       setLoading(false);
     }
