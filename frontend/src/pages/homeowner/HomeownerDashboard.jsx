@@ -316,11 +316,13 @@ const HomeownerDashboard = () => {
   };
 
   useEffect(() => {
-    // Check if user is logged in - improved check
+    // Check if user is logged in - check both token keys for compatibility
     const user = localStorage.getItem('user');
     const userType = localStorage.getItem('userType');
-    const authToken = localStorage.getItem('authToken');
-    const hasValidAuth = user && authToken && userType === 'homeowner';
+    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+    
+    // Allow both 'homeowner' and 'tenant' user types
+    const hasValidAuth = user && token && (userType === 'homeowner' || userType === 'tenant');
     setIsLoggedIn(hasValidAuth);
     
     // Check for mobile view
