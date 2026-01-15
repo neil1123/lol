@@ -49,12 +49,19 @@ const HomeownerDashboard = () => {
   const [linkedPM, setLinkedPM] = useState(null);
   const [newMessage, setNewMessage] = useState('');
   
-  // Check auth immediately on initial render
+  // Check auth from localStorage - allow both homeowner and tenant types
   const getAuthStatus = () => {
-    const user = localStorage.getItem('user');
-    const userType = localStorage.getItem('userType');
-    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
-    return user && token && (userType === 'homeowner' || userType === 'tenant');
+    try {
+      const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+      const userStr = localStorage.getItem('user');
+      if (!token || !userStr) return false;
+      
+      const user = JSON.parse(userStr);
+      // Accept homeowner, tenant, or any user with property_manager_id
+      return user && (user.user_type === 'homeowner' || user.user_type === 'tenant' || user.property_manager_id);
+    } catch {
+      return false;
+    }
   };
   
   const [isLoggedIn, setIsLoggedIn] = useState(getAuthStatus);
