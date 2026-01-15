@@ -127,6 +127,7 @@ const HomeownerDashboard = () => {
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('userType');
+    localStorage.removeItem('token');
     localStorage.removeItem('authToken');
     setIsLoggedIn(false);
     setActiveTab('home');
