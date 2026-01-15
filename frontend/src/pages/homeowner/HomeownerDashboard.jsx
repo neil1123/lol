@@ -48,7 +48,16 @@ const HomeownerDashboard = () => {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [linkedPM, setLinkedPM] = useState(null);
   const [newMessage, setNewMessage] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  // Check auth immediately on initial render
+  const getAuthStatus = () => {
+    const user = localStorage.getItem('user');
+    const userType = localStorage.getItem('userType');
+    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+    return user && token && (userType === 'homeowner' || userType === 'tenant');
+  };
+  
+  const [isLoggedIn, setIsLoggedIn] = useState(getAuthStatus);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState({
