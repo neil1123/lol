@@ -333,14 +333,9 @@ const HomeownerDashboard = () => {
   };
 
   useEffect(() => {
-    // Check if user is logged in - check both token keys for compatibility
-    const user = localStorage.getItem('user');
-    const userType = localStorage.getItem('userType');
-    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
-    
-    // Allow both 'homeowner' and 'tenant' user types
-    const hasValidAuth = user && token && (userType === 'homeowner' || userType === 'tenant');
-    setIsLoggedIn(hasValidAuth);
+    // Re-check auth status on mount
+    const isAuth = getAuthStatus();
+    setIsLoggedIn(isAuth);
     
     // Check for mobile view
     const checkMobile = () => {
@@ -350,7 +345,7 @@ const HomeownerDashboard = () => {
     window.addEventListener('resize', checkMobile);
     
     // Load notifications and messages if authenticated
-    if (hasValidAuth) {
+    if (isAuth) {
       loadNotifications();
       loadMessageThreads();
       loadOrders();
