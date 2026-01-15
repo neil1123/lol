@@ -40,20 +40,24 @@ const API = `${BACKEND_URL}/api`;
 
 function App() {
   // Clear localStorage cache on app initialization to prevent stale data
+  // Only run once using a flag
   useEffect(() => {
-    // Clear all localStorage to prevent Wilson Home Services and other stale data
-    localStorage.removeItem('registeredProviders');
-    localStorage.removeItem('providerCustomers');
-    localStorage.removeItem('orders');
-    localStorage.removeItem('messages');
-    localStorage.removeItem('quotations');
-    localStorage.removeItem('quotationRequests');
-    localStorage.removeItem('mockProviders');
-    localStorage.removeItem('mockOrders');
-    localStorage.removeItem('mockMessages');
-    localStorage.removeItem('mockQuotations');
-    localStorage.removeItem('mockQuotationRequests');
-    console.log('✅ localStorage cleared to prevent stale data');
+    if (!window.__appInitialized) {
+      window.__appInitialized = true;
+      // Clear mock data only, not auth data
+      localStorage.removeItem('registeredProviders');
+      localStorage.removeItem('providerCustomers');
+      localStorage.removeItem('orders');
+      localStorage.removeItem('messages');
+      localStorage.removeItem('quotations');
+      localStorage.removeItem('quotationRequests');
+      localStorage.removeItem('mockProviders');
+      localStorage.removeItem('mockOrders');
+      localStorage.removeItem('mockMessages');
+      localStorage.removeItem('mockQuotations');
+      localStorage.removeItem('mockQuotationRequests');
+      console.log('✅ Mock data cleared on app init');
+    }
   }, []);
 
   return (
