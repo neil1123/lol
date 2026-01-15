@@ -58,32 +58,36 @@ const PropertyManagerDashboard = () => {
       setLoading(true);
       
       // Load tenants, orders, and properties
-      const [tenants, orders, properties] = await Promise.all([
+      const [tenantsData, ordersData, propertiesData] = await Promise.all([
         apiService.getPropertyManagerTenants(),
         apiService.getPropertyManagerOrders(),
         apiService.getPropertyManagerProperties()
       ]);
 
       // Store the properties data
-      const propertiesData = Array.isArray(properties) ? properties : [];
-      setProperties(propertiesData);
+      const propertiesList = Array.isArray(propertiesData) ? propertiesData : [];
+      setProperties(propertiesList);
+
+      // Ensure tenants and orders are arrays
+      const tenantsList = Array.isArray(tenantsData) ? tenantsData : [];
+      const ordersList = Array.isArray(ordersData) ? ordersData : [];
 
       // Calculate stats
-      const pendingApprovalOrders = orders.filter(order => order.status === 'pending_pm_approval');
-      const activeOrders = orders.filter(order => ['pending_quotation', 'quoted', 'accepted', 'confirmed'].includes(order.status));
+      const pendingApprovalOrders = ordersList.filter(order => order.status === 'pending_pm_approval');
+      const activeOrders = ordersList.filter(order => ['pending_quotation', 'quoted', 'accepted', 'confirmed'].includes(order.status));
       
       setStats({
-        totalProperties: propertiesData.length,
-        totalTenants: tenants.length,
+        totalProperties: propertiesList.length,
+        totalTenants: tenantsList.length,
         pendingApprovals: pendingApprovalOrders.length,
         activeOrders: activeOrders.length
       });
 
       setPendingOrders(pendingApprovalOrders.slice(0, 5)); // Show latest 5
-      setTenants(tenants.slice(0, 4)); // Show latest 4 tenants in dashboard
+      setTenants(tenantsList.slice(0, 4)); // Show latest 4 tenants in dashboard
       
       // Create recent activity from orders
-      const sortedOrders = orders.sort((a, b) => new Date(b.request_date) - new Date(a.request_date));
+      const sortedOrders = ordersList.sort((a, b) => new Date(b.request_date) - new Date(a.request_date));
       setRecentActivity(sortedOrders.slice(0, 8));
       
     } catch (error) {
