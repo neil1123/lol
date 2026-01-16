@@ -1,20 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Copy, RefreshCw, Users, CheckCircle } from 'lucide-react';
 import apiService from '../services/api';
 
-const PMCodeCard = () => {
+const PMCodeCard = ({ onDataChange }) => {
   const [code, setCode] = useState(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [copied, setCopied] = useState(false);
   const [tenantCount, setTenantCount] = useState(0);
 
+  const loadCode = useCallback(async () => {
+    try {
+      const response = await apiService.getMyPMCode();
+      setCode(response.code);
+      // Also update localStorage user to keep pm_code in sync
+      const userStr = localStorage.getItem('user');
+      if (userStr && response.code) {
+        const user = JSON.parse(userStr);
+        user.pm_code = response.code;
+        localStorage.setItem('user', JSON.stringify(user));
+      }
+    } catch (error) {
+      console.error('Failed to load code:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const loadTenantCount = useCallback(async () => {
+    try {
+      const tenants = await apiService.getPMTenants();
+      setTenantCount(tenants.length);
+      // Notify parent of data change if callback provided
+      if (onDataChange) {
+        onDataChange({ tenantCount: tenants.length });
+      }
+    } catch (error) {
+      console.error('Failed to load tenants:', error);
+    }
+  }, [onDataChange]);
+
   useEffect(() => {
     loadCode();
     loadTenantCount();
-  }, []);
+  }, [loadCode, loadTenantCount]);
 
   const loadCode = async () => {
     try {

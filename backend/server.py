@@ -1529,20 +1529,23 @@ async def get_issues(current_user: User = Depends(get_current_user)):
     """Get issues - for tenants (their issues) or property managers (all assigned issues)"""
     db = await get_db()
     try:
-        if current_user.user_type == "homeowner":
-            # Tenant sees their own issues
+        if current_user.user_type in ["homeowner", "tenant"]:
+            # Tenant/homeowner sees their own issues
             cursor = await db.execute('''
                 SELECT * FROM reported_issues 
                 WHERE tenant_id = ?
                 ORDER BY created_at DESC
             ''', (current_user.id,))
-        else:
+        elif current_user.user_type == "property_manager":
             # Property manager sees issues assigned to them
             cursor = await db.execute('''
                 SELECT * FROM reported_issues 
                 WHERE property_manager_id = ?
                 ORDER BY created_at DESC
             ''', (current_user.id,))
+        else:
+            # Provider or other - no issues
+            return []
         
         rows = await cursor.fetchall()
         issues = []
