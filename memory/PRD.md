@@ -174,14 +174,22 @@ Build a full-stack application for Property Managers, Tenants, and Service Provi
 
 ## Future/Backlog Tasks
 
-### P4 - UI/UX Updates
-- Change "Homeowner" → "Tenant" throughout app
+### P4 - UI/UX Updates (UPDATED)
+- ~~Change "Homeowner" → "Tenant" throughout app~~ (User decided to keep both terms)
 - Improve mobile responsiveness
 - Add notifications for new quotes
 
 ### P4 - Template Response System
 - Pre-built responses for common issues
 - PM can quickly respond to tenants
+
+### P4 - Quote Management UI (In Progress)
+- Build frontend for PM to review/accept/reject quotes in "Quotes" tab
+- Enhance Provider Orders page for quote submission
+
+### P4 - Calendar Scheduling Flow (In Progress)
+- Integrate ScheduleServiceModal with quote approval flow
+- Connect to PMCalendar for event display
 
 ### P5 - Backend Refactoring (Further)
 - Split server.py into proper routers
