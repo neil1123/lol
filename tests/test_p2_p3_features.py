@@ -18,7 +18,7 @@ import os
 import uuid
 from datetime import datetime, timedelta
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://tenantfix-1.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://propmanage-app-7.preview.emergentagent.com')
 
 # Test credentials from previous iterations
 PM_EMAIL = "e2e_pm_1768106090@test.com"

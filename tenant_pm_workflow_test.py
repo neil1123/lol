@@ -16,7 +16,7 @@ import uuid
 from datetime import datetime
 
 # Backend URL
-BACKEND_URL = "https://tenantfix-1.preview.emergentagent.com/api"
+BACKEND_URL = "https://propmanage-app-7.preview.emergentagent.com/api"
 
 # Global test data
 pm_token = None

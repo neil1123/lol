@@ -9,7 +9,7 @@ import json
 import uuid
 
 # Backend URL
-BACKEND_URL = "https://tenantfix-1.preview.emergentagent.com/api"
+BACKEND_URL = "https://propmanage-app-7.preview.emergentagent.com/api"
 
 def test_pm_endpoints():
     """Test all Property Manager endpoints"""

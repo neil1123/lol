@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 
 # Backend URL
-BACKEND_URL = "https://tenantfix-1.preview.emergentagent.com/api"
+BACKEND_URL = "https://propmanage-app-7.preview.emergentagent.com/api"
 
 def test_critical_homeowner_quotation():
     """Test the critical homeowner quotation acceptance/decline functionality"""

@@ -2,7 +2,7 @@
 """
 Doord SQLite Backend API Testing
 Focus: Testing authentication, provider operations, order flow, and services
-Base URL: https://tenantfix-1.preview.emergentagent.com
+Base URL: https://propmanage-app-7.preview.emergentagent.com
 """
 
 import requests
@@ -12,7 +12,7 @@ import sys
 from datetime import datetime
 
 # Base URL from frontend .env
-BACKEND_URL = "https://tenantfix-1.preview.emergentagent.com/api"
+BACKEND_URL = "https://propmanage-app-7.preview.emergentagent.com/api"
 
 # Global test data storage
 test_data = {
