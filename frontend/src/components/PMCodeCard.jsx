@@ -47,42 +47,6 @@ const PMCodeCard = ({ onDataChange }) => {
     loadTenantCount();
   }, [loadCode, loadTenantCount]);
 
-  const loadCode = async () => {
-    try {
-      const response = await apiService.getMyPMCode();
-      setCode(response.code);
-      // Also update localStorage user to keep pm_code in sync
-      const userStr = localStorage.getItem('user');
-      if (userStr && response.code) {
-        const user = JSON.parse(userStr);
-        user.pm_code = response.code;
-        localStorage.setItem('user', JSON.stringify(user));
-      }
-    } catch (error) {
-      console.error('Failed to load code:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadTenantCount = async () => {
-    try {
-      const tenants = await apiService.getPMTenants();
-      setTenantCount(tenants.length);
-      // Notify parent of data change if callback provided
-      if (onDataChange) {
-        onDataChange({ tenantCount: tenants.length });
-      }
-    } catch (error) {
-      console.error('Failed to load tenants:', error);
-    }
-  };
-
-  // Expose refresh method for parent component
-  const refreshData = async () => {
-    await Promise.all([loadCode(), loadTenantCount()]);
-  };
-
   const generateCode = async () => {
     setGenerating(true);
     try {
@@ -122,7 +86,7 @@ const PMCodeCard = ({ onDataChange }) => {
   }
 
   return (
-    <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white">
+    <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white" data-testid="pm-code-card">
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-lg">
           <Users className="w-5 h-5 text-blue-600" />
@@ -134,7 +98,7 @@ const PMCodeCard = ({ onDataChange }) => {
           <>
             <div className="bg-white rounded-lg p-4 border-2 border-dashed border-blue-300 text-center">
               <p className="text-xs text-gray-500 mb-1">Share this code with your tenants</p>
-              <div className="text-3xl font-mono font-bold tracking-widest text-blue-600">
+              <div className="text-3xl font-mono font-bold tracking-widest text-blue-600" data-testid="pm-code">
                 {code}
               </div>
             </div>
@@ -144,6 +108,7 @@ const PMCodeCard = ({ onDataChange }) => {
                 onClick={copyCode} 
                 variant="outline" 
                 className="flex-1"
+                data-testid="copy-code-btn"
               >
                 {copied ? (
                   <>
@@ -161,12 +126,13 @@ const PMCodeCard = ({ onDataChange }) => {
                 onClick={generateCode} 
                 variant="outline"
                 disabled={generating}
+                data-testid="regenerate-code-btn"
               >
                 <RefreshCw className={`w-4 h-4 ${generating ? 'animate-spin' : ''}`} />
               </Button>
             </div>
             
-            <div className="text-center text-sm text-gray-500">
+            <div className="text-center text-sm text-gray-500" data-testid="tenant-count">
               <span className="font-semibold text-blue-600">{tenantCount}</span> tenant{tenantCount !== 1 ? 's' : ''} connected
             </div>
           </>
@@ -179,6 +145,7 @@ const PMCodeCard = ({ onDataChange }) => {
               onClick={generateCode} 
               disabled={generating}
               className="w-full bg-blue-600 hover:bg-blue-700"
+              data-testid="generate-code-btn"
             >
               {generating ? (
                 <>
