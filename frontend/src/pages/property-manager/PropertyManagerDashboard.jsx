@@ -317,7 +317,7 @@ const PropertyManagerDashboard = () => {
 
           {/* PM Code Card */}
           <div className="mb-6 sm:mb-8">
-            <PMCodeCard />
+            <PMCodeCard onDataChange={handlePMCodeDataChange} />
           </div>
 
           {/* Stats Cards */}
