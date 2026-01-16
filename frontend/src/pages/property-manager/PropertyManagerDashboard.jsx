@@ -184,6 +184,12 @@ const PropertyManagerDashboard = () => {
                   Tenants
                 </button>
                 <button
+                  onClick={() => navigate('/property-manager/providers')}
+                  className="text-gray-600 hover:text-blue-600 px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium"
+                >
+                  Providers
+                </button>
+                <button
                   onClick={() => navigate('/property-manager/properties')}
                   className="text-gray-600 hover:text-blue-600 px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium"
                 >
