@@ -29,6 +29,21 @@ const PropertyManagerDashboard = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // Refresh data when page becomes visible (navigating back)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        loadDashboardData();
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
   useEffect(() => {
     // Check authentication and get user data
     const token = localStorage.getItem('token');
@@ -52,6 +67,13 @@ const PropertyManagerDashboard = () => {
       navigate('/property-manager/auth');
     }
   }, [navigate]);
+
+  // Handle callback from PMCodeCard to refresh stats
+  const handlePMCodeDataChange = (data) => {
+    if (data.tenantCount !== undefined) {
+      setStats(prev => ({ ...prev, totalTenants: data.tenantCount }));
+    }
+  };
 
   const loadDashboardData = async () => {
     try {
