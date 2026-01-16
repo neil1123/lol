@@ -92,6 +92,7 @@ Build a full-stack application for Property Managers, Tenants, and Service Provi
 - `/app/frontend/src/components/IssueSizeClassifier.jsx` - Issue size buttons
 - `/app/frontend/src/components/ScheduleServiceModal.jsx` - Scheduling modal
 - `/app/frontend/src/components/SubmitQuoteModal.jsx` - Provider quote submission
+- `/app/frontend/src/pages/property-manager/PMServiceProviders.jsx` - PM provider browse page (NEW - Jan 16)
 
 ### Backend
 - `/app/backend/models/schemas.py` - Pydantic models for all requests/responses
@@ -105,6 +106,15 @@ Build a full-stack application for Property Managers, Tenants, and Service Provi
 - Added `scheduled_date` column (TEXT)
 - Added `scheduled_time` column (TEXT)
 - Added `estimated_duration` column (TEXT)
+
+### pm_favorite_providers table (NEW - Jan 16)
+- `id` (TEXT PRIMARY KEY)
+- `pm_id` (TEXT NOT NULL)
+- `provider_id` (TEXT NOT NULL)
+- `provider_name` (TEXT)
+- `notes` (TEXT)
+- `created_at` (TEXT)
+- UNIQUE constraint on (pm_id, provider_id)
 
 ## Test Results (Jan 11, 2026)
 - Backend P2/P3 tests: 18/19 passed (95% pass rate)
