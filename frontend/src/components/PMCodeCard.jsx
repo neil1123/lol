@@ -51,6 +51,13 @@ const PMCodeCard = ({ onDataChange }) => {
     try {
       const response = await apiService.getMyPMCode();
       setCode(response.code);
+      // Also update localStorage user to keep pm_code in sync
+      const userStr = localStorage.getItem('user');
+      if (userStr && response.code) {
+        const user = JSON.parse(userStr);
+        user.pm_code = response.code;
+        localStorage.setItem('user', JSON.stringify(user));
+      }
     } catch (error) {
       console.error('Failed to load code:', error);
     } finally {
@@ -62,9 +69,18 @@ const PMCodeCard = ({ onDataChange }) => {
     try {
       const tenants = await apiService.getPMTenants();
       setTenantCount(tenants.length);
+      // Notify parent of data change if callback provided
+      if (onDataChange) {
+        onDataChange({ tenantCount: tenants.length });
+      }
     } catch (error) {
       console.error('Failed to load tenants:', error);
     }
+  };
+
+  // Expose refresh method for parent component
+  const refreshData = async () => {
+    await Promise.all([loadCode(), loadTenantCount()]);
   };
 
   const generateCode = async () => {
