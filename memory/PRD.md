@@ -69,6 +69,9 @@ Build a full-stack application for Property Managers, Tenants, and Service Provi
 - `PUT /api/pm/orders/{id}/reject-quote` - Reject quote
 - `PUT /api/pm/orders/{id}/schedule` - Schedule service (P2)
 - `GET /api/pm/calendar` - Get calendar events (P2)
+- `GET /api/pm/favorites` - Get PM's favorite providers (NEW - Jan 16)
+- `POST /api/pm/favorites` - Add provider to favorites (NEW - Jan 16)
+- `DELETE /api/pm/favorites/{provider_id}` - Remove from favorites (NEW - Jan 16)
 
 ### Service Provider
 - `GET /api/provider/orders` - Get assigned orders
