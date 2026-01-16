@@ -912,6 +912,119 @@ async def get_pm_tenants(current_user: User = Depends(get_current_user)):
     finally:
         await db.close()
 
+# ====== PM FAVORITE PROVIDERS ======
+
+@api_router.get("/pm/favorites")
+async def get_pm_favorite_providers(current_user: User = Depends(get_current_user)):
+    """Get PM's favorite service providers"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can access this")
+    
+    db = await get_db()
+    try:
+        cursor = await db.execute('''
+            SELECT f.id, f.provider_id, f.provider_name, f.notes, f.created_at,
+                   u.business_name, u.email, u.phone, u.services, u.rating, u.address
+            FROM pm_favorite_providers f
+            LEFT JOIN users u ON f.provider_id = u.id
+            WHERE f.pm_id = ?
+            ORDER BY f.created_at DESC
+        ''', (current_user.id,))
+        rows = await cursor.fetchall()
+        
+        favorites = []
+        for row in rows:
+            services = parse_json_field(row[8]) if row[8] else []
+            favorites.append({
+                "id": row[0],
+                "provider_id": row[1],
+                "provider_name": row[2] or row[5] or "Unknown",
+                "notes": row[3],
+                "created_at": row[4],
+                "business_name": row[5],
+                "email": row[6],
+                "phone": row[7],
+                "services": services,
+                "rating": row[9] or 5.0,
+                "location": row[10] or "Not specified"
+            })
+        
+        return favorites
+    finally:
+        await db.close()
+
+@api_router.post("/pm/favorites")
+async def add_pm_favorite_provider(data: dict, current_user: User = Depends(get_current_user)):
+    """Add a service provider to PM's favorites"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can access this")
+    
+    provider_id = data.get("provider_id")
+    notes = data.get("notes", "")
+    
+    if not provider_id:
+        raise HTTPException(status_code=400, detail="Provider ID is required")
+    
+    db = await get_db()
+    try:
+        # Verify provider exists
+        cursor = await db.execute(
+            "SELECT id, business_name, name FROM users WHERE id = ? AND user_type = 'provider'",
+            (provider_id,)
+        )
+        provider = await cursor.fetchone()
+        
+        if not provider:
+            raise HTTPException(status_code=404, detail="Service provider not found")
+        
+        provider_name = provider[1] or provider[2]
+        
+        # Check if already a favorite
+        cursor = await db.execute(
+            "SELECT id FROM pm_favorite_providers WHERE pm_id = ? AND provider_id = ?",
+            (current_user.id, provider_id)
+        )
+        existing = await cursor.fetchone()
+        
+        if existing:
+            raise HTTPException(status_code=400, detail="Provider is already in favorites")
+        
+        # Add to favorites
+        favorite_id = str(uuid.uuid4())
+        now = datetime.utcnow().isoformat()
+        
+        await db.execute('''
+            INSERT INTO pm_favorite_providers (id, pm_id, provider_id, provider_name, notes, created_at)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', (favorite_id, current_user.id, provider_id, provider_name, notes, now))
+        await db.commit()
+        
+        return {
+            "message": "Provider added to favorites",
+            "favorite_id": favorite_id,
+            "provider_name": provider_name
+        }
+    finally:
+        await db.close()
+
+@api_router.delete("/pm/favorites/{provider_id}")
+async def remove_pm_favorite_provider(provider_id: str, current_user: User = Depends(get_current_user)):
+    """Remove a service provider from PM's favorites"""
+    if current_user.user_type != "property_manager":
+        raise HTTPException(status_code=403, detail="Only property managers can access this")
+    
+    db = await get_db()
+    try:
+        result = await db.execute(
+            "DELETE FROM pm_favorite_providers WHERE pm_id = ? AND provider_id = ?",
+            (current_user.id, provider_id)
+        )
+        await db.commit()
+        
+        return {"message": "Provider removed from favorites"}
+    finally:
+        await db.close()
+
 @api_router.put("/providers/services")
 async def update_provider_services(services: List[str], current_user: User = Depends(get_current_user)):
     db = await get_db()
