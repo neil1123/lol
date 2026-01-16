@@ -88,6 +88,13 @@ const PMCodeCard = ({ onDataChange }) => {
     try {
       const response = await apiService.generatePMCode();
       setCode(response.code);
+      // Update localStorage user with the new code
+      const userStr = localStorage.getItem('user');
+      if (userStr && response.code) {
+        const user = JSON.parse(userStr);
+        user.pm_code = response.code;
+        localStorage.setItem('user', JSON.stringify(user));
+      }
     } catch (error) {
       console.error('Failed to generate code:', error);
       alert('Failed to generate code. Please try again.');
