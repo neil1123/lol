@@ -246,6 +246,24 @@ class ApiService {
     });
   }
 
+  // ====== PM FAVORITE PROVIDERS ======
+  async getPMFavorites() {
+    return await this.request('/pm/favorites');
+  }
+
+  async addPMFavorite(providerId, notes = '') {
+    return await this.request('/pm/favorites', {
+      method: 'POST',
+      body: JSON.stringify({ provider_id: providerId, notes }),
+    });
+  }
+
+  async removePMFavorite(providerId) {
+    return await this.request(`/pm/favorites/${providerId}`, {
+      method: 'DELETE',
+    });
+  }
+
   // ====== CUSTOMERS ======
   async getCustomers() {
     return await this.request('/customers');
