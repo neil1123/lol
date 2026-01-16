@@ -282,6 +282,20 @@ async def init_db():
         except Exception as e:
             pass
         
+        # Create PM favorite providers table
+        await db.execute('''
+            CREATE TABLE IF NOT EXISTS pm_favorite_providers (
+                id TEXT PRIMARY KEY,
+                pm_id TEXT NOT NULL,
+                provider_id TEXT NOT NULL,
+                provider_name TEXT,
+                notes TEXT,
+                created_at TEXT,
+                UNIQUE(pm_id, provider_id)
+            )
+        ''')
+        await db.execute('CREATE INDEX IF NOT EXISTS idx_pm_favorites_pm ON pm_favorite_providers(pm_id)')
+        
         await db.commit()
         print("SQLite database initialized successfully", file=sys.stderr, flush=True)
     except Exception as e:
