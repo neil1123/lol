@@ -42,6 +42,7 @@ const ReportIssuesChat = ({ onIssueSubmitted }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [aiSuggestion, setAiSuggestion] = useState(null);
   const [linkedPM, setLinkedPM] = useState(null);
+  const [loadingPM, setLoadingPM] = useState(true);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -64,11 +65,39 @@ const ReportIssuesChat = ({ onIssueSubmitted }) => {
   }, []);
 
   const loadLinkedPM = async () => {
+    setLoadingPM(true);
     try {
-      const response = await apiService.getTenantPM();
-      setLinkedPM(response.property_manager);
+      // First check localStorage for cached PM info
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      
+      // If user already has property_manager_id in localStorage, try to load from API
+      if (user.property_manager_id) {
+        try {
+          const response = await apiService.getTenantPM();
+          if (response.property_manager) {
+            setLinkedPM(response.property_manager);
+            setLoadingPM(false);
+            return;
+          }
+        } catch (apiError) {
+          console.log('API error, using cached PM info:', apiError);
+          // If API fails but we have property_manager_id, use a fallback
+          setLinkedPM({ 
+            id: user.property_manager_id, 
+            name: 'Your Property Manager'
+          });
+          setLoadingPM(false);
+          return;
+        }
+      }
+      
+      // User is a homeowner without PM connection - that's fine
+      setLinkedPM(null);
     } catch (error) {
       console.error('Failed to load PM:', error);
+      setLinkedPM(null);
+    } finally {
+      setLoadingPM(false);
     }
   };
 
