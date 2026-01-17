@@ -103,21 +103,24 @@ const ServiceBrowse = () => {
     }
   };
 
-
   const filteredProviders = allProviders
     .filter(provider => {
       try {
-        // Hide Wilson Home Services entries - comprehensive filtering
+        // Filter out test/dummy accounts - expanded list
         const providerName = (provider.name || '').toLowerCase();
         const businessName = (provider.business_name || '').toLowerCase();
         const companyName = (provider.companyName || '').toLowerCase();
+        const email = (provider.email || '').toLowerCase();
         
-        if (providerName.includes('wilson') || 
-            businessName.includes('wilson') || 
-            companyName.includes('wilson') ||
-            providerName.includes('wilson home services') ||
-            businessName.includes('wilson home services') ||
-            companyName.includes('wilson home services')) {
+        const testPatterns = ['wilson', 'test', 'dummy', 'fake', 'demo', 'sample', 'example'];
+        const isTestAccount = testPatterns.some(pattern => 
+          providerName.includes(pattern) || 
+          businessName.includes(pattern) ||
+          companyName.includes(pattern) ||
+          email.includes(pattern)
+        );
+        
+        if (isTestAccount) {
           return false;
         }
         
