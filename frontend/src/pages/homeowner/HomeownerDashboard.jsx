@@ -65,6 +65,23 @@ const HomeownerDashboard = () => {
   };
   
   const [isLoggedIn, setIsLoggedIn] = useState(getAuthStatus);
+  
+  // Re-check auth status when localStorage changes (e.g., from another tab)
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === 'token' || e.key === 'authToken' || e.key === 'user') {
+        const newAuthStatus = getAuthStatus();
+        setIsLoggedIn(newAuthStatus);
+        if (!newAuthStatus) {
+          navigate('/homeowners/auth');
+        }
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [navigate]);
+  
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState({
