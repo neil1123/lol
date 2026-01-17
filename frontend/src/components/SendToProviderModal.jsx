@@ -47,10 +47,26 @@ const SendToProviderModal = ({ issue, issues, provider, onClose, onSuccess }) =>
       setLoading(true);
       const data = await apiService.getAllProviders();
       
+      // Filter out test/dummy providers first
+      const testPatterns = ['test', 'dummy', 'fake', 'demo', 'sample', 'example', 'bob\'s', 'wilson'];
+      const realProviders = data.filter(provider => {
+        const name = (provider.name || '').toLowerCase();
+        const businessName = (provider.business_name || '').toLowerCase();
+        const email = (provider.email || '').toLowerCase();
+        
+        const isTestAccount = testPatterns.some(pattern => 
+          name.includes(pattern) || 
+          businessName.includes(pattern) ||
+          email.includes(pattern)
+        );
+        
+        return !isTestAccount;
+      });
+      
       // Filter providers by issue category if available
-      let relevantProviders = data;
+      let relevantProviders = realProviders;
       if (issue?.issue_category) {
-        relevantProviders = data.filter(provider => {
+        const categoryFiltered = realProviders.filter(provider => {
           const services = provider.services || [];
           return services.some(service => 
             service.toLowerCase().includes(issue.issue_category.toLowerCase()) ||
@@ -58,9 +74,9 @@ const SendToProviderModal = ({ issue, issues, provider, onClose, onSuccess }) =>
           );
         });
         
-        // If no relevant providers, show all
-        if (relevantProviders.length === 0) {
-          relevantProviders = data;
+        // If no relevant providers, show all real providers
+        if (categoryFiltered.length > 0) {
+          relevantProviders = categoryFiltered;
         }
       }
       
