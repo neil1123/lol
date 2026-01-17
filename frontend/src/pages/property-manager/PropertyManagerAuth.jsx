@@ -54,9 +54,11 @@ const PropertyManagerAuth = () => {
           return;
         }
 
-        // Store auth data
+        // Store auth data (apiService already stores it, but ensure consistency)
         localStorage.setItem('token', response.access_token);
+        localStorage.setItem('authToken', response.access_token);
         localStorage.setItem('user', JSON.stringify(response.user));
+        localStorage.setItem('userType', response.user.user_type);
         
         // Navigate to property manager dashboard
         navigate('/property-manager/dashboard');
