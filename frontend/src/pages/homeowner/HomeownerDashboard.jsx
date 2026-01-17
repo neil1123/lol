@@ -344,6 +344,19 @@ const HomeownerDashboard = () => {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     
+    // Load linkedPM from localStorage on mount
+    const loadLinkedPMFromStorage = () => {
+      try {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        if (user.property_manager_id) {
+          setLinkedPM({ id: user.property_manager_id });
+        }
+      } catch (e) {
+        console.error('Error loading PM from storage:', e);
+      }
+    };
+    loadLinkedPMFromStorage();
+    
     // Load notifications and messages if authenticated
     if (isAuth) {
       loadNotifications();
