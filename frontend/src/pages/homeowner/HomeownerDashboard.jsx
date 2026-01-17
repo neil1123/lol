@@ -1001,7 +1001,7 @@ const HomeownerDashboard = () => {
                   {notifications.total === 0 ? (
                     <div className="p-6 text-center text-gray-500 bg-white h-full flex flex-col justify-center">
                       <Bell className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                      <p>You don't have any new notifications</p>
+                      <p>You don&apos;t have any new notifications</p>
                     </div>
                   ) : (
                     <div className="bg-white">
