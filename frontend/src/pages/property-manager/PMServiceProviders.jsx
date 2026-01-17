@@ -443,7 +443,6 @@ const PMServiceProviders = () => {
                     Clear Filters
                   </Button>
                 )}
-                </Button>
               </div>
             ) : (
               <div className="grid gap-6">
