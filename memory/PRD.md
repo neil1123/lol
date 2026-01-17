@@ -135,6 +135,12 @@ Build a full-stack application for Property Managers, Tenants, and Service Provi
 2. **PM Code Disappearing** - PMCodeCard now syncs to localStorage
 3. **Tenant Count Not Updating** - Added visibility change listener and callback to PMCodeCard
 
+### Bugs Fixed (Jan 17, 2026)
+1. **Session Loss on Tab Navigation** - Fixed `hasValidAuth is not defined` error in HomeownerDashboard
+2. **Report Issues showing "Connect PM" warning** - Fixed ReportIssuesChat to check localStorage first
+3. **Tenant/Homeowner confusion** - Improved flow for users who sign up without PM code then connect later
+4. **Dummy providers showing in PM dashboard** - Added comprehensive test account filtering
+
 ### New Features (Jan 16, 2026)
 1. **PM Favorites System** - PMs can add service providers to favorites
 2. **PM Service Providers Page** - New page at `/property-manager/providers`
