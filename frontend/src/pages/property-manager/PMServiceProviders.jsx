@@ -423,21 +423,26 @@ const PMServiceProviders = () => {
           <TabsContent value="all" className="mt-0">
             {displayProviders.length === 0 ? (
               <div className="text-center py-12">
-                <div className="text-gray-400 text-4xl mb-4">🔍</div>
+                <Users className="h-16 w-16 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                  No providers found
+                  {searchTerm || selectedServices.length > 0 ? 'No matching providers' : 'No service providers yet'}
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  Try adjusting your search criteria or browse all services.
+                  {searchTerm || selectedServices.length > 0 
+                    ? 'Try adjusting your search criteria or clear filters.'
+                    : 'Service providers will appear here once they sign up on the platform.'}
                 </p>
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                    setSearchTerm('');
-                    setSelectedServices([]);
-                  }}
-                >
-                  Clear Filters
+                {(searchTerm || selectedServices.length > 0) && (
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      setSearchTerm('');
+                      setSelectedServices([]);
+                    }}
+                  >
+                    Clear Filters
+                  </Button>
+                )}
                 </Button>
               </div>
             ) : (
