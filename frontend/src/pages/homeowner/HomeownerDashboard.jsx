@@ -467,7 +467,7 @@ const HomeownerDashboard = () => {
     }
     
     // Handle back button behavior for logged in users
-    if (hasValidAuth) {
+    if (isAuth) {
       const handlePopState = (event) => {
         // If user is logged in and tries to navigate back to landing, redirect to home tab
         if (window.location.pathname === '/homeowners' || window.location.pathname === '/') {
