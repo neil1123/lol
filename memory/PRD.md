@@ -192,14 +192,6 @@ Build a full-stack application for Property Managers, Tenants, and Service Provi
 - Pre-built responses for common issues
 - PM can quickly respond to tenants
 
-### P4 - Quote Management UI (In Progress)
-- Build frontend for PM to review/accept/reject quotes in "Quotes" tab
-- Enhance Provider Orders page for quote submission
-
-### P4 - Calendar Scheduling Flow (In Progress)
-- Integrate ScheduleServiceModal with quote approval flow
-- Connect to PMCalendar for event display
-
 ### P5 - Backend Refactoring (Further)
 - Split server.py into proper routers
 - Add unit tests for all endpoints
