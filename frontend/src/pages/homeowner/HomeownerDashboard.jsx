@@ -386,7 +386,7 @@ const HomeownerDashboard = () => {
       const providerName = location.state?.providerName;
       const action = location.state?.action;
       
-      if (hasValidAuth && (providerId || threadId)) {
+      if (isAuth && (providerId || threadId)) {
         const initializeConversation = async () => {
           try {
             // Load message threads first
