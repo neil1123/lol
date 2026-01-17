@@ -1094,7 +1094,10 @@ const HomeownerDashboard = () => {
 
               {/* Tenant Join PM Section */}
               <div className="mb-8">
-                <TenantJoinPM />
+                <TenantJoinPM onJoined={(pm) => {
+                  setLinkedPM(pm);
+                  // Update localStorage is handled in TenantJoinPM
+                }} />
               </div>
               {/* Featured Services Section */}
               <div className="mb-8">
