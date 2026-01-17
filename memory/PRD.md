@@ -14,23 +14,38 @@ Build a full-stack application for Property Managers, Tenants, and Service Provi
 2. **PM Code System**: Tenants link to PM using unique 6-character code
 3. **AI-Powered Issue Reporting**: Simple prompt → AI summary → structured form
 4. **Quick Send to Provider**: One-click sending of issues to service providers
+5. **PM Favorites System**: PMs can add/remove favorite providers for quick access
 
-### P2 Features (Completed - Jan 11, 2026)
+### P2 Features (Completed - Jan 17, 2026) ✅
 1. **Quote Management UI**: 
-   - PM can view pending quotes from providers
+   - PM can view pending quotes from providers in "Quotes" tab
    - "Approve & Schedule" and "Reject" buttons
    - Quote details: amount, duration, validity
+   - Provider can submit quotes via Orders page
    
-2. **Calendar Integration**:
+2. **Provider Quote Submission**:
+   - Provider Orders page shows assigned orders
+   - Quick quote input with amount field
+   - "Send Quote" button
+   - Status tracking (Pending → Quoted → Confirmed → In Progress → Done)
+   
+3. **Calendar Integration**:
    - Month and List view modes
    - Shows scheduled services with date/time
    - Click on date to see events
    - Automatic event creation when scheduling
 
-3. **Service Scheduling**:
+4. **Service Scheduling**:
    - PM schedules service after approving quote
    - Date and time picker
    - Creates appointment record
+   - Shows on PM Calendar
+
+5. **PM Service Provider Browsing**:
+   - New page at /property-manager/providers
+   - Search and filter providers
+   - Add/remove favorites
+   - Send issues directly to providers
 
 ### P3 Features (Completed - Jan 11, 2026)
 1. **Issue Classification**:
