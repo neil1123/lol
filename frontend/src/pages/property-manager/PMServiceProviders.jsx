@@ -28,7 +28,7 @@ const PMServiceProviders = () => {
 
   useEffect(() => {
     // Check authentication
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
     const userData = localStorage.getItem('user');
     
     if (!token || !userData) {
