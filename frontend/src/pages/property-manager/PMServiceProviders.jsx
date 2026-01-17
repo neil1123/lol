@@ -131,9 +131,17 @@ const PMServiceProviders = () => {
     try {
       const providerName = (provider.name || '').toLowerCase();
       const businessName = (provider.business_name || '').toLowerCase();
+      const email = (provider.email || '').toLowerCase();
       
-      // Filter out test accounts
-      if (providerName.includes('wilson') || businessName.includes('wilson')) {
+      // Filter out test/dummy accounts - expanded list
+      const testPatterns = ['wilson', 'test', 'dummy', 'fake', 'demo', 'sample', 'example'];
+      const isTestAccount = testPatterns.some(pattern => 
+        providerName.includes(pattern) || 
+        businessName.includes(pattern) ||
+        email.includes(pattern)
+      );
+      
+      if (isTestAccount) {
         return false;
       }
       
