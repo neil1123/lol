@@ -44,6 +44,19 @@ const PropertyManagerDashboard = () => {
     };
   }, []);
 
+  // Poll for new tenants every 30 seconds
+  useEffect(() => {
+    const pollInterval = setInterval(() => {
+      // Only poll if user is authenticated
+      const token = localStorage.getItem('token');
+      if (token) {
+        loadDashboardData();
+      }
+    }, 30000);
+
+    return () => clearInterval(pollInterval);
+  }, []);
+
   useEffect(() => {
     // Check authentication and get user data
     const token = localStorage.getItem('token');
