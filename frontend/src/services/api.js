@@ -27,8 +27,8 @@ class ApiService {
     localStorage.removeItem('user');
   }
 
-  // Make API request with authentication
-  async request(endpoint, options = {}) {
+  // Make API request with authentication and retry logic
+  async request(endpoint, options = {}, retries = 2) {
     const url = `${this.baseURL}${endpoint}`;
     const token = this.getAuthToken();
 
@@ -41,19 +41,31 @@ class ApiService {
       ...options,
     };
 
-    try {
-      const response = await fetch(url, config);
-      
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ detail: 'Network error' }));
-        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
-      }
+    let lastError;
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        const response = await fetch(url, config);
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ detail: 'Network error' }));
+          throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+        }
 
-      return await response.json();
-    } catch (error) {
-      console.error(`API request failed: ${endpoint}`, error);
-      throw error;
+        return await response.json();
+      } catch (error) {
+        lastError = error;
+        console.error(`API request failed (attempt ${attempt + 1}/${retries + 1}): ${endpoint}`, error);
+        
+        // Don't retry on auth errors (401, 403) or if it's the last attempt
+        if (error.message.includes('401') || error.message.includes('403') || attempt === retries) {
+          throw error;
+        }
+        
+        // Wait before retrying (exponential backoff)
+        await new Promise(resolve => setTimeout(resolve, 500 * (attempt + 1)));
+      }
     }
+    throw lastError;
   }
 
   // ====== AUTHENTICATION ======
