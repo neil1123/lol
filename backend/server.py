@@ -737,7 +737,7 @@ async def tenant_join_pm(data: dict, current_user: User = Depends(get_current_us
     """Tenant joins a Property Manager using their code"""
     # Allow both 'homeowner' and 'tenant' user types
     if current_user.user_type not in ["homeowner", "tenant"]:
-        raise HTTPException(status_code=403, detail="Only tenants can join property managers")
+        raise HTTPException(status_code=403, detail="Only homeowners or tenants can connect to property managers. You are logged in as: " + current_user.user_type)
     
     code = data.get("code", "").strip().upper()
     property_address = data.get("property_address", "")
