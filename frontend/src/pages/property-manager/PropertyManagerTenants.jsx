@@ -53,7 +53,9 @@ const PropertyManagerTenants = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('authToken');
     localStorage.removeItem('user');
+    localStorage.removeItem('userType');
     navigate('/property-manager');
   };
 
