@@ -20,8 +20,25 @@ const QuickSendToProvider = ({ issue, onSuccess }) => {
       setLoading(true);
       const data = await apiService.getAllProviders();
       
+      // Filter out test/dummy providers
+      const testPatterns = ['test', 'dummy', 'fake', 'demo', 'sample', 'example', 'bob\'s', 'wilson'];
+      const realProviders = data.filter(provider => {
+        const name = (provider.name || '').toLowerCase();
+        const businessName = (provider.business_name || '').toLowerCase();
+        const email = (provider.email || '').toLowerCase();
+        
+        // Check if any test pattern matches
+        const isTestAccount = testPatterns.some(pattern => 
+          name.includes(pattern) || 
+          businessName.includes(pattern) ||
+          email.includes(pattern)
+        );
+        
+        return !isTestAccount;
+      });
+      
       // Sort providers - relevant ones first based on issue category
-      let sortedProviders = [...data];
+      let sortedProviders = [...realProviders];
       if (issue.issue_category) {
         sortedProviders.sort((a, b) => {
           const aMatch = (a.services || []).some(s => 
