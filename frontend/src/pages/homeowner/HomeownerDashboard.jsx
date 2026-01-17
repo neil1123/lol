@@ -712,11 +712,7 @@ const HomeownerDashboard = () => {
             <div className="px-4 pb-4">
               <Button
                 variant="outline"
-                onClick={() => {
-                  localStorage.removeItem('userType');
-                  localStorage.removeItem('user');
-                  navigate('/homeowners');
-                }}
+                onClick={handleLogout}
                 className="w-full justify-start h-12 text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
               >
                 <ArrowRight className="h-5 w-5 mr-3 rotate-180" />
