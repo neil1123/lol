@@ -112,7 +112,7 @@ const QuickSendToProvider = ({ issue, onSuccess }) => {
 
   if (providers.length === 0) {
     return (
-      <p className="text-sm text-gray-500">No providers available</p>
+      <p className="text-sm text-gray-500">No service providers available yet. Providers will appear here once they register on the platform.</p>
     );
   }
 
