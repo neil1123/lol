@@ -14,27 +14,31 @@ const PropertyManagerTenants = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check authentication and get user data
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
-    
-    if (!token || !userData) {
-      navigate('/property-manager/auth');
-      return;
-    }
-
-    try {
-      const parsedUser = JSON.parse(userData);
-      if (parsedUser.user_type !== 'property_manager') {
+    const checkAuth = () => {
+      const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+      const userData = localStorage.getItem('user');
+      
+      if (!token || !userData) {
         navigate('/property-manager/auth');
         return;
       }
-      setUser(parsedUser);
-      loadTenants();
-    } catch (error) {
-      console.error('Error parsing user data:', error);
-      navigate('/property-manager/auth');
-    }
+
+      try {
+        const parsedUser = JSON.parse(userData);
+        if (parsedUser.user_type !== 'property_manager') {
+          navigate('/property-manager/auth');
+          return;
+        }
+        setUser(parsedUser);
+        setTenants([]);
+        loadTenants();
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        navigate('/property-manager/auth');
+      }
+    };
+    
+    checkAuth();
   }, [navigate]);
 
   const loadTenants = async () => {
