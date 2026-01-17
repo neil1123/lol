@@ -261,6 +261,21 @@ const ReportIssuesChat = ({ onIssueSubmitted }) => {
 
   // Step 1: Simple Prompt Bar
   if (step === 1) {
+    // Show loading state while checking PM connection
+    if (loadingPM) {
+      return (
+        <div className="space-y-6" data-testid="report-issue-loading">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-900">Report an Issue</h2>
+            <p className="text-gray-600 mt-2">Loading your property manager info...</p>
+          </div>
+          <div className="flex justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="space-y-6" data-testid="report-issue-step-1">
         <div className="text-center mb-8">
@@ -273,10 +288,12 @@ const ReportIssuesChat = ({ onIssueSubmitted }) => {
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <AlertTriangle className="w-5 h-5 text-orange-500" />
-                <p className="text-sm text-orange-700">
-                  You need to connect to a Property Manager before reporting issues. 
-                  Go to the "My PM" tab to enter your PM code.
-                </p>
+                <div className="text-sm text-orange-700">
+                  <p className="font-medium">Not connected to a Property Manager</p>
+                  <p className="mt-1">
+                    Please go to the <strong>Home</strong> tab and enter your PM code to connect before reporting issues.
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>
