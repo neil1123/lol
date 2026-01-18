@@ -177,15 +177,16 @@ const PropertyManagerDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow">
+      <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center h-auto sm:h-16 py-4 sm:py-0">
-            <div className="flex items-center mb-4 sm:mb-0">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo and Title */}
+            <div className="flex items-center">
               <h1 className="text-xl sm:text-2xl font-bold text-blue-600">Doord</h1>
-              <span className="text-gray-600 ml-2 text-sm sm:text-base">Property Manager Dashboard</span>
+              <span className="text-gray-600 ml-2 text-sm hidden sm:inline">Property Manager</span>
               <button
                 onClick={() => loadDashboardData()}
-                className="ml-3 p-1 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-full"
+                className="ml-2 p-1 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-full"
                 title="Refresh data"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -193,42 +194,79 @@ const PropertyManagerDashboard = () => {
                 </svg>
               </button>
             </div>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
-              <span className="text-gray-700 text-sm sm:text-base">Welcome, {user?.name}</span>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => navigate('/property-manager/orders')}
-                  className="text-gray-600 hover:text-blue-600 px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium"
-                >
-                  Orders
-                </button>
-                <button
-                  onClick={() => navigate('/property-manager/tenants')}
-                  className="text-gray-600 hover:text-blue-600 px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium"
-                >
-                  Tenants
-                </button>
-                <button
-                  onClick={() => navigate('/property-manager/providers')}
-                  className="text-gray-600 hover:text-blue-600 px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium"
-                >
-                  Providers
-                </button>
-                <button
-                  onClick={() => navigate('/property-manager/properties')}
-                  className="text-gray-600 hover:text-blue-600 px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium"
-                >
-                  Properties
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-600 text-white px-3 sm:px-4 py-1 sm:py-2 rounded-md text-xs sm:text-sm hover:bg-red-700"
-                >
-                  Logout
-                </button>
-              </div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-4">
+              <span className="text-gray-700 text-sm">Welcome, {user?.name}</span>
+              <button
+                onClick={() => navigate('/property-manager/orders')}
+                className="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Orders
+              </button>
+              <button
+                onClick={() => navigate('/property-manager/tenants')}
+                className="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Tenants
+              </button>
+              <button
+                onClick={() => navigate('/property-manager/providers')}
+                className="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Providers
+              </button>
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 text-white px-4 py-2 rounded-md text-sm hover:bg-red-700"
+              >
+                Logout
+              </button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden flex items-center">
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 rounded-md text-gray-600 hover:text-blue-600 hover:bg-gray-100"
+              >
+                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
             </div>
           </div>
+
+          {/* Mobile Navigation Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden border-t border-gray-200 py-3 space-y-2">
+              <div className="px-2 py-2 text-sm text-gray-700 font-medium">
+                Welcome, {user?.name}
+              </div>
+              <button
+                onClick={() => { navigate('/property-manager/orders'); setMobileMenuOpen(false); }}
+                className="block w-full text-left px-3 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md"
+              >
+                Orders
+              </button>
+              <button
+                onClick={() => { navigate('/property-manager/tenants'); setMobileMenuOpen(false); }}
+                className="block w-full text-left px-3 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md"
+              >
+                Tenants
+              </button>
+              <button
+                onClick={() => { navigate('/property-manager/providers'); setMobileMenuOpen(false); }}
+                className="block w-full text-left px-3 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-md"
+              >
+                Providers
+              </button>
+              <button
+                onClick={handleLogout}
+                className="block w-full text-left px-3 py-2 text-red-600 hover:bg-red-50 rounded-md font-medium"
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </header>
 
