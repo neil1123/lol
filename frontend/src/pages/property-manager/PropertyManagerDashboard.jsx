@@ -4,13 +4,14 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../components/ui/ca
 import { Badge } from '../../components/ui/badge';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
-import { Search, ArrowRight } from 'lucide-react';
+import { Search, ArrowRight, Menu, X } from 'lucide-react';
 import apiService from '../../services/api';
 import PMCodeCard from '../../components/PMCodeCard';
 
 const PropertyManagerDashboard = () => {
   const [user, setUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [stats, setStats] = useState({
     totalProperties: 0,
     totalTenants: 0,
